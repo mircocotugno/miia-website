@@ -1,67 +1,89 @@
 import { EntrySchema } from '@props/schema'
-import type { LocationProps, PriceProps } from '@props/types'
+import type { PriceProps } from '@props/types'
 
-type LocationEntry = Omit<EntrySchema, 'value'> & { value: LocationProps }
+export type LocationEntry = EntrySchema & {
+  name: 'title'
+  value: {
+    title: string | null
+    city: string | null
+    address: string | null
+    cap: string | null
+    phone: string | null
+    email: string | null
+    lat: string | null
+    lng: string | null
+    direction: string | null
+  }
+}
 
-const locationTreviso: LocationEntry = {
-  name: 'Treviso',
-  datasource_id: 'location',
+const locations: LocationEntry = {
+  name: 'title',
+  datasource_id: 'locations',
   value: {
-    city: 'Treviso',
-    address: 'Via Zorzetto, 20',
-    cap: '31100',
-    phone: '+39 0422 440188',
-    email: 'treviso@madeinitalyacademy.com',
-    position: { lat: 45.66361026232961, lng: 12.245983217385389 },
-    direction: 'https://maps.app.goo.gl/cSXqXu8yz4tGQvYn9',
-  },
-}
-const locationPadova: LocationEntry = {
-  name: 'Padova',
-  datasource_id: 'location',
-  value: {
-    city: 'Padova',
-    address: 'Viale della Navigazione Interna, 51/A',
-    cap: '35129',
-    phone: '+39 0422 440188',
-    email: 'padova@madeinitalyacademy.com',
-    position: { lat: 45.409303548033336, lng: 11.928371084638048 },
-    direction: 'https://maps.app.goo.gl/GinetyzDYN8gUDDa9',
-  },
-}
-const locationBassano: LocationEntry = {
-  name: 'Bassano',
-  datasource_id: 'location',
-  value: {
-    city: 'Bassano del Grappa',
-    address: 'Via Madonna di Fatima 10',
-    cap: '36061',
-    phone: '+39 0422 440188',
-    email: 'bassano@madeinitalyacademy.com',
-    position: { lat: 45.73969990647777, lng: 11.756428313871918 },
-    direction: 'https://maps.app.goo.gl/yWxgrayhYcsnQgWX8',
+    title: null,
+    city: null,
+    address: null,
+    cap: null,
+    phone: null,
+    email: null,
+    lat: null,
+    lng: null,
+    direction: null,
   },
 }
 
-type PriceEntry = Omit<EntrySchema, 'value'> & { value: PriceProps }
+// type PriceEntry = Omit<EntrySchema, 'value'> & { value: PriceProps }
 
-const priceShortCourse: PriceEntry = {
-  name: 'corso_brece',
-  datasource_id: 'prices',
+// const priceShortCourse: PriceEntry = {
+//   name: 'corso_brece',
+//   datasource_id: 'prices',
+//   value: {
+//     low: 490,
+//     total: 3680,
+//     installments: [
+//       { installments: 1, price: 3680, total: 3680 },
+//       { installments: 8, price: 490, total: 3920 },
+//       { installments: 4, price: 950, total: 3800 },
+//     ],
+//   },
+// }
+
+export type CourseEntry = EntrySchema & {
+  name: 'title'
   value: {
-    price: 490,
-    total: 3680,
-    installments: [
-      { installments: 1, price: 3680, total: 3680 },
-      { installments: 8, price: 490, total: 3920 },
-      { installments: 4, price: 950, total: 3800 },
-    ],
+    title: string | null
+    enrolled: string | null
+    location: string | null
+    starts: string | null
+    ends: string | null
+    frequency: string | null
+    firstLesson: string | null
+    secondLesson: string | null
+    firstCoach: string | null
+    secondCoach: string | null
+    thirdCoach: string | null
+  }
+}
+
+const courses: CourseEntry = {
+  name: 'title',
+  datasource_id: 'courses',
+  value: {
+    title: null,
+    enrolled: null,
+    location: null,
+    starts: null,
+    ends: null,
+    frequency: null,
+    firstLesson: null,
+    secondLesson: null,
+    firstCoach: null,
+    secondCoach: null,
+    thirdCoach: null,
   },
 }
 
 export const entries = {
-  locationTreviso,
-  locationPadova,
-  locationBassano,
-  priceShortCourse,
+  locations,
+  courses,
 }

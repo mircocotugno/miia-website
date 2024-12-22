@@ -14,13 +14,7 @@ type Home = {
   }
 }
 
-const resolvers = [
-  'page.header',
-  'page.footer',
-  'resource.item',
-  'grid.items',
-  'media.author',
-]
+const resolvers = ['page.header', 'page.footer', 'grid.items']
 
 export default function Home({ story }: Home) {
   const page = useStoryblokState(story, {
@@ -53,7 +47,6 @@ export async function getStaticProps() {
   return {
     props: {
       story: data?.ContentNode || null,
-      key: data?.ContentNode?.id || null,
     },
     revalidate: 3600,
   }

@@ -16,9 +16,11 @@
     "paths": {
       "@styles/*": ["./styles/*"],
       "@components/*": ["./components/*"],
+      "@config/*": ["./config/*"],
       "@modules/*": ["./modules/*"],
       "@props/*": ["./props/*"],
-      "@cms/*": ["./cms/*"]
+      "@cms/*": ["./cms/*"],
+      "@public/*": ["./public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -1,6 +1,9 @@
 import dotenv from 'dotenv'
 dotenv.config()
+
 import util from 'util'
+import fs from 'fs'
+import * as csv from 'fast-csv'
 
 import { cancelRecords, getRecord, printRecord } from './record'
 import {
@@ -28,9 +31,11 @@ import { entries } from './entries'
 type Operations =
   | 'get'
   | 'read'
+  | 'update'
   | 'create'
   | 'update'
   | 'delete'
+  | 'clear'
   | 'help'
   | string
 type Elements = 'group' | 'component' | 'preset' | 'source' | 'entry' | string
@@ -69,30 +74,38 @@ async function storyblok(
       `)
   }
 
-  let element = null
-  let schema = null
+  let element: any = null
+  let elements: any = null
+  let schema: any = null
   let id: string | null = ''
 
-  if (operation !== 'get') {
+  if (!['get', 'clear'].includes(operation)) {
     if (typeof lists[type][name] == 'undefined') {
       return console.error(`Error! Element ${name} of type ${type} not exist.`)
     }
     schema = { ...lists[type][name] }
     if (type === 'component') {
       schema.component_group_uuid = getRecord({
-        name: `${schema?.component_group_uuid}_group`,
+        name: `${schema?.component_group_uuid}`,
         type: 'group',
         unique: true,
       })
+    } else if (type === 'entry') {
+      schema.datasource_id = getRecord({
+        name: `${schema?.datasource_id}`,
+        type: 'source',
+      })
     }
-    id = getRecord({ name, type })
+    if (['read', 'update', 'delete'].includes(operation)) {
+      id = getRecord({ name, type })
+    }
   }
 
   switch (operation) {
     // GET
     case 'get':
       id = getRecord({ name, type: 'source' })
-      const elements = await storyblokGet({ type, id })
+      elements = await storyblokGet({ type, id })
       if (elements) {
         return elements.forEach(
           (element: { id?: string; uuid?: string; name?: string }) =>
@@ -115,13 +128,51 @@ async function storyblok(
         console.log(`Error reading ${name} ${type} not exist!`)
       }
       break
+    // UPLOAD
+    case 'upload':
+      const stream = fs.createReadStream(`./csv/${name}.csv`)
+      elements = []
+      csv
+        .parseStream(stream, {
+          headers: true,
+          ignoreEmpty: true,
+          delimiter: ',',
+        })
+        .on('error', (error) => console.log(error))
+        .on('data', (line) => {
+          const _schema = { ...schema }
+          _schema.name = line[schema.name]
+          Object.keys(line).forEach((key) => (_schema.value[key] = line[key]))
+          elements.push(_schema)
+          _schema.value = JSON.stringify(_schema.value)
+        })
+        .on('end', () => {
+          const length = elements.length - 1
+          elements.forEach(async (schema: any, index: number) => {
+            element = await storyblokCreate({
+              schema,
+              type,
+            })
+            if (element) {
+              console.log(
+                `${name} ${type} number ${index} is created with id: ${element.id}`
+              )
+              if (index === 0) {
+                printRecord({ name, type: 'entry_start', id: `${element.id}` })
+              } else if (index === length) {
+                printRecord({ name, type: 'entry_end', id: `${element.id}` })
+              }
+            }
+          })
+        })
+      break
     // CREATE
     case 'create':
       if (schema) {
         element = await storyblokCreate({ schema, type })
         if (element) {
           printRecord({ name, type, id: element.id, uuid: element?.uuid })
-          console.log(`${name} ${type} is created with id:${element.id}`)
+          console.log(`${name} ${type} is created with id: ${element.id}`)
         }
       } else {
         return console.error(`Error creating ${name} ${type}!`)
@@ -149,6 +200,21 @@ async function storyblok(
       } else {
         return console.error(`Error deleting ${name} ${type}!`)
       }
+      break
+    // CLEAR
+    case 'clear':
+      const start = await getRecord({ name, type: type + `_start` })
+      const end = await getRecord({ name, type: type + `_end` })
+      if (!start || !end) {
+        return console.log(
+          `Error reading there are no ${type} with name ${name}!`
+        )
+      }
+      for (let id = Number(start); id <= Number(end); id++) {
+        element = await storyblokDelete({ id: id.toString(), type: 'entry' })
+      }
+      cancelRecords({ name, type: type + `_start` })
+      cancelRecords({ name, type: type + `_end` })
       break
     default:
       console.log(

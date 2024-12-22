@@ -4,6 +4,7 @@ export type StoryProps = {
   full_slug: string
   name: string
   tag_list: Array<string>
+  content: BlokProps
 }
 
 export type BlokProps = {
@@ -39,6 +40,11 @@ export type ImageProps = {
 
 // Sources Props
 
+export type StudentProps = {
+  name: string
+  email: string
+}
+
 export type LocationProps = {
   city: string
   address: string
@@ -53,7 +59,7 @@ export type LocationProps = {
 }
 
 export type PriceProps = {
-  price: number
+  low: number
   total: number
   installments: Array<{
     installments: number
@@ -88,7 +94,7 @@ type InputTypes =
   | 'checkbox'
   | 'area'
   | 'select'
-  | 'file'
+  // | 'file' //TODO: find a file module
   | 'enroll'
   | 'hidden'
 
@@ -102,12 +108,12 @@ export type CoachProps = BlokProps & {
   links: Array<ActionProps>
 }
 
-export type StudentProps = BlokProps & {
-  asset: ImageProps
-  name: string
-  review: string
-  links: Array<ActionProps>
-}
+// export type StudentProps = BlokProps & {
+//   asset: ImageProps
+//   name: string
+//   review: string
+//   links: Array<ActionProps>
+// }
 
 export type CourseProps = BlokProps & {
   program: CoursePrograms
@@ -127,9 +133,13 @@ export type MetaProps = {
 
 export type PageProps = BlokProps &
   MetaProps & {
-    header: object
-    footer: object
-    body: Array<object>
+    header: StoryProps & {
+      content: NavProps
+    }
+    footer: StoryProps & {
+      content: NavProps
+    }
+    body: Array<SectionProps>
   }
 
 export type ArticleProps = BlokProps &
@@ -161,23 +171,22 @@ export type SectionProps = BlokProps & {
 }
 
 export type NavProps = BlokProps & {
-  brand: ImageProps
-  navigation: Array<object>
+  navigation: Array<ActionProps>
   actions: Array<ActionProps>
   message: string
 }
 
 export type GridProps = BlokProps & {
-  items: Array<object>
+  items: Array<StoryProps>
 }
 
 export type MapProps = BlokProps & {
-  locations: Array<LocationProps>
+  locations: Array<string>
 }
 
 export type FormProps = BlokProps & {
   scope: FormScopes
-  body: Array<object>
+  body: Array<FieldProps>
   message: string
 }
 

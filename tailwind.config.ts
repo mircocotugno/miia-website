@@ -8,8 +8,45 @@ export default {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: ['var(--font-sans)'],
+      serif: ['var(--font-serif)'],
+    },
+    extend: {
+      maxHeight: {
+        'modal': '40rem',
+      }
+    },
   },
   darkMode: 'class',
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            background: '#ffffff',
+            foreground: '#232325',
+            primary: {
+              DEFAULT: '#008a45',
+            },
+            secondary: {
+              DEFAULT: '#d12934',
+            },
+          },
+        },
+        dark: {
+          colors: {
+            background: '#232325',
+            foreground: '#ffffff',
+            primary: {
+              DEFAULT: '#d12934',
+            },
+            secondary: {
+              DEFAULT: '#008a45',
+            },
+          },
+        },
+      },
+    }),
+  ],
 } satisfies Config

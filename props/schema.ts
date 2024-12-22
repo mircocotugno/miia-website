@@ -15,11 +15,12 @@ export type PresetSchema = {
 export type SourceSchema = {
   name: string
   slug: string
+  dimensions_attributes?: Array<{ name: string; entry_value: string }>
 }
 
 export type EntrySchema = {
   name: string
-  value: string
+  value: string | object
   datasource_id: string
 }
 

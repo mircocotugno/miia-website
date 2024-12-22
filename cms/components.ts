@@ -210,20 +210,20 @@ const page: ComponentSchema = {
       display_name: 'Menu superiore',
       description: 'Seleziona uno delle intestazioni o creane una nuova',
       source: 'internal_stories',
-      filter_content_type: [],
+      filter_content_type: ['nav'],
     },
     footer: {
       type: 'option',
       display_name: 'Menu inferiore',
       description: 'Seleziona uno dei pie di pagina o creane uno nuovo',
       source: 'internal_stories',
-      filter_content_type: [],
+      filter_content_type: ['nav'],
     },
     body: {
       type: 'bloks',
       display_name: 'Contenuti della pagina',
       restrict_components: true,
-      component_whitelist: ['section'],
+      component_whitelist: ['section', 'cover'],
     },
   },
 }
@@ -388,16 +388,12 @@ const nav: ComponentSchema = {
   icon: 'block-buildin',
   preview_tmpl: ``,
   schema: {
-    brand: {
-      type: 'multiasset',
-      display_name: 'Brand',
-      filetypes: ['images'],
-    },
     navigation: {
       type: 'bloks',
       display_name: 'Menu',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['action'],
+      required: true,
     },
     actions: {
       type: 'bloks',
@@ -429,7 +425,7 @@ const cover: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['heading', 'action'],
     },
     background: {
       type: 'asset',
@@ -473,13 +469,14 @@ const section: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['content', 'grid', 'map', 'gallery', 'form'],
+      required: true,
     },
     footer: {
       type: 'bloks',
       display_name: 'Chiusura',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['action'],
     },
   },
 }
@@ -498,7 +495,7 @@ const grid: ComponentSchema = {
       type: 'options',
       display_name: 'Elementi',
       source: 'internal_stories',
-      filter_content_type: ['article', 'coach', 'student', 'course'],
+      filter_content_type: ['coach'],
       required: true,
     },
   },
@@ -548,7 +545,7 @@ const form: ComponentSchema = {
       type: 'bloks',
       display_name: 'Passaggi',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['field'],
       required: true,
     },
     message: {
@@ -607,7 +604,7 @@ const field: ComponentSchema = {
         { value: 'checkbox', name: 'Casella' },
         { value: 'area', name: 'Messaggio' },
         { value: 'select', name: 'Selezione' },
-        { value: 'file', name: 'File' },
+        // { value: 'file', name: 'File' }, //TODO :find a module for file input
         { value: 'enroll', name: 'Iscrizione' },
         { value: 'hidden', name: 'Nascosto' },
       ],
@@ -683,7 +680,7 @@ const content: ComponentSchema = {
   color: '#8bc34a',
   icon: 'block-text-c',
   schema: {
-    text: {
+    body: {
       type: 'markdown',
       display_name: 'Testo descrizione',
       customize_toolbar: true,
@@ -700,6 +697,7 @@ const content: ComponentSchema = {
         'hrule',
         'link',
         'inlinecode',
+        'image',
       ],
       required: true,
       default_value: '#### Titolo...\nParagrafo...\n- lista - lista',
@@ -746,7 +744,7 @@ const action: ComponentSchema = {
       customize_toolbar: true,
       rich_markdown: true,
       required: true,
-      toolbar: ['inlinecode'],
+      toolbar: ['inlinecode','image'],
       max_length: 60,
     },
     link: {

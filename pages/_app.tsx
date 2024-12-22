@@ -1,25 +1,38 @@
 import '@styles/globals.css'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import type { AppProps } from 'next/app'
 import { storyblokInit, apiPlugin } from '@storyblok/react'
 import { NextUIProvider } from '@nextui-org/react'
+import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
-import { Montserrat, Playfair_Display } from 'next/font/google'
+import { fontSans, fontSerif } from '@config/fonts'
+
 import { Page } from '@components/page'
 import { Section } from '@components/section'
-
-const geistSans = Montserrat({
-  variable: '--font-sans',
-  subsets: ['latin'],
-})
-
-const geistSerif = Playfair_Display({
-  variable: '--font-serif',
-  subsets: ['latin'],
-})
+import { Nav } from '@components/nav'
+import { Cover } from '@components/cover'
+import { Heading } from '@components/heading'
+import { Action } from '@components/action'
+import { Content } from '@components/content'
+import { Grid } from '@components/grid'
+import { Coach } from '@components/coach'
+import { Gallery } from '@components/gallery'
+import { Field } from '@components/field'
+import { Form } from '@components/form'
 
 const components = {
   page: Page,
+  nav: Nav,
   section: Section,
+  cover: Cover,
+  grid: Grid,
+  gallery: Gallery,
+  form: Form,
+  field: Field,
+  heading: Heading,
+  content: Content,
+  action: Action,
+  coach: Coach,
 }
 
 storyblokInit({
@@ -30,10 +43,17 @@ storyblokInit({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <NextUIProvider>
-      <div className={`${geistSans.variable} ${geistSerif.variable}`}>
-        <Component {...pageProps} />
-      </div>
-    </NextUIProvider>
+    <>
+      <NextUIProvider>
+        <NextThemesProvider attribute='class' defaultTheme='light'>
+          <Component {...pageProps} />
+        </NextThemesProvider>
+      </NextUIProvider>
+    </>
   )
+}
+
+export const fonts = {
+  sans: fontSans.style.fontFamily,
+  serif: fontSerif.style.fontStyle,
 }
