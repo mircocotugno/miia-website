@@ -14,15 +14,16 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@styles/*": ["./styles/*"],
+      "@pages/*": ["./pages/*"],
       "@components/*": ["./components/*"],
-      "@config/*": ["./config/*"],
+      "@styles/*": ["./styles/*"],
       "@modules/*": ["./modules/*"],
+      "@public/*": ["./public/*"],
+      "@config/*": ["./config/*"],
       "@props/*": ["./props/*"],
-      "@cms/*": ["./cms/*"],
-      "@public/*": ["./public/*"]
+      "@cms/*": ["./cms/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "cms"]
 }

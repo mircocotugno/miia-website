@@ -12,7 +12,7 @@ export default function Document() {
         />
       </Head>
       <body
-        className={`font-sans text-foreground bg-background min-h-screen ${fontSans.variable} ${fontSerif.variable}`}
+        className={`font-sans dark text-foreground bg-background min-h-screen ${fontSans.variable} ${fontSerif.variable}`}
       >
         <Main />
         <NextScript />

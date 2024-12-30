@@ -1,4 +1,4 @@
-export default async function preview(req, res) {
+export default async function preview(req: any, res: any) {
   const { slug = '' } = req.query
   const params = req.url.split('?')
 
@@ -10,7 +10,7 @@ export default async function preview(req, res) {
   const cookies = res.getHeader('Set-Cookie')
   res.setHeader(
     'Set-Cookie',
-    cookies.map((cookie) =>
+    cookies.map((cookie: any) =>
       cookie.replace('SameSite=Lax', 'SameSite=None;Secure')
     )
   )

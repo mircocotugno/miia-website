@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useTheme } from 'next-themes'
-import Image from 'next/image'
 import {
   Navbar,
   NavbarBrand,
@@ -9,36 +8,36 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
+  Button,
   Link,
 } from '@nextui-org/react'
-import { NavProps } from '@props/types'
+import type { NavProps } from '@props/types'
 
 import { Brand } from '@public/brand'
 import { Logo } from '@public/logo'
+import { compiler } from 'markdown-to-jsx'
 
 interface NavComponent {
   blok: NavProps
 }
 
 export function Nav({ blok }: NavComponent) {
-  // console.log(blok)
-  
-  const { theme, setTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  
-  console.log(theme)
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth='xl' className='my-auto'>
       <NavbarBrand>
         <Link href='/'>
           <Logo
             classes='max-md:hidden'
-            primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
-            secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}
+            // primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
+            // secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}
+            primary='#F3F3F2'
+            secondary='#686D6C'
           />
           <Brand
             classes='md:hidden'
-            color={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
+            // color={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
+            color='#F3F3F2'
           />
         </Link>
       </NavbarBrand>
@@ -46,17 +45,29 @@ export function Nav({ blok }: NavComponent) {
         {blok.navigation.map((item, index) => (
           <NavbarItem key={index}>
             <Link
-              href={item.link.cached_url || item.link.url}
+              href={item.link?.cached_url || item.link.url}
               target={item.link.target}
               color='foreground'
             >
-              {item.label}
+              {compiler(item.label, { wrapper: null, overrides: overrides })}
             </Link>
           </NavbarItem>
         ))}
       </NavbarContent>
       <NavbarContent justify='end'>
-        <NavbarItem className='pr-3'>
+        {blok.actions.map((item, index) => (
+          <NavbarItem key={index} className='max-sm:hidden'>
+            <Button
+              href={item.link?.cached_url || item.link.url}
+              target={item.link.target}
+              color='primary'
+              as={Link}
+            >
+              {compiler(item.label, { wrapper: null, overrides: overrides })}
+            </Button>
+          </NavbarItem>
+        ))}
+        {/* <NavbarItem className='pr-3'>
           <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
             <i
               className={`iconoir-${
@@ -64,7 +75,7 @@ export function Nav({ blok }: NavComponent) {
               }`}
             />
           </button>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           className='sm:hidden'
@@ -77,12 +88,33 @@ export function Nav({ blok }: NavComponent) {
             <Link
               href={item.link.cached_url || item.link.url}
               target={item.link.target}
+              color='foreground'
             >
-              {item.label}
+              {compiler(item.label, { wrapper: null, overrides: overrides })}
             </Link>
+          </NavbarMenuItem>
+        ))}
+        {blok.actions.map((item, index) => (
+          <NavbarMenuItem key={index}>
+            <Button
+              href={item.link.cached_url || item.link.url}
+              target={item.link.target}
+              color='primary'
+              as={Link}
+            >
+              {compiler(item.label, { wrapper: null, overrides: overrides })}
+            </Button>
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
     </Navbar>
   )
+}
+
+const overrides = {
+  code: {
+    component: ({ children }: { children: string }) => (
+      <i className={`iconoir-${children}`} />
+    ),
+  },
 }

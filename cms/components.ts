@@ -113,24 +113,26 @@ const course: ComponentSchema = {
       ],
       required: true,
     },
-    frequency: {
-      type: 'option',
-      display_name: 'Frequenza',
-      description:
-        'Per aggiungere una frequenza indicare giorni e orari separti dalla virgola',
+    days: {
+      type: 'options',
+      display_name: 'Giorni di lezione',
       options: [
-        {
-          value: 'Martedì e Giovedì - 20:00/23:00',
-          name: 'Martedi e Giovedì - serale',
-        },
-        {
-          value: 'Sabato - 9:00/16:00',
-          name: 'Sabato - mattina/pomeriggio',
-        },
-        {
-          value: 'Lunedì e Mercoledì - 20:00/23:00',
-          name: 'Lunedì e Mercoledì - serale',
-        },
+        { value: 'Lunedì', name: 'Lunedì' },
+        { value: 'Martedi', name: 'Martedi' },
+        { value: 'Mercoledì', name: 'Mercoledì' },
+        { value: 'Giovedì', name: 'Giovedì' },
+        { value: 'Venerdì', name: 'Venerdì' },
+        { value: 'Sabato', name: 'Sabato' },
+      ],
+      required: true,
+    },
+    hours: {
+      type: 'options',
+      display_name: 'Orario delle lezioni',
+      options: [
+        { value: '9:00/12:00', name: '9:00/12:00' },
+        { value: '13:00/16:00', name: '13:00/16:00' },
+        { value: '20:00/23:00', name: '20:00/23:00' },
       ],
       required: true,
     },
@@ -221,7 +223,7 @@ const page: ComponentSchema = {
     },
     body: {
       type: 'bloks',
-      display_name: 'Contenuti della pagina',
+      display_name: 'Contenuti pagina',
       restrict_components: true,
       component_whitelist: ['section', 'cover'],
     },
@@ -238,6 +240,11 @@ const article: ComponentSchema = {
   icon: 'block-comment',
   preview_tmpl: ``,
   schema: {
+    preview: {
+      type: 'section',
+      display_name: 'Anteprima metadati',
+      keys: ['title', 'description', 'image', 'author'],
+    },
     title: {
       type: 'textarea',
       display_name: 'Titolo',
@@ -265,9 +272,9 @@ const article: ComponentSchema = {
     },
     body: {
       type: 'bloks',
-      display_name: 'Contenuti della pagina',
+      display_name: 'Contenuti articolo',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['section'],
     },
   },
 }
@@ -325,23 +332,7 @@ const enroll: ComponentSchema = {
     enrollment: {
       type: 'section',
       display_name: 'Iscrizione',
-      keys: ['headline', 'price', 'courses', 'action', 'form'],
-    },
-    headline: {
-      type: 'markdown',
-      display_name: 'Initestazione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: ['bold', 'inlinecode', 'link'],
-      required: true,
-      max_length: 140,
-    },
-    price: {
-      type: 'option',
-      display_name: 'Prezzo',
-      source: 'internal',
-      datasource_slug: 'prices',
-      required: true,
+      keys: ['courses', 'form'],
     },
     courses: {
       type: 'options',
@@ -350,16 +341,6 @@ const enroll: ComponentSchema = {
       restrict_content_types: true,
       filter_content_type: ['course'],
       required: true,
-      folder_slug: '{0}/{1}/corsi',
-    },
-    action: {
-      type: 'markdown',
-      display_name: 'Azione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      required: true,
-      toolbar: ['inlinecode'],
-      max_length: 60,
     },
     form: {
       type: 'option',
@@ -373,14 +354,14 @@ const enroll: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['section', 'cover'],
     },
   },
 }
 
 const nav: ComponentSchema = {
   name: 'nav',
-  display_name: 'Menu',
+  display_name: 'Navigatore',
   is_root: true,
   is_nestable: true,
   component_group_uuid: 'containers',
@@ -399,7 +380,7 @@ const nav: ComponentSchema = {
       type: 'bloks',
       display_name: 'Azioni',
       restrict_components: true,
-      component_whitelist: [],
+      component_whitelist: ['action'],
     },
     message: {
       type: 'markdown',
@@ -433,6 +414,15 @@ const cover: ComponentSchema = {
       description: 'Dimensione consigliata 1920x1280px',
       filetypes: ['images'],
     },
+    styles: {
+      type: 'options',
+      display_name: 'Stili',
+      options: [
+        { value: 'themeDark', name: 'Tema scuro' },
+        { value: 'justifyRight', name: 'Giusifica a destra' },
+        { value: 'minHeight', name: 'Altezza minima' },
+      ],
+    },
   },
 }
 
@@ -448,7 +438,7 @@ const section: ComponentSchema = {
   schema: {
     headline: {
       type: 'markdown',
-      display_name: 'Testo',
+      display_name: 'Intestazione',
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: [
@@ -469,14 +459,22 @@ const section: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: ['content', 'grid', 'map', 'gallery', 'form'],
+      component_whitelist: ['content', 'grid', 'map', 'gallery', 'accordion'],
       required: true,
     },
     footer: {
       type: 'bloks',
       display_name: 'Chiusura',
       restrict_components: true,
-      component_whitelist: ['action'],
+      component_whitelist: ['action', 'alias'],
+    },
+    styles: {
+      type: 'options',
+      display_name: 'Stili',
+      options: [
+        { value: 'themeDark', name: 'Tema scuro' },
+        { value: 'justifyCenter', name: 'Giusifica al centro' },
+      ],
     },
   },
 }
@@ -517,6 +515,25 @@ const map: ComponentSchema = {
       source: 'internal',
       datasource_slug: 'locations',
       required: true,
+    },
+  },
+}
+
+const accordion: ComponentSchema = {
+  name: 'accordion',
+  display_name: 'Fisarmonica',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  color: '#ff7043',
+  icon: 'block-text-img-c',
+  preview_tmpl: ``,
+  schema: {
+    contents: {
+      type: 'bloks',
+      display_name: 'Contenuti',
+      restrict_components: true,
+      component_whitelist: ['content'],
     },
   },
 }
@@ -680,16 +697,20 @@ const content: ComponentSchema = {
   color: '#8bc34a',
   icon: 'block-text-c',
   schema: {
+    head: {
+      type: 'markdown',
+      display_name: 'Titolo',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: ['h3', 'h4', 'h5', 'h6'],
+      default_value: '### Titolo...',
+    },
     body: {
       type: 'markdown',
-      display_name: 'Testo descrizione',
+      display_name: 'Descrizione',
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: [
-        'h3',
-        'h4',
-        'h5',
-        'h6',
         'bold',
         'paragraph',
         'list',
@@ -700,7 +721,7 @@ const content: ComponentSchema = {
         'image',
       ],
       required: true,
-      default_value: '#### Titolo...\nParagrafo...\n- lista - lista',
+      default_value: 'Descrizione...',
     },
   },
 }
@@ -744,8 +765,7 @@ const action: ComponentSchema = {
       customize_toolbar: true,
       rich_markdown: true,
       required: true,
-      toolbar: ['inlinecode','image'],
-      max_length: 60,
+      toolbar: ['bold', 'inlinecode'],
     },
     link: {
       type: 'multilink',
@@ -827,6 +847,7 @@ export type Components =
   | 'nav'
   | 'grid'
   | 'map'
+  | 'accordion'
   | 'heading'
   | 'content'
   | 'form'
@@ -847,6 +868,7 @@ export const components = {
   nav,
   grid,
   map,
+  accordion,
   heading,
   content,
   form,

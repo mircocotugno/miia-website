@@ -22,4 +22,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .min-h-inherit {
+    min-height: inherit;
+  }
 }

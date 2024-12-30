@@ -1,4 +1,9 @@
-import type { FieldProps, FormProps } from '@props/types'
+import type {
+  CourseProps,
+  FieldProps,
+  FormProps,
+  OptionProp,
+} from '@props/types'
 import {
   Drawer,
   DrawerContent,
@@ -15,6 +20,7 @@ import { Content } from '@components/content'
 
 interface FormComponent {
   blok: FormProps
+  courses?: Array<OptionProp>
 }
 
 const formTitles = {
@@ -40,7 +46,7 @@ interface FormData {
   [key: string]: DataProps
 }
 
-export function Form({ blok }: FormComponent) {
+export function Form({ blok, courses }: FormComponent) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [data, setData] = useState((): FormData => getData(blok.body))
   const [message, setMessage] = useState(blok.message)
@@ -89,7 +95,7 @@ export function Form({ blok }: FormComponent) {
 
   return (
     <>
-      <Button color='primary' onPress={onOpen}>
+      <Button color='primary' className='font-bold text-md' onPress={onOpen}>
         {callToAction[blok.scope]}
       </Button>
       <Drawer size='lg' isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -100,14 +106,20 @@ export function Form({ blok }: FormComponent) {
                 {!!blok.scope && formTitles[blok.scope]}
               </DrawerHeader>
               <DrawerBody>
-                {blok.body.map((field, index) => (
-                  <StoryblokComponent
-                    blok={field}
-                    data={data[field.id]}
-                    callback={handleChange}
-                    key={index}
-                  />
-                ))}
+                {blok.body.map((field, index) =>
+                  field.input === 'enroll' && !courses?.length ? null : (
+                    <StoryblokComponent
+                      blok={
+                        field.input === 'enroll'
+                          ? { ...field, options: courses }
+                          : field
+                      }
+                      data={data[field.id]}
+                      callback={handleChange}
+                      key={index}
+                    />
+                  )
+                )}
               </DrawerBody>
               <DrawerFooter className='justify-start'>
                 <Button color='primary' onPress={() => handleSubmit()}>
@@ -122,7 +134,7 @@ export function Form({ blok }: FormComponent) {
                 {!!blok.scope && formTitles[blok.scope]}
               </DrawerHeader>
               <DrawerBody>
-                <Content blok={{ body: message }} />
+                <Content blok={{ head: '', body: message }} />
               </DrawerBody>
               <DrawerFooter className='justify-start'>
                 <Button color='primary' onPress={() => handleReset()}>

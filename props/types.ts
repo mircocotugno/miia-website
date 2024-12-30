@@ -45,16 +45,14 @@ export type StudentProps = {
   email: string
 }
 
-export type LocationProps = {
+export type LocationProps = string & {
   city: string
   address: string
   cap: string
   phone: string
   email: string
-  position: {
-    lat: number
-    lng: number
-  }
+  lat: number
+  lng: number
   direction: string
 }
 
@@ -78,10 +76,15 @@ type CoursePrograms =
   | 'interior avanzato'
   | 'fashion avanzato'
 
-type CourseFrequencies =
-  | 'Martedì e Giovedì - 20:00/23:00'
-  | 'Sabato - 9:00/16:00'
-  | 'Lunedì e Mercoledì - 20:00/23:00'
+type CourseDays =
+  | 'Lunedì'
+  | 'Martedì'
+  | 'Mercoledì'
+  | 'Giovedì'
+  | 'Venerdì'
+  | 'Sabato'
+
+type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
 type FormScopes = 'contact' | 'openday' | 'enroll'
 
@@ -118,7 +121,8 @@ export type CoachProps = BlokProps & {
 export type CourseProps = BlokProps & {
   program: CoursePrograms
   location: LocationProps
-  frequency: CourseFrequencies
+  days: Array<CourseDays>
+  hours: Array<CourseHours>
   starts: string
   ends: string
   seats: number
@@ -131,43 +135,54 @@ export type MetaProps = {
   image?: ImageProps
 }
 
-export type PageProps = BlokProps &
-  MetaProps & {
-    header: StoryProps & {
-      content: NavProps
-    }
-    footer: StoryProps & {
-      content: NavProps
-    }
-    body: Array<SectionProps>
+export type PageProps = MetaProps & {
+  header: StoryProps & {
+    content: NavProps
   }
+  footer: StoryProps & {
+    content: NavProps
+  }
+  body: Array<SectionProps & CoverProps>
+}
 
-export type ArticleProps = BlokProps &
-  MetaProps & {
-    author: CoachProps
-    body: Array<object>
+export type ArticleProps = MetaProps & {
+  author: StoryProps & {
+    content: CoachProps
   }
+  body: Array<SectionProps>
+}
 
-export type EnrollProps = BlokProps &
-  MetaProps & {
-    header: object
-    footer: object
-    headline: string
-    price: PriceProps
-    courses: Array<CoachProps>
-    form: FormProps
-    body: Array<object>
+export type EnrollProps = MetaProps & {
+  header: StoryProps & {
+    content: NavProps
   }
+  footer: StoryProps & {
+    content: NavProps
+  }
+  courses: Array<
+    StoryProps & {
+      content: CourseProps
+    }
+  >
+  form: StoryProps & {
+    content: FormProps
+  }
+  body: Array<SectionProps & CoverProps>
+}
 
 export type CoverProps = BlokProps & {
-  body: Array<object>
+  body: Array<HeadingProps & ActionProps>
   background: ImageProps
+  styles: ['themeDark' | 'justifyRight' | 'minHeight']
 }
 
 export type SectionProps = BlokProps & {
   headline?: string
-  body: Array<object>
-  footer: Array<ActionProps>
+  body: Array<
+    ContentProps & GridProps & MapProps & GalleryProps & AccordionProps
+  >
+  footer: Array<ActionProps & AliasProps>
+  styles: ['themeDark' | 'justifyCenter']
 }
 
 export type NavProps = BlokProps & {
@@ -177,11 +192,19 @@ export type NavProps = BlokProps & {
 }
 
 export type GridProps = BlokProps & {
-  items: Array<StoryProps>
+  items: Array<
+    StoryProps & {
+      content: CoachProps
+    }
+  >
 }
 
 export type MapProps = BlokProps & {
-  locations: Array<string>
+  locations: Array<LocationProps>
+}
+
+export type AccordionProps = BlokProps & {
+  contents: Array<ContentProps>
 }
 
 export type FormProps = BlokProps & {
@@ -190,13 +213,18 @@ export type FormProps = BlokProps & {
   message: string
 }
 
+export type OptionProp = {
+  name: string
+  value: string
+}
+
 export type FieldProps = BlokProps & {
   id: string
   input: InputTypes
   label: string
   placeholder: string
   required: boolean
-  options: string
+  options: string | Array<OptionProp>
 }
 
 export type HeadingProps = BlokProps & {
@@ -204,6 +232,7 @@ export type HeadingProps = BlokProps & {
 }
 
 export type ContentProps = BlokProps & {
+  head: string
   body: string
 }
 
@@ -214,7 +243,9 @@ export type ActionProps = BlokProps & {
 }
 
 export type AliasProps = BlokProps & {
-  item: object
+  item: StoryProps & {
+    content: ArticleProps & CoachProps & FormProps & StudentProps & CourseProps
+  }
 }
 
 export type GalleryProps = BlokProps & {

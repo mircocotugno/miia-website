@@ -14,11 +14,11 @@ type Home = {
   }
 }
 
-const resolvers = ['page.header', 'page.footer', 'grid.items']
+const relations = ['page.header', 'page.footer', 'grid.items', 'alias.item']
 
 export default function Home({ story }: Home) {
   const page = useStoryblokState(story, {
-    resolveRelations: resolvers,
+    resolveRelations: relations,
     preventClicks: true,
   })
   if (!page?.content) return null
@@ -27,20 +27,18 @@ export default function Home({ story }: Home) {
 
 export async function getStaticProps() {
   const slug = 'home'
-  const relations = resolvers.join(',')
 
-  const variables = { slug, relations }
+  const variables = { slug, relations: relations.join(',') }
   const query = `
-  query ($relations: String) {
-    ContentNode(
-      id: "home",
-      resolve_relations: $relations
-    ) {
-      id
-      content
+    query ($relations: String) {
+      ContentNode(
+        id: "home",
+        resolve_relations: $relations
+      ) {
+        id
+        content
+      }
     }
-  }
-  
 `
   const data = await storyblokApi({ query, variables })
 

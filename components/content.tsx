@@ -15,11 +15,13 @@ export function Content({ blok }: ContentComponent) {
       className='w-full h-full space-y-1.5 backdrop-blur-sm'
       {...storyblokEditable(blok)}
     >
-      {compiler(blok.body, {
-        wrapper: null,
-        forceWrapper: true,
-        overrides: overrides,
-      })}
+      {compiler(blok.head, { wrapper: null, overrides: overrides })}
+      <div className='font-sans'>
+        {compiler(blok.body, {
+          wrapper: null,
+          overrides: overrides,
+        })}
+      </div>
     </div>
   )
 }
@@ -27,12 +29,22 @@ export function Content({ blok }: ContentComponent) {
 const overrides = {
   h3: {
     component: ({ children }: { children: string }) => (
-      <h3 className='font-bold text-4xl max-sm:text-2xl'>{children}</h3>
+      <h3 className='font-bold text-2xl'>{children}</h3>
     ),
   },
   h4: {
     component: ({ children }: { children: string }) => (
-      <h4 className='font-semibold text-3xl max-sm:text-xl'>{children}</h4>
+      <h4 className='font-semibold text-xl'>{children}</h4>
+    ),
+  },
+  h5: {
+    component: ({ children }: { children: string }) => (
+      <h5 className='font-semibold text-lg'>{children}</h5>
+    ),
+  },
+  h6: {
+    component: ({ children }: { children: string }) => (
+      <h6 className='font-semibold'>{children}</h6>
     ),
   },
   ul: {
@@ -42,7 +54,9 @@ const overrides = {
   },
   a: {
     component: ({ href, children }: { href: string; children: string }) => (
-      <Link href={href || ''}>{children}</Link>
+      <Link color='primary' href={href || ''}>
+        {children}
+      </Link>
     ),
   },
   code: {
@@ -60,10 +74,5 @@ const overrides = {
       alt: string
       title: string
     }) => <Image src={src} alt={alt} title={title} width='100%' />,
-  },
-  p: {
-    component: ({ children }: { children: string }) => (
-      <p className='max-sm:line-clamp-3'>{children}</p>
-    ),
   },
 }

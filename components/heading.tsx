@@ -9,7 +9,7 @@ interface HeadingComponent {
 
 export function Heading({ blok }: HeadingComponent) {
   return (
-    <div className='font-serif space-y-3 backdrop-blur-sm'>
+    <div className='font-serif space-y-3 backdrop-blur-sm break-words'>
       {compiler(blok.body, {
         wrapper: null,
         forceWrapper: true,
@@ -22,7 +22,9 @@ export function Heading({ blok }: HeadingComponent) {
 const overrides = {
   h1: {
     component: ({ children }: { children: string }) => (
-      <h1 className='text-primary font-black text-6xl max-sm:text-5xl'>{children}</h1>
+      <h1 className='text-primary font-black text-7xl max-sm:text-6xl'>
+        {children}
+      </h1>
     ),
   },
   h2: {
@@ -37,12 +39,7 @@ const overrides = {
   },
   h4: {
     component: ({ children }: { children: string }) => (
-      <h4 className='font-semibold text-3xl max-sm:text-2xl'>{children}</h4>
-    ),
-  },
-  a: {
-    component: ({ href, children }: { href: string; children: string }) => (
-      <Link href={href || ''}>{children}</Link>
+      <h4 className='font-bold text-3xl max-sm:text-2xl'>{children}</h4>
     ),
   },
   code: {
@@ -50,9 +47,14 @@ const overrides = {
       <i className={`iconoir-${children}`} />
     ),
   },
+  a: {
+    component: ({ href, children }: { href: string; children: string }) => (
+      <Link href={href || ''}>{children}</Link>
+    ),
+  },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className='font-sans max-sm:line-clamp-3'>{children}</p>
+      <p className='font-sans text-lg max-sm:line-clamp-3'>{children}</p>
     ),
   },
 }

@@ -19,7 +19,7 @@ export function Coach({ blok }: CoachComponent) {
     <Card className='p-0' radius='sm' shadow='sm'>
       <CardHeader className='p-0'>
         <Image
-          radius='none'
+          radius='full'
           removeWrapper
           src={blok.image.filename}
           alt={blok.image.alt}

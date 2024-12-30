@@ -14,8 +14,12 @@ export default {
     },
     extend: {
       maxHeight: {
-        'modal': '40rem',
-      }
+        modal: '40rem',
+      },
+      minHeight: {
+        '100': '25rem',
+        cover: '40rem',
+      },
     },
   },
   darkMode: 'class',

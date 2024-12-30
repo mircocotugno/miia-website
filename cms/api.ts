@@ -65,7 +65,7 @@ interface StoryblokRead {
 
 export async function storyblokRead({ id, type }: StoryblokRead) {
   return await Storyblok.get(`${space}/${list[type].path}/${id}`)
-    .then(async (response) => {
+    .then(async (response: any) => {
       const data = await response.data
       return data[list[type].key]
     })
@@ -84,7 +84,7 @@ export async function storyblokCreate({ schema, type }: StoryblokCreate) {
   return await Storyblok.post(`${space}/${list[type].path}/`, {
     [list[type].key]: schema,
   })
-    .then(async (response) => {
+    .then(async (response: any) => {
       const data = await response.data
       return data[list[type].key]
     })
@@ -104,7 +104,7 @@ export async function storyblokUpdate({ id, type, schema }: StoryblokUpdate) {
   return await Storyblok.put(`${space}/${list[type].path}/${id}`, {
     [list[type].key]: schema,
   })
-    .then(async (response) => {
+    .then(async (response: any) => {
       const data = await response.data
       return data
     })
@@ -120,8 +120,8 @@ interface StoryblokDelete {
 }
 
 export async function storyblokDelete({ id, type }: StoryblokDelete) {
-  return await Storyblok.delete(`${space}/${list[type].path}/${id}`)
-    .then(async (response) => {
+  return await Storyblok.delete(`${space}/${list[type].path}/${id}`, {})
+    .then(async (response: any) => {
       const data = await response.data
       return data
     })

@@ -79,7 +79,7 @@ async function storyblok(
   let schema: any = null
   let id: string | null = ''
 
-  if (!['get', 'clear'].includes(operation)) {
+  if (!['get', 'clear', 'delete'].includes(operation)) {
     if (typeof lists[type][name] == 'undefined') {
       return console.error(`Error! Element ${name} of type ${type} not exist.`)
     }
@@ -96,9 +96,10 @@ async function storyblok(
         type: 'source',
       })
     }
-    if (['read', 'update', 'delete'].includes(operation)) {
-      id = getRecord({ name, type })
-    }
+  }
+
+  if (['read', 'update', 'delete'].includes(operation)) {
+    id = getRecord({ name, type })
   }
 
   switch (operation) {
