@@ -16,7 +16,8 @@ import {
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
 import { useState } from 'react'
-import { Content } from '@components/content'
+import { compiler } from 'markdown-to-jsx'
+import { Typography } from './typography'
 
 interface FormComponent {
   blok: FormProps
@@ -134,7 +135,10 @@ export function Form({ blok, courses }: FormComponent) {
                 {!!blok.scope && formTitles[blok.scope]}
               </DrawerHeader>
               <DrawerBody>
-                <Content blok={{ head: '', body: message }} />
+                {compiler(message, {
+                  wrapper: null,
+                  overrides: Typography,
+                })}
               </DrawerBody>
               <DrawerFooter className='justify-start'>
                 <Button color='primary' onPress={() => handleReset()}>

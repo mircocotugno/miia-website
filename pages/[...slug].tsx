@@ -25,53 +25,24 @@ type PageStory = {
     id: string
     content: BlokProps
   }
-  extra?: Array<any>
 }
 
-export default function PageStory({ story, extra }: PageStory) {
+export default function PageStory({ story }: PageStory) {
   const page = useStoryblokState(story, {
     resolveRelations: relations,
     preventClicks: true,
   })
   if (!page) return null
 
-  return (
-    <StoryblokComponent
-      blok={page.content}
-      tags={page.tag_list}
-      published={page.first_published_at}
-      extra={extra}
-    />
-  )
-}
-
-type ArticlePrevieProps = {
-  full_slug: string
-  first_published_at: any
-  tag_list: Array<string>
-  content: {
-    title: string
-  }
-}
-
-export type ArticleExtraProps = null | {
-  header: any
-  footer: any
-  articles: Array<ArticlePrevieProps>
-  tags: Array<string>
+  return <StoryblokComponent blok={page.content} />
 }
 
 export async function getStaticProps({ params }: any) {
   let slug = `/${params.slug.join('/')}`
 
-  const isArticle = slug.startsWith('/blog/')
-  let articleExtraData: ArticleExtraProps = null
-
-  // console.log(slug)
-
-  const variables = { slug, isArticle, relations: relations.join(',') }
+  const variables = { slug, relations: relations.join(',') }
   const query = `
-    query ($slug: ID!, $isArticle: Boolean!, $relations: String) {
+    query ($slug: ID!, $relations: String) {
       ContentNode(
         id: $slug,
         resolve_relations: $relations
@@ -82,48 +53,13 @@ export async function getStaticProps({ params }: any) {
         first_published_at
         tag_list
       }
-      ArticleItems(per_page: 15) @include(if: $isArticle) {
-        items {
-          full_slug
-          first_published_at
-          tag_list
-          content {
-            title
-          }
-        }
-      }
-      PageItem(id: "/blog") @include(if: $isArticle) {
-        content {
-          header {
-            content
-          }
-          footer {
-            content
-          }
-        }
-      }
-      Tags @include(if: $isArticle) {
-        items {
-          name
-        }
-      }
     }
   `
   const data = await storyblokApi({ query, variables })
 
-  if (isArticle) {
-    articleExtraData = {
-      header: data.PageItem.content.header,
-      footer: data.PageItem.content.footer,
-      articles: data.ArticleItems.items,
-      tags: data.Tags.items,
-    }
-  }
-
   return {
     props: {
       story: data?.ContentNode || null,
-      extra: articleExtraData,
     },
     revalidate: 3600,
   }
@@ -132,7 +68,7 @@ export async function getStaticProps({ params }: any) {
 export async function getStaticPaths() {
   const variables = { excluding_slugs: excluding_slugs.join(',') }
   const query = `
-    query ($excluding_slugs: String {
+    query ($excluding_slugs: String) {
       ContentNodes(
         excluding_slugs: $excluding_slugs, 
         filter_query: {
@@ -151,7 +87,7 @@ export async function getStaticPaths() {
   const paths: Array<string> = slugs.ContentNodes.items.map(
     ({ full_slug }: { full_slug: string }) => `/${full_slug}`
   )
-  console.log(paths)
+
   return {
     paths: paths,
     fallback: 'blocking',

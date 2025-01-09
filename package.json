@@ -39,6 +39,6 @@
     "storyblok-js-client": "^5.14.4",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.19.2",
-    "typescript": "^5"
+    "typescript": "^5.7.3"
   }
 }
