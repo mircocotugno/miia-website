@@ -2,7 +2,7 @@ import type { ContentProps } from '@props/types'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from '@components/typography'
 import { storyblokEditable } from '@storyblok/react'
-import { Column } from '@components/Column'
+import { Column } from '@components/column'
 
 interface ContentComponent {
   blok: ContentProps

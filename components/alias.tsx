@@ -1,6 +1,6 @@
 import { AliasProps } from '@props/types'
 import { StoryblokComponent } from '@storyblok/react'
-import { Column } from '@components/Column'
+import { Column } from '@components/column'
 
 interface AliasComponent {
   blok: AliasProps

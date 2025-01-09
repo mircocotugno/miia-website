@@ -1,7 +1,7 @@
 import type { PictureProps } from '@props/types'
 import { Image } from '@nextui-org/react'
 import { storyblokEditable } from '@storyblok/react'
-import { Column } from '@components/Column'
+import { Column } from '@components/column'
 import { parentPort } from 'worker_threads'
 
 interface PictureComponent {

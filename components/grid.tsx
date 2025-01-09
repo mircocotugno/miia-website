@@ -1,6 +1,6 @@
 import { GridProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import { Column } from '@components/Column'
+import { Column } from '@components/column'
 import { tv } from 'tailwind-variants'
 
 interface GridComponent {
