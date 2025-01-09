@@ -17,6 +17,7 @@ import { Content } from '@components/content'
 import { Grid } from '@components/grid'
 import { Coach } from '@components/coach'
 import { Gallery } from '@components/gallery'
+import { Picture } from '@components/picture'
 import { Field } from '@components/field'
 import { Form } from '@components/form'
 import { Accordion } from '@components/accordion'
@@ -34,6 +35,7 @@ const components = {
   cover: Cover,
   grid: Grid,
   gallery: Gallery,
+  picture: Picture,
   map: Map,
   accordion: Accordion,
   form: Form,

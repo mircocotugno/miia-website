@@ -22,3 +22,4 @@ article_component_id=6719798
 course_component_id=6719837
 enroll_component_id=6719839
 alias_component_id=6719841
+picture_component_id=6739127

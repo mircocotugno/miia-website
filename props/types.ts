@@ -8,8 +8,8 @@ export type StoryProps = {
 }
 
 export type BlokProps = {
-  _uid?: string
-  component?: string
+  _uid: string
+  component: string
 }
 
 export type EntryProps = {
@@ -182,7 +182,7 @@ export type SectionProps = BlokProps & {
     ContentProps & GridProps & MapProps & GalleryProps & AccordionProps
   >
   footer: Array<ActionProps & AliasProps>
-  styles: ['themeDark' | 'justifyCenter']
+  styles: ['themeDark' | 'justifyCenter' | 'smallSpaces']
 }
 
 export type NavProps = BlokProps & {
@@ -197,6 +197,7 @@ export type GridProps = BlokProps & {
       content: CoachProps
     }
   >
+  styles: ['doubleWidth']
 }
 
 export type MapProps = BlokProps & {
@@ -250,6 +251,11 @@ export type AliasProps = BlokProps & {
 
 export type GalleryProps = BlokProps & {
   images: Array<ImageProps>
+}
+
+export type PictureProps = BlokProps & {
+  image: ImageProps
+  style: 'sm' | 'md' | 'lg' | 'xl'
 }
 
 export type ComponentsProps =

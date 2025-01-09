@@ -30,9 +30,9 @@ export async function getStaticProps() {
 
   const variables = { slug, relations: relations.join(',') }
   const query = `
-    query ($relations: String) {
+    query ($slug: ID!, $relations: String) {
       ContentNode(
-        id: "home",
+        id: $slug,
         resolve_relations: $relations
       ) {
         id

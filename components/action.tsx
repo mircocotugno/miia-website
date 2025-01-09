@@ -1,7 +1,8 @@
 import { Link, Button, NavbarItem } from '@nextui-org/react'
 import { compiler } from 'markdown-to-jsx'
 import type { ActionProps } from '@props/types'
-import type { ReactElement } from 'react'
+import { Typography } from '@components/typography'
+import { storyblokEditable } from '@storyblok/react'
 
 interface ActionComponent {
   blok: ActionProps
@@ -13,11 +14,11 @@ export function Action({ blok, parent }: ActionComponent) {
 
   if (parent === 'nav') {
     return (
-      <NavbarItem>
+      <NavbarItem {...storyblokEditable(blok)}>
         <Link href={link} target={blok.link.target} color='foreground'>
           {compiler(blok.label, {
             wrapper: null,
-            overrides: overrides,
+            overrides: Typography,
           })}
         </Link>
       </NavbarItem>
@@ -29,21 +30,14 @@ export function Action({ blok, parent }: ActionComponent) {
       href={link}
       target={blok.link.target}
       color='primary'
-      className='mr-2'
+      size='lg'
+      className='mx-2 text-lg font-medium'
       as={Link}
     >
       {compiler(blok.label, {
         wrapper: null,
-        overrides: overrides,
+        overrides: Typography,
       })}
     </Button>
   )
-}
-
-const overrides = {
-  code: {
-    component: ({ children }: { children: string }) => (
-      <i className={`iconoir-${children}`} />
-    ),
-  },
 }

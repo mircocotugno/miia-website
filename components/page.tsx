@@ -14,7 +14,7 @@ export function Page({ blok }: PageComponent) {
       {blok.header && <Nav blok={blok.header.content} />}
       {blok.body &&
         blok.body.map((body, index) => (
-          <StoryblokComponent blok={body} parent={body.component} key={index} />
+          <StoryblokComponent blok={body} parent="page" key={index} />
         ))}
       {blok.footer && <footer>footer</footer>}
     </>

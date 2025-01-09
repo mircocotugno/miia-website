@@ -1,74 +1,34 @@
 import type { AccordionProps } from '@props/types'
-import {
-  Accordion as NextAccordion,
-  AccordionItem,
-  Link,
-  Image,
-} from '@nextui-org/react'
+import { Accordion as NextAccordion, AccordionItem } from '@nextui-org/react'
 import { compiler } from 'markdown-to-jsx'
+import { Typography } from '@components/typography'
+import { storyblokEditable } from '@storyblok/react'
+import { Column } from '@components/Column'
 
 interface AccordionComponent {
   blok: AccordionProps
+  parent?: string
 }
 
-export function Accordion({ blok }: AccordionComponent) {
+export function Accordion({ blok, parent }: AccordionComponent) {
   return (
-    <NextAccordion>
-      {blok.contents.map((content, index) => (
-        <AccordionItem
-          key={index}
-          aria-label={`accordion-${index}`}
-          title={compiler(content.head, {
-            wrapper: null,
-            overrides: overrides,
-          })}
-        >
-          <div className='font-light'>
-            {compiler(content.body, { wrapper: null, overrides: overrides })}
-          </div>
-        </AccordionItem>
-      ))}
-    </NextAccordion>
+    <Column parent={parent} classes='flex-1 max-sm:min-w-full min-w-60'>
+      <NextAccordion {...storyblokEditable(blok)}>
+        {blok.contents.map((content, index) => (
+          <AccordionItem
+            key={index}
+            aria-label={`accordion-${index}`}
+            title={compiler(content.head, {
+              wrapper: null,
+              overrides: Typography,
+            })}
+          >
+            <div className='font-light'>
+              {compiler(content.body, { wrapper: null, overrides: Typography })}
+            </div>
+          </AccordionItem>
+        ))}
+      </NextAccordion>
+    </Column>
   )
-}
-
-const overrides = {
-  h3: {
-    component: ({ children }: { children: string }) => (
-      <h3 className='font-medium text-xl max-sm:text-lg'>{children}</h3>
-    ),
-  },
-  h4: {
-    component: ({ children }: { children: string }) => (
-      <h4 className='font-semibold text-lg max-sm:text-md'>{children}</h4>
-    ),
-  },
-  ul: {
-    component: ({ children }: { children: string }) => (
-      <ul className='list-disc list-outside'>{children}</ul>
-    ),
-  },
-  a: {
-    component: ({ href, children }: { href: string; children: string }) => (
-      <Link color='primary' href={href || ''} className='font-semibold'>
-        {children}
-      </Link>
-    ),
-  },
-  code: {
-    component: ({ children }: { children: string }) => (
-      <i className={`iconoir-${children}`} />
-    ),
-  },
-  img: {
-    component: ({
-      src,
-      alt,
-      title,
-    }: {
-      src: string
-      alt: string
-      title: string
-    }) => <Image src={src} alt={alt} title={title} width='100%' />,
-  },
 }

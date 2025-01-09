@@ -15,32 +15,32 @@ export function Cover({ blok }: CoverComponent) {
     sectionStyles.backgroundImage = `url(${blok.background.filename})`
   }
 
-  const columnClasses = tv({
-    base: 'flex-none space-y-2 lg:w-1/2 w-2/3 max-sm:w-full my-6 lg:my-12',
+  const coverClasses = tv({
+    base: 'py-12 lg:py-24 bg-forenground text-background',
+    variants: {
+      background: {
+        true: 'bg-cover bg-center',
+      },
+      themeDark: {
+        true: 'bg-background text-foreground',
+      },
+      minHeight: {
+        true: 'min-h-60 md:min-h-80 lg:min-h-100',
+      },
+    },
   })
 
   const containerClasses = tv({
     base: 'flex items-center px-6 mx-auto max-w-[1280px] min-h-inherit',
     variants: {
       justifyRight: {
-        true: 'flex-row-reverse text-right',
+        true: 'justify-end text-right',
       },
     },
   })
 
-  const coverClasses = tv({
-    base: 'py-6 lg:py-12 bg-background text-foreground',
-    variants: {
-      background: {
-        true: 'bg-cover bg-center',
-      },
-      themeDark: {
-        true: 'bg-forenground text-background',
-      },
-      minHeight: {
-        true: 'min-h-60 md:min-h-80 lg:min-h-100',
-      },
-    },
+  const columnClasses = tv({
+    base: 'flex-none space-y-4 lg:w-1/2 w-2/3 max-sm:w-full my-6 lg:my-12',
   })
 
   return (

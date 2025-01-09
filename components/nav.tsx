@@ -12,6 +12,7 @@ import {
   Link,
 } from '@nextui-org/react'
 import type { NavProps } from '@props/types'
+import { Typography } from '@components/typography'
 
 import { Brand } from '@public/brand'
 import { Logo } from '@public/logo'
@@ -49,7 +50,7 @@ export function Nav({ blok }: NavComponent) {
               target={item.link.target}
               color='foreground'
             >
-              {compiler(item.label, { wrapper: null, overrides: overrides })}
+              {compiler(item.label, { wrapper: null, overrides: Typography })}
             </Link>
           </NavbarItem>
         ))}
@@ -63,7 +64,7 @@ export function Nav({ blok }: NavComponent) {
               color='primary'
               as={Link}
             >
-              {compiler(item.label, { wrapper: null, overrides: overrides })}
+              {compiler(item.label, { wrapper: null, overrides: Typography })}
             </Button>
           </NavbarItem>
         ))}
@@ -90,7 +91,7 @@ export function Nav({ blok }: NavComponent) {
               target={item.link.target}
               color='foreground'
             >
-              {compiler(item.label, { wrapper: null, overrides: overrides })}
+              {compiler(item.label, { wrapper: null, overrides: Typography })}
             </Link>
           </NavbarMenuItem>
         ))}
@@ -102,19 +103,11 @@ export function Nav({ blok }: NavComponent) {
               color='primary'
               as={Link}
             >
-              {compiler(item.label, { wrapper: null, overrides: overrides })}
+              {compiler(item.label, { wrapper: null, overrides: Typography })}
             </Button>
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
     </Navbar>
   )
-}
-
-const overrides = {
-  code: {
-    component: ({ children }: { children: string }) => (
-      <i className={`iconoir-${children}`} />
-    ),
-  },
 }

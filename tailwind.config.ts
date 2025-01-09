@@ -20,6 +20,17 @@ export default {
         '100': '25rem',
         cover: '40rem',
       },
+      lineHeight: {
+        tight: '1.125',
+        compact: '.9',
+      },
+      dropShadow: {
+        '8xl': [
+          '0 0.125rem 0.25rem rgba(0, 0, 0, 0.4)',
+          '0 0.75rem 1.25rem rgba(0, 0, 0, 0.2)',
+          '0 1.5rem 2rem rgba(0, 0, 0, 0.1)',
+        ],
+      },
     },
   },
   darkMode: 'class',

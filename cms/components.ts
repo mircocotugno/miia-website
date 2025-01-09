@@ -452,14 +452,21 @@ const section: ComponentSchema = {
         'bold',
         'hrule',
       ],
-      required: true,
       default_value: '### Titolo...',
     },
     body: {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: ['content', 'grid', 'map', 'gallery', 'accordion'],
+      component_whitelist: [
+        'content',
+        'grid',
+        'map',
+        'gallery',
+        'picture',
+        'accordion',
+        'alias',
+      ],
       required: true,
     },
     footer: {
@@ -473,6 +480,7 @@ const section: ComponentSchema = {
       display_name: 'Stili',
       options: [
         { value: 'themeDark', name: 'Tema scuro' },
+        { value: 'smallSpaces', name: 'Spaziatura ridotta' },
         { value: 'justifyCenter', name: 'Giusifica al centro' },
       ],
     },
@@ -493,8 +501,13 @@ const grid: ComponentSchema = {
       type: 'options',
       display_name: 'Elementi',
       source: 'internal_stories',
-      filter_content_type: ['coach'],
+      filter_content_type: ['coach', 'article'],
       required: true,
+    },
+    styles: {
+      type: 'options',
+      display_name: 'Stili',
+      options: [{ value: 'doubleWidth', name: 'Larghezza doppia' }],
     },
   },
 }
@@ -745,6 +758,35 @@ const gallery: ComponentSchema = {
   },
 }
 
+const picture: ComponentSchema = {
+  name: 'picture',
+  display_name: 'Immagine',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  color: '#d500f9',
+  icon: 'block-image',
+  preview_tmpl: ``,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagini',
+      filetypes: ['images'],
+      required: true,
+    },
+    style: {
+      type: 'option',
+      display_name: 'Stili',
+      options: [
+        { value: 'sm', name: 'piccola' },
+        { value: 'md', name: 'media' },
+        { value: 'lg', name: 'grande' },
+        { value: 'xl', name: 'extra' },
+      ],
+    },
+  },
+}
+
 const action: ComponentSchema = {
   name: 'action',
   display_name: 'Azione',
@@ -853,6 +895,7 @@ export type Components =
   | 'form'
   | 'field'
   | 'gallery'
+  | 'picture'
   | 'alias'
 
 export const components = {
@@ -874,5 +917,6 @@ export const components = {
   form,
   field,
   gallery,
+  picture,
   alias,
 }

@@ -6,6 +6,8 @@ import {
   StoryblokComponent,
 } from '@storyblok/react'
 
+const excluding_slugs = ['home', 'blog/']
+
 const relations = [
   'page.header',
   'page.footer',
@@ -128,10 +130,11 @@ export async function getStaticProps({ params }: any) {
 }
 
 export async function getStaticPaths() {
+  const variables = { excluding_slugs: excluding_slugs.join(',') }
   const query = `
-    query {
+    query ($excluding_slugs: String {
       ContentNodes(
-        excluding_slugs: "home", 
+        excluding_slugs: $excluding_slugs, 
         filter_query: {
           component: {
             in: "page,enroll,article"
@@ -144,11 +147,11 @@ export async function getStaticPaths() {
       }
     }
   `
-  const slugs = await storyblokApi({ query })
-  const paths = slugs.ContentNodes.items.map(
+  const slugs = await storyblokApi({ query, variables })
+  const paths: Array<string> = slugs.ContentNodes.items.map(
     ({ full_slug }: { full_slug: string }) => `/${full_slug}`
   )
-  // console.log(paths)
+  console.log(paths)
   return {
     paths: paths,
     fallback: 'blocking',
