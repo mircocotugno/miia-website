@@ -9,7 +9,7 @@ interface StoryblokApi {
 }
 
 export async function storyblokApi({ query, variables }: StoryblokApi) {
-  const version = process.env.NODE_ENV == 'production' ? 'published' : 'draft'
+  const version = process.env.NEXT_PUBLIC_STORYBLOK_IS_PREVIEW === 'true' ? 'draft' : 'published'
 
   const res = await fetch('https://gapi.storyblok.com/v1/api', {
     method: 'POST',

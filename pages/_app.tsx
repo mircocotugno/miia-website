@@ -48,6 +48,7 @@ const components = {
 }
 
 storyblokInit({
+  bridge: process.env.NEXT_PUBLIC_STORYBLOK_IS_PREVIEW === 'true' ? true : false,
   accessToken: process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_TOKEN,
   use: [apiPlugin],
   components,
