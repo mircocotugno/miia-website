@@ -47,8 +47,11 @@ const components = {
   alias: Alias,
 }
 
+console.log(`is preview: ${process.env.IS_PREVIEW}`)
+
 storyblokInit({
-  accessToken: process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW_TOKEN,
+  bridge: process.env.IS_PREVIEW === 'true' ? true : false,
+  accessToken: process.env.STORYBLOK_PREVIEW,
   use: [apiPlugin],
   components,
 })
