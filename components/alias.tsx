@@ -8,6 +8,7 @@ interface AliasComponent {
 }
 
 export function Alias({ blok, parent }: AliasComponent) {
+  if (!blok.item?.content) return null
   return (
     <Column parent={parent} classes='flex-none'>
       <StoryblokComponent blok={blok.item.content} />

@@ -1,6 +1,3 @@
-import type { StoryProps } from '@props/types'
-import type { ISbStoryData } from '@storyblok/react'
-
 interface StoryblokApi {
   query: string
   variables?: {

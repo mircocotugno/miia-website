@@ -31,6 +31,13 @@ const pagination = 10
 const relations = ['article.author', 'page.header', 'page.footer']
 
 export default function Blog({ story }: Blog) {
+  const page: pageContent = useStoryblokState(story.page, {
+    resolveRelations: relations,
+    preventClicks: true,
+  })
+
+  if (!page?.content && !story.articles?.length) return null
+
   const [articles, setArticles] = useState(story.articles)
   const [loadMore, setLoadMore] = useState(false)
   const [current, setCurrent] = useState(1)
@@ -85,14 +92,7 @@ export default function Blog({ story }: Blog) {
     getMoreArticle().catch((error) => console.log(error))
   }, [loadMore])
 
-  const page: pageContent = useStoryblokState(story.page, {
-    resolveRelations: relations,
-    preventClicks: true,
-  })
-  if (!page) return null
-
   const { tags, hasMore } = story
-  console.log(current)
 
   return (
     <>
