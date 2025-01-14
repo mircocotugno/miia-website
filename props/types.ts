@@ -153,6 +153,19 @@ export type ArticleProps = MetaProps & {
   body: Array<SectionProps>
 }
 
+export type EventProsp = BlokProps & {
+  image: ImageProps
+  title: string
+  description: string
+  date: Date
+  form?: StoryProps & {
+    content: FormProps
+  }
+  location?: StoryProps & {
+    content: LocationProps
+  }
+}
+
 export type EnrollProps = MetaProps & {
   header: StoryProps & {
     content: NavProps

@@ -14,7 +14,7 @@ type Home = {
   }
 }
 
-const relations = ['page.header', 'page.footer', 'grid.items', 'alias.item']
+const relations = ['page.header', 'page.footer', 'grid.items', 'alias.item', 'event.form']
 
 export default function Home({ story }: Home) {
   const page = useStoryblokState(story, {

@@ -25,3 +25,4 @@ alias_component_id=6719841
 picture_component_id=6739127
 menu_component_id=6798619
 carousel_component_id=6800791
+event_component_id=6791750

@@ -23,6 +23,7 @@ import { Form } from '@components/form'
 import { Accordion } from '@components/accordion'
 import { Map } from '@components/map'
 import { Article } from '@components/article'
+import { Event } from '@components/event'
 import { Alias } from '@components/alias'
 import { Enroll } from '@components/enroll'
 import { Menu } from '@components/menu'
@@ -31,6 +32,7 @@ import { Carousel } from '@components/carousel'
 const components = {
   page: Page,
   article: Article,
+  event: Event,
   enroll: Enroll,
   nav: Nav,
   menu: Menu,

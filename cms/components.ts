@@ -279,6 +279,52 @@ const article: ComponentSchema = {
   },
 }
 
+const event: ComponentSchema = {
+  name: 'event',
+  display_name: 'Evento',
+  is_root: true,
+  is_nestable: true,
+  component_group_uuid: 'resources',
+  color: '#43a047',
+  icon: 'block-comment',
+  preview_tmpl: ``,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      description: 'Dimensione consigliata 1200x627px',
+      filetypes: ['images'],
+    },
+    title: {
+      type: 'text',
+      display_name: 'Titolo',
+      required: true,
+    },
+    description: {
+      type: 'textarea',
+      display_name: 'Descrizione',
+    },
+    date: {
+      type: 'datetime',
+      display_name: 'Data',
+      required: true,
+    },
+    location: {
+      type: 'option',
+      display_name: 'Luogo',
+      source: 'internal',
+      datasource_slug: 'locations',
+    },
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+    },
+  },
+}
+
 const enroll: ComponentSchema = {
   name: 'enroll',
   display_name: 'Iscrizione',
@@ -880,7 +926,14 @@ const alias: ComponentSchema = {
       type: 'option',
       display_name: 'Elemento',
       source: 'internal_stories',
-      filter_content_type: ['article', 'coach', 'form', 'student', 'course'],
+      filter_content_type: [
+        'article',
+        'coach',
+        'form',
+        'student',
+        'course',
+        'event',
+      ],
       required: true,
     },
   },
@@ -928,6 +981,7 @@ export type Components =
   | 'course'
   | 'page'
   | 'article'
+  | 'event'
   | 'enroll'
   | 'cover'
   | 'section'
@@ -952,6 +1006,7 @@ export const components = {
   course,
   page,
   article,
+  event,
   enroll,
   cover,
   section,
