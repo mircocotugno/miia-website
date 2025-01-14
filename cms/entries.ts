@@ -1,5 +1,4 @@
-import { EntrySchema } from '@props/schema'
-import type { PriceProps } from '@props/types'
+import type { EntrySchema } from '../props/schema'
 
 export type LocationEntry = EntrySchema & {
   name: 'title'

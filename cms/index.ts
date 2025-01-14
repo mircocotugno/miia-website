@@ -20,7 +20,7 @@ import type {
   GroupSchema,
   PresetSchema,
   SourceSchema,
-} from '@props/schema'
+} from '../props/schema'
 
 import { groups } from './groups'
 import { components } from './components'

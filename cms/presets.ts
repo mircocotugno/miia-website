@@ -1,6 +1,6 @@
-import type { StoryblokPreset } from '@props/schema'
+import type { PresetSchema } from '../props/schema'
 
-const fieldName: StoryblokPreset = {
+const fieldName: PresetSchema = {
   name: 'Nome',
   component_id: 'field',
   preset: {
@@ -11,7 +11,7 @@ const fieldName: StoryblokPreset = {
     placeholder: 'Mario',
   },
 }
-const fieldSurname: StoryblokPreset = {
+const fieldSurname: PresetSchema = {
   name: 'Cognome',
   component_id: 'field',
   preset: {
@@ -22,7 +22,7 @@ const fieldSurname: StoryblokPreset = {
     placeholder: 'Rossi',
   },
 }
-const fieldFullname: StoryblokPreset = {
+const fieldFullname: PresetSchema = {
   name: 'Nome completo',
   component_id: 'field',
   preset: {
@@ -33,7 +33,7 @@ const fieldFullname: StoryblokPreset = {
     required: true,
   },
 }
-const fieldBirthday: StoryblokPreset = {
+const fieldBirthday: PresetSchema = {
   name: 'Data di nascita',
   component_id: 'field',
   preset: {
@@ -42,7 +42,7 @@ const fieldBirthday: StoryblokPreset = {
     label: 'Data di nascita',
   },
 }
-const fieldGender: StoryblokPreset = {
+const fieldGender: PresetSchema = {
   name: 'Sesso',
   component_id: 'field',
   preset: {
@@ -52,7 +52,7 @@ const fieldGender: StoryblokPreset = {
     options: 'male:Maschile\nfemale:Femminile\nother:Altro',
   },
 }
-const fieldBornIn: StoryblokPreset = {
+const fieldBornIn: PresetSchema = {
   name: 'Luogo di nascita',
   component_id: 'field',
   preset: {
@@ -63,7 +63,7 @@ const fieldBornIn: StoryblokPreset = {
     required: true,
   },
 }
-const fieldEmail: StoryblokPreset = {
+const fieldEmail: PresetSchema = {
   name: 'Indirizzo email',
   component_id: 'field',
   preset: {
@@ -74,7 +74,7 @@ const fieldEmail: StoryblokPreset = {
     required: true,
   },
 }
-const fieldPhone: StoryblokPreset = {
+const fieldPhone: PresetSchema = {
   name: 'Telefono',
   component_id: 'field',
   preset: {
@@ -85,7 +85,7 @@ const fieldPhone: StoryblokPreset = {
     required: true,
   },
 }
-const fieldPec: StoryblokPreset = {
+const fieldPec: PresetSchema = {
   name: 'Indirizzo posta certificata',
   component_id: 'field',
   preset: {
@@ -98,7 +98,7 @@ const fieldPec: StoryblokPreset = {
     required: true,
   },
 }
-const fieldCompany: StoryblokPreset = {
+const fieldCompany: PresetSchema = {
   name: 'Ragione fiscale',
   component_id: 'field',
   preset: {
@@ -111,7 +111,7 @@ const fieldCompany: StoryblokPreset = {
     required: true,
   },
 }
-const fieldVat: StoryblokPreset = {
+const fieldVat: PresetSchema = {
   name: 'Partita iva',
   component_id: 'field',
   preset: {
@@ -124,7 +124,7 @@ const fieldVat: StoryblokPreset = {
     required: true,
   },
 }
-const fieldSdi: StoryblokPreset = {
+const fieldSdi: PresetSchema = {
   name: 'Fatturazione elettronica',
   component_id: 'field',
   preset: {
@@ -137,7 +137,7 @@ const fieldSdi: StoryblokPreset = {
     required: true,
   },
 }
-const fieldTax: StoryblokPreset = {
+const fieldTax: PresetSchema = {
   name: 'Inquadramento fiscale',
   component_id: 'field',
   preset: {
@@ -149,7 +149,7 @@ const fieldTax: StoryblokPreset = {
     required: true,
   },
 }
-const fieldPayment: StoryblokPreset = {
+const fieldPayment: PresetSchema = {
   name: 'Rateazione',
   component_id: 'field',
   preset: {
@@ -161,7 +161,7 @@ const fieldPayment: StoryblokPreset = {
     required: true,
   },
 }
-const fieldAddress: StoryblokPreset = {
+const fieldAddress: PresetSchema = {
   name: 'Indirizzo',
   component_id: 'field',
   preset: {
@@ -172,7 +172,7 @@ const fieldAddress: StoryblokPreset = {
     required: true,
   },
 }
-const fieldPostal: StoryblokPreset = {
+const fieldPostal: PresetSchema = {
   name: 'Codice postale',
   component_id: 'field',
   preset: {
@@ -183,7 +183,7 @@ const fieldPostal: StoryblokPreset = {
     required: true,
   },
 }
-const fieldCity: StoryblokPreset = {
+const fieldCity: PresetSchema = {
   name: 'Città',
   component_id: 'field',
   preset: {
@@ -194,7 +194,7 @@ const fieldCity: StoryblokPreset = {
     required: true,
   },
 }
-const fieldDistrict: StoryblokPreset = {
+const fieldDistrict: PresetSchema = {
   name: 'Provincia',
   component_id: 'field',
   preset: {
@@ -205,7 +205,7 @@ const fieldDistrict: StoryblokPreset = {
     required: true,
   },
 }
-const fieldNationality: StoryblokPreset = {
+const fieldNationality: PresetSchema = {
   name: 'Nazionalità',
   component_id: 'field',
   preset: {
@@ -215,7 +215,7 @@ const fieldNationality: StoryblokPreset = {
     placeholder: 'Italiana',
   },
 }
-const fieldIdentityCard: StoryblokPreset = {
+const fieldIdentityCard: PresetSchema = {
   name: "Carta d'identità",
   component_id: 'field',
   preset: {
@@ -225,7 +225,7 @@ const fieldIdentityCard: StoryblokPreset = {
     required: true,
   },
 }
-const fieldFiscalCode: StoryblokPreset = {
+const fieldFiscalCode: PresetSchema = {
   name: 'Numero codice fiscale',
   component_id: 'field',
   preset: {
