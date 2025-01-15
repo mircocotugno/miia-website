@@ -22,7 +22,7 @@ export function Map({ blok }: MapComponent) {
   return (
     <div className='flex-1 w-full h-full min-h-96 '>
       <MapGl
-        mapboxAccessToken={process.env.MAPBOX_TOKEN}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         style={{ width: 'inherit', height: 'inherit', minHeight: 'inherit' }}
         mapStyle='mapbox://styles/mapbox/dark-v9'
         initialViewState={intialView}

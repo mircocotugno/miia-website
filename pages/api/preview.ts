@@ -2,7 +2,7 @@ export default async function preview(req: any, res: any) {
   const { slug = '' } = req.query
   const params = req.url.split('?')
 
-  if (req.query.secret !== process.env.STORYBLOK_PREVIEW) {
+  if (req.query.secret !== process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW) {
     return res.status(401).json({ message: 'Invalid token' })
   }
 
