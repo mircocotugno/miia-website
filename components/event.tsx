@@ -1,10 +1,4 @@
 import { EventProsp } from '@props/types'
-import {
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  useDisclosure,
-} from '@nextui-org/react'
 
 interface EventComponent {
   blok: EventProsp
@@ -12,12 +6,9 @@ interface EventComponent {
 }
 
 export function Event({ blok, parent }: EventComponent) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const date = new Date(blok.date)
   const day = date.toLocaleString('IT-it', { day: '2-digit' })
   const month = date.toLocaleString('IT-it', { month: 'short' })
-
-  console.log(blok.form)
 
   return (
     <div className='inline-flex items-center p-4 gap-4'>
@@ -30,14 +21,5 @@ export function Event({ blok, parent }: EventComponent) {
         <p className='text-small'>{blok.description}</p>
       </div>
     </div>
-  )
-
-  return (
-    <>
-      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
-        <DrawerHeader></DrawerHeader>
-        <DrawerBody></DrawerBody>
-      </Drawer>
-    </>
   )
 }

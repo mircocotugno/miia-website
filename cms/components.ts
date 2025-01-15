@@ -310,17 +310,8 @@ const event: ComponentSchema = {
       required: true,
     },
     location: {
-      type: 'option',
+      type: 'text',
       display_name: 'Luogo',
-      source: 'internal',
-      datasource_slug: 'locations',
-    },
-    form: {
-      type: 'option',
-      display_name: 'Modulo',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
     },
   },
 }

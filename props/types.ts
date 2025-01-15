@@ -158,12 +158,7 @@ export type EventProsp = BlokProps & {
   title: string
   description: string
   date: Date
-  form?: StoryProps & {
-    content: FormProps
-  }
-  location?: StoryProps & {
-    content: LocationProps
-  }
+  location: string
 }
 
 export type EnrollProps = MetaProps & {
