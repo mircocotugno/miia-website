@@ -17,6 +17,7 @@ import { Typography } from '@components/typography'
 import { Brand } from '@public/brand'
 import { Logo } from '@public/logo'
 import { compiler } from 'markdown-to-jsx'
+import { StoryblokComponent } from '@storyblok/react'
 
 interface NavComponent {
   blok: NavProps
@@ -42,17 +43,9 @@ export function Nav({ blok }: NavComponent) {
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent className='max-sm:hidden'>
-        {blok.navigation.map((item, index) => (
-          <NavbarItem key={index}>
-            <Link
-              href={item.link?.cached_url || item.link.url}
-              target={item.link.target}
-              color='foreground'
-            >
-              {compiler(item.label, { wrapper: null, overrides: Typography })}
-            </Link>
-          </NavbarItem>
+      <NavbarContent className='max-sm:hidden gap-6'>
+        {blok.links.map((item, index) => (
+          <StoryblokComponent blok={item} parent='nav' key={index} />
         ))}
       </NavbarContent>
       <NavbarContent justify='end'>
@@ -83,17 +76,9 @@ export function Nav({ blok }: NavComponent) {
         />
       </NavbarContent>
 
-      <NavbarMenu>
-        {blok.navigation.map((item, index) => (
-          <NavbarMenuItem key={index}>
-            <Link
-              href={item.link.cached_url || item.link.url}
-              target={item.link.target}
-              color='foreground'
-            >
-              {compiler(item.label, { wrapper: null, overrides: Typography })}
-            </Link>
-          </NavbarMenuItem>
+      <NavbarMenu className='py-6 gap-6'>
+        {blok.links.map((item, index) => (
+          <StoryblokComponent blok={item} parent='nav-mobile' key={index} />
         ))}
         {blok.actions.map((item, index) => (
           <NavbarMenuItem key={index}>
