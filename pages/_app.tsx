@@ -25,12 +25,14 @@ import { Map } from '@components/map'
 import { Article } from '@components/article'
 import { Alias } from '@components/alias'
 import { Enroll } from '@components/enroll'
+import { Menu } from '@components/menu'
 
 const components = {
   page: Page,
   article: Article,
   enroll: Enroll,
   nav: Nav,
+  menu: Menu,
   section: Section,
   cover: Cover,
   grid: Grid,
@@ -47,11 +49,9 @@ const components = {
   alias: Alias,
 }
 
-console.log(`is preview: ${process.env.IS_PREVIEW}`)
-
 storyblokInit({
-  bridge: process.env.IS_PREVIEW === 'true' ? true : false,
-  accessToken: process.env.STORYBLOK_PREVIEW,
+  bridge: process.env.NEXT_PUBLIC_IS_PREVIEW === 'true' ? true : false,
+  accessToken: process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW,
   use: [apiPlugin],
   components,
 })

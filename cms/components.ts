@@ -369,11 +369,11 @@ const nav: ComponentSchema = {
   icon: 'block-buildin',
   preview_tmpl: ``,
   schema: {
-    navigation: {
+    links: {
       type: 'bloks',
-      display_name: 'Menu',
+      display_name: 'Collegamenti',
       restrict_components: true,
-      component_whitelist: ['action'],
+      component_whitelist: ['action', 'menu'],
       required: true,
     },
     actions: {
@@ -388,6 +388,31 @@ const nav: ComponentSchema = {
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: ['bold', 'link', 'inlinecode', 'italic'],
+    },
+  },
+}
+
+const menu: ComponentSchema = {
+  name: 'menu',
+  display_name: 'Menu',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  color: '#8e24aa',
+  icon: 'block-buildin',
+  preview_tmpl: ``,
+  schema: {
+    label: {
+      type: 'text',
+      display_name: 'Etichetta',
+      required: true,
+    },
+    links: {
+      type: 'bloks',
+      display_name: 'Collegamenti',
+      restrict_components: true,
+      component_whitelist: ['action'],
+      required: true,
     },
   },
 }
@@ -887,6 +912,7 @@ export type Components =
   | 'section'
   | 'action'
   | 'nav'
+  | 'menu'
   | 'grid'
   | 'map'
   | 'accordion'
@@ -909,6 +935,7 @@ export const components = {
   section,
   action,
   nav,
+  menu,
   grid,
   map,
   accordion,
