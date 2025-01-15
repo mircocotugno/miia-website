@@ -26,6 +26,7 @@ import { Article } from '@components/article'
 import { Alias } from '@components/alias'
 import { Enroll } from '@components/enroll'
 import { Menu } from '@components/menu'
+import { Carousel } from '@components/carousel'
 
 const components = {
   page: Page,
@@ -37,6 +38,7 @@ const components = {
   cover: Cover,
   grid: Grid,
   gallery: Gallery,
+  carousel: Carousel,
   picture: Picture,
   map: Map,
   accordion: Accordion,
