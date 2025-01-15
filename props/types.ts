@@ -8,6 +8,7 @@ export type StoryProps = {
 }
 
 export type BlokProps = {
+  id: string
   _uid: string
   component: string
 }
@@ -186,9 +187,14 @@ export type SectionProps = BlokProps & {
 }
 
 export type NavProps = BlokProps & {
-  navigation: Array<ActionProps>
+  links: Array<ActionProps>
   actions: Array<ActionProps>
   message: string
+}
+
+export type MenuProps = BlokProps & {
+  label: string
+  links: Array<ActionProps>
 }
 
 export type GridProps = BlokProps & {
@@ -251,6 +257,10 @@ export type AliasProps = BlokProps & {
 
 export type GalleryProps = BlokProps & {
   images: Array<ImageProps>
+}
+
+export type CarouselProps = BlokProps & {
+  items: Array<ContentProps & CoverProps>
 }
 
 export type PictureProps = BlokProps & {

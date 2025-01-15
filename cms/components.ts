@@ -490,6 +490,7 @@ const section: ComponentSchema = {
         'gallery',
         'picture',
         'accordion',
+        'carousel',
         'alias',
       ],
       required: true,
@@ -783,6 +784,26 @@ const gallery: ComponentSchema = {
   },
 }
 
+const carousel: ComponentSchema = {
+  name: 'carousel',
+  display_name: 'Carosello',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  color: '#d500f9',
+  icon: 'block-image',
+  preview_tmpl: ``,
+  schema: {
+    items: {
+      type: 'bloks',
+      display_name: 'Elementi',
+      restrict_components: true,
+      component_whitelist: ['content', 'cover'],
+      required: true,
+    },
+  },
+}
+
 const picture: ComponentSchema = {
   name: 'picture',
   display_name: 'Immagine',
@@ -921,6 +942,7 @@ export type Components =
   | 'form'
   | 'field'
   | 'gallery'
+  | 'carousel'
   | 'picture'
   | 'alias'
 
@@ -944,6 +966,7 @@ export const components = {
   form,
   field,
   gallery,
+  carousel,
   picture,
   alias,
 }
