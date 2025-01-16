@@ -89,14 +89,16 @@ export function Menu({ blok, parent }: MenuComponent) {
   return (
     <Column parent={parent} classes='flex-0'>
       <>
-        <p className='text-md'>{blok.label}</p>
-        <hr />
-        <ul>
+        <p className='text-md mb-2'>{blok.label}</p>
+        <hr className='opacity-10 mb-4'/>
+        <ul className="space-y-2">
           {blok.links.map((item, index) => (
             <li>
               <Link
                 href={item.link.cached_url || item.link.url}
                 target={item.link.target}
+                size='sm'
+                color="foreground"
               >
                 {compiler(item.label, { wrapper: null, overrides: Typography })}
               </Link>

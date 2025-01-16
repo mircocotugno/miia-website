@@ -25,7 +25,7 @@ export function Section({ blok, parent }: SectionComponent) {
       },
     },
   })
-  const containerClasses = tv({
+  const bodyClasses = tv({
     base: 'flex gap-6 flex-wrap items-center',
     variants: {
       justifyCenter: {
@@ -73,7 +73,7 @@ export function Section({ blok, parent }: SectionComponent) {
         )}
         {blok.body && (
           <div
-            className={containerClasses({
+            className={bodyClasses({
               justifyCenter: blok.styles?.includes('justifyCenter'),
               smallSpaces: blok.styles?.includes('smallSpaces'),
             })}
