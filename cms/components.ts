@@ -171,6 +171,8 @@ const course: ComponentSchema = {
   },
 }
 
+// Layouts
+
 const page: ComponentSchema = {
   name: 'page',
   display_name: 'Pagina',
@@ -359,6 +361,8 @@ const enroll: ComponentSchema = {
   },
 }
 
+// Bloks
+
 const nav: ComponentSchema = {
   name: 'nav',
   display_name: 'Navigatore',
@@ -392,31 +396,6 @@ const nav: ComponentSchema = {
   },
 }
 
-const menu: ComponentSchema = {
-  name: 'menu',
-  display_name: 'Menu',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#8e24aa',
-  icon: 'block-buildin',
-  preview_tmpl: ``,
-  schema: {
-    label: {
-      type: 'text',
-      display_name: 'Etichetta',
-      required: true,
-    },
-    links: {
-      type: 'bloks',
-      display_name: 'Collegamenti',
-      restrict_components: true,
-      component_whitelist: ['action'],
-      required: true,
-    },
-  },
-}
-
 const cover: ComponentSchema = {
   name: 'cover',
   display_name: 'Copertina',
@@ -431,7 +410,7 @@ const cover: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: ['heading', 'action'],
+      component_whitelist: ['content', 'alias', 'action'],
     },
     background: {
       type: 'asset',
@@ -459,8 +438,12 @@ const section: ComponentSchema = {
   color: '#9c24d8',
   icon: 'block-block',
   component_group_uuid: 'containers',
-  preview_tmpl: ``,
+  preview_tmpl: `{{it.headline}}`,
   schema: {
+    id: {
+      type: 'text',
+      display_name: 'Id',
+    },
     headline: {
       type: 'markdown',
       display_name: 'Intestazione',
@@ -484,9 +467,11 @@ const section: ComponentSchema = {
       display_name: 'Contenuti',
       restrict_components: true,
       component_whitelist: [
+        'heading',
         'content',
-        'grid',
+        'wrapper',
         'map',
+        'grid',
         'gallery',
         'picture',
         'accordion',
@@ -508,7 +493,79 @@ const section: ComponentSchema = {
         { value: 'themeDark', name: 'Tema scuro' },
         { value: 'smallSpaces', name: 'Spaziatura ridotta' },
         { value: 'justifyCenter', name: 'Giusifica al centro' },
+        { value: 'alignCenter', name: 'Allinea al centro' },
+        { value: 'fullScreen', name: 'Schermo pieno' },
       ],
+    },
+  },
+}
+
+// Containers
+
+const wrapper: ComponentSchema = {
+  name: 'wrapper',
+  display_name: 'Contenitore',
+  is_root: false,
+  is_nestable: true,
+  color: '#9c24d8',
+  icon: 'block-block',
+  component_group_uuid: 'containers',
+  preview_tmpl: `{{it.styles}}`,
+  schema: {
+    body: {
+      type: 'bloks',
+      display_name: 'Contenuti',
+      restrict_components: true,
+      component_whitelist: [
+        'content',
+        'grid',
+        'map',
+        'gallery',
+        'picture',
+        'accordion',
+        'carousel',
+        'alias',
+      ],
+      required: true,
+    },
+    styles: {
+      type: 'options',
+      display_name: 'Stili',
+      options: [
+        { value: 'fullWidth', name: 'Larghezza piena' },
+        { value: 'threequarterWidth', name: 'Larghezza tre quarti' },
+        { value: 'twoThirdWidth', name: 'Largezza due terzi' },
+        { value: 'halfWidth', name: 'Mezza largheza' },
+        { value: 'thirdWidth', name: 'Largezza un terzo' },
+        { value: 'quarterWidth', name: 'Larghezza un quarto' },
+        { value: 'reorderFirst', name: 'Riordina per primo' },
+        { value: 'asRow', name: 'Disponi orizontalmente' },
+      ],
+    },
+  },
+}
+
+const menu: ComponentSchema = {
+  name: 'menu',
+  display_name: 'Menu',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  color: '#8e24aa',
+  icon: 'block-buildin',
+  preview_tmpl: ``,
+  schema: {
+    label: {
+      type: 'text',
+      display_name: 'Etichetta',
+      required: true,
+    },
+    links: {
+      type: 'bloks',
+      display_name: 'Collegamenti',
+      restrict_components: true,
+      component_whitelist: ['action'],
+      required: true,
     },
   },
 }
@@ -633,6 +690,28 @@ region, district, city, address, message, policy.`,
   },
 }
 
+const carousel: ComponentSchema = {
+  name: 'carousel',
+  display_name: 'Carosello',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  color: '#d500f9',
+  icon: 'block-image',
+  preview_tmpl: ``,
+  schema: {
+    items: {
+      type: 'bloks',
+      display_name: 'Elementi',
+      restrict_components: true,
+      component_whitelist: ['content', 'cover'],
+      required: true,
+    },
+  },
+}
+
+// Elements
+
 const field: ComponentSchema = {
   name: 'field',
   display_name: 'Campo',
@@ -695,6 +774,31 @@ const field: ComponentSchema = {
   },
 }
 
+const picture: ComponentSchema = {
+  name: 'picture',
+  display_name: 'Immagine',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.styles}}`,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+      required: true,
+    },
+    styles: {
+      type: 'options',
+      display_name: 'Stili',
+      options: [
+        { value: 'squareRatio', name: 'Quadrata' },
+        { value: 'squareRatio', name: 'Quadrata' },
+      ],
+    },
+  },
+}
+
 const heading: ComponentSchema = {
   name: 'heading',
   display_name: 'Intestazione',
@@ -703,11 +807,11 @@ const heading: ComponentSchema = {
   component_group_uuid: 'elements',
   color: '#ff1744',
   icon: 'block-sticker',
-  preview_tmpl: ``,
+  preview_tmpl: `{{it.body}}`,
   schema: {
     body: {
       type: 'markdown',
-      display_name: 'Testo intestazione',
+      display_name: 'Testo',
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: [
@@ -722,7 +826,7 @@ const heading: ComponentSchema = {
         'hrule',
       ],
       required: true,
-      default_value: '### Titolo...',
+      default_value: '### Intestazione...',
     },
   },
 }
@@ -735,7 +839,13 @@ const content: ComponentSchema = {
   component_group_uuid: 'elements',
   color: '#8bc34a',
   icon: 'block-text-c',
+  preview_tmpl: `{{it.head}}`,
   schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+    },
     head: {
       type: 'markdown',
       display_name: 'Titolo',
@@ -762,6 +872,20 @@ const content: ComponentSchema = {
       required: true,
       default_value: 'Descrizione...',
     },
+    styles: {
+      type: 'options',
+      display_name: 'Stili',
+      options: [
+        { value: 'fullWidth', name: 'Larghezza piena' },
+        { value: 'threequarterWidth', name: 'Larghezza tre quarti' },
+        { value: 'twoThirdWidth', name: 'Largezza due terzi' },
+        { value: 'halfWidth', name: 'Mezza largheza' },
+        { value: 'thirdWidth', name: 'Largezza un terzo' },
+        { value: 'quarterWidth', name: 'Larghezza un quarto' },
+        { value: 'reorderFirst', name: 'Riordina per primo' },
+        { value: 'asRow', name: 'Disponi orizontalmente' },
+      ],
+    },
   },
 }
 
@@ -780,55 +904,6 @@ const gallery: ComponentSchema = {
       display_name: 'Immagini',
       filetypes: ['images'],
       required: true,
-    },
-  },
-}
-
-const carousel: ComponentSchema = {
-  name: 'carousel',
-  display_name: 'Carosello',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#d500f9',
-  icon: 'block-image',
-  preview_tmpl: ``,
-  schema: {
-    items: {
-      type: 'bloks',
-      display_name: 'Elementi',
-      restrict_components: true,
-      component_whitelist: ['content', 'cover'],
-      required: true,
-    },
-  },
-}
-
-const picture: ComponentSchema = {
-  name: 'picture',
-  display_name: 'Immagine',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#d500f9',
-  icon: 'block-image',
-  preview_tmpl: ``,
-  schema: {
-    image: {
-      type: 'asset',
-      display_name: 'Immagini',
-      filetypes: ['images'],
-      required: true,
-    },
-    style: {
-      type: 'option',
-      display_name: 'Stili',
-      options: [
-        { value: 'sm', name: 'piccola' },
-        { value: 'md', name: 'media' },
-        { value: 'lg', name: 'grande' },
-        { value: 'xl', name: 'extra' },
-      ],
     },
   },
 }
@@ -886,42 +961,6 @@ const alias: ComponentSchema = {
   },
 }
 
-// const group: ComponentSchema = {
-//   name: 'group',
-//   display_name: 'Gruppo',
-//   is_root: false,
-//   is_nestable: true,
-//   color: '#4db6ac',
-//   icon: 'block-wallet',
-//   component_group_uuid: 'containers',
-//   preview_tmpl: ``,
-//   schema: {},
-// }
-
-// const row: ComponentSchema = {
-//   name: 'row',
-//   display_name: 'Riga',
-//   is_root: false,
-//   is_nestable: true,
-//   color: '#9c24d8',
-//   icon: 'block-block',
-//   component_group_uuid: 'containers',
-//   preview_tmpl: ``,
-//   schema: {},
-// }
-
-// const slider: ComponentSchema = {
-//   name: 'slider',
-//   display_name: 'Carosello',
-//   is_root: false,
-//   is_nestable: true,
-//   color: '#6525d3',
-//   icon: 'block-text-img-r-l',
-//   component_group_uuid: 'containers',
-//   preview_tmpl: ``,
-//   schema: {},
-// }
-
 export type Components =
   | 'coach'
   | 'student'
@@ -933,6 +972,7 @@ export type Components =
   | 'section'
   | 'action'
   | 'nav'
+  | 'wrapper'
   | 'menu'
   | 'grid'
   | 'map'
@@ -955,6 +995,7 @@ export const components = {
   enroll,
   cover,
   section,
+  wrapper,
   action,
   nav,
   menu,

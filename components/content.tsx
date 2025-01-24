@@ -1,8 +1,9 @@
 import type { ContentProps } from '@props/types'
 import { compiler } from 'markdown-to-jsx'
+import { tv } from 'tailwind-variants'
 import { Typography } from '@components/typography'
 import { storyblokEditable } from '@storyblok/react'
-import { Column } from '@components/column'
+import { Image } from '@nextui-org/react'
 
 interface ContentComponent {
   blok: ContentProps
@@ -11,18 +12,33 @@ interface ContentComponent {
 
 export function Content({ blok, parent }: ContentComponent) {
   return (
-    <Column parent={parent} classes='flex-1 min-w-60 lg:min-w-60'>
-      <div
-        className='w-full h-full space-y-4 backdrop-blur-sm'
-        {...storyblokEditable(blok)}
-      >
-        {compiler(blok.head, { wrapper: null, overrides: Typography })}
-
+    <div
+      className={classes({ asColumn: parent === 'section' })}
+      {...storyblokEditable(blok)}
+    >
+      {blok.image?.filename && (
+        <Image src={blok.image.filename} alt={blok.image.alt} width={'100%'} />
+      )}
+      {blok.head && (
+        <header>
+          {compiler(blok.head, { wrapper: null, overrides: Typography })}
+        </header>
+      )}
+      <article className='line-clamp-3 sm:line-clamp-none space-y-2'>
         {compiler(blok.body, {
           wrapper: null,
           overrides: Typography,
         })}
-      </div>
-    </Column>
+      </article>
+    </div>
   )
 }
+
+const classes = tv({
+  base: 'h-full space-y-4 backdrop-blur-sm',
+  variants: {
+    asColumn: {
+      true: 'col-span-6',
+    },
+  },
+})

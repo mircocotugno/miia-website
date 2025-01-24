@@ -13,11 +13,17 @@ export default {
       serif: ['var(--font-serif)'],
     },
     extend: {
+      maxWidth: {
+        "1/2": '50%',
+        "1/3": '33.3333%',
+        "1/4": '25%',
+      },
       maxHeight: {
         modal: '40rem',
       },
       minHeight: {
         '100': '25rem',
+        '120': '30rem',
         cover: '40rem',
       },
       lineHeight: {

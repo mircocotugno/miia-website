@@ -25,7 +25,7 @@ export function Cover({ blok }: CoverComponent) {
         true: 'bg-background text-foreground',
       },
       minHeight: {
-        true: 'min-h-60 md:min-h-80 lg:min-h-100',
+        true: 'min-h-80 md:min-h-100 lg:min-h-120',
       },
     },
   })

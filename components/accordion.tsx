@@ -3,7 +3,7 @@ import { Accordion as NextAccordion, AccordionItem } from '@nextui-org/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from '@components/typography'
 import { storyblokEditable } from '@storyblok/react'
-import { Column } from '@components/column'
+import { Container } from '@components/container'
 
 interface AccordionComponent {
   blok: AccordionProps
@@ -12,7 +12,7 @@ interface AccordionComponent {
 
 export function Accordion({ blok, parent }: AccordionComponent) {
   return (
-    <Column parent={parent} classes='flex-1 max-sm:min-w-full min-w-60'>
+    <Container wrap={parent === 'section'} classes='col-span-6'>
       <NextAccordion {...storyblokEditable(blok)}>
         {blok.contents.map((content, index) => (
           <AccordionItem
@@ -29,6 +29,6 @@ export function Accordion({ blok, parent }: AccordionComponent) {
           </AccordionItem>
         ))}
       </NextAccordion>
-    </Column>
+    </Container>
   )
 }

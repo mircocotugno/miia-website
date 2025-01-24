@@ -1,6 +1,5 @@
 import { AliasProps } from '@props/types'
 import { StoryblokComponent } from '@storyblok/react'
-import { Column } from '@components/column'
 
 interface AliasComponent {
   blok: AliasProps
@@ -10,8 +9,10 @@ interface AliasComponent {
 export function Alias({ blok, parent }: AliasComponent) {
   if (!blok.item?.content) return null
   return (
-    <Column parent={parent} classes='flex-none'>
-      <StoryblokComponent blok={blok.item.content} />
-    </Column>
+    <StoryblokComponent
+      parent='alias'
+      blok={blok.item.content}
+      slug={blok.item.full_slug}
+    />
   )
 }

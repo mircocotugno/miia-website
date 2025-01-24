@@ -9,7 +9,6 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from '@nextui-org/react'
-import { Column } from '@components/column'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { useState } from 'react'
@@ -21,35 +20,6 @@ interface MenuComponent {
 
 export function Menu({ blok, parent }: MenuComponent) {
   const [isOpen, setIsOpen] = useState(false)
-  if (parent === 'nav')
-    return (
-      <Dropdown>
-        <NavbarItem>
-          <DropdownTrigger>
-            <Link color='foreground'>{blok.label}</Link>
-          </DropdownTrigger>
-        </NavbarItem>
-        <DropdownMenu
-          aria-label={blok.id}
-          classNames={{
-            base: 'bg-background/70 backdrop-blur-lg',
-            list: 'shadow-none',
-          }}
-        >
-          {blok.links.map((item, index) => (
-            <DropdownItem key={index}>
-              <Link
-                href={item.link.cached_url || item.link.url}
-                target={item.link.target}
-                color='foreground'
-              >
-                {compiler(item.label, { wrapper: null, overrides: Typography })}
-              </Link>
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    )
 
   if (parent === 'nav-mobile')
     return (
@@ -86,26 +56,65 @@ export function Menu({ blok, parent }: MenuComponent) {
       </NavbarMenuItem>
     )
 
-  return (
-    <Column parent={parent} classes='flex-0'>
-      <>
+  if (parent === 'footer')
+    return (
+      <div className='flex-0'>
         <p className='text-md mb-2'>{blok.label}</p>
-        <hr className='opacity-10 mb-4'/>
-        <ul className="space-y-2">
+        <hr className='opacity-10 mb-4' />
+        <ul className='space-y-2'>
           {blok.links.map((item, index) => (
             <li>
               <Link
                 href={item.link.cached_url || item.link.url}
                 target={item.link.target}
                 size='sm'
-                color="foreground"
+                color='foreground'
               >
-                {compiler(item.label, { wrapper: null, overrides: Typography })}
+                {compiler(item.label, {
+                  wrapper: null,
+                  overrides: Typography,
+                })}
               </Link>
             </li>
           ))}
         </ul>
-      </>
-    </Column>
+      </div>
+    )
+
+  const Trigger = () => (
+    <DropdownTrigger>
+      <Link color='foreground'>{blok.label}</Link>
+    </DropdownTrigger>
+  )
+
+  return (
+    <Dropdown>
+      {parent === 'nav' ? (
+        <NavbarItem>
+          <Trigger />
+        </NavbarItem>
+      ) : (
+        <Trigger />
+      )}
+      <DropdownMenu
+        aria-label={blok.id}
+        classNames={{
+          base: 'bg-background/70 backdrop-blur-lg',
+          list: 'shadow-none',
+        }}
+      >
+        {blok.links.map((item, index) => (
+          <DropdownItem key={index}>
+            <Link
+              href={item.link.cached_url || item.link.url}
+              target={item.link.target}
+              color='foreground'
+            >
+              {compiler(item.label, { wrapper: null, overrides: Typography })}
+            </Link>
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
   )
 }

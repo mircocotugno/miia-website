@@ -27,6 +27,7 @@ import { Alias } from '@components/alias'
 import { Enroll } from '@components/enroll'
 import { Menu } from '@components/menu'
 import { Carousel } from '@components/carousel'
+import { Wrapper } from '@components/wrapper'
 
 const components = {
   page: Page,
@@ -35,6 +36,7 @@ const components = {
   nav: Nav,
   menu: Menu,
   section: Section,
+  wrapper: Wrapper,
   cover: Cover,
   grid: Grid,
   gallery: Gallery,

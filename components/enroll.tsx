@@ -31,7 +31,7 @@ export function Enroll({ blok }: EnrollComponent) {
   return (
     <>
       <Meta {...blok} />
-      {blok.header && <Nav blok={blok.header.content} />}
+      {blok.header && <Nav parent="header" blok={blok.header.content} />}
       {!!blok.body.length && <StoryblokComponent blok={blok.body[0]} />}
       <div className={containerClasses()}>
         <div className='order-last md:order-1 col-span-full md:col-span-8'>
@@ -108,7 +108,7 @@ export function Enroll({ blok }: EnrollComponent) {
           )}
         </div>
       </div>
-      {blok.footer && <footer>footer</footer>}
+      {blok.footer && <Nav parent="footer" blok={blok.footer.content} />}
     </>
   )
 }

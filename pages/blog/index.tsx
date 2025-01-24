@@ -97,9 +97,7 @@ export default function Blog({ story }: Blog) {
   return (
     <>
       <Meta {...page.content} />
-      {page.content.header.content && (
-        <Nav blok={page.content.header.content} />
-      )}
+      {page.content.header.content && <Nav parent="header" blok={page.content.header.content} />}
       {articles?.length && (
         <section className='py-6 pb-10 lg:py-12 lg:pb-20 space-y-8 bg-foreground text-background'>
           <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
@@ -166,7 +164,7 @@ export default function Blog({ story }: Blog) {
         page.content.body.map((body, index) => (
           <StoryblokComponent blok={body} parent='page' key={index} />
         ))}
-      {page.content.footer.content && <footer>footer</footer>}
+      {page.content?.footer.content && <Nav parent="footer" blok={page.content.footer.content} />}
     </>
   )
 }

@@ -1,6 +1,6 @@
 import type { HeadingProps } from '@props/types'
 import { Typography } from '@components/typography'
-import { Link } from '@nextui-org/react'
+import { tv } from 'tailwind-variants'
 import { compiler } from 'markdown-to-jsx'
 import { storyblokEditable } from '@storyblok/react'
 
@@ -9,11 +9,13 @@ interface HeadingComponent {
   parent?: string
 }
 // backdrop-blur-sm
-export function Heading({ blok }: HeadingComponent) {
+export function Heading({ blok, parent }: HeadingComponent) {
   return (
     <div
       {...storyblokEditable(blok)}
-      className='font-serif space-y-6 leading-none drop-shadow-8xl break-words'
+      className={classes({
+        asColumn: parent === 'section',
+      })}
     >
       {compiler(blok.body, {
         wrapper: null,
@@ -23,3 +25,13 @@ export function Heading({ blok }: HeadingComponent) {
     </div>
   )
 }
+
+const classes = tv({
+  base: 'font-serif space-y-6 leading-none break-words',
+  variants: {
+    asColumn: {
+      true: 'col-span-12',
+      false: 'drop-shadow-8xl',
+    },
+  },
+})

@@ -11,42 +11,13 @@ interface SectionComponent {
 }
 
 export function Section({ blok, parent }: SectionComponent) {
-  const sectionClasses = tv({
-    base: 'py-6 lg:py-12 space-y-8 bg-foreground text-background',
-    variants: {
-      themeDark: {
-        true: 'bg-background text-foreground',
-      },
-      justifyCenter: {
-        true: 'text-center',
-      },
-      smallSpaces: {
-        true: 'py-3 lg:py-6 space-y-4',
-      },
-    },
-  })
-  const bodyClasses = tv({
-    base: 'flex gap-6 flex-wrap items-center',
-    variants: {
-      justifyCenter: {
-        true: 'justify-items-center text-center',
-      },
-      smallSpaces: {
-        true: 'gap-3',
-      },
-    },
-  })
-  const headlineClasses = tv({
-    base: 'max-w-screen-md',
-    variants: {
-      justifyCenter: {
-        true: 'mx-auto text-center',
-      },
-    },
-  })
   const Container = ({ children }: PropsWithChildren) =>
     parent === 'page' ? (
-      <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
+      <div
+        className={containerClasses({
+          fullScreen: blok.styles?.includes('fullScreen'),
+        })}
+      >
         {children}
       </div>
     ) : (
@@ -55,6 +26,7 @@ export function Section({ blok, parent }: SectionComponent) {
 
   return (
     <section
+      id={blok.id}
       className={sectionClasses({
         themeDark: blok.styles?.includes('themeDark'),
         smallSpaces: blok.styles?.includes('smallSpaces'),
@@ -66,6 +38,7 @@ export function Section({ blok, parent }: SectionComponent) {
           <div
             className={headlineClasses({
               justifyCenter: blok.styles?.includes('justifyCenter'),
+              fullScreen: blok.styles?.includes('fullScreen'),
             })}
           >
             {compiler(blok.headline, { wrapper: null, overrides: Typography })}
@@ -75,16 +48,27 @@ export function Section({ blok, parent }: SectionComponent) {
           <div
             className={bodyClasses({
               justifyCenter: blok.styles?.includes('justifyCenter'),
+              alignCenter: blok.styles?.includes('alignCenter'),
               smallSpaces: blok.styles?.includes('smallSpaces'),
             })}
           >
             {blok.body.map((body, index) => (
-              <StoryblokComponent blok={body} parent='section' key={index} />
+              <StoryblokComponent
+                blok={body}
+                parent='section'
+                centered={blok.styles?.includes('justifyCenter')}
+                key={index}
+              />
             ))}
           </div>
         )}
         {!!blok.footer.length && (
-          <div className='space-y-2'>
+          <div
+            className={footerClasses({
+              justifyCenter: blok.styles?.includes('justifyCenter'),
+              fullScreen: blok.styles?.includes('fullScreen'),
+            })}
+          >
             {blok.footer.map((footer, index) => (
               <StoryblokComponent
                 blok={footer}
@@ -98,3 +82,62 @@ export function Section({ blok, parent }: SectionComponent) {
     </section>
   )
 }
+
+const sectionClasses = tv({
+  base: 'py-6 lg:py-12 space-y-8 bg-foreground text-background',
+  variants: {
+    themeDark: {
+      true: 'bg-background text-foreground',
+    },
+    justifyCenter: {
+      true: 'text-center',
+    },
+    smallSpaces: {
+      true: 'lg:py-6 space-y-4',
+    },
+  },
+})
+const bodyClasses = tv({
+  base: 'gap-6 grid grid-cols-12 grid-flow-row-dense',
+  variants: {
+    justifyCenter: {
+      true: 'justify-center text-center',
+    },
+    alignCenter: {
+      true: 'items-center',
+    },
+    smallSpaces: {
+      true: 'gap-3',
+    },
+  },
+})
+const headlineClasses = tv({
+  base: 'space-y-4',
+  variants: {
+    justifyCenter: {
+      true: 'mx-auto text-center',
+    },
+    fullScreen: {
+      true: 'px-6',
+    },
+  },
+})
+const footerClasses = tv({
+  base: 'space-y-2',
+  variants: {
+    justifyCenter: {
+      true: 'mx-auto text-center',
+    },
+    fullScreen: {
+      true: 'px-6',
+    },
+  },
+})
+const containerClasses = tv({
+  base: 'blok space-y-6',
+  variants: {
+    fullScreen: {
+      false: 'px-6 mx-auto max-w-[1280px] min-h-inherit',
+    },
+  },
+})
