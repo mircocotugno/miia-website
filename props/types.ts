@@ -178,12 +178,29 @@ export type CoverProps = BlokProps & {
 }
 
 export type SectionProps = BlokProps & {
+  id: string
   headline?: string
   body: Array<
     ContentProps & GridProps & MapProps & GalleryProps & AccordionProps
   >
   footer: Array<ActionProps & AliasProps>
-  styles: ['themeDark' | 'justifyCenter' | 'smallSpaces']
+  styles: Array<'themeDark' | 'justifyCenter' | 'alignCenter' | 'smallSpaces' | 'fullScreen'>
+}
+
+export type WrapperProps = BlokProps & {
+  body: Array<
+    ContentProps & GridProps & MapProps & GalleryProps & AccordionProps
+  >
+  styles: Array<
+    | 'fullWidth'
+    | 'threeQuarterWidth'
+    | 'twoThirdWidth'
+    | 'halfWidth'
+    | 'thirdWidth'
+    | 'quarterWidth'
+    | 'reorderFirst'
+    | 'asRow'
+  >
 }
 
 export type NavProps = BlokProps & {
@@ -239,6 +256,7 @@ export type HeadingProps = BlokProps & {
 }
 
 export type ContentProps = BlokProps & {
+  image: ImageProps
   head: string
   body: string
 }
@@ -288,3 +306,4 @@ export type ComponentsProps =
   | ActionProps
   | AliasProps
   | GalleryProps
+  | PictureProps

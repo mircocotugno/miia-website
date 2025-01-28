@@ -1,5 +1,5 @@
 import { Map as MapGl, Marker } from 'react-map-gl'
-import type { MapProps, LocationProps } from '@props/types'
+import type { MapProps } from '@cms/components'
 
 interface MapComponent {
   blok: MapProps
@@ -7,13 +7,22 @@ interface MapComponent {
 }
 
 export function Map({ blok }: MapComponent) {
-  const locations: Array<LocationProps> = blok.locations.map((item) =>
-    JSON.parse(item)
-  )
+  const locations = blok.locations.map((location) => {
+    const pos = location.gps.split('/').map((s) => Number(s))
+    return { ...location, pos }
+  })
+
+  const longitude =
+    locations.reduce((sum, locations) => sum + locations.pos[0], 0) /
+    locations.length
+
+  const latitude =
+    locations.reduce((sum, locations) => sum + locations.pos[1], 0) /
+    locations.length
 
   const intialView = {
-    longitude: 11.953459368033833,
-    latitude: 45.71456573746414,
+    longitude: longitude,
+    latitude: latitude,
     zoom: 7.5,
     bearing: 0,
     pitch: 0,
@@ -27,8 +36,13 @@ export function Map({ blok }: MapComponent) {
         mapStyle='mapbox://styles/mapbox/dark-v9'
         initialViewState={intialView}
       >
-        {locations.map(({ lat, lng }, index) => (
-          <Marker longitude={lng} latitude={lat} anchor='bottom' key={index} />
+        {locations.map((location, index) => (
+          <Marker
+            latitude={location.pos[0]}
+            longitude={location.pos[1]}
+            anchor='bottom'
+            key={index}
+          />
         ))}
       </MapGl>
     </div>

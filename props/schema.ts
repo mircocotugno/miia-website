@@ -29,7 +29,7 @@ export type ComponentSchema = {
   display_name: string
   is_root: boolean
   is_nestable: boolean
-  color: `#${string}`
+  color?: `#${string}`
   icon?: string
   component_group_uuid: Groups | string | null
   preview_tmpl?: string
@@ -62,7 +62,7 @@ type FieldSchema = {
 
 type FieldBaseSchema = FieldSchema & {
   type: string
-  default_value?: string
+  default_value?: string | boolean
 }
 
 type FieldBooleanSchema = FieldBaseSchema & {

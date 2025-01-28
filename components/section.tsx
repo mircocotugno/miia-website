@@ -1,52 +1,26 @@
-import type { SectionProps } from '@props/types'
-import { tv } from 'tailwind-variants'
+import type { SectionProps, PictureProps } from '@cms/components'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { PropsWithChildren } from 'react'
-import { compiler } from 'markdown-to-jsx'
-import { Typography } from '@components/typography'
+import type { PropsWithChildren, ReactNode } from 'react'
+import { tv } from 'tailwind-variants'
 
 interface SectionComponent {
   blok: SectionProps
-  parent?: string
+  contain?: boolean
 }
 
-export function Section({ blok, parent }: SectionComponent) {
-  const sectionClasses = tv({
-    base: 'py-6 lg:py-12 space-y-8 bg-foreground text-background',
-    variants: {
-      themeDark: {
-        true: 'bg-background text-foreground',
-      },
-      justifyCenter: {
-        true: 'text-center',
-      },
-      smallSpaces: {
-        true: 'py-3 lg:py-6 space-y-4',
-      },
-    },
-  })
-  const bodyClasses = tv({
-    base: 'flex gap-6 flex-wrap items-center',
-    variants: {
-      justifyCenter: {
-        true: 'justify-items-center text-center',
-      },
-      smallSpaces: {
-        true: 'gap-3',
-      },
-    },
-  })
-  const headlineClasses = tv({
-    base: 'max-w-screen-md',
-    variants: {
-      justifyCenter: {
-        true: 'mx-auto text-center',
-      },
-    },
-  })
+const gridClasses = 'grid grid-cols-12 gap-2 md:gap-4 lg:gap-6 items-center'
+
+export function Section({ blok, contain }: SectionComponent) {
+  const Tag = contain ? 'div' : 'section'
+
+  const hasBackground = blok.contents.findIndex((c: any) => !!c?.background)
+  const background: PictureProps = blok.contents[hasBackground]
+
   const Container = ({ children }: PropsWithChildren) =>
-    parent === 'page' ? (
-      <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
+    contain || blok.contain ? (
+      <div
+        className={`relative z-10 px-6 max-w-[1280px] min-h-inherit mx-auto ${gridClasses}`}
+      >
         {children}
       </div>
     ) : (
@@ -54,47 +28,42 @@ export function Section({ blok, parent }: SectionComponent) {
     )
 
   return (
-    <section
+    <Tag
+      id={blok.id}
       className={sectionClasses({
-        themeDark: blok.styles?.includes('themeDark'),
-        smallSpaces: blok.styles?.includes('smallSpaces'),
+        theme: blok.theme,
+        hasBackground: hasBackground >= 0,
+        contain: contain || blok.contain,
       })}
+      style={
+        background && {
+          backgroundImage: `linear-gradient(to right, rgb(0 0 0 / 60%), rgb(0 0 0 / 0%) 60%), url(${background.asset.filename})`,
+        }
+      }
       {...storyblokEditable(blok)}
     >
       <Container>
-        {blok.headline && (
-          <div
-            className={headlineClasses({
-              justifyCenter: blok.styles?.includes('justifyCenter'),
-            })}
-          >
-            {compiler(blok.headline, { wrapper: null, overrides: Typography })}
-          </div>
-        )}
-        {blok.body && (
-          <div
-            className={bodyClasses({
-              justifyCenter: blok.styles?.includes('justifyCenter'),
-              smallSpaces: blok.styles?.includes('smallSpaces'),
-            })}
-          >
-            {blok.body.map((body, index) => (
-              <StoryblokComponent blok={body} parent='section' key={index} />
-            ))}
-          </div>
-        )}
-        {!!blok.footer.length && (
-          <div className='space-y-2'>
-            {blok.footer.map((footer, index) => (
-              <StoryblokComponent
-                blok={footer}
-                parent={blok.component}
-                key={index}
-              />
-            ))}
-          </div>
+        {blok.contents.map((content, index) =>
+          hasBackground !== index ? (
+            <StoryblokComponent key={index} blok={content} />
+          ) : null
         )}
       </Container>
-    </section>
+    </Tag>
   )
 }
+
+const sectionClasses = tv({
+  base: 'py-6 lg:py-12 min-h-inherit',
+  variants: {
+    theme: {
+      dark: 'dark text-foreground bg-background',
+    },
+    hasBackground: {
+      true: 'bg-cover bg-center text-background [&_h1]:drop-shadow-8xl [&_h2]:drop-shadow-8xl [&_h3]:drop-shadow-8xl [&_p]:drop-shadow-8xl',
+    },
+    contain: {
+      false: `${gridClasses}`,
+    },
+  },
+})

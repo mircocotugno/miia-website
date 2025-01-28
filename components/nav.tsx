@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useTheme } from 'next-themes'
 import {
   Navbar,
   NavbarBrand,
@@ -8,11 +7,10 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Button,
   Link,
 } from '@nextui-org/react'
-import type { NavProps } from '@props/types'
-import { Typography } from '@components/typography'
+import { NavProps } from '@cms/components'
+import { Typography } from './typography'
 
 import { Brand } from '@public/brand'
 import { Logo } from '@public/logo'
@@ -21,20 +19,30 @@ import { StoryblokComponent } from '@storyblok/react'
 
 interface NavComponent {
   blok: NavProps
-  parent?: string
+  parent: 'header' | 'footer'
+}
+
+const templates = {
+  header: Header,
+  footer: Footer,
 }
 
 export function Nav({ blok, parent }: NavComponent) {
-  return parent === 'header' ? <Header {...blok} /> : <Footer {...blok} />
+  const Template = templates[parent]
+  return <Template blok={blok} />
 }
 
-function Header(blok: NavProps) {
+function Header({ blok }: { blok: NavProps }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth='xl' className='my-auto'>
-      <NavbarBrand>
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      className='dark bg-background text-foreground'
+      classNames={{ wrapper: 'max-w-[1280px] mx-auto' }}
+    >
+      <NavbarBrand className='grow-0'>
         <Link href='/'>
-          <Logo
+        <Logo
             classes='max-md:hidden'
             // primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
             // secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}
@@ -48,33 +56,14 @@ function Header(blok: NavProps) {
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent className='max-sm:hidden gap-6'>
-        {blok.links.map((item, index) => (
-          <StoryblokComponent blok={item} parent='nav' key={index} />
+      <NavbarContent justify='start' className='max-sm:hidden gap-6'>
+        {blok.contents.map((item, index) => (
+          <NavbarItem key={index}>
+            <StoryblokComponent blok={item} />
+          </NavbarItem>
         ))}
       </NavbarContent>
       <NavbarContent justify='end'>
-        {blok.actions.map((item, index) => (
-          <NavbarItem key={index} className='max-sm:hidden'>
-            <Button
-              href={item.link?.cached_url || item.link.url}
-              target={item.link.target}
-              color='primary'
-              as={Link}
-            >
-              {compiler(item.label, { wrapper: null, overrides: Typography })}
-            </Button>
-          </NavbarItem>
-        ))}
-        {/* <NavbarItem className='pr-3'>
-          <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-            <i
-              className={`iconoir-${
-                theme === 'dark' ? 'sun-light' : 'half-moon'
-              }`}
-            />
-          </button>
-        </NavbarItem> */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           className='sm:hidden'
@@ -82,19 +71,9 @@ function Header(blok: NavProps) {
       </NavbarContent>
 
       <NavbarMenu className='py-6 gap-6'>
-        {blok.links.map((item, index) => (
-          <StoryblokComponent blok={item} parent='nav-mobile' key={index} />
-        ))}
-        {blok.actions.map((item, index) => (
+        {blok.contents.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Button
-              href={item.link.cached_url || item.link.url}
-              target={item.link.target}
-              color='primary'
-              as={Link}
-            >
-              {compiler(item.label, { wrapper: null, overrides: Typography })}
-            </Button>
+            <StoryblokComponent blok={item} key={index} />
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
@@ -102,9 +81,9 @@ function Header(blok: NavProps) {
   )
 }
 
-function Footer(blok: NavProps) {
+function Footer({ blok }: { blok: NavProps }) {
   return (
-    <footer className='bg-background text-foreground py-12 space-y-12'>
+    <footer className='dark bg-background text-foreground py-12 space-y-12'>
       <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
         <Link href='/'>
           <Logo
@@ -121,7 +100,7 @@ function Footer(blok: NavProps) {
           />
         </Link>
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-6 lg:gap-8'>
-          {blok.links.map((item, index) => (
+          {blok.contents.map((item, index) => (
             <div className='flex-1'>
               <StoryblokComponent parent='footer' blok={item} key={index} />
             </div>

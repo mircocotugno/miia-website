@@ -1,3 +1,5 @@
+import type { FieldProps, OptionProps } from '@cms/components'
+import type { DataProps } from '@components/form'
 import {
   Input,
   Select,
@@ -6,8 +8,6 @@ import {
   DatePicker,
   Textarea,
 } from '@nextui-org/react'
-import type { FieldProps, OptionProp } from '@props/types'
-import type { DataProps } from '@components/form'
 
 interface FieldComponent {
   blok: FieldProps
@@ -116,7 +116,7 @@ const fields = {
   hidden: () => null,
 }
 
-const getOptions = (fieldOptions: string | Array<OptionProp>) => {
+const getOptions = (fieldOptions: string | Array<OptionProps>) => {
   if (typeof fieldOptions !== 'string') return fieldOptions
   const options: Array<{ name: string; value: string }> = []
   fieldOptions.split('\n').forEach((option) => {

@@ -3,24 +3,28 @@ import { Link, Image } from '@nextui-org/react'
 export const Typography = {
   h1: {
     component: ({ children }: { children: string }) => (
-      <h1 className='font-serif leading-compact font-black text-7xl max-sm:text-6xl'>
+      <h1 className='font-serif leading-compact font-black break-words text-5xl sm:text-6xl md:text-7xl'>
         {children}
       </h1>
     ),
   },
   h2: {
     component: ({ children }: { children: string }) => (
-      <h2 className='font-serif leading-compact font-extrabold text-5xl max-sm:text-4xl'>{children}</h2>
+      <h2 className='font-serif leading-tight font-extrabold break-words text-4xl sm:text-5xl md:text-6xl'>
+        {children}
+      </h2>
     ),
   },
   h3: {
     component: ({ children }: { children: string }) => (
-      <h3 className='font-serif leading-compact font-bold text-4xl max-sm:text-3xl break-words'>{children}</h3>
+      <h3 className='font-serif leading-tight font-bold break-words text-3xl sm:text-4xl md:text-5xl'>
+        {children}
+      </h3>
     ),
   },
   h4: {
     component: ({ children }: { children: string }) => (
-      <h4 className='font-bold leading-none text-2xl'>{children}</h4>
+      <h4 className='font-bold leading-snug text-2xl'>{children}</h4>
     ),
   },
   h5: {
@@ -45,7 +49,7 @@ export const Typography = {
   },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className='font-sans leading-tight max-sm:line-clamp-3'>{children}</p>
+      <p className='font-sans leading-snug max-sm:line-clamp-3'>{children}</p>
     ),
   },
   ul: {
@@ -62,6 +66,8 @@ export const Typography = {
       src: string
       alt: string
       title: string
-    }) => <Image removeWrapper src={src} alt={alt} title={title} width='100%' />,
+    }) => (
+      <Image removeWrapper src={src} alt={alt} title={title} width='100%' />
+    ),
   },
 }
