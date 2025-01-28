@@ -1,76 +1,123 @@
-import { WrapperProps } from '@props/types'
-import { storyblokEditable } from '@storyblok/react'
-import { StoryblokComponent } from '@storyblok/react'
+import type { WrapperProps, PictureProps } from '@cms/components'
+import { Card, CardBody, CardHeader } from '@nextui-org/react'
+import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { tv } from 'tailwind-variants'
 
 interface WrapperComponent {
   blok: WrapperProps
-  centered?: boolean
 }
-export function Wrapper({ blok, centered }: WrapperComponent) {
+
+export function Wrapper({ blok }: WrapperComponent) {
+  const hasBackground = blok.contents.findIndex((c: any) => !!c?.background)
+  const background: false | PictureProps =
+    hasBackground >= 0 && blok.contents[hasBackground]
+
+  if (blok.boxed) {
+    return (
+      <Card
+        {...storyblokEditable(blok)}
+        className={classes({
+          size: blok.size,
+          row: blok.row,
+          boxed: true,
+          hasBackground: hasBackground >= 0,
+        })}
+        style={
+          background
+            ? { backgroundImage: `url(${background.asset.filename})` }
+            : undefined
+        }
+      >
+        {!background && (
+          <CardHeader className='z-10'>
+            {blok.contents
+              .filter((c) => c.component === 'picture')
+              .map((content, index) => (
+                <StoryblokComponent blok={content} key={index} />
+              ))}
+          </CardHeader>
+        )}
+        <CardBody className='z-10'>
+          {blok.contents
+            .filter((c) => c.component !== 'picture')
+            .map((content, index) => (
+              <StoryblokComponent blok={content} key={index} />
+            ))}
+        </CardBody>
+      </Card>
+    )
+  }
+
   return (
     <div
-      className={classes({
-        widths: blok?.styles.findLast((s) => s.endsWith('Width')),
-        centered: centered,
-        reorderFirst: blok?.styles.includes('reorderFirst'),
-        asRow: blok?.styles.includes('asRow'),
-      })}
       {...storyblokEditable(blok)}
+      className={classes({
+        size: blok.size,
+        row: blok.row,
+        boxed: false,
+        justify: blok.justify,
+        hasBackground: !!background,
+      })}
+      style={
+        background
+          ? { backgroundImage: `url(${background.asset.filename})` }
+          : undefined
+      }
     >
-      {blok.body.map((blok, index) => (
-        <StoryblokComponent blok={blok} key={index} />
-      ))}
+      {blok.contents.map((content, index) =>
+        hasBackground !== index ? (
+          <StoryblokComponent key={index} blok={content} />
+        ) : null
+      )}
     </div>
   )
 }
 
 const classes = tv({
-  base: 'flex flex-col gap-6 col-span-12 sm:col-span-6',
+  base: 'col-span-12 sm:col-span-6',
   variants: {
-    widths: {
-      fullWidth: 'sm:col-span-12',
-      threeQuarterWidth: 'sm:col-span-9',
-      twoThirdWidth: 'sm:col-span-8',
-      halfWidth: 'sm:col-span-6',
-      thirdWidth: 'sm:col-span-4',
-      quarterWidth: 'sm:col-span-3',
+    size: {
+      small: 'sm:col-span-3',
+      medium: 'sm:col-span-4',
+      large: 'sm:col-span-8',
+      extra: 'sm:col-span-9',
     },
-    reorderFirst: {
-      true: 'order-first sm:order-none',
+    justify: {
+      right: 'items-start',
+      center: 'items-center',
+      left: 'items-end',
     },
-    centered: {
-      true: 'sm:col-start-4',
+    boxed: {
+      false: 'flex flex-col gap-2 md:gap-4 lg:gap-6',
     },
-    asRow: {
-      true: 'flex-row items-stretch',
+    row: {
+      true: 'flex-row',
+    },
+    hasBackground: {
+      true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
     },
   },
   compoundVariants: [
     {
-      widths: 'threeQuarterWidth',
-      centered: true,
-      class: 'sm:col-start-2 sm:col-span-10',
+      row: true,
+      boxed: true,
+      class: 'flex gap-2 md:gap-4 lg:gap-6',
     },
     {
-      widths: 'twoThirdWidth',
-      centered: true,
-      class: 'sm:col-start-3',
+      row: true,
+      justify: "right",
+      class: 'justify-start',
     },
     {
-      widths: 'halfWidth',
-      centered: true,
-      class: 'sm:col-start-4',
+      row: true,
+      justify: "center",
+      class: 'justify-center',
     },
     {
-      widths: 'thirdWidth',
-      centered: true,
-      class: 'sm:col-start-5',
-    },
-    {
-      widths: 'quarterWidth',
-      centered: true,
-      class: 'sm:col-start-5 sm:col-span-4',
+      row: true,
+      justify: "left",
+      class: 'justify-end',
     },
   ],
+
 })

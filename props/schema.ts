@@ -62,7 +62,7 @@ type FieldSchema = {
 
 type FieldBaseSchema = FieldSchema & {
   type: string
-  default_value?: string
+  default_value?: string | boolean
 }
 
 type FieldBooleanSchema = FieldBaseSchema & {

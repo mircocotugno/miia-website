@@ -1,9 +1,4 @@
-import type {
-  CourseProps,
-  FieldProps,
-  FormProps,
-  OptionProp,
-} from '@props/types'
+import type { FieldProps, FormProps, OptionProps } from '@cms/components'
 import {
   Drawer,
   DrawerContent,
@@ -21,7 +16,7 @@ import { Typography } from './typography'
 
 interface FormComponent {
   blok: FormProps
-  courses?: Array<OptionProp>
+  courses?: Array<OptionProps>
 }
 
 const formTitles = {

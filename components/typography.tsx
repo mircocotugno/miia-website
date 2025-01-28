@@ -3,21 +3,21 @@ import { Link, Image } from '@nextui-org/react'
 export const Typography = {
   h1: {
     component: ({ children }: { children: string }) => (
-      <h1 className='font-serif leading-compact font-black text-5xl sm:text-6xl md:text-7xl'>
+      <h1 className='font-serif leading-compact font-black break-words text-5xl sm:text-6xl md:text-7xl'>
         {children}
       </h1>
     ),
   },
   h2: {
     component: ({ children }: { children: string }) => (
-      <h2 className='font-serif leading-tight font-extrabold text-4xl sm:text-5xl md:text-6xl'>
+      <h2 className='font-serif leading-tight font-extrabold break-words text-4xl sm:text-5xl md:text-6xl'>
         {children}
       </h2>
     ),
   },
   h3: {
     component: ({ children }: { children: string }) => (
-      <h3 className='font-serif leading-tight font-bold text-3xl sm:text-4xl md:text-5xl break-words'>
+      <h3 className='font-serif leading-tight font-bold break-words text-3xl sm:text-4xl md:text-5xl'>
         {children}
       </h3>
     ),

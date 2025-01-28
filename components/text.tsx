@@ -1,0 +1,71 @@
+import type { TextProps } from '@cms/components'
+import { Typography } from './typography'
+import { storyblokEditable } from '@storyblok/react'
+import { compiler } from 'markdown-to-jsx'
+import { tv } from 'tailwind-variants'
+
+interface TextComponent {
+  blok: TextProps
+}
+
+const settings = { wrapper: null, overrides: Typography }
+
+export function Text({ blok }: TextComponent) {
+  const Title = () => (
+    <div
+      className={titleClases({
+        hide: blok.hide === 'all' || blok.hide.includes('title'),
+      })}
+    >
+      {compiler(blok.title, settings)}
+    </div>
+  )
+  const Description = () => (
+    <div
+      className={descriptionClasses({
+        hide: blok.hide === 'all' || blok.hide.includes('description'),
+      })}
+    >
+      {compiler(blok.description, settings)}
+    </div>
+  )
+
+  return (
+    <article
+      className={textClasses({ justify: blok.justify })}
+      {...storyblokEditable(blok)}
+    >
+      <Title />
+      <Description />
+    </article>
+  )
+}
+
+const textClasses = tv({
+  base: 'flex flex-col align-stretch gap-2 lg:gap-4 col-span-12',
+  variants: {
+    justify: {
+      right: 'text-right',
+      center: 'text-center',
+      left: 'text-left',
+    },
+  },
+})
+
+const titleClases = tv({
+  base: 'space-y-2',
+  variants: {
+    hide: {
+      true: 'hidden sm:block',
+    },
+  },
+})
+
+const descriptionClasses = tv({
+  base: 'space-y-2',
+  variants: {
+    hide: {
+      true: 'hidden sm:block',
+    },
+  },
+})

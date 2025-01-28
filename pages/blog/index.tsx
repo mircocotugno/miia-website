@@ -7,7 +7,7 @@ import {
 
 import { storyblokApi } from '@modules/storyblokApi'
 import { StoryProps, type ArticleProps, type PageProps } from '@props/types'
-import { Meta } from '@components/meta'
+import { Meta } from '../../components/meta'
 import { Nav } from '@components/nav'
 import Link from 'next/link'
 import { Image, Chip, Button } from '@nextui-org/react'

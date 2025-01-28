@@ -1,0 +1,116 @@
+import type { ListProps } from '@cms/components'
+import { storyblokEditable } from '@storyblok/react'
+import { compiler } from 'markdown-to-jsx'
+import { Typography } from './typography'
+import {
+  Accordion,
+  AccordionItem,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Link,
+  Tabs,
+  Tab,
+} from '@nextui-org/react'
+import { StoryblokComponent } from '@storyblok/react'
+
+interface ListComponent {
+  blok: ListProps
+}
+
+const displayModes = {
+  dropdown: ListDropdown,
+  tab: ListTab,
+  accordion: ListAccordion,
+}
+
+const displayFilters = {
+  dropdown: 'link',
+  tab: 'link',
+  accordion: 'text',
+}
+
+export function List({ blok }: ListComponent) {
+  if (blok.display) {
+    const ListFilter = displayFilters[blok.display]
+    const ListDisplay = displayModes[blok.display]
+    blok.items = blok.items.filter(({ component }) => component === ListFilter)
+    return <ListDisplay {...blok} />
+  }
+  return (
+    <div className='flex-0'>
+      <p className='text-lg font-medium mb-2'>{blok.label}</p>
+      <hr className='opacity-10 mb-4' />
+      <ul className='space-y-2'>
+        {blok.items.map((item, index) => (
+          <li key={`list-${index}`}>
+            <StoryblokComponent blok={item} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function ListDropdown(blok: ListProps) {
+  return (
+    <Dropdown {...storyblokEditable(blok)}>
+      <DropdownTrigger>
+        <Link color='foreground'>{blok.label}</Link>
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label={blok.id}
+        classNames={{
+          base: 'bg-background/70 backdrop-blur-lg',
+          list: 'shadow-none',
+        }}
+      >
+        {blok.items.map((item, index) => (
+          <DropdownItem key={`dropdown-${index}`}>
+            <StoryblokComponent blok={item} />
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
+  )
+}
+
+function ListTab(blok: ListProps) {
+  return (
+    <Tabs>
+      {blok.items.map((item, index) => (
+        <Tab key={index}>
+          <StoryblokComponent blok={item} />
+        </Tab>
+      ))}
+    </Tabs>
+  )
+}
+
+function ListAccordion(blok: ListProps) {
+  return (
+    <Accordion className='col-span-12' {...storyblokEditable(blok)}>
+      {blok.items.map((item, index) => (
+        <AccordionItem
+          key={index}
+          aria-label={`accordion-${index}`}
+          title={compiler(item.title, {
+            wrapper: null,
+            overrides: Typography,
+          })}
+        >
+          <div className='font-light'>
+            {compiler(item.description, {
+              wrapper: null,
+              overrides: Typography,
+            })}
+          </div>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  )
+}
+
+function ListTimeliine(blok: any) {
+}
