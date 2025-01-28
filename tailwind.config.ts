@@ -13,22 +13,48 @@ export default {
       serif: ['var(--font-serif)'],
     },
     extend: {
+      fontSize: {
+        '5xl': '2.75rem',
+      },
+      width: {
+        sm: '8rem',
+        md: '16rem',
+        lg: '32rem',
+        xl: '64rem',
+      },
       maxWidth: {
-        "1/2": '50%',
-        "1/3": '33.3333%',
-        "1/4": '25%',
+        '1/2': '50%',
+        '1/3': '33.3333%',
+        '1/4': '25%',
+        sm: '8rem',
+        md: '16rem',
+        lg: '32rem',
+        xl: '64rem',
       },
       maxHeight: {
         modal: '40rem',
+        sm: '8rem',
+        md: '16rem',
+        lg: '32rem',
+        xl: '64rem',
       },
       minHeight: {
         '100': '25rem',
         '120': '30rem',
         cover: '40rem',
+        sm: '8rem',
+        md: '16rem',
+        lg: '32rem',
+        xl: '64rem',
+        inherit: 'inherit',
       },
       lineHeight: {
         tight: '1.125',
         compact: '.9',
+      },
+      aspectRatio: {
+        '4/3': '4 / 3',
+        '3/4': '3 / 4',
       },
       dropShadow: {
         '8xl': [

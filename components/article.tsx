@@ -1,6 +1,6 @@
-import type { ArticleProps } from '@props/types'
+import type { ArticleProps } from '@cms/components'
 import { StoryblokComponent } from '@storyblok/react'
-import { Meta } from '@components/meta'
+import { Meta } from './meta'
 import { Image } from '@nextui-org/react'
 import Link from 'next/link'
 

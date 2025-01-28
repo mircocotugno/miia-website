@@ -11,13 +11,9 @@ const excluding_slugs = ['home', 'blog/']
 const relations = [
   'page.header',
   'page.footer',
-  'article.author',
-  'enroll.header',
-  'enroll.footer',
   'enroll.courses',
   'enroll.form',
-  'grid.items',
-  'alias.item',
+  'article.author'
 ]
 
 type PageStory = {

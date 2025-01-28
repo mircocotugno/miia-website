@@ -1,177 +1,617 @@
-import type { ComponentSchema } from '@props/schema'
+import type { ComponentSchema } from '../props/schema'
+import type { StoryProps, BlokProps } from '../props/types'
 
-const coach: ComponentSchema = {
-  name: 'coach',
-  display_name: 'Docente',
-  is_root: true,
-  is_nestable: false,
-  component_group_uuid: 'resources',
-  color: '#1e88e5',
-  icon: 'block-locked',
-  preview_tmpl: ``,
+export type ActionProps = BlokProps & {
+  id: string
+  label: string
+  link: {
+    cached_url: string
+    linktype: 'story' | 'url'
+    url: string
+    target?: '_blank'
+  }
+  button: boolean
+}
+
+const action: ComponentSchema = {
+  name: 'action',
+  display_name: 'Collegamento',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.label}}`,
   schema: {
-    image: {
-      type: 'asset',
-      display_name: 'Immagine',
-      description: 'Dimensione consigliata 500x500',
-      filetypes: ['images'],
+    label: {
+      type: 'markdown',
+      display_name: 'Etichetta',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: ['inlinecode'],
+      default_value: 'Collegamento',
       required: true,
     },
-    name: {
+    link: {
+      type: 'multilink',
+      display_name: 'Destinazione',
+      restrict_content_types: true,
+      component_whitelist: ['page', 'article', 'enroll'],
+      show_anchor: true,
+      asset_link_type: true,
+    },
+    button: {
+      type: 'boolean',
+      display_name: 'Mostra come bottone',
+      inline_label: true,
+    },
+    id: {
       type: 'text',
-      display_name: 'Nome Cognome',
-      required: true,
+      display_name: 'Tracciamento',
     },
-    role: {
-      type: 'options',
-      display_name: 'Ruolo',
-      options: [
-        { value: 'progettazione', name: 'Progettazione' },
-        { value: 'stile e disegno', name: 'Stile e disegno' },
-        { value: 'software CAD', name: 'Software CAD' },
+  },
+}
+
+export type TextProps = BlokProps & {
+  title: string
+  description: string
+  justify: 'right' | 'center' | 'left'
+  hide: 'title' | 'description' | 'all'
+}
+
+const text: ComponentSchema = {
+  name: 'text',
+  display_name: 'Testo',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.title}}`,
+  schema: {
+    title: {
+      type: 'markdown',
+      display_name: 'Titolo',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'link',
+        'inlinecode',
+        'italic',
+        'bold',
+        'hrule',
       ],
-      required: true,
+      default_value: '### Titolo',
     },
-    about: {
+    description: {
       type: 'markdown',
       display_name: 'Descrizione',
       customize_toolbar: true,
       rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
-      max_length: 240,
-      required: true,
+      toolbar: [
+        'bold',
+        'paragraph',
+        'list',
+        'olist',
+        'hrule',
+        'link',
+        'inlinecode',
+      ],
+      default_value: 'Descrizione...',
     },
-    links: {
-      type: 'bloks',
-      display_name: 'Collegamenti',
-      restrict_components: true,
-      component_whitelist: ['action'],
-      maximum: 3,
+    justify: {
+      type: 'option',
+      display_name: 'Giustifica',
+      options: [
+        { value: 'right', name: 'Destra' },
+        { value: 'center', name: 'Centro' },
+        { value: 'left', name: 'Sinistra' },
+      ],
+    },
+    hide: {
+      type: 'option',
+      display_name: 'Nascondi mobile',
+      options: [
+        { value: 'title', name: 'Titolo' },
+        { value: 'description', name: 'Descrizione' },
+        { value: 'all', name: 'Tutto' },
+      ],
     },
   },
 }
 
-const student: ComponentSchema = {
-  name: 'student',
-  display_name: 'Studente',
-  is_root: true,
-  is_nestable: false,
-  component_group_uuid: 'resources',
-  color: '#1e88e5',
-  icon: 'block-locked',
-  preview_tmpl: ``,
+export type PictureProps = BlokProps & {
+  asset: {
+    filename: string
+    alt: string
+    title: string
+    source: string
+    copyright: string
+    focus: string
+  }
+  size: 'sm' | 'md' | 'lg' | 'xl'
+  ratio: 'square' | 'portrait' | 'landscape' | 'circle'
+  effect: 'blurred' | 'zoomed'
+  background: boolean
+  preview: boolean
+}
+
+const picture: ComponentSchema = {
+  name: 'picture',
+  display_name: 'Immagine',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.asset}}`,
   schema: {
-    image: {
+    asset: {
       type: 'asset',
-      display_name: 'Immagine',
-      description: 'Dimensione consigliata 500x500',
+      display_name: 'Risorsa',
       filetypes: ['images'],
       required: true,
     },
-    name: {
-      type: 'text',
-      display_name: 'Nome Cognome',
-      required: true,
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'sm', name: 'Piccola' },
+        { value: 'md', name: 'Media' },
+        { value: 'lg', name: 'Grande' },
+        { value: 'xl', name: 'Enorme' },
+      ],
     },
-    quote: {
-      type: 'markdown',
-      display_name: 'Recensione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
-      max_length: 240,
-      required: true,
+    ratio: {
+      type: 'option',
+      display_name: 'Forma',
+      options: [
+        { value: 'square', name: 'Quadrata' },
+        { value: 'portrait', name: 'Verticale' },
+        { value: 'landscape', name: 'Orizzontale' },
+        { value: 'circle', name: 'Tonda' },
+      ],
     },
-    links: {
-      type: 'bloks',
-      display_name: 'Collegamenti',
-      restrict_components: true,
-      component_whitelist: ['action'],
-      maximum: 3,
+    effect: {
+      type: 'option',
+      display_name: 'Effetto',
+      options: [
+        { value: 'blurred', name: 'Sfocato' },
+        { value: 'zoomed', name: 'Zoom' },
+      ],
+    },
+    preview: {
+      type: 'boolean',
+      display_name: 'Mostra in galleria',
+      inline_label: true,
+      default_value: false,
+    },
+    background: {
+      type: 'boolean',
+      display_name: 'Applica come sfondo',
+      inline_label: true,
+      default_value: false,
     },
   },
 }
 
-const course: ComponentSchema = {
-  name: 'course',
-  display_name: 'Corso',
-  is_root: true,
+export type GalleryProps = BlokProps & {
+  assets: Array<{
+    filename: string
+    alt: string
+    title: string
+    source: string
+    copyright: string
+    focus: string
+  }>
+}
+
+const gallery: ComponentSchema = {
+  name: 'gallery',
+  display_name: 'Galleria',
+  is_root: false,
   is_nestable: true,
-  component_group_uuid: 'resources',
-  color: '#ffd600',
-  icon: 'block-shield-2',
+  component_group_uuid: 'elements',
   preview_tmpl: ``,
   schema: {
-    program: {
+    assets: {
+      type: 'multiasset',
+      display_name: 'Immagini',
+      filetypes: ['images'],
+      required: true,
+    },
+  },
+}
+export type OptionProps = { name: string; value: string }
+
+export type FieldProps = BlokProps & {
+  id: string
+  input:
+    | 'text'
+    | 'number'
+    | 'email'
+    | 'tel'
+    | 'date'
+    | 'checkbox'
+    | 'area'
+    | 'select'
+    // | 'file' //TODO: find a file module
+    | 'enroll'
+    | 'hidden'
+  label: string
+  placeholder: string
+  required: boolean
+  options: string | Array<OptionProps>
+}
+
+const field: ComponentSchema = {
+  name: 'field',
+  display_name: 'Campo',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: ``,
+  schema: {
+    id: {
+      type: 'text',
+      display_name: 'Id',
+      required: true,
+    },
+    input: {
       type: 'option',
       display_name: 'Tipo',
       options: [
-        { value: 'interior base', name: 'Interni - base' },
-        { value: 'fashion base', name: 'Moda - base' },
-        { value: 'interior avanzato', name: 'Interni - avanzato' },
-        { value: 'fashion avanzato', name: 'Moda - avanzato' },
+        { value: 'text', name: 'Testo' },
+        { value: 'number', name: 'Numero' },
+        { value: 'email', name: 'Email' },
+        { value: 'tel', name: 'Telefono' },
+        { value: 'date', name: 'Data' },
+        { value: 'checkbox', name: 'Casella' },
+        { value: 'area', name: 'Messaggio' },
+        { value: 'select', name: 'Selezione' },
+        // { value: 'file', name: 'File' }, //TODO :find a module for file input
+        { value: 'enroll', name: 'Iscrizione' },
+        { value: 'hidden', name: 'Nascosto' },
       ],
+      description:
+        'Il campo tipo: "Iscrizione" può essere usato solo nelle pagine corso',
+      default_value: 'text',
       required: true,
     },
-    days: {
-      type: 'options',
-      display_name: 'Giorni di lezione',
-      options: [
-        { value: 'Lunedì', name: 'Lunedì' },
-        { value: 'Martedi', name: 'Martedi' },
-        { value: 'Mercoledì', name: 'Mercoledì' },
-        { value: 'Giovedì', name: 'Giovedì' },
-        { value: 'Venerdì', name: 'Venerdì' },
-        { value: 'Sabato', name: 'Sabato' },
-      ],
+    label: {
+      type: 'text',
+      display_name: 'Etichetta',
+      required: true,
+      max_length: 60,
+    },
+    placeholder: {
+      type: 'text',
+      display_name: 'Segnaposto',
+      description: 'Indicare il valore per il tipo "Nascosto"',
+      max_length: 140,
+    },
+    required: {
+      type: 'boolean',
+      display_name: 'Obbligatorio',
+      default_value: false,
+      inline_label: true,
+    },
+    options: {
+      type: 'textarea',
+      display_name: 'Opzioni',
+      description: `Solo per il tipo "Selezione".
+\nUsare la sintassi chiave:valore e andare a capo per ogni opzione.`,
+    },
+  },
+}
+
+export type ListProps = BlokProps & {
+  label: string
+  items: Array<TextProps & ActionProps>
+  display: 'dropdown' | 'tab' | 'accordion'
+}
+
+const list: ComponentSchema = {
+  name: 'list',
+  display_name: 'Lista',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.display}}`,
+  schema: {
+    label: {
+      type: 'text',
+      display_name: 'Etichetta',
       required: true,
     },
-    hours: {
-      type: 'options',
-      display_name: 'Orario delle lezioni',
-      options: [
-        { value: '9:00/12:00', name: '9:00/12:00' },
-        { value: '13:00/16:00', name: '13:00/16:00' },
-        { value: '20:00/23:00', name: '20:00/23:00' },
-      ],
+    items: {
+      type: 'bloks',
+      display_name: 'Testi',
+      restrict_components: true,
+      component_whitelist: ['text', 'action'],
       required: true,
     },
-    location: {
+    display: {
       type: 'option',
-      display_name: 'Sede',
-      source: 'internal',
-      datasource_slug: 'locations',
+      display_name: 'Mostra come',
+      options: [
+        { value: 'dropdown', name: 'Menu' },
+        { value: 'tab', name: 'Scheda' },
+        { value: 'accordion', name: 'Fisarmonica' },
+      ],
+    },
+  },
+}
+
+export type WrapperProps = BlokProps & {
+  contents: Array<PictureProps & TextProps & ActionProps>
+  row: boolean
+  boxed: boolean
+  size: 'small' | 'medium' | 'large' | 'extra'
+  justify: 'right' | 'center' | 'left'
+}
+
+const wrapper: ComponentSchema = {
+  name: 'wrapper',
+  display_name: 'Contenitore',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.display}}`,
+  schema: {
+    contents: {
+      type: 'bloks',
+      display_name: 'Contenuti',
+      restrict_components: true,
+      component_whitelist: ['picture', 'gallery', 'text', 'action', 'list'],
       required: true,
     },
-    starts: {
-      type: 'datetime',
-      display_name: 'Data inizio',
-      disable_time: true,
+    row: {
+      type: 'boolean',
+      display_name: 'Orizontale',
+      inline_label: true,
     },
-    ends: {
-      type: 'datetime',
-      display_name: 'Data fine',
-      disable_time: true,
+    boxed: {
+      type: 'boolean',
+      display_name: 'Incorniciato',
+      inline_label: true,
     },
-    seats: {
-      type: 'number',
-      display_name: 'Posti',
-      description: 'Numero massimo di posti',
-      default_value: '12',
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'small', name: 'Piccola' },
+        { value: 'medium', name: 'Media' },
+        { value: 'large', name: 'Grande' },
+        { value: 'extra', name: 'Enorme' },
+      ],
     },
-    link: {
-      type: 'multilink',
-      display_name: 'Collegamento',
-      restrict_content_types: true,
-      component_whitelist: ['enroll'],
-      link_scope: '{0}/{1}/',
-      force_link_scope: true,
+    justify: {
+      type: 'option',
+      display_name: 'Giustifica',
+      options: [
+        { value: 'right', name: 'Destra' },
+        { value: 'center', name: 'Centro' },
+        { value: 'left', name: 'Sinistra' },
+      ],
+    },
+  },
+}
+
+export type CarouselProps = BlokProps & {
+  slides: Array<SectionProps | WrapperProps>
+  weight: 'low' | 'high'
+}
+
+const carousel: ComponentSchema = {
+  name: 'carousel',
+  display_name: 'Carosello',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  preview_tmpl: ``,
+  schema: {
+    slides: {
+      type: 'bloks',
+      display_name: 'Elementi',
+      restrict_components: true,
+      component_whitelist: ['section', 'wrapper'],
+      required: true,
+    },
+    weight: {
+      type: 'option',
+      display_name: 'Densità',
+      options: [
+        { value: 'low', name: 'Bassa' },
+        { value: 'high', name: 'Alta' },
+      ],
+    },
+  },
+}
+
+export type MapProps = BlokProps & {
+  locations: Array<LocationProps>
+}
+
+const map: ComponentSchema = {
+  name: 'map',
+  display_name: 'Mappa',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  preview_tmpl: ``,
+  schema: {
+    locations: {
+      type: 'options',
+      display_name: 'Località',
+      source: 'internal_stories',
+      filter_content_type: ['location'],
       required: true,
     },
   },
 }
 
-// Layouts
+export type FormProps = BlokProps & {
+  scope: 'contact' | 'openday' | 'enroll'
+  body: Array<FieldProps>
+  message: string
+}
+
+const form: ComponentSchema = {
+  name: 'form',
+  display_name: 'Modulo',
+  is_root: true,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  preview_tmpl: ``,
+  schema: {
+    scope: {
+      type: 'option',
+      display_name: 'Scopo',
+      options: [
+        { value: 'contact', name: 'Richiesta informazioni' },
+        { value: 'openday', name: 'Partecipazione openday' },
+        { value: 'enroll', name: 'Iscrizione corso' },
+      ],
+      required: true,
+    },
+    fields: {
+      type: 'bloks',
+      display_name: 'Passaggi',
+      restrict_components: true,
+      component_whitelist: ['field'],
+      required: true,
+    },
+    message: {
+      type: 'markdown',
+      display_name: 'Messaggio di successo',
+      description: `Il messaggio di successo viene mostrato al termine del modulo.
+\nNel testo potrai inserire {{nome del campo}} tra quelli inseriti.
+\nElenco dei campi: 
+name, surname,fullname, birthday, gender, email, phone, country, 
+region, district, city, address, message, policy.`,
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: [
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'bold',
+        'italic',
+        'paragraph',
+        'list',
+        'hrule',
+        'link',
+        'image',
+        'inlinecode',
+      ],
+      required: true,
+    },
+  },
+}
+
+export type SectionProps = BlokProps & {
+  contents: Array<
+    PictureProps &
+      ListProps &
+      TextProps &
+      ActionProps &
+      WrapperProps &
+      CarouselProps &
+      MapProps
+  >
+  theme: 'dark'
+  contain: boolean
+  id: string
+}
+
+const section: ComponentSchema = {
+  name: 'section',
+  display_name: 'Sezione',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  preview_tmpl: `{{it.id}}`,
+  schema: {
+    id: {
+      type: 'text',
+      display_name: 'Ancora',
+    },
+    contents: {
+      type: 'bloks',
+      display_name: 'Contenuti',
+      restrict_components: true,
+      component_whitelist: ['picture', 'list', 'text', 'action', 'wrapper'],
+      required: true,
+    },
+    theme: {
+      type: 'option',
+      display_name: 'Tema',
+      options: [{ value: 'dark', name: 'Scuro' }],
+    },
+    contain: {
+      type: 'boolean',
+      display_name: 'Applica margini',
+      default_value: true,
+      inline_label: true,
+    },
+  },
+}
+
+export type NavProps = BlokProps & {
+  contents: Array<ActionProps | ListProps>
+  message: string
+}
+
+const nav: ComponentSchema = {
+  name: 'nav',
+  display_name: 'Navigatore',
+  is_root: true,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  preview_tmpl: ``,
+  schema: {
+    contents: {
+      type: 'bloks',
+      display_name: 'Collegamenti',
+      restrict_components: true,
+      component_whitelist: ['action', 'list'],
+      required: true,
+    },
+    message: {
+      type: 'markdown',
+      display_name: 'Messaggio',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: ['bold', 'paragraph', 'link', 'inlinecode', 'italic'],
+    },
+  },
+}
+
+export type MetaProps = {
+  title?: string
+  description?: string
+  image?: {
+    filename: string
+    alt: string
+    title: string
+    source: string
+    copyright: string
+    focus: string
+  }
+}
+
+export type PageProps = BlokProps &
+  MetaProps & {
+    header: StoryProps & {
+      content: NavProps
+    }
+    footer: StoryProps & {
+      content: NavProps
+    }
+    body: Array<SectionProps & CarouselProps>
+  }
 
 const page: ComponentSchema = {
   name: 'page',
@@ -179,8 +619,6 @@ const page: ComponentSchema = {
   is_root: true,
   is_nestable: false,
   component_group_uuid: 'layouts',
-  color: '#00b8d4',
-  icon: 'block-doc',
   preview_tmpl: ``,
   schema: {
     preview: {
@@ -227,59 +665,23 @@ const page: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti pagina',
       restrict_components: true,
-      component_whitelist: ['section', 'cover'],
+      component_whitelist: ['section', 'carousel'],
     },
   },
 }
 
-const article: ComponentSchema = {
-  name: 'article',
-  display_name: 'Articolo',
-  is_root: true,
-  is_nestable: false,
-  component_group_uuid: 'layouts',
-  color: '#43a047',
-  icon: 'block-comment',
-  preview_tmpl: ``,
-  schema: {
-    preview: {
-      type: 'section',
-      display_name: 'Anteprima metadati',
-      keys: ['title', 'description', 'image', 'author'],
-    },
-    title: {
-      type: 'textarea',
-      display_name: 'Titolo',
-      max_length: 80,
-      required: true,
-    },
-    description: {
-      type: 'textarea',
-      display_name: 'Riassunto',
-      max_length: 300,
-      required: true,
-    },
-    image: {
-      type: 'asset',
-      display_name: 'Immagine',
-      description: 'Dimensione consigliata 1200x627px',
-      filetypes: ['images'],
-      required: true,
-    },
-    author: {
-      type: 'option',
-      display_name: 'Autore',
-      source: 'internal_stories',
-      filter_content_type: ['coach'],
-    },
-    body: {
-      type: 'bloks',
-      display_name: 'Contenuti articolo',
-      restrict_components: true,
-      component_whitelist: ['section'],
-    },
-  },
-}
+export type EnrollProps = BlokProps &
+  MetaProps & {
+    header: StoryProps & {
+      content: NavProps
+    }
+    footer: StoryProps & {
+      content: NavProps
+    }
+    courses: Array<CourseProps>
+    form: FormProps
+    body: Array<SectionProps & CarouselProps>
+  }
 
 const enroll: ComponentSchema = {
   name: 'enroll',
@@ -287,9 +689,7 @@ const enroll: ComponentSchema = {
   is_root: true,
   is_nestable: false,
   component_group_uuid: 'layouts',
-  color: '#ff3d00',
-  icon: 'block-cart',
-  preview_tmpl: ``,
+  preview_tmpl: `{{it.courses}}`,
   schema: {
     preview: {
       type: 'section',
@@ -356,208 +756,243 @@ const enroll: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: ['section', 'cover'],
+      component_whitelist: ['section', 'carousel'],
     },
   },
 }
 
-// Bloks
+export type ArticleProps = BlokProps &
+  MetaProps & {
+    author: StoryProps & {
+      content: PersonProps
+    }
+    body: Array<SectionProps>
+  }
 
-const nav: ComponentSchema = {
-  name: 'nav',
-  display_name: 'Navigatore',
+const article: ComponentSchema = {
+  name: 'article',
+  display_name: 'Articolo',
   is_root: true,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#8e24aa',
-  icon: 'block-buildin',
+  is_nestable: false,
+  component_group_uuid: 'layouts',
   preview_tmpl: ``,
   schema: {
-    links: {
-      type: 'bloks',
-      display_name: 'Collegamenti',
-      restrict_components: true,
-      component_whitelist: ['action', 'menu'],
+    preview: {
+      type: 'section',
+      display_name: 'Anteprima metadati',
+      keys: ['title', 'description', 'image', 'author'],
+    },
+    title: {
+      type: 'textarea',
+      display_name: 'Titolo',
+      max_length: 80,
       required: true,
     },
-    actions: {
+    description: {
+      type: 'textarea',
+      display_name: 'Riassunto',
+      max_length: 300,
+      required: true,
+    },
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      description: 'Dimensione consigliata 1200x627px',
+      filetypes: ['images'],
+      required: true,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+    body: {
       type: 'bloks',
-      display_name: 'Azioni',
+      display_name: 'Contenuti articolo',
       restrict_components: true,
-      component_whitelist: ['action'],
+      component_whitelist: ['section', 'carousel'],
+    },
+  },
+}
+
+export type LocationProps = {
+  title: string
+  address: string
+  gps: string
+  direction: string
+}
+
+const location: ComponentSchema = {
+  name: 'location',
+  display_name: 'Località',
+  is_root: true,
+  is_nestable: false,
+  component_group_uuid: 'resources',
+  preview_tmpl: ``,
+  schema: {
+    title: {
+      type: 'text',
+      display_name: 'Nome',
+      required: true,
+    },
+    address: {
+      type: 'textarea',
+      display_name: 'Indirizzo',
+      description: `Via, Civico - cap\nCittà Provincia`,
+      required: true,
+    },
+    gps: {
+      type: 'text',
+      display_name: 'Coordinate',
+      description: 'Latitudine/Longitudine',
+      required: true,
+    },
+    direction: {
+      type: 'text',
+      display_name: 'Indicazioni',
+    },
+  },
+}
+
+export type CourseProps = {
+  title: string
+  location: LocationProps
+  days: Array<
+    'Lunedì' | 'Martedì' | 'Mercoledì' | 'Giovedì' | 'Venerdì' | 'Sabato'
+  >
+  hours: Array<'9:00/12:00' | '13:00/16:00' | '20:00/23:00'>
+  starts: string
+  ends: string
+  seats: number
+  page: {
+    cached_url: string
+    linktype: 'story' | 'url'
+    url: string
+    target?: '_blank'
+  }
+}
+
+const course: ComponentSchema = {
+  name: 'course',
+  display_name: 'Corso',
+  is_root: true,
+  is_nestable: false,
+  component_group_uuid: 'resources',
+  preview_tmpl: ``,
+  schema: {
+    title: {
+      type: 'text',
+      display_name: 'Titolo',
+      required: true,
+    },
+    location: {
+      type: 'option',
+      display_name: 'Sede',
+      source: 'internal_stories',
+      filter_content_type: ['location'],
+      required: true,
+    },
+    days: {
+      type: 'options',
+      display_name: 'Giorni di lezione',
+      options: [
+        { value: 'Lunedì', name: 'Lunedì' },
+        { value: 'Martedi', name: 'Martedi' },
+        { value: 'Mercoledì', name: 'Mercoledì' },
+        { value: 'Giovedì', name: 'Giovedì' },
+        { value: 'Venerdì', name: 'Venerdì' },
+        { value: 'Sabato', name: 'Sabato' },
+      ],
+      required: true,
+    },
+    hours: {
+      type: 'options',
+      display_name: 'Orario delle lezioni',
+      options: [
+        { value: '9:00/12:00', name: '9:00/12:00' },
+        { value: '13:00/16:00', name: '13:00/16:00' },
+        { value: '20:00/23:00', name: '20:00/23:00' },
+      ],
+      required: true,
+    },
+    starts: {
+      type: 'datetime',
+      display_name: 'Data inizio',
+      disable_time: true,
+    },
+    ends: {
+      type: 'datetime',
+      display_name: 'Data fine',
+      disable_time: true,
+    },
+    seats: {
+      type: 'number',
+      display_name: 'Posti',
+      description: 'Numero massimo di posti',
+      default_value: '12',
+    },
+    page: {
+      type: 'multilink',
+      display_name: 'Pagina',
+      restrict_content_types: true,
+      component_whitelist: ['enroll'],
+    },
+  },
+}
+
+export type PersonProps = {
+  image: Array<{
+    filename: string
+    alt: string
+    title: string
+    source: string
+    copyright: string
+    focus: string
+  }>
+  title: string
+  description: string
+  message: string
+  links: Array<ActionProps>
+}
+
+const person: ComponentSchema = {
+  name: 'person',
+  display_name: 'Perona',
+  is_root: true,
+  is_nestable: false,
+  component_group_uuid: 'resources',
+  preview_tmpl: ``,
+  schema: {
+    image: {
+      type: 'multiasset',
+      display_name: 'Immagini',
+      description: 'Dimensione consigliata 500x500',
+      filetypes: ['images'],
+
+      required: true,
+    },
+    title: {
+      type: 'text',
+      display_name: 'Nome Cognome',
+      required: true,
+    },
+    description: {
+      type: 'markdown',
+      display_name: 'Descrizione',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
+      max_length: 240,
+      required: true,
     },
     message: {
       type: 'markdown',
       display_name: 'Messaggio',
       customize_toolbar: true,
       rich_markdown: true,
-      toolbar: ['bold', 'link', 'inlinecode', 'italic'],
-    },
-  },
-}
-
-const cover: ComponentSchema = {
-  name: 'cover',
-  display_name: 'Copertina',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#ff7043',
-  icon: 'block-center-m',
-  preview_tmpl: ``,
-  schema: {
-    body: {
-      type: 'bloks',
-      display_name: 'Contenuti',
-      restrict_components: true,
-      component_whitelist: ['content', 'alias', 'action'],
-    },
-    background: {
-      type: 'asset',
-      display_name: 'Sfondo',
-      description: 'Dimensione consigliata 1920x1280px',
-      filetypes: ['images'],
-    },
-    styles: {
-      type: 'options',
-      display_name: 'Stili',
-      options: [
-        { value: 'themeDark', name: 'Tema scuro' },
-        { value: 'justifyRight', name: 'Giusifica a destra' },
-        { value: 'minHeight', name: 'Altezza minima' },
-      ],
-    },
-  },
-}
-
-const section: ComponentSchema = {
-  name: 'section',
-  display_name: 'Sezione',
-  is_root: false,
-  is_nestable: true,
-  color: '#9c24d8',
-  icon: 'block-block',
-  component_group_uuid: 'containers',
-  preview_tmpl: `{{it.headline}}`,
-  schema: {
-    id: {
-      type: 'text',
-      display_name: 'Id',
-    },
-    headline: {
-      type: 'markdown',
-      display_name: 'Intestazione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'link',
-        'inlinecode',
-        'italic',
-        'bold',
-        'hrule',
-      ],
-      default_value: '### Titolo...',
-    },
-    body: {
-      type: 'bloks',
-      display_name: 'Contenuti',
-      restrict_components: true,
-      component_whitelist: [
-        'heading',
-        'content',
-        'wrapper',
-        'map',
-        'grid',
-        'gallery',
-        'picture',
-        'accordion',
-        'carousel',
-        'alias',
-      ],
-      required: true,
-    },
-    footer: {
-      type: 'bloks',
-      display_name: 'Chiusura',
-      restrict_components: true,
-      component_whitelist: ['action', 'alias'],
-    },
-    styles: {
-      type: 'options',
-      display_name: 'Stili',
-      options: [
-        { value: 'themeDark', name: 'Tema scuro' },
-        { value: 'smallSpaces', name: 'Spaziatura ridotta' },
-        { value: 'justifyCenter', name: 'Giusifica al centro' },
-        { value: 'alignCenter', name: 'Allinea al centro' },
-        { value: 'fullScreen', name: 'Schermo pieno' },
-      ],
-    },
-  },
-}
-
-// Containers
-
-const wrapper: ComponentSchema = {
-  name: 'wrapper',
-  display_name: 'Contenitore',
-  is_root: false,
-  is_nestable: true,
-  color: '#9c24d8',
-  icon: 'block-block',
-  component_group_uuid: 'containers',
-  preview_tmpl: `{{it.styles}}`,
-  schema: {
-    body: {
-      type: 'bloks',
-      display_name: 'Contenuti',
-      restrict_components: true,
-      component_whitelist: [
-        'content',
-        'grid',
-        'map',
-        'gallery',
-        'picture',
-        'accordion',
-        'carousel',
-        'alias',
-      ],
-      required: true,
-    },
-    styles: {
-      type: 'options',
-      display_name: 'Stili',
-      options: [
-        { value: 'fullWidth', name: 'Larghezza piena' },
-        { value: 'threequarterWidth', name: 'Larghezza tre quarti' },
-        { value: 'twoThirdWidth', name: 'Largezza due terzi' },
-        { value: 'halfWidth', name: 'Mezza largheza' },
-        { value: 'thirdWidth', name: 'Largezza un terzo' },
-        { value: 'quarterWidth', name: 'Larghezza un quarto' },
-        { value: 'reorderFirst', name: 'Riordina per primo' },
-        { value: 'asRow', name: 'Disponi orizontalmente' },
-      ],
-    },
-  },
-}
-
-const menu: ComponentSchema = {
-  name: 'menu',
-  display_name: 'Menu',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#8e24aa',
-  icon: 'block-buildin',
-  preview_tmpl: ``,
-  schema: {
-    label: {
-      type: 'text',
-      display_name: 'Etichetta',
+      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
+      max_length: 240,
       required: true,
     },
     links: {
@@ -565,296 +1000,25 @@ const menu: ComponentSchema = {
       display_name: 'Collegamenti',
       restrict_components: true,
       component_whitelist: ['action'],
-      required: true,
+      maximum: 3,
     },
   },
 }
 
-const grid: ComponentSchema = {
-  name: 'grid',
-  display_name: 'Griglia',
+const event: ComponentSchema = {
+  name: 'event',
+  display_name: 'Evento',
   is_root: true,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#ffd600',
-  icon: 'block-shield-2',
+  is_nestable: false,
+  component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    items: {
-      type: 'options',
-      display_name: 'Elementi',
-      source: 'internal_stories',
-      filter_content_type: ['coach', 'article'],
-      required: true,
-    },
-    styles: {
-      type: 'options',
-      display_name: 'Stili',
-      options: [{ value: 'doubleWidth', name: 'Larghezza doppia' }],
-    },
-  },
-}
-
-const map: ComponentSchema = {
-  name: 'map',
-  display_name: 'Mappa',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#195B4A',
-  icon: 'block-map-pin',
-  preview_tmpl: ``,
-  schema: {
-    locations: {
-      type: 'options',
-      display_name: 'Sedi',
-      source: 'internal',
-      datasource_slug: 'locations',
-      required: true,
-    },
-  },
-}
-
-const accordion: ComponentSchema = {
-  name: 'accordion',
-  display_name: 'Fisarmonica',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#ff7043',
-  icon: 'block-text-img-c',
-  preview_tmpl: ``,
-  schema: {
-    contents: {
-      type: 'bloks',
-      display_name: 'Contenuti',
-      restrict_components: true,
-      component_whitelist: ['content'],
-    },
-  },
-}
-
-const form: ComponentSchema = {
-  name: 'form',
-  display_name: 'Modulo',
-  is_root: true,
-  is_nestable: true,
-  color: '#1a3ada',
-  icon: 'block-suitcase',
-  component_group_uuid: 'containers',
-  preview_tmpl: ``,
-  schema: {
-    scope: {
-      type: 'option',
-      display_name: 'Scopo',
-      options: [
-        { value: 'contact', name: 'Richiesta informazioni' },
-        { value: 'openday', name: 'Partecipazione openday' },
-        { value: 'enroll', name: 'Iscrizione corso' },
-      ],
-      required: true,
-    },
-    body: {
-      type: 'bloks',
-      display_name: 'Passaggi',
-      restrict_components: true,
-      component_whitelist: ['field'],
-      required: true,
-    },
-    message: {
-      type: 'markdown',
-      display_name: 'Messaggio di successo',
-      description: `Il messaggio di successo viene mostrato al termine del modulo.
-\nNel testo potrai inserire {{nome del campo}} tra quelli inseriti.
-\nElenco dei campi: 
-name, surname,fullname, birthday, gender, email, phone, country, 
-region, district, city, address, message, policy.`,
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: [
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'bold',
-        'italic',
-        'paragraph',
-        'list',
-        'hrule',
-        'link',
-        'image',
-        'inlinecode',
-      ],
-      required: true,
-    },
-  },
-}
-
-const carousel: ComponentSchema = {
-  name: 'carousel',
-  display_name: 'Carosello',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  color: '#d500f9',
-  icon: 'block-image',
-  preview_tmpl: ``,
-  schema: {
-    items: {
-      type: 'bloks',
-      display_name: 'Elementi',
-      restrict_components: true,
-      component_whitelist: ['content', 'cover'],
-      required: true,
-    },
-  },
-}
-
-// Elements
-
-const field: ComponentSchema = {
-  name: 'field',
-  display_name: 'Campo',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#455a64',
-  icon: 'block-tag',
-  preview_tmpl: ``,
-  schema: {
-    id: {
+    title: {
       type: 'text',
-      display_name: 'Id',
-      required: true,
-    },
-    input: {
-      type: 'option',
-      display_name: 'Tipo',
-      options: [
-        { value: 'text', name: 'Testo' },
-        { value: 'number', name: 'Numero' },
-        { value: 'email', name: 'Email' },
-        { value: 'tel', name: 'Telefono' },
-        { value: 'date', name: 'Data' },
-        { value: 'checkbox', name: 'Casella' },
-        { value: 'area', name: 'Messaggio' },
-        { value: 'select', name: 'Selezione' },
-        // { value: 'file', name: 'File' }, //TODO :find a module for file input
-        { value: 'enroll', name: 'Iscrizione' },
-        { value: 'hidden', name: 'Nascosto' },
-      ],
-      description:
-        'Il campo tipo: "Iscrizione" può essere usato solo nelle pagine corso',
-      default_value: 'text',
-      required: true,
-    },
-    label: {
-      type: 'text',
-      display_name: 'Etichetta',
-      required: true,
-      max_length: 60,
-    },
-    placeholder: {
-      type: 'text',
-      display_name: 'Segnaposto',
-      description: 'Indicare il valore per il tipo "Nascosto"',
-      max_length: 140,
-    },
-    required: {
-      type: 'boolean',
-      display_name: 'Obbligatorio',
-      default_value: 'false',
-    },
-    options: {
-      type: 'textarea',
-      display_name: 'Opzioni',
-      description: `Solo per il tipo "Selezione".
-\nUsare la sintassi chiave:valore e andare a capo per ogni opzione.`,
-    },
-  },
-}
-
-const picture: ComponentSchema = {
-  name: 'picture',
-  display_name: 'Immagine',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  preview_tmpl: `{{it.styles}}`,
-  schema: {
-    image: {
-      type: 'asset',
-      display_name: 'Immagine',
-      filetypes: ['images'],
-      required: true,
-    },
-    styles: {
-      type: 'options',
-      display_name: 'Stili',
-      options: [
-        { value: 'squareRatio', name: 'Quadrata' },
-        { value: 'squareRatio', name: 'Quadrata' },
-      ],
-    },
-  },
-}
-
-const heading: ComponentSchema = {
-  name: 'heading',
-  display_name: 'Intestazione',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#ff1744',
-  icon: 'block-sticker',
-  preview_tmpl: `{{it.body}}`,
-  schema: {
-    body: {
-      type: 'markdown',
-      display_name: 'Testo',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'link',
-        'inlinecode',
-        'italic',
-        'bold',
-        'hrule',
-      ],
-      required: true,
-      default_value: '### Intestazione...',
-    },
-  },
-}
-
-const content: ComponentSchema = {
-  name: 'content',
-  display_name: 'Descrizione',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#8bc34a',
-  icon: 'block-text-c',
-  preview_tmpl: `{{it.head}}`,
-  schema: {
-    image: {
-      type: 'asset',
-      display_name: 'Immagine',
-      filetypes: ['images'],
-    },
-    head: {
-      type: 'markdown',
       display_name: 'Titolo',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: ['h3', 'h4', 'h5', 'h6'],
-      default_value: '### Titolo...',
+      required: true,
     },
-    body: {
+    description: {
       type: 'markdown',
       display_name: 'Descrizione',
       customize_toolbar: true,
@@ -867,147 +1031,68 @@ const content: ComponentSchema = {
         'hrule',
         'link',
         'inlinecode',
-        'image',
       ],
-      required: true,
-      default_value: 'Descrizione...',
+      default_value: '',
     },
-    styles: {
-      type: 'options',
-      display_name: 'Stili',
-      options: [
-        { value: 'fullWidth', name: 'Larghezza piena' },
-        { value: 'threequarterWidth', name: 'Larghezza tre quarti' },
-        { value: 'twoThirdWidth', name: 'Largezza due terzi' },
-        { value: 'halfWidth', name: 'Mezza largheza' },
-        { value: 'thirdWidth', name: 'Largezza un terzo' },
-        { value: 'quarterWidth', name: 'Larghezza un quarto' },
-        { value: 'reorderFirst', name: 'Riordina per primo' },
-        { value: 'asRow', name: 'Disponi orizontalmente' },
-      ],
-    },
-  },
-}
-
-const gallery: ComponentSchema = {
-  name: 'gallery',
-  display_name: 'Galleria',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#d500f9',
-  icon: 'block-image',
-  preview_tmpl: ``,
-  schema: {
-    images: {
-      type: 'multiasset',
-      display_name: 'Immagini',
-      filetypes: ['images'],
-      required: true,
-    },
-  },
-}
-
-const action: ComponentSchema = {
-  name: 'action',
-  display_name: 'Azione',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#ffa000',
-  icon: 'block-arrow-pointer',
-  preview_tmpl: ``,
-  schema: {
-    id: {
-      type: 'text',
-      display_name: 'Id',
-    },
-    label: {
-      type: 'markdown',
-      display_name: 'Etichetta',
-      customize_toolbar: true,
-      rich_markdown: true,
-      required: true,
-      toolbar: ['bold', 'inlinecode'],
-    },
-    link: {
-      type: 'multilink',
-      display_name: 'Collegamento',
-      restrict_content_types: true,
-      component_whitelist: ['page', 'article', 'enroll'],
-      show_anchor: true,
-      asset_link_type: true,
-    },
-  },
-}
-
-const alias: ComponentSchema = {
-  name: 'alias',
-  display_name: 'Risorsa',
-  is_root: true,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  color: '#ffd600',
-  icon: 'block-shield-2',
-  preview_tmpl: ``,
-  schema: {
-    item: {
+    location: {
       type: 'option',
-      display_name: 'Elemento',
+      display_name: 'Sede',
       source: 'internal_stories',
-      filter_content_type: ['article', 'coach', 'form', 'student', 'course'],
+      filter_content_type: ['location'],
+    },
+    date: {
+      type: 'datetime',
+      display_name: 'Data',
       required: true,
+    },
+    page: {
+      type: 'multilink',
+      display_name: 'Pagina',
+      restrict_content_types: true,
+      component_whitelist: ['page'],
     },
   },
 }
 
 export type Components =
-  | 'coach'
-  | 'student'
+  | 'action'
+  | 'text'
+  | 'picture'
+  | 'gallery'
+  | 'field'
+  | 'list'
+  | 'form'
+  | 'wrapper'
+  | 'carousel'
+  | 'map'
+  | 'section'
+  | 'nav'
+  | 'location'
   | 'course'
+  | 'person'
+  | 'event'
   | 'page'
   | 'article'
   | 'enroll'
-  | 'cover'
-  | 'section'
-  | 'action'
-  | 'nav'
-  | 'wrapper'
-  | 'menu'
-  | 'grid'
-  | 'map'
-  | 'accordion'
-  | 'heading'
-  | 'content'
-  | 'form'
-  | 'field'
-  | 'gallery'
-  | 'carousel'
-  | 'picture'
-  | 'alias'
 
 export const components = {
-  coach,
-  student,
-  course,
-  page,
-  article,
-  enroll,
-  cover,
-  section,
-  wrapper,
   action,
-  nav,
-  menu,
-  grid,
-  map,
-  accordion,
-  heading,
-  content,
-  form,
-  field,
-  gallery,
-  carousel,
+  text,
   picture,
-  alias,
+  gallery,
+  field,
+  list,
+  wrapper,
+  carousel,
+  map,
+  form,
+  section,
+  nav,
+  page,
+  enroll,
+  article,
+  location,
+  course,
+  person,
+  event,
 }

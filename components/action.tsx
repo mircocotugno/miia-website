@@ -1,55 +1,37 @@
-import { Link, Button, NavbarItem, NavbarMenuItem } from '@nextui-org/react'
+import { Button, Link } from '@nextui-org/react'
+import type { ActionProps } from '@cms/components'
 import { compiler } from 'markdown-to-jsx'
-import type { ActionProps } from '@props/types'
-import { Typography } from '@components/typography'
 import { storyblokEditable } from '@storyblok/react'
+import { Typography } from './typography'
 
 interface ActionComponent {
   blok: ActionProps
-  parent?: string
 }
 
-export function Action({ blok, parent }: ActionComponent) {
-  const link: string = blok.link?.cached_url || blok.link.url
+export function Action({ blok }: ActionComponent) {
+  const link = blok.link.cached_url || blok.link.url
 
-  if (parent === 'nav')
+  if (blok.button)
     return (
-      <NavbarItem {...storyblokEditable(blok)}>
-        <Link href={link} target={blok.link.target} color='foreground'>
-          {compiler(blok.label, {
-            wrapper: null,
-            overrides: Typography,
-          })}
-        </Link>
-      </NavbarItem>
-    )
-
-  if (parent === 'nav-mobile')
-    return (
-      <NavbarMenuItem>
-        <Link href={link} target={blok.link.target} color='foreground'>
-          {compiler(blok.label, {
-            wrapper: null,
-            overrides: Typography,
-          })}
-        </Link>
-      </NavbarMenuItem>
+      <Button
+        id={blok.id}
+        as={Link}
+        target={blok.link.target}
+        color='primary'
+        size='lg'
+        href={link}
+        className='col-auto min-w-fit'
+        {...storyblokEditable(blok)}
+      >
+        {blok.label &&
+          compiler(blok.label, { wrapper: null, overrides: Typography })}
+      </Button>
     )
 
   return (
-    <Button
-      href={link}
-      target={blok.link.target}
-      color='primary'
-      size='lg'
-      className='mx-2 text-lg font-medium'
-      as={Link}
-      {...storyblokEditable(blok)}
-    >
-      {compiler(blok.label, {
-        wrapper: null,
-        overrides: Typography,
-      })}
-    </Button>
+    <Link className='col-auto min-w-fit' href={link} target={blok.link.target} color='foreground'>
+      {blok.label &&
+        compiler(blok.label, { wrapper: null, overrides: Typography })}
+    </Link>
   )
 }

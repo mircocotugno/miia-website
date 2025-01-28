@@ -10,22 +10,16 @@ import { fontSans, fontSerif } from '@config/fonts'
 import { Page } from '@components/page'
 import { Section } from '@components/section'
 import { Nav } from '@components/nav'
-import { Cover } from '@components/cover'
-import { Heading } from '@components/heading'
+import { Text } from '@components/text'
 import { Action } from '@components/action'
-import { Content } from '@components/content'
-import { Grid } from '@components/grid'
-import { Coach } from '@components/coach'
 import { Gallery } from '@components/gallery'
 import { Picture } from '@components/picture'
 import { Field } from '@components/field'
 import { Form } from '@components/form'
-import { Accordion } from '@components/accordion'
 import { Map } from '@components/map'
 import { Article } from '@components/article'
-import { Alias } from '@components/alias'
 import { Enroll } from '@components/enroll'
-import { Menu } from '@components/menu'
+import { List } from '@components/list'
 import { Carousel } from '@components/carousel'
 import { Wrapper } from '@components/wrapper'
 
@@ -34,23 +28,17 @@ const components = {
   article: Article,
   enroll: Enroll,
   nav: Nav,
-  menu: Menu,
+  list: List,
   section: Section,
   wrapper: Wrapper,
-  cover: Cover,
-  grid: Grid,
   gallery: Gallery,
   carousel: Carousel,
   picture: Picture,
   map: Map,
-  accordion: Accordion,
   form: Form,
   field: Field,
-  heading: Heading,
-  content: Content,
+  text: Text,
   action: Action,
-  coach: Coach,
-  alias: Alias,
 }
 
 storyblokInit({
