@@ -1,3 +1,4 @@
+import type { NavProps } from '@props/types'
 import { useState } from 'react'
 import {
   Navbar,
@@ -9,7 +10,6 @@ import {
   NavbarMenuItem,
   Link,
 } from '@nextui-org/react'
-import { NavProps } from '@cms/components'
 import { Typography } from './typography'
 
 import { Brand } from '@public/brand'
@@ -42,7 +42,7 @@ function Header({ blok }: { blok: NavProps }) {
     >
       <NavbarBrand className='grow-0'>
         <Link href='/'>
-        <Logo
+          <Logo
             classes='max-md:hidden'
             // primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
             // secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}

@@ -1,4 +1,4 @@
-import type { PageProps } from '@cms/components'
+import type { PageProps } from '@props/types'
 import { StoryblokComponent } from '@storyblok/react'
 import { Meta } from '@components/meta'
 import { Nav } from '@components/nav'
@@ -12,10 +12,12 @@ export function Page({ blok }: PageComponent) {
     <>
       <Meta {...blok} />
       {blok.header && <Nav parent='header' blok={blok.header.content} />}
-      {blok.body &&
-        blok.body.map((body, index) => (
-          <StoryblokComponent blok={body} parent='page' key={index} />
-        ))}
+      <main className='min-h-screen'>
+        {blok.body &&
+          blok.body.map((body, index) => (
+            <StoryblokComponent blok={body} parent='page' key={index} />
+          ))}
+      </main>
       {blok.footer && <Nav parent='footer' blok={blok.footer.content} />}
     </>
   )

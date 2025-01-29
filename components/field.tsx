@@ -1,5 +1,4 @@
-import type { FieldProps, OptionProps } from '@cms/components'
-import type { DataProps } from '@components/form'
+import type { FieldProps, OptionProps, DataProps } from '@props/types'
 import {
   Input,
   Select,

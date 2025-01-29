@@ -1,5 +1,5 @@
+import type { MapProps } from '@props/types'
 import { Map as MapGl, Marker } from 'react-map-gl'
-import type { MapProps } from '@cms/components'
 
 interface MapComponent {
   blok: MapProps

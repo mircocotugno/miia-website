@@ -22,6 +22,11 @@ import { Enroll } from '@components/enroll'
 import { List } from '@components/list'
 import { Carousel } from '@components/carousel'
 import { Wrapper } from '@components/wrapper'
+import { Alias } from '@components/alias'
+import { Person } from '@components/person'
+import { Event } from '@components/event'
+import { Course } from '@components/course'
+import { Location } from '@components/location'
 
 const components = {
   page: Page,
@@ -29,6 +34,7 @@ const components = {
   enroll: Enroll,
   nav: Nav,
   list: List,
+  alias: Alias,
   section: Section,
   wrapper: Wrapper,
   gallery: Gallery,
@@ -39,6 +45,10 @@ const components = {
   field: Field,
   text: Text,
   action: Action,
+  person: Person,
+  event: Event,
+  course: Course,
+  location: Location,
 }
 
 storyblokInit({

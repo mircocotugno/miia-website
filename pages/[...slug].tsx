@@ -1,3 +1,4 @@
+import type { LocationProps } from '@props/types'
 import { storyblokApi } from '@modules/storyblokApi'
 import type { BlokProps } from '@props/types'
 import {
@@ -11,9 +12,13 @@ const excluding_slugs = ['home', 'blog/']
 const relations = [
   'page.header',
   'page.footer',
+  'enroll.header',
+  'enroll.footer',
   'enroll.courses',
+  'course.location',
   'enroll.form',
-  'article.author'
+  'article.author',
+  'alias.resource',
 ]
 
 type PageStory = {
@@ -21,16 +26,19 @@ type PageStory = {
     id: string
     content: BlokProps
   }
+  locations: Array<{
+    content: LocationProps
+  }>
 }
 
-export default function PageStory({ story }: PageStory) {
+export default function PageStory({ story, locations }: PageStory) {
   const page = useStoryblokState(story, {
     resolveRelations: relations,
     preventClicks: true,
   })
   if (!page) return null
 
-  return <StoryblokComponent blok={page.content} />
+  return <StoryblokComponent locations={locations} blok={page.content} />
 }
 
 export async function getStaticProps({ params }: any) {
@@ -49,6 +57,17 @@ export async function getStaticProps({ params }: any) {
         first_published_at
         tag_list
       }
+      LocationItems {
+        items {
+          content {
+            address
+            direction
+            gps
+            title
+          }
+          uuid
+        }
+      }
     }
   `
   const data = await storyblokApi({ query, variables })
@@ -56,6 +75,7 @@ export async function getStaticProps({ params }: any) {
   return {
     props: {
       story: data?.ContentNode || null,
+      locations: data?.LocationItems.items || null,
     },
     revalidate: 3600,
   }
@@ -69,7 +89,7 @@ export async function getStaticPaths() {
         excluding_slugs: $excluding_slugs, 
         filter_query: {
           component: {
-            in: "page,enroll,article"
+            in: "page,enroll"
           }
         }
       ) {

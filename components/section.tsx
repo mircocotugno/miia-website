@@ -1,6 +1,6 @@
-import type { SectionProps, PictureProps } from '@cms/components'
+import type { SectionProps, PictureProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { PropsWithChildren, ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 import { tv } from 'tailwind-variants'
 
 interface SectionComponent {
@@ -8,13 +8,36 @@ interface SectionComponent {
   contain?: boolean
 }
 
-const gridClasses = 'grid grid-cols-12 gap-2 md:gap-4 lg:gap-6 items-center'
+const gridClasses =
+  'grid grid-cols-12 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-12 items-center'
 
 export function Section({ blok, contain }: SectionComponent) {
   const Tag = contain ? 'div' : 'section'
 
-  const hasBackground = blok.contents.findIndex((c: any) => !!c?.background)
-  const background: PictureProps = blok.contents[hasBackground]
+  const hasBackground = blok.contents.findIndex(
+    (content): content is PictureProps =>
+      content.component === 'picture' && !!content?.background
+  )
+  const background: PictureProps | undefined = blok.contents.find(
+    (content): content is PictureProps =>
+      content.component === 'picture' && !!content?.background
+  )
+  const gradient = blok.theme === 'dark' ? '255 255 255' : '0 0 0'
+
+  const sectionClasses = tv({
+    base: `py-6 lg:py-12 ${background ? 'min-h-lg' : 'min-h-12'}`,
+    variants: {
+      theme: {
+        dark: 'dark text-foreground bg-background',
+      },
+      hasBackground: {
+        true: 'bg-cover bg-center text-background [&_article]:backdrop-blur-sm [&_article]:rounded-xl [&_h1]:drop-shadow-8xl [&_h2]:drop-shadow-8xl [&_h3]:drop-shadow-8xl [&_p]:drop-shadow-8xl',
+      },
+      contain: {
+        false: `${gridClasses}`,
+      },
+    },
+  })
 
   const Container = ({ children }: PropsWithChildren) =>
     contain || blok.contain ? (
@@ -37,7 +60,7 @@ export function Section({ blok, contain }: SectionComponent) {
       })}
       style={
         background && {
-          backgroundImage: `linear-gradient(to right, rgb(0 0 0 / 60%), rgb(0 0 0 / 0%) 60%), url(${background.asset.filename})`,
+          backgroundImage: `linear-gradient(to right, rgb(${gradient} / 60%), rgb(${gradient} / 0%) 70%), url(${background.asset.filename})`,
         }
       }
       {...storyblokEditable(blok)}
@@ -52,18 +75,3 @@ export function Section({ blok, contain }: SectionComponent) {
     </Tag>
   )
 }
-
-const sectionClasses = tv({
-  base: 'py-6 lg:py-12 min-h-inherit',
-  variants: {
-    theme: {
-      dark: 'dark text-foreground bg-background',
-    },
-    hasBackground: {
-      true: 'bg-cover bg-center text-background [&_h1]:drop-shadow-8xl [&_h2]:drop-shadow-8xl [&_h3]:drop-shadow-8xl [&_p]:drop-shadow-8xl',
-    },
-    contain: {
-      false: `${gridClasses}`,
-    },
-  },
-})

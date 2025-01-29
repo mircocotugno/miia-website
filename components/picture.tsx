@@ -1,5 +1,4 @@
-import type { PictureProps } from '@cms/components'
-import { useState } from 'react'
+import type { PictureProps } from '@props/types'
 import {
   Modal,
   ModalContent,
@@ -7,9 +6,8 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import { default as NextImage } from 'next/image'
-import { Avatar, Image as HeroImage } from '@nextui-org/react'
+import { Image as HeroImage } from '@nextui-org/react'
 import { tv } from 'tailwind-variants'
-import { storyblokEditable } from '@storyblok/react'
 
 interface PictureComponent {
   blok: PictureProps
@@ -34,6 +32,36 @@ export function Picture({ blok }: PictureComponent) {
     ?.map((s) => parseInt(s, 10))
   const pictureWidth = blok.background ? '100%' : sizes[blok.size] || '100%'
 
+  const wrapperClasses = tv({
+    base: 'flex-1 sm:flex-0 col-span-12 w-full max-h-fit',
+    variants: {
+      size: {
+        sm: 'max-w-sm ',
+        md: 'max-w-md',
+        lg: 'max-w-lg',
+        xl: 'max-w-xl',
+      },
+      ratio: {
+        square: 'aspect-square',
+        portrait: 'aspect-3/4',
+        landscape: 'aspect-4/3',
+        circle: 'aspect-square',
+      },
+      zoomed: {
+        true: 'max-w-fit',
+      },
+    },
+  })
+
+  const imageClasses = tv({
+    base: 'object-cover',
+    variants: {
+      ratio: {
+        true: 'absolute t-0 r-0 w-full h-full',
+      },
+    },
+  })
+
   return (
     <>
       <HeroImage
@@ -41,7 +69,7 @@ export function Picture({ blok }: PictureComponent) {
           wrapper: wrapperClasses({
             ratio: blok.ratio,
             size: blok.size,
-            zoomed: blok.effect.includes("zoomed")
+            zoomed: blok.effect.includes('zoomed'),
           }),
           img: imageClasses({
             ratio: !!blok.ratio,
@@ -84,33 +112,3 @@ export function Picture({ blok }: PictureComponent) {
     </>
   )
 }
-
-const wrapperClasses = tv({
-  base: 'col-span-12 w-full max-h-fit flex-none',
-  variants: {
-    size: {
-      sm: 'max-w-sm',
-      md: 'max-w-md',
-      lg: 'max-w-lg',
-      xl: 'max-w-xl',
-    },
-    ratio: {
-      square: 'aspect-square',
-      portrait: 'aspect-3/4',
-      landscape: 'aspect-4/3',
-      circle: 'aspect-square',
-    },
-    zoomed: {
-      true: 'max-w-fit',
-    },
-  },
-})
-
-const imageClasses = tv({
-  base: 'object-cover',
-  variants: {
-    ratio: {
-      true: 'absolute t-0 r-0 w-full h-full',
-    },
-  },
-})

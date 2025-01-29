@@ -1,4 +1,4 @@
-import type { TextProps } from '@cms/components'
+import type { TextProps } from '@props/types'
 import { Typography } from './typography'
 import { storyblokEditable } from '@storyblok/react'
 import { compiler } from 'markdown-to-jsx'
@@ -35,14 +35,14 @@ export function Text({ blok }: TextComponent) {
       className={textClasses({ justify: blok.justify })}
       {...storyblokEditable(blok)}
     >
-      <Title />
-      <Description />
+      {blok.title && <Title />}
+      {blok.description && <Description />}
     </article>
   )
 }
 
 const textClasses = tv({
-  base: 'flex flex-col align-stretch gap-2 lg:gap-4 col-span-12',
+  base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-16',
   variants: {
     justify: {
       right: 'text-right',
@@ -53,7 +53,7 @@ const textClasses = tv({
 })
 
 const titleClases = tv({
-  base: 'space-y-2',
+  base: 'space-y-6',
   variants: {
     hide: {
       true: 'hidden sm:block',

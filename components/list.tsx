@@ -1,7 +1,7 @@
-import type { ListProps } from '@cms/components'
+import type { ListProps, TextProps } from '@props/types'
 import { storyblokEditable } from '@storyblok/react'
 import { compiler } from 'markdown-to-jsx'
-import { Typography } from './typography'
+import { Typography } from '@components/typography'
 import {
   Accordion,
   AccordionItem,
@@ -89,9 +89,12 @@ function ListTab(blok: ListProps) {
 }
 
 function ListAccordion(blok: ListProps) {
+  const items = blok.items.filter(
+    (item): item is TextProps => item.component === 'text'
+  )
   return (
     <Accordion className='col-span-12' {...storyblokEditable(blok)}>
-      {blok.items.map((item, index) => (
+      {items.map((item, index) => (
         <AccordionItem
           key={index}
           aria-label={`accordion-${index}`}
@@ -112,5 +115,4 @@ function ListAccordion(blok: ListProps) {
   )
 }
 
-function ListTimeliine(blok: any) {
-}
+function ListTimeliine(blok: any) {}

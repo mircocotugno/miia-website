@@ -1,4 +1,10 @@
-import type { FieldProps, FormProps, OptionProps } from '@cms/components'
+import type {
+  FieldProps,
+  FormProps,
+  OptionProps,
+  DataProps,
+  StoryProps,
+} from '@props/types'
 import {
   Drawer,
   DrawerContent,
@@ -31,20 +37,13 @@ const callToAction = {
   enroll: 'Iscriviti',
 }
 
-export type DataProps = {
-  id: string
-  value: any
-  required: boolean
-  error: string | null
-}
-
 interface FormData {
   [key: string]: DataProps
 }
 
 export function Form({ blok, courses }: FormComponent) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [data, setData] = useState((): FormData => getData(blok.body))
+  const [data, setData] = useState((): FormData => getData(blok.fields))
   const [message, setMessage] = useState(blok.message)
   const [submitted, setSubmitted] = useState(false)
 
@@ -83,7 +82,7 @@ export function Form({ blok, courses }: FormComponent) {
   }
 
   const handleReset = () => {
-    setData(() => getData(blok.body))
+    setData(() => getData(blok.fields))
     setSubmitted(false)
 
     onOpenChange()
@@ -102,7 +101,7 @@ export function Form({ blok, courses }: FormComponent) {
                 {!!blok.scope && formTitles[blok.scope]}
               </DrawerHeader>
               <DrawerBody>
-                {blok.body.map((field, index) =>
+                {blok.fields.map((field, index) =>
                   field.input === 'enroll' && !courses?.length ? null : (
                     <StoryblokComponent
                       blok={

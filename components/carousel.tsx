@@ -1,4 +1,4 @@
-import type { CarouselProps } from '@cms/components'
+import type { CarouselProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { tv } from 'tailwind-variants'
 import { Swiper, SwiperSlide } from 'swiper/react'

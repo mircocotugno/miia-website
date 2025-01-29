@@ -1,4 +1,4 @@
-import type { GalleryProps } from '@cms/components'
+import type { GalleryProps } from '@props/types'
 import { useState } from 'react'
 import {
   Modal,

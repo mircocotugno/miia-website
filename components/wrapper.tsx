@@ -1,4 +1,4 @@
-import type { WrapperProps, PictureProps } from '@cms/components'
+import type { PictureProps, WrapperProps, ImageProps } from '@props/types'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { tv } from 'tailwind-variants'
@@ -8,9 +8,65 @@ interface WrapperComponent {
 }
 
 export function Wrapper({ blok }: WrapperComponent) {
-  const hasBackground = blok.contents.findIndex((c: any) => !!c?.background)
-  const background: false | PictureProps =
-    hasBackground >= 0 && blok.contents[hasBackground]
+  const hasBackground = blok.contents.findIndex(
+    (content): content is PictureProps =>
+      content.component === 'picture' && !!content?.background
+  )
+  const background: PictureProps | undefined = blok.contents.find(
+    (content): content is PictureProps =>
+      content.component === 'picture' && !!content?.background
+  )
+
+  const classes = tv({
+    base: 'col-span-12 sm:col-span-6',
+    variants: {
+      size: {
+        small: 'sm:col-span-3',
+        medium: 'sm:col-span-4',
+        large: 'sm:col-span-8',
+        extra: 'sm:col-span-9',
+      },
+      justify: {
+        right: 'items-start',
+        center: 'items-center',
+        left: 'items-end',
+      },
+      boxed: {
+        false: 'flex flex-wrap flex-col gap-2 md:gap-4 lg:gap-6',
+      },
+      row: {
+        true: 'flex-row',
+      },
+      hasBackground: {
+        true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
+      },
+      order: {
+        true: `order-${blok.order}`,
+      },
+    },
+    compoundVariants: [
+      {
+        row: true,
+        boxed: true,
+        class: 'flex gap-2 md:gap-4 lg:gap-6',
+      },
+      {
+        row: true,
+        justify: 'right',
+        class: 'justify-start',
+      },
+      {
+        row: true,
+        justify: 'center',
+        class: 'justify-center',
+      },
+      {
+        row: true,
+        justify: 'left',
+        class: 'justify-end',
+      },
+    ],
+  })
 
   if (blok.boxed) {
     return (
@@ -20,6 +76,7 @@ export function Wrapper({ blok }: WrapperComponent) {
           size: blok.size,
           row: blok.row,
           boxed: true,
+          order: blok.order >= 0,
           hasBackground: hasBackground >= 0,
         })}
         style={
@@ -72,52 +129,3 @@ export function Wrapper({ blok }: WrapperComponent) {
     </div>
   )
 }
-
-const classes = tv({
-  base: 'col-span-12 sm:col-span-6',
-  variants: {
-    size: {
-      small: 'sm:col-span-3',
-      medium: 'sm:col-span-4',
-      large: 'sm:col-span-8',
-      extra: 'sm:col-span-9',
-    },
-    justify: {
-      right: 'items-start',
-      center: 'items-center',
-      left: 'items-end',
-    },
-    boxed: {
-      false: 'flex flex-col gap-2 md:gap-4 lg:gap-6',
-    },
-    row: {
-      true: 'flex-row',
-    },
-    hasBackground: {
-      true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
-    },
-  },
-  compoundVariants: [
-    {
-      row: true,
-      boxed: true,
-      class: 'flex gap-2 md:gap-4 lg:gap-6',
-    },
-    {
-      row: true,
-      justify: "right",
-      class: 'justify-start',
-    },
-    {
-      row: true,
-      justify: "center",
-      class: 'justify-center',
-    },
-    {
-      row: true,
-      justify: "left",
-      class: 'justify-end',
-    },
-  ],
-
-})

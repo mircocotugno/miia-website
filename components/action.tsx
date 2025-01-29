@@ -1,14 +1,15 @@
 import { Button, Link } from '@nextui-org/react'
-import type { ActionProps } from '@cms/components'
+import type { ActionProps, Sizes } from '@props/types'
 import { compiler } from 'markdown-to-jsx'
 import { storyblokEditable } from '@storyblok/react'
 import { Typography } from './typography'
 
 interface ActionComponent {
   blok: ActionProps
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export function Action({ blok }: ActionComponent) {
+export function Action({ blok, size }: ActionComponent) {
   const link = blok.link.cached_url || blok.link.url
 
   if (blok.button)
@@ -20,7 +21,7 @@ export function Action({ blok }: ActionComponent) {
         color='primary'
         size='lg'
         href={link}
-        className='col-auto min-w-fit'
+        className='col-auto font-bold self-start min-w-fit'
         {...storyblokEditable(blok)}
       >
         {blok.label &&
@@ -29,7 +30,13 @@ export function Action({ blok }: ActionComponent) {
     )
 
   return (
-    <Link className='col-auto min-w-fit' href={link} target={blok.link.target} color='foreground'>
+    <Link
+      className='col-auto self-start font-medium min-w-fit'
+      href={link}
+      target={blok.link.target}
+      color='foreground'
+      size={size || 'md'}
+    >
       {blok.label &&
         compiler(blok.label, { wrapper: null, overrides: Typography })}
     </Link>

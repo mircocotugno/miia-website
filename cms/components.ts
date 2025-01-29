@@ -1,17 +1,4 @@
 import type { ComponentSchema } from '../props/schema'
-import type { StoryProps, BlokProps } from '../props/types'
-
-export type ActionProps = BlokProps & {
-  id: string
-  label: string
-  link: {
-    cached_url: string
-    linktype: 'story' | 'url'
-    url: string
-    target?: '_blank'
-  }
-  button: boolean
-}
 
 const action: ComponentSchema = {
   name: 'action',
@@ -27,7 +14,6 @@ const action: ComponentSchema = {
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: ['inlinecode'],
-      default_value: 'Collegamento',
       required: true,
     },
     link: {
@@ -48,13 +34,6 @@ const action: ComponentSchema = {
       display_name: 'Tracciamento',
     },
   },
-}
-
-export type TextProps = BlokProps & {
-  title: string
-  description: string
-  justify: 'right' | 'center' | 'left'
-  hide: 'title' | 'description' | 'all'
 }
 
 const text: ComponentSchema = {
@@ -83,7 +62,6 @@ const text: ComponentSchema = {
         'bold',
         'hrule',
       ],
-      default_value: '### Titolo',
     },
     description: {
       type: 'markdown',
@@ -99,7 +77,6 @@ const text: ComponentSchema = {
         'link',
         'inlinecode',
       ],
-      default_value: 'Descrizione...',
     },
     justify: {
       type: 'option',
@@ -120,22 +97,6 @@ const text: ComponentSchema = {
       ],
     },
   },
-}
-
-export type PictureProps = BlokProps & {
-  asset: {
-    filename: string
-    alt: string
-    title: string
-    source: string
-    copyright: string
-    focus: string
-  }
-  size: 'sm' | 'md' | 'lg' | 'xl'
-  ratio: 'square' | 'portrait' | 'landscape' | 'circle'
-  effect: 'blurred' | 'zoomed'
-  background: boolean
-  preview: boolean
 }
 
 const picture: ComponentSchema = {
@@ -195,17 +156,6 @@ const picture: ComponentSchema = {
   },
 }
 
-export type GalleryProps = BlokProps & {
-  assets: Array<{
-    filename: string
-    alt: string
-    title: string
-    source: string
-    copyright: string
-    focus: string
-  }>
-}
-
 const gallery: ComponentSchema = {
   name: 'gallery',
   display_name: 'Galleria',
@@ -221,27 +171,6 @@ const gallery: ComponentSchema = {
       required: true,
     },
   },
-}
-export type OptionProps = { name: string; value: string }
-
-export type FieldProps = BlokProps & {
-  id: string
-  input:
-    | 'text'
-    | 'number'
-    | 'email'
-    | 'tel'
-    | 'date'
-    | 'checkbox'
-    | 'area'
-    | 'select'
-    // | 'file' //TODO: find a file module
-    | 'enroll'
-    | 'hidden'
-  label: string
-  placeholder: string
-  required: boolean
-  options: string | Array<OptionProps>
 }
 
 const field: ComponentSchema = {
@@ -305,12 +234,6 @@ const field: ComponentSchema = {
   },
 }
 
-export type ListProps = BlokProps & {
-  label: string
-  items: Array<TextProps & ActionProps>
-  display: 'dropdown' | 'tab' | 'accordion'
-}
-
 const list: ComponentSchema = {
   name: 'list',
   display_name: 'Lista',
@@ -343,12 +266,42 @@ const list: ComponentSchema = {
   },
 }
 
-export type WrapperProps = BlokProps & {
-  contents: Array<PictureProps & TextProps & ActionProps>
-  row: boolean
-  boxed: boolean
-  size: 'small' | 'medium' | 'large' | 'extra'
-  justify: 'right' | 'center' | 'left'
+const alias: ComponentSchema = {
+  name: 'alias',
+  display_name: 'Risorsa',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: ``,
+  schema: {
+    resource: {
+      type: 'option',
+      display_name: 'Risorsa',
+      source: 'internal_stories',
+      filter_content_type: [
+        'location',
+        'person',
+        'event',
+        'course',
+        'article',
+        'form',
+      ],
+    },
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'small', name: 'Piccola' },
+        { value: 'medium', name: 'Media' },
+        { value: 'large', name: 'Grande' },
+        { value: 'extra', name: 'Enorme' },
+      ],
+    },
+    order: {
+      type: 'number',
+      display_name: 'Ordinamento mobile',
+    },
+  },
 }
 
 const wrapper: ComponentSchema = {
@@ -363,7 +316,14 @@ const wrapper: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: ['picture', 'gallery', 'text', 'action', 'list'],
+      component_whitelist: [
+        'picture',
+        'gallery',
+        'text',
+        'action',
+        'list',
+        'alias',
+      ],
       required: true,
     },
     row: {
@@ -395,12 +355,11 @@ const wrapper: ComponentSchema = {
         { value: 'left', name: 'Sinistra' },
       ],
     },
+    order: {
+      type: 'number',
+      display_name: 'Ordinamento mobile',
+    },
   },
-}
-
-export type CarouselProps = BlokProps & {
-  slides: Array<SectionProps | WrapperProps>
-  weight: 'low' | 'high'
 }
 
 const carousel: ComponentSchema = {
@@ -415,7 +374,7 @@ const carousel: ComponentSchema = {
       type: 'bloks',
       display_name: 'Elementi',
       restrict_components: true,
-      component_whitelist: ['section', 'wrapper'],
+      component_whitelist: ['section', 'wrapper', 'alias'],
       required: true,
     },
     weight: {
@@ -427,10 +386,6 @@ const carousel: ComponentSchema = {
       ],
     },
   },
-}
-
-export type MapProps = BlokProps & {
-  locations: Array<LocationProps>
 }
 
 const map: ComponentSchema = {
@@ -449,12 +404,6 @@ const map: ComponentSchema = {
       required: true,
     },
   },
-}
-
-export type FormProps = BlokProps & {
-  scope: 'contact' | 'openday' | 'enroll'
-  body: Array<FieldProps>
-  message: string
 }
 
 const form: ComponentSchema = {
@@ -511,21 +460,6 @@ region, district, city, address, message, policy.`,
   },
 }
 
-export type SectionProps = BlokProps & {
-  contents: Array<
-    PictureProps &
-      ListProps &
-      TextProps &
-      ActionProps &
-      WrapperProps &
-      CarouselProps &
-      MapProps
-  >
-  theme: 'dark'
-  contain: boolean
-  id: string
-}
-
 const section: ComponentSchema = {
   name: 'section',
   display_name: 'Sezione',
@@ -542,7 +476,14 @@ const section: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: ['picture', 'list', 'text', 'action', 'wrapper'],
+      component_whitelist: [
+        'picture',
+        'list',
+        'text',
+        'action',
+        'wrapper',
+        'alias',
+      ],
       required: true,
     },
     theme: {
@@ -557,11 +498,6 @@ const section: ComponentSchema = {
       inline_label: true,
     },
   },
-}
-
-export type NavProps = BlokProps & {
-  contents: Array<ActionProps | ListProps>
-  message: string
 }
 
 const nav: ComponentSchema = {
@@ -588,30 +524,6 @@ const nav: ComponentSchema = {
     },
   },
 }
-
-export type MetaProps = {
-  title?: string
-  description?: string
-  image?: {
-    filename: string
-    alt: string
-    title: string
-    source: string
-    copyright: string
-    focus: string
-  }
-}
-
-export type PageProps = BlokProps &
-  MetaProps & {
-    header: StoryProps & {
-      content: NavProps
-    }
-    footer: StoryProps & {
-      content: NavProps
-    }
-    body: Array<SectionProps & CarouselProps>
-  }
 
 const page: ComponentSchema = {
   name: 'page',
@@ -670,19 +582,6 @@ const page: ComponentSchema = {
   },
 }
 
-export type EnrollProps = BlokProps &
-  MetaProps & {
-    header: StoryProps & {
-      content: NavProps
-    }
-    footer: StoryProps & {
-      content: NavProps
-    }
-    courses: Array<CourseProps>
-    form: FormProps
-    body: Array<SectionProps & CarouselProps>
-  }
-
 const enroll: ComponentSchema = {
   name: 'enroll',
   display_name: 'Iscrizione',
@@ -734,14 +633,34 @@ const enroll: ComponentSchema = {
     enrollment: {
       type: 'section',
       display_name: 'Iscrizione',
-      keys: ['courses', 'form'],
+      keys: ['headline', 'courses', 'form'],
+    },
+    headline: {
+      type: 'markdown',
+      display_name: 'Intestazione',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'link',
+        'inlinecode',
+        'italic',
+        'bold',
+        'hrule',
+      ],
+      required: true,
     },
     courses: {
       type: 'options',
       display_name: 'Corsi',
       source: 'internal_stories',
       restrict_content_types: true,
-      filter_content_type: ['course'],
+      filter_content_type: ['course', 'event'],
       required: true,
     },
     form: {
@@ -760,14 +679,6 @@ const enroll: ComponentSchema = {
     },
   },
 }
-
-export type ArticleProps = BlokProps &
-  MetaProps & {
-    author: StoryProps & {
-      content: PersonProps
-    }
-    body: Array<SectionProps>
-  }
 
 const article: ComponentSchema = {
   name: 'article',
@@ -816,13 +727,6 @@ const article: ComponentSchema = {
   },
 }
 
-export type LocationProps = {
-  title: string
-  address: string
-  gps: string
-  direction: string
-}
-
 const location: ComponentSchema = {
   name: 'location',
   display_name: 'Località',
@@ -853,24 +757,6 @@ const location: ComponentSchema = {
       display_name: 'Indicazioni',
     },
   },
-}
-
-export type CourseProps = {
-  title: string
-  location: LocationProps
-  days: Array<
-    'Lunedì' | 'Martedì' | 'Mercoledì' | 'Giovedì' | 'Venerdì' | 'Sabato'
-  >
-  hours: Array<'9:00/12:00' | '13:00/16:00' | '20:00/23:00'>
-  starts: string
-  ends: string
-  seats: number
-  page: {
-    cached_url: string
-    linktype: 'story' | 'url'
-    url: string
-    target?: '_blank'
-  }
 }
 
 const course: ComponentSchema = {
@@ -939,21 +825,6 @@ const course: ComponentSchema = {
       component_whitelist: ['enroll'],
     },
   },
-}
-
-export type PersonProps = {
-  image: Array<{
-    filename: string
-    alt: string
-    title: string
-    source: string
-    copyright: string
-    focus: string
-  }>
-  title: string
-  description: string
-  message: string
-  links: Array<ActionProps>
 }
 
 const person: ComponentSchema = {
@@ -1062,6 +933,7 @@ export type Components =
   | 'field'
   | 'list'
   | 'form'
+  | 'alias'
   | 'wrapper'
   | 'carousel'
   | 'map'
@@ -1082,6 +954,7 @@ export const components = {
   gallery,
   field,
   list,
+  alias,
   wrapper,
   carousel,
   map,
