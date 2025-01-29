@@ -8,8 +8,9 @@ export type StoryProps = {
 }
 
 export type BlokProps = {
+  id: string
   _uid: string
-  component: string
+  uuid: string
 }
 
 export type EntryProps = {
@@ -38,43 +39,16 @@ export type ImageProps = {
   focus: string
 }
 
-// Sources Props
-
-export type StudentProps = {
+export type OptionProps = {
   name: string
-  email: string
-}
-
-export type LocationProps = string & {
-  city: string
-  address: string
-  cap: string
-  phone: string
-  email: string
-  lat: number
-  lng: number
-  direction: string
-}
-
-export type PriceProps = {
-  low: number
-  total: number
-  installments: Array<{
-    installments: number
-    price: number
-    total: number
-  }>
+  value: string
 }
 
 // Props
 
-type CoachRoles = 'progettazione' | 'stile e disegno' | 'software CAD'
+export type Sizes = 'small' | 'medium' | 'large' | 'extra'
 
-type CoursePrograms =
-  | 'interior base'
-  | 'fashion base'
-  | 'interior avanzato'
-  | 'fashion avanzato'
+export type Justifications = 'right' | 'center' | 'left'
 
 type CourseDays =
   | 'Lunedì'
@@ -87,6 +61,8 @@ type CourseDays =
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
 type FormScopes = 'contact' | 'openday' | 'enroll'
+
+type DisplayModes = 'dropdown' | 'tab' | 'accordion'
 
 type InputTypes =
   | 'text'
@@ -103,30 +79,154 @@ type InputTypes =
 
 // Components Props
 
-export type CoachProps = BlokProps & {
-  image: ImageProps
-  name: string
-  role: CoachRoles
-  about: string
-  links: Array<ActionProps>
+export type ComponentsProps =
+  | ActionProps
+  | TextProps
+  | PictureProps
+  | GalleryProps
+  | FieldProps
+  | ListProps
+  | AliasProps
+  | WrapperProps
+  | CarouselProps
+  | MapProps
+  | FormProps
+  | SectionProps
+  | NavProps
+  | MetaProps
+  | PageProps
+  | EnrollProps
+  | ArticleProps
+  | LocationProps
+  | CourseProps
+  | PersonProps
+  | EventProps
+
+export type ActionProps = BlokProps & {
+  component: 'action'
+  id: string
+  label: string
+  link: LinkProps
+  button: boolean
 }
 
-// export type StudentProps = BlokProps & {
-//   asset: ImageProps
-//   name: string
-//   review: string
-//   links: Array<ActionProps>
-// }
+export type TextProps = BlokProps & {
+  component: 'text'
+  title: string
+  description: string
+  justify: Justifications
+  hide: 'title' | 'description' | 'all'
+}
 
-export type CourseProps = BlokProps & {
-  program: CoursePrograms
-  location: LocationProps
-  days: Array<CourseDays>
-  hours: Array<CourseHours>
-  starts: string
-  ends: string
-  seats: number
-  link: LinkProps
+export type PictureProps = BlokProps & {
+  component: 'picture'
+  asset: ImageProps
+  size: 'sm' | 'md' | 'lg' | 'xl'
+  ratio: 'square' | 'portrait' | 'landscape' | 'circle'
+  effect: 'blurred' | 'zoomed'
+  background: boolean
+  preview: boolean
+}
+
+export type GalleryProps = BlokProps & {
+  component: 'gallery'
+  assets: Array<ImageProps>
+}
+
+export type FieldProps = BlokProps & {
+  component: 'field'
+  id: string
+  input: InputTypes
+  label: string
+  placeholder: string
+  required: boolean
+  options: string | Array<OptionProps>
+}
+
+export type ListProps = BlokProps & {
+  component: 'list'
+  label: string
+  items: Array<TextProps | ActionProps>
+  display: DisplayModes
+}
+
+export type AliasProps = BlokProps & {
+  component: 'alias'
+  resource: StoryProps & {
+    content?:
+      | LocationProps
+      | PersonProps
+      | EventProps
+      | CourseProps
+      | ArticleProps
+      | FormProps
+  }
+  size: Sizes
+  order: number
+}
+
+export type WrapperProps = BlokProps & {
+  component: 'wrapper'
+  contents: (
+    | PictureProps
+    | TextProps
+    | ActionProps
+    | GalleryProps
+    | ListProps
+    | AliasProps
+  )[]
+  row: boolean
+  boxed: boolean
+  size: Sizes
+  justify: Justifications
+  order: number
+}
+
+export type CarouselProps = BlokProps & {
+  component: 'carousel'
+  slides: Array<SectionProps | WrapperProps>
+  weight: 'low' | 'high'
+}
+
+export type MapProps = BlokProps & {
+  component: 'map'
+  locations: Array<LocationProps>
+}
+
+export type FormProps = BlokProps & {
+  component: 'form'
+  scope: FormScopes
+  fields: Array<FieldProps>
+  message: string
+}
+
+export type DataProps = {
+  id: string
+  value: any
+  required: boolean
+  error: string | null
+}
+
+export type SectionProps = BlokProps & {
+  component: 'section'
+  contents: Array<
+    | PictureProps
+    | ListProps
+    | TextProps
+    | ActionProps
+    | WrapperProps
+    | CarouselProps
+    | MapProps
+  >
+  theme: 'dark'
+  contain: boolean
+  id: string
+}
+
+export type NavProps = BlokProps & {
+  component: 'nav'
+  contents: Array<ActionProps | ListProps>
+  message: string
 }
 
 export type MetaProps = {
@@ -135,146 +235,80 @@ export type MetaProps = {
   image?: ImageProps
 }
 
-export type PageProps = MetaProps & {
-  header: StoryProps & {
-    content: NavProps
-  }
-  footer: StoryProps & {
-    content: NavProps
-  }
-  body: Array<SectionProps & CoverProps>
-}
-
-export type ArticleProps = MetaProps & {
-  author: StoryProps & {
-    content: CoachProps
-  }
-  body: Array<SectionProps>
-}
-
-export type EnrollProps = MetaProps & {
-  header: StoryProps & {
-    content: NavProps
-  }
-  footer: StoryProps & {
-    content: NavProps
-  }
-  courses: Array<
-    StoryProps & {
-      content: CourseProps
+export type PageProps = BlokProps &
+  MetaProps & {
+    component: 'page'
+    header: StoryProps & {
+      content: NavProps
     }
-  >
-  form: StoryProps & {
-    content: FormProps
-  }
-  body: Array<SectionProps & CoverProps>
-}
-
-export type CoverProps = BlokProps & {
-  body: Array<HeadingProps & ActionProps>
-  background: ImageProps
-  styles: ['themeDark' | 'justifyRight' | 'minHeight']
-}
-
-export type SectionProps = BlokProps & {
-  headline?: string
-  body: Array<
-    ContentProps & GridProps & MapProps & GalleryProps & AccordionProps
-  >
-  footer: Array<ActionProps & AliasProps>
-  styles: ['themeDark' | 'justifyCenter' | 'smallSpaces']
-}
-
-export type NavProps = BlokProps & {
-  navigation: Array<ActionProps>
-  actions: Array<ActionProps>
-  message: string
-}
-
-export type GridProps = BlokProps & {
-  items: Array<
-    StoryProps & {
-      content: CoachProps
+    footer: StoryProps & {
+      content: NavProps
     }
-  >
-  styles: ['doubleWidth']
-}
-
-export type MapProps = BlokProps & {
-  locations: Array<LocationProps>
-}
-
-export type AccordionProps = BlokProps & {
-  contents: Array<ContentProps>
-}
-
-export type FormProps = BlokProps & {
-  scope: FormScopes
-  body: Array<FieldProps>
-  message: string
-}
-
-export type OptionProp = {
-  name: string
-  value: string
-}
-
-export type FieldProps = BlokProps & {
-  id: string
-  input: InputTypes
-  label: string
-  placeholder: string
-  required: boolean
-  options: string | Array<OptionProp>
-}
-
-export type HeadingProps = BlokProps & {
-  body: string
-}
-
-export type ContentProps = BlokProps & {
-  head: string
-  body: string
-}
-
-export type ActionProps = BlokProps & {
-  id?: string
-  label: string
-  link: LinkProps
-}
-
-export type AliasProps = BlokProps & {
-  item: StoryProps & {
-    content: ArticleProps & CoachProps & FormProps & StudentProps & CourseProps
+    body: Array<SectionProps & CarouselProps>
   }
+
+export type EnrollProps = BlokProps &
+  MetaProps & {
+    component: 'enroll'
+    header: StoryProps & {
+      content: NavProps
+    }
+    footer: StoryProps & {
+      content: NavProps
+    }
+    headline: string
+    courses: Array<{
+      content: Omit<CourseProps, 'location'> & { location: string }
+    }>
+    form: StoryProps & {
+      content: FormProps
+    }
+    body: Array<SectionProps | CarouselProps>
+  }
+
+export type ArticleProps = BlokProps &
+  MetaProps & {
+    component: 'article'
+    author: StoryProps & {
+      content: PersonProps
+    }
+    body: Array<SectionProps>
+  }
+
+export type LocationProps = BlokProps & {
+  component: 'location'
+  title: string
+  address: string
+  gps: string
+  direction: string
 }
 
-export type GalleryProps = BlokProps & {
-  images: Array<ImageProps>
+export type CourseProps = BlokProps & {
+  component: 'course'
+  title: string
+  location: LocationProps
+  days: Array<CourseDays>
+  hours: Array<CourseHours>
+  starts: string
+  ends: string
+  seats: number
+  page: LinkProps
 }
 
-export type PictureProps = BlokProps & {
-  image: ImageProps
-  style: 'sm' | 'md' | 'lg' | 'xl'
+export type PersonProps = BlokProps & {
+  component: 'person'
+  image: Array<ImageProps>
+  title: string
+  description: string
+  message: string
+  links: Array<ActionProps>
 }
 
-export type ComponentsProps =
-  | CoachProps
-  | StudentProps
-  | CourseProps
-  | MetaProps
-  | PageProps
-  | ArticleProps
-  | EnrollProps
-  | CoverProps
-  | SectionProps
-  | NavProps
-  | GridProps
-  | MapProps
-  | FormProps
-  | FieldProps
-  | HeadingProps
-  | ContentProps
-  | ActionProps
-  | AliasProps
-  | GalleryProps
+export type EventProps = BlokProps & {
+  component: 'event'
+  title: string
+  description: string
+  location: LocationProps
+  date: string
+  page: LinkProps
+}

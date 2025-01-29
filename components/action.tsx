@@ -1,43 +1,44 @@
-import { Link, Button, NavbarItem } from '@nextui-org/react'
+import { Button, Link } from '@nextui-org/react'
+import type { ActionProps, Sizes } from '@props/types'
 import { compiler } from 'markdown-to-jsx'
-import type { ActionProps } from '@props/types'
-import { Typography } from '@components/typography'
 import { storyblokEditable } from '@storyblok/react'
+import { Typography } from './typography'
 
 interface ActionComponent {
   blok: ActionProps
-  parent?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export function Action({ blok, parent }: ActionComponent) {
-  const link: string = blok.link?.cached_url || blok.link.url
+export function Action({ blok, size }: ActionComponent) {
+  const link = blok.link.cached_url || blok.link.url
 
-  if (parent === 'nav') {
+  if (blok.button)
     return (
-      <NavbarItem {...storyblokEditable(blok)}>
-        <Link href={link} target={blok.link.target} color='foreground'>
-          {compiler(blok.label, {
-            wrapper: null,
-            overrides: Typography,
-          })}
-        </Link>
-      </NavbarItem>
+      <Button
+        id={blok.id}
+        as={Link}
+        target={blok.link.target}
+        color='primary'
+        size='lg'
+        href={link}
+        className='col-auto font-bold self-start min-w-fit'
+        {...storyblokEditable(blok)}
+      >
+        {blok.label &&
+          compiler(blok.label, { wrapper: null, overrides: Typography })}
+      </Button>
     )
-  }
 
   return (
-    <Button
+    <Link
+      className='col-auto self-start font-medium min-w-fit'
       href={link}
       target={blok.link.target}
-      color='primary'
-      size='lg'
-      className='mx-2 text-lg font-medium'
-      as={Link}
+      color='foreground'
+      size={size || 'md'}
     >
-      {compiler(blok.label, {
-        wrapper: null,
-        overrides: Typography,
-      })}
-    </Button>
+      {blok.label &&
+        compiler(blok.label, { wrapper: null, overrides: Typography })}
+    </Link>
   )
 }

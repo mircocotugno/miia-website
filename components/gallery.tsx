@@ -1,12 +1,11 @@
+import type { GalleryProps } from '@props/types'
 import { useState } from 'react'
-import { GalleryProps } from '@props/types'
 import {
   Modal,
   ModalContent,
   ModalBody,
   useDisclosure,
 } from '@nextui-org/react'
-
 import Image from 'next/image'
 
 interface GalleryComponent {
@@ -14,7 +13,7 @@ interface GalleryComponent {
 }
 
 export function Gallery({ blok }: GalleryComponent) {
-  const galleryLength = blok.images.length
+  const galleryLength = blok.assets.length
   const [current, setCurrent] = useState(0)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -30,8 +29,8 @@ export function Gallery({ blok }: GalleryComponent) {
 
   return (
     <>
-      <div className='grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-        {blok.images.map((image, index) => (
+      <div className='col-span-12 grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+        {blok.assets.map((image, index) => (
           <div
             className='max-h-28 lg:max-h-32 overflow-hidden rounded'
             key={index}
@@ -61,8 +60,8 @@ export function Gallery({ blok }: GalleryComponent) {
           {() => (
             <ModalBody className='p-0 max-h-modal overflow-scroll hide-scroolbar'>
               <Image
-                src={blok.images[current].filename}
-                alt={blok.images[current].alt}
+                src={blok.assets[current].filename}
+                alt={blok.assets[current].alt}
                 onClick={() => handleCurrent(current)}
                 width={1280}
                 height={1024}

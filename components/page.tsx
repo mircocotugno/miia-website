@@ -11,12 +11,14 @@ export function Page({ blok }: PageComponent) {
   return (
     <>
       <Meta {...blok} />
-      {blok.header && <Nav blok={blok.header.content} />}
-      {blok.body &&
-        blok.body.map((body, index) => (
-          <StoryblokComponent blok={body} parent="page" key={index} />
-        ))}
-      {blok.footer && <footer>footer</footer>}
+      {blok.header && <Nav parent='header' blok={blok.header.content} />}
+      <main className='min-h-screen'>
+        {blok.body &&
+          blok.body.map((body, index) => (
+            <StoryblokComponent blok={body} parent='page' key={index} />
+          ))}
+      </main>
+      {blok.footer && <Nav parent='footer' blok={blok.footer.content} />}
     </>
   )
 }

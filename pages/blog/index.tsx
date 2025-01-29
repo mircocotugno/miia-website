@@ -1,3 +1,4 @@
+import type { ArticleProps, PageProps, StoryProps } from '@props/types'
 import { useEffect, useState } from 'react'
 import {
   StoryblokComponent,
@@ -6,8 +7,7 @@ import {
 } from '@storyblok/react'
 
 import { storyblokApi } from '@modules/storyblokApi'
-import { StoryProps, type ArticleProps, type PageProps } from '@props/types'
-import { Meta } from '@components/meta'
+import { Meta } from '../../components/meta'
 import { Nav } from '@components/nav'
 import Link from 'next/link'
 import { Image, Chip, Button } from '@nextui-org/react'
@@ -98,13 +98,13 @@ export default function Blog({ story }: Blog) {
     <>
       <Meta {...page.content} />
       {page.content.header.content && (
-        <Nav blok={page.content.header.content} />
+        <Nav parent='header' blok={page.content.header.content} />
       )}
-      {articles?.length && (
+      {!!articles && articles.length > 0 && (
         <section className='py-6 pb-10 lg:py-12 lg:pb-20 space-y-8 bg-foreground text-background'>
           <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
             <div>
-              {tags?.length &&
+              {!!tags?.length &&
                 tags.map(({ name }, index) => <Chip key={index}>{name}</Chip>)}
             </div>
             <div className='flex flex-wrap gap-6 lg:gap-8'>
@@ -166,7 +166,9 @@ export default function Blog({ story }: Blog) {
         page.content.body.map((body, index) => (
           <StoryblokComponent blok={body} parent='page' key={index} />
         ))}
-      {page.content.footer.content && <footer>footer</footer>}
+      {page.content?.footer.content && (
+        <Nav parent='footer' blok={page.content.footer.content} />
+      )}
     </>
   )
 }
