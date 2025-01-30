@@ -17,7 +17,7 @@ export const Typography = {
   },
   h3: {
     component: ({ children }: { children: string }) => (
-      <h3 className='font-serif leading-tight font-bold break-words text-3xl sm:text-4xl md:text-5xl'>
+      <h3 className='font-serif leading-snug font-bold break-words text-3xl sm:text-4xl md:text-5xl'>
         {children}
       </h3>
     ),
@@ -44,7 +44,7 @@ export const Typography = {
   },
   a: {
     component: ({ href, children }: { href: string; children: string }) => (
-      <Link href={href || ''}>{children}</Link>
+      <Link className="text-md" color="foreground" href={href || ''}>{children}</Link>
     ),
   },
   p: {
@@ -55,6 +55,11 @@ export const Typography = {
   ul: {
     component: ({ children }: { children: string }) => (
       <ul className='list-disc list-outside'>{children}</ul>
+    ),
+  },
+  hr: {
+    component: () => (
+      <hr className='max-w-1/3'/>
     ),
   },
   img: {

@@ -42,12 +42,12 @@ export function Text({ blok }: TextComponent) {
 }
 
 const textClasses = tv({
-  base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-16',
+  base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-16 text-left',
   variants: {
     justify: {
-      right: 'text-right',
-      center: 'text-center',
-      left: 'text-left',
+      right: 'sm:text-right',
+      center: 'sm:text-center',
+      left: 'sm:text-left',
     },
   },
 })

@@ -19,6 +19,7 @@ const relations = [
   'enroll.form',
   'article.author',
   'alias.resource',
+  'map.locations',
 ]
 
 type PageStory = {
@@ -41,7 +42,7 @@ export default function PageStory({ story, locations }: PageStory) {
   return <StoryblokComponent locations={locations} blok={page.content} />
 }
 
-export async function getStaticProps({ params }: any) {
+export async function getStaticProps({ params, preview }: any) {
   let slug = `/${params.slug.join('/')}`
 
   const variables = { slug, relations: relations.join(',') }

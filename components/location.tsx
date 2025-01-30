@@ -14,7 +14,7 @@ export function Location({ blok }: LocationComponent) {
   return (
     <Container>
       <div className=''>
-        <h4 className='font-bold leading-snug text-2xl'>{blok.title}</h4>
+        <h5 className='font-semibold leading-snug text-xl'>{blok.title}</h5>
         <p className='text-sm'>{blok.address}</p>
       </div>
     </Container>

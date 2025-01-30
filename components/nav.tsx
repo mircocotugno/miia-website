@@ -43,14 +43,14 @@ function Header({ blok }: { blok: NavProps }) {
       <NavbarBrand className='grow-0'>
         <Link href='/'>
           <Logo
-            classes='max-md:hidden'
+            classes='sm:max-md:hidden'
             // primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
             // secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}
             primary='#F3F3F2'
             secondary='#686D6C'
           />
           <Brand
-            classes='md:hidden'
+            classes='max-sm:hidden md:hidden'
             // color={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
             color='#F3F3F2'
           />

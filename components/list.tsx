@@ -10,8 +10,6 @@ import {
   DropdownMenu,
   DropdownItem,
   Link,
-  Tabs,
-  Tab,
 } from '@nextui-org/react'
 import { StoryblokComponent } from '@storyblok/react'
 
@@ -26,8 +24,8 @@ const displayModes = {
 }
 
 const displayFilters = {
-  dropdown: 'link',
-  tab: 'link',
+  dropdown: 'action',
+  tab: 'action',
   accordion: 'text',
 }
 
@@ -78,13 +76,11 @@ function ListDropdown(blok: ListProps) {
 
 function ListTab(blok: ListProps) {
   return (
-    <Tabs>
+    <div {...storyblokEditable(blok)} className='col-span-12 flex gap-2'>
       {blok.items.map((item, index) => (
-        <Tab key={index}>
-          <StoryblokComponent blok={item} />
-        </Tab>
+        <StoryblokComponent blok={item} key={index} theme="default" size="sm"/>
       ))}
-    </Tabs>
+    </div>
   )
 }
 
@@ -115,4 +111,4 @@ function ListAccordion(blok: ListProps) {
   )
 }
 
-function ListTimeliine(blok: any) {}
+function ListTimeline(blok: any) {}

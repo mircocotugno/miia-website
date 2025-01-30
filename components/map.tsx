@@ -1,22 +1,23 @@
 import type { MapProps } from '@props/types'
+import type { PropsWithChildren } from 'react'
 import { Map as MapGl, Marker } from 'react-map-gl'
 
 interface MapComponent {
   blok: MapProps
-  parent?: string
+  contain?: boolean
 }
 
-export function Map({ blok }: MapComponent) {
-  const locations = blok.locations.map((location) => {
-    const pos = location.gps.split('/').map((s) => Number(s))
-    return { ...location, pos }
+export function Map({ blok, contain }: MapComponent) {
+  const locations = blok.locations.map(({ content }) => {
+    const pos = content.gps.split('/').map((s) => Number(s))
+    return { ...content, pos }
   })
 
-  const longitude =
+  const latitude =
     locations.reduce((sum, locations) => sum + locations.pos[0], 0) /
     locations.length
 
-  const latitude =
+  const longitude =
     locations.reduce((sum, locations) => sum + locations.pos[1], 0) /
     locations.length
 
@@ -28,8 +29,11 @@ export function Map({ blok }: MapComponent) {
     pitch: 0,
   }
 
+  const Tag = contain ? 'section' : 'div'
+  const classes: string = contain ? 'min-h-md' : 'flex-1 w-full h-full min-h-96'
+
   return (
-    <div className='flex-1 w-full h-full min-h-96 '>
+    <Tag className={classes}>
       <MapGl
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         style={{ width: 'inherit', height: 'inherit', minHeight: 'inherit' }}
@@ -45,6 +49,6 @@ export function Map({ blok }: MapComponent) {
           />
         ))}
       </MapGl>
-    </div>
+    </Tag>
   )
 }

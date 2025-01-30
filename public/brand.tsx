@@ -5,9 +5,9 @@ interface BrandProps {
 
 export const Brand = ({ classes, color = '#F3F3F2' }: BrandProps) => (
   <svg
-    width='50'
-    height='33'
-    viewBox='0 0 150 100'
+    width='55'
+    height='44'
+    viewBox='0 0 150 125'
     fill='none'
     className={classes}
     xmlns='http://www.w3.org/2000/svg'
