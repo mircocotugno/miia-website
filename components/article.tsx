@@ -2,6 +2,7 @@ import type { ArticleProps, StoryProps } from '@props/types'
 import { storyblokEditable } from '@storyblok/react'
 import { Image } from '@nextui-org/react'
 import Link from 'next/link'
+import { tv } from 'tailwind-variants'
 
 interface ArticleComponent {
   blok: ArticleProps
@@ -9,19 +10,26 @@ interface ArticleComponent {
 }
 
 export function Article({ blok, story }: ArticleComponent) {
+  const classes = tv({
+    base: 'flex flex-wrap gap-4 items-end',
+  })
+
   return (
-    <article {...storyblokEditable(blok)}>
+    <article className={classes()} {...storyblokEditable(blok)}>
       {blok.image && (
-        <Link href={story.full_slug}>
+        <Link className='flex-none min-w-16 w-full md:w-1/3' href={story.full_slug}>
           <Image
-            className='col-span-1'
+            classNames={{
+              wrapper: 'aspect-4/3 md:aspect-square w-full max-h-fit',
+              img: 'absolute t-0 r-0 w-full h-full object-cover',
+            }}
             src={blok.image?.filename}
             alt={blok.image?.alt}
-            width={'100%'}
+            width={256}
           />
         </Link>
       )}
-      <div className='col-span-2 space-y-4'>
+      <div className='flex-1 min-w-32 space-y-4'>
         <Link href={story.full_slug}>
           <h4 className='font-bold leading-tight text-3xl'>{blok.title}</h4>
         </Link>

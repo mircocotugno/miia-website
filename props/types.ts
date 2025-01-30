@@ -174,12 +174,13 @@ export type WrapperProps = BlokProps & {
     | GalleryProps
     | ListProps
     | AliasProps
+    | MapProps
   )[]
   row: boolean
   boxed: boolean
   size: Sizes
   justify: Justifications
-  order: number
+  order: 'first' | 'second' | 'third' | 'fourth' | 'last'
 }
 
 export type CarouselProps = BlokProps & {
@@ -190,7 +191,7 @@ export type CarouselProps = BlokProps & {
 
 export type MapProps = BlokProps & {
   component: 'map'
-  locations: Array<LocationProps>
+  locations: Array<StoryProps & { content: LocationProps }>
 }
 
 export type FormProps = BlokProps & {
@@ -244,7 +245,7 @@ export type PageProps = BlokProps &
     footer: StoryProps & {
       content: NavProps
     }
-    body: Array<SectionProps & CarouselProps>
+    body: Array<SectionProps | CarouselProps | MapProps>
   }
 
 export type EnrollProps = BlokProps &
@@ -263,7 +264,7 @@ export type EnrollProps = BlokProps &
     form: StoryProps & {
       content: FormProps
     }
-    body: Array<SectionProps | CarouselProps>
+    body: Array<SectionProps | CarouselProps | MapProps>
   }
 
 export type ArticleProps = BlokProps &

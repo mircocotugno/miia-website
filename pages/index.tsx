@@ -14,7 +14,7 @@ type Home = {
   }
 }
 
-const relations = ['page.header', 'page.footer', 'alias.resource']
+const relations = ['page.header', 'page.footer', 'alias.resource', 'map.locations']
 
 export default function Home({ story }: Home) {
   const page = useStoryblokState(story, {
@@ -25,7 +25,7 @@ export default function Home({ story }: Home) {
   return <StoryblokComponent blok={page.content} />
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ preview }: any) {
   const slug = 'home'
 
   const variables = { slug, relations: relations.join(',') }

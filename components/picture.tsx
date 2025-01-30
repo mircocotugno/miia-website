@@ -33,7 +33,7 @@ export function Picture({ blok }: PictureComponent) {
   const pictureWidth = blok.background ? '100%' : sizes[blok.size] || '100%'
 
   const wrapperClasses = tv({
-    base: 'flex-1 sm:flex-0 col-span-12 w-full max-h-fit',
+    base: 'flex-1 sm:flex-0 col-span-12 w-full sm:max-h-fit',
     variants: {
       size: {
         sm: 'max-w-sm ',
@@ -42,7 +42,7 @@ export function Picture({ blok }: PictureComponent) {
         xl: 'max-w-xl',
       },
       ratio: {
-        square: 'aspect-square',
+        square: 'max-h-48 aspect-4/3 sm:aspect-square',
         portrait: 'aspect-3/4',
         landscape: 'aspect-4/3',
         circle: 'aspect-square',

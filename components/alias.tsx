@@ -9,9 +9,19 @@ interface AliasComponent {
 export function Alias({ blok }: AliasComponent) {
   if (typeof blok.resource === 'string') return null
 
+  const type = blok.resource.content.component
+
   const classes = tv({
     base: 'col-span-12 sm:col-span-6',
     variants: {
+      type: {
+        location: '',
+        person: '',
+        article: 'md:col-span-8',
+        course: '',
+        event: '',
+        form: '',
+      },
       size: {
         small: 'sm:col-span-3',
         medium: 'sm:col-span-4',
@@ -27,6 +37,7 @@ export function Alias({ blok }: AliasComponent) {
   return (
     <div
       className={classes({
+        type: type,
         size: blok.size,
         order: blok.order >= 0,
       })}

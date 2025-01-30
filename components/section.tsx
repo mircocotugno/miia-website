@@ -5,14 +5,11 @@ import { tv } from 'tailwind-variants'
 
 interface SectionComponent {
   blok: SectionProps
-  contain?: boolean
+  parent?: 'page' | 'enroll' | 'carousel'
 }
 
-const gridClasses =
-  'grid grid-cols-12 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-12 items-center'
-
-export function Section({ blok, contain }: SectionComponent) {
-  const Tag = contain ? 'div' : 'section'
+export function Section({ blok, parent }: SectionComponent) {
+  const Tag = parent !== 'carousel' ? 'div' : 'section'
 
   const hasBackground = blok.contents.findIndex(
     (content): content is PictureProps =>
@@ -24,8 +21,11 @@ export function Section({ blok, contain }: SectionComponent) {
   )
   const gradient = blok.theme === 'dark' ? '255 255 255' : '0 0 0'
 
+  const gridClasses =
+    'grid grid-cols-12 gap-x-3 sm:gap-x-4 md:gap-x-5 lg:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:gap-y-12 items-center'
+
   const sectionClasses = tv({
-    base: `py-6 lg:py-12 ${background ? 'min-h-lg' : 'min-h-12'}`,
+    base: `py-8 sm:py-12 md:py-16 lg:py-20 ${background ? 'min-h-lg' : 'min-h-12'}`,
     variants: {
       theme: {
         dark: 'dark text-foreground bg-background',
@@ -40,7 +40,7 @@ export function Section({ blok, contain }: SectionComponent) {
   })
 
   const Container = ({ children }: PropsWithChildren) =>
-    contain || blok.contain ? (
+    parent !== 'carousel' || blok.contain ? (
       <div
         className={`relative z-10 px-6 max-w-[1280px] min-h-inherit mx-auto ${gridClasses}`}
       >
@@ -56,7 +56,7 @@ export function Section({ blok, contain }: SectionComponent) {
       className={sectionClasses({
         theme: blok.theme,
         hasBackground: hasBackground >= 0,
-        contain: contain || blok.contain,
+        contain: parent !== 'carousel' || blok.contain,
       })}
       style={
         background && {
@@ -68,7 +68,11 @@ export function Section({ blok, contain }: SectionComponent) {
       <Container>
         {blok.contents.map((content, index) =>
           hasBackground !== index ? (
-            <StoryblokComponent key={index} blok={content} />
+            <StoryblokComponent
+              key={index}
+              blok={content}
+              parent={blok.component}
+            />
           ) : null
         )}
       </Container>

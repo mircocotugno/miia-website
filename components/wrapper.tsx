@@ -8,6 +8,9 @@ interface WrapperComponent {
 }
 
 export function Wrapper({ blok }: WrapperComponent) {
+  const hasPicture = blok.contents.some(
+    ({ component }) => component === 'picture'
+  )
   const hasBackground = blok.contents.findIndex(
     (content): content is PictureProps =>
       content.component === 'picture' && !!content?.background
@@ -16,12 +19,13 @@ export function Wrapper({ blok }: WrapperComponent) {
     (content): content is PictureProps =>
       content.component === 'picture' && !!content?.background
   )
+  const orderClass = `order-${blok.order}`
 
   const classes = tv({
-    base: 'col-span-12 sm:col-span-6',
+    base: 'col-span-12 p-2 p-0 sm:p-4 md:p-6 sm:col-span-6 sm:order-none',
     variants: {
       size: {
-        small: 'sm:col-span-3',
+        small: 'sm:col-span-6 md:col-span-3',
         medium: 'sm:col-span-4',
         large: 'sm:col-span-8',
         extra: 'sm:col-span-9',
@@ -41,7 +45,15 @@ export function Wrapper({ blok }: WrapperComponent) {
         true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
       },
       order: {
-        true: `order-${blok.order}`,
+        first: 'order-first',
+        second: '-order-7',
+        third: '-order-6',
+        fourth: '-order-5',
+        fifth: '-order-4',
+        sixth: '-order-3',
+        seventh: '-order-2',
+        eighth: '-order-1',
+        last: 'order-last',
       },
     },
     compoundVariants: [
@@ -76,7 +88,7 @@ export function Wrapper({ blok }: WrapperComponent) {
           size: blok.size,
           row: blok.row,
           boxed: true,
-          order: blok.order >= 0,
+          order: blok.order,
           hasBackground: hasBackground >= 0,
         })}
         style={
@@ -85,7 +97,7 @@ export function Wrapper({ blok }: WrapperComponent) {
             : undefined
         }
       >
-        {!background && (
+        {!background && hasPicture && (
           <CardHeader className='z-10'>
             {blok.contents
               .filter((c) => c.component === 'picture')
@@ -113,6 +125,7 @@ export function Wrapper({ blok }: WrapperComponent) {
         row: blok.row,
         boxed: false,
         justify: blok.justify,
+        order: blok.order,
         hasBackground: !!background,
       })}
       style={

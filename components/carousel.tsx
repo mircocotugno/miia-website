@@ -3,29 +3,48 @@ import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { tv } from 'tailwind-variants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
+import type { PropsWithChildren } from 'react'
 
 interface CarouselComponent {
   blok: CarouselProps
+  parent?: 'page' | 'enroll' | 'section'
 }
 
-export function Carousel({ blok }: CarouselComponent) {
+export function Carousel({ blok, parent }: CarouselComponent) {
   if (!blok.slides.length) return null
+
   const isCarousel = blok.slides[0].component !== 'section'
   const weights = { low: [1, 2, 3, 4], high: [3, 5, 7, 9] }
   const weight = blok.weight ? weights[blok.weight] : [2, 3, 4, 6]
 
   const slides = blok.slides.map((slide, index) => (
-    <SwiperSlide className={isCarousel ? 'min-h-sm': 'min-h-lg'} key={index}>
-      <StoryblokComponent blok={slide} />
+    <SwiperSlide className={isCarousel ? 'min-h-sm' : 'min-h-lg'} key={index}>
+      <StoryblokComponent blok={slide} parent={blok.component} />
     </SwiperSlide>
   ))
 
+  const Tag = parent !== 'section' ? 'div' : 'section'
+  const classes = tv({
+    variants: {
+      contain: {
+        true: 'col-span-12',
+      },
+      carousel: {
+        true: 'py-6 lg:py-12 min-h-sm',
+        false: 'min-h-lg',
+      },
+    },
+  })
+
   return (
-    <section
-      className={classes({ carousel: isCarousel })}
-      {...storyblokEditable(blok)}
+    <Tag
+      className={classes({
+        carousel: isCarousel,
+        contain: parent == 'section',
+      })}
     >
       <Swiper
+        {...storyblokEditable(blok)}
         modules={[Autoplay]}
         loop={true}
         autoplay={isCarousel ? { delay: 1500 } : false}
@@ -47,15 +66,6 @@ export function Carousel({ blok }: CarouselComponent) {
       >
         {slides}
       </Swiper>
-    </section>
+    </Tag>
   )
 }
-
-const classes = tv({
-  variants: {
-    carousel: {
-      true: 'py-6 lg:py-12 min-h-sm',
-      false: 'min-h-lg',
-    },
-  },
-})

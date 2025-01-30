@@ -25,7 +25,6 @@ export function Person({ blok }: PersonComponent) {
           src={firstImage.filename}
           alt={firstImage.alt}
           width={'100%'}
-          // className='aspect-square rounded-full'
         />
       </CardHeader>
       <CardBody>
