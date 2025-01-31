@@ -16,15 +16,11 @@ interface ActionComponent {
 export function Action({ blok, parent, theme, size }: ActionComponent) {
   const router = useRouter()
   let link = blok.link.url || `/${blok.link.cached_url}`
-  console.log(link.startsWith(router.asPath))
   if (blok.link?.anchor) {
     link = link.startsWith(router.asPath)
       ? `#${blok.link.anchor}`
       : `${link}#${blok.link.anchor}`
   }
-  // const link =
-  //   blok.link.url ||
-  //   `/${blok.link.cached_url === 'home' ? '' : blok.link.cached_url}${blok.link.anchor ? '#' + blok.link.anchor : ''}`
 
   const Container = ({ children }: PropsWithChildren) =>
     parent === 'section' ? (
