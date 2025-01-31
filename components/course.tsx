@@ -41,16 +41,14 @@ export function Course({ blok }: CourseComponent) {
               <i className='iconoir-calendar-arrow-up pr-1' />
               <span className='md:max-lg:hidden'>inizio:</span>
               <span>
-                {blok.starts
-                  ? getLongDate(new Date(blok.starts))
-                  : 'in programmazione'}
+                {blok.starts ? getLongDate(blok.starts) : 'in programmazione'}
               </span>
             </li>
             {blok.ends && (
               <li className='space-x-0.5'>
                 <i className='iconoir-calendar-arrow-down pr-1' />
                 <span className='md:max-lg:hidden'>inizio:</span>
-                {getShortDate(new Date(blok.ends))}
+                {getShortDate(blok.ends)}
               </li>
             )}
             <li className='space-x-0.5'>
