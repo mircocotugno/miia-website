@@ -33,9 +33,7 @@ export function Event({ blok }: EventComponent) {
               <i className='iconoir-calendar-arrow-up pr-1' />
               <span className='md:max-lg:hidden'>Data</span>
               <span>
-                {blok.date
-                  ? getLongDate(new Date(blok.date))
-                  : 'in programmazione'}
+                {blok.date ? getLongDate(blok.date) : 'in programmazione'}
               </span>
             </p>
           )}

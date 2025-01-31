@@ -70,7 +70,7 @@ function Header({ blok }: { blok: NavProps }) {
         />
       </NavbarContent>
 
-      <NavbarMenu className='py-6 gap-6'>
+      <NavbarMenu className='py-6 px-10 gap-6 items-end'>
         {blok.contents.map((item, index) => (
           <NavbarMenuItem key={index}>
             <StoryblokComponent blok={item} key={index} />
@@ -101,8 +101,8 @@ function Footer({ blok }: { blok: NavProps }) {
         </Link>
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-6 lg:gap-8'>
           {blok.contents.map((item, index) => (
-            <div className='flex-1'>
-              <StoryblokComponent parent='footer' blok={item} key={index} />
+            <div className='flex-1' key={index}>
+              <StoryblokComponent parent='footer' blok={item} />
             </div>
           ))}
         </div>

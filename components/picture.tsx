@@ -42,7 +42,7 @@ export function Picture({ blok }: PictureComponent) {
         xl: 'max-w-xl',
       },
       ratio: {
-        square: 'max-h-48 aspect-4/3 sm:aspect-square',
+        square: 'aspect-square',
         portrait: 'aspect-3/4',
         landscape: 'aspect-4/3',
         circle: 'aspect-square',

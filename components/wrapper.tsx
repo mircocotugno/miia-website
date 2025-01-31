@@ -19,10 +19,9 @@ export function Wrapper({ blok }: WrapperComponent) {
     (content): content is PictureProps =>
       content.component === 'picture' && !!content?.background
   )
-  const orderClass = `order-${blok.order}`
 
   const classes = tv({
-    base: 'col-span-12 p-2 p-0 sm:p-4 md:p-6 sm:col-span-6 sm:order-none',
+    base: 'col-span-12 sm:col-span-6 sm:order-none',
     variants: {
       size: {
         small: 'sm:col-span-6 md:col-span-3',
@@ -36,7 +35,9 @@ export function Wrapper({ blok }: WrapperComponent) {
         left: 'items-end',
       },
       boxed: {
-        false: 'flex flex-wrap flex-col gap-2 md:gap-4 lg:gap-6',
+        false:
+          'flex flex-wrap flex-col gap-2 md:gap-4 p-0 sm:p-4 md:p-6',
+        true: 'p-2',
       },
       row: {
         true: 'flex-row',

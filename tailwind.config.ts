@@ -41,7 +41,7 @@ export default {
       minHeight: {
         '100': '25rem',
         '120': '30rem',
-        cover: '40rem',
+        cover: 'calc(100vh - 4rem)',
         sm: '8rem',
         md: '16rem',
         lg: '32rem',

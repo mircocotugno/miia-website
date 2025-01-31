@@ -43,7 +43,7 @@ export function List({ blok }: ListComponent) {
       <ul className='space-y-2'>
         {blok.items.map((item, index) => (
           <li key={`list-${index}`}>
-            <StoryblokComponent blok={item} />
+            <StoryblokComponent blok={item} size="sm" />
           </li>
         ))}
       </ul>
@@ -66,7 +66,7 @@ function ListDropdown(blok: ListProps) {
       >
         {blok.items.map((item, index) => (
           <DropdownItem key={`dropdown-${index}`}>
-            <StoryblokComponent blok={item} />
+            <StoryblokComponent blok={item}/>
           </DropdownItem>
         ))}
       </DropdownMenu>

@@ -386,7 +386,7 @@ const carousel: ComponentSchema = {
       type: 'bloks',
       display_name: 'Elementi',
       restrict_components: true,
-      component_whitelist: ['section', 'wrapper', 'alias'],
+      component_whitelist: ['section', 'wrapper', 'alias', 'picture'],
       required: true,
     },
     weight: {

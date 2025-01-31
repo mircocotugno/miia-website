@@ -28,6 +28,7 @@ export type LinkProps = {
   linktype: 'story' | 'url'
   url: string
   target?: '_blank'
+  anchor?: string
 }
 
 export type ImageProps = {

@@ -44,7 +44,7 @@ export const Typography = {
   },
   a: {
     component: ({ href, children }: { href: string; children: string }) => (
-      <Link className="text-md" color="foreground" href={href || ''}>{children}</Link>
+      <Link className="text-md hover:underline" color="foreground" href={href || ''}>{children}</Link>
     ),
   },
   p: {

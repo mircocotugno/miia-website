@@ -57,13 +57,15 @@ function Aside({ blok, locations }: EnrollComponent) {
     blok.courses.length > 0 &&
     blok.courses.map(({ content }) => {
       options.push({ name: content.title, value: content.title })
-      const location = locations.findIndex(
-        (location) => location.uuid === content.location
-      )
-      return { ...content, location: locations[location] }
+      const location =
+        locations[
+          locations.findIndex((location) => location.uuid === content.location)
+        ]
+      const starts = getLongDate(content.starts)
+      const ends = getLongDate(content.ends)
+      console.log({ ...content, location, starts, ends })
+      return { ...content, location, starts, ends }
     })
-
-  console.log(blok.form)
 
   return (
     <div className='sticky md:top-20 col-span-full md:col-span-4 flex flex-col align-start justify-start -mt-10 md:-mt-20 lg:-mt-48 px-2 py-3 order-1 md:order-last max-h-fit bg-background shadow-lg rounded-3xl border-neutral-100/25 border-2'>
@@ -102,17 +104,13 @@ function Aside({ blok, locations }: EnrollComponent) {
                 <li className='space-x-0.5'>
                   <i className='iconoir-calendar-arrow-up pr-1' />
                   <span className='md:max-lg:hidden'>inizio:</span>
-                  <span>
-                    {course.starts
-                      ? getLongDate(new Date(course.starts))
-                      : 'in programmazione'}
-                  </span>
+                  <span>{course.starts || 'in programmazione'}</span>
                 </li>
                 {course.ends && (
                   <li className='space-x-0.5'>
                     <i className='iconoir-calendar-arrow-down pr-1' />
                     <span className='md:max-lg:hidden'>inizio:</span>
-                    {getShortDate(new Date(course.ends))}
+                    {course.ends}
                   </li>
                 )}
                 <li className='space-x-0.5'>
@@ -125,7 +123,9 @@ function Aside({ blok, locations }: EnrollComponent) {
           ))}
         </Accordion>
       )}
-      {blok.form && <StoryblokComponent blok={blok.form.content} courses={options} />}
+      {blok.form && (
+        <StoryblokComponent blok={blok.form.content} courses={options} />
+      )}
     </div>
   )
 }
