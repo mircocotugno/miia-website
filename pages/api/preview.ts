@@ -5,15 +5,13 @@ export default async function preview(req: any, res: any) {
   if (req.query.secret !== process.env.NEXT_PUBLIC_STORYBLOK_PREVIEW) {
     return res.status(401).json({ message: 'Invalid token' })
   }
-
   res.setPreviewData({})
-  const cookies = res.getHeader('Set-Cookie')
-  res.setHeader(
-    'Set-Cookie',
-    cookies.map((cookie: any) =>
-      cookie.replace('SameSite=Lax', 'SameSite=None;Secure')
-    )
-  )
+  const previous = res.getHeader('Set-Cookie')
+  previous.forEach((cookie: any, index: any) => {
+    previous[index] = cookie.replace('SameSite=Lax', 'SameSite=None;Secure')
+  })
+  res.setHeader(`Set-Cookie`, previous)
+  res.end('Preview mode enabled')
 
   res.redirect(`/${slug}?${params[1]}`)
 }
