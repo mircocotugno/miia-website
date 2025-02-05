@@ -843,7 +843,7 @@ const course: ComponentSchema = {
 
 const person: ComponentSchema = {
   name: 'person',
-  display_name: 'Perona',
+  display_name: 'Persona',
   is_root: true,
   is_nestable: false,
   component_group_uuid: 'resources',
@@ -862,23 +862,33 @@ const person: ComponentSchema = {
       display_name: 'Nome Cognome',
       required: true,
     },
+    role: {
+      type: 'option',
+      display_name: 'Ruolo',
+      options: [
+        { value: 'interior', name: 'Studente interni' },
+        // { value: 'fashion', name: 'Studente moda' },
+        { value: 'style', name: 'Docente stile' },
+        { value: 'design', name: 'Docente progettazione' },
+        { value: 'software', name: 'Docente software' },
+      ],
+      required: true,
+    },
     description: {
       type: 'markdown',
       display_name: 'Descrizione',
       customize_toolbar: true,
       rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
+      toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
       max_length: 240,
-      required: true,
     },
     message: {
       type: 'markdown',
       display_name: 'Messaggio',
       customize_toolbar: true,
       rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
+      toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
       max_length: 240,
-      required: true,
     },
     links: {
       type: 'bloks',

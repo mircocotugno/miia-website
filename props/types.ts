@@ -301,6 +301,7 @@ export type PersonProps = BlokProps & {
   component: 'person'
   image: Array<ImageProps>
   title: string
+  role: 'interior' | 'style' | 'design' | 'software'
   description: string
   message: string
   links: Array<ActionProps>

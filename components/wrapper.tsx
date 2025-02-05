@@ -36,7 +36,7 @@ export function Wrapper({ blok }: WrapperComponent) {
       },
       boxed: {
         false:
-          'flex flex-wrap flex-col gap-2 md:gap-4 p-0 sm:p-4 md:p-6',
+          'flex flex-wrap flex-col gap-2 md:gap-4 p-0 sm:p-1 md:p-2 lg:p-3',
         true: 'p-2',
       },
       row: {

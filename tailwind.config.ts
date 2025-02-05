@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       fontSize: {
+        'icon': '120%',
         '5xl': '2.75rem',
       },
       width: {

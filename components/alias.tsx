@@ -10,13 +10,14 @@ export function Alias({ blok }: AliasComponent) {
   if (typeof blok.resource === 'string') return null
 
   const type = blok.resource.content.component
+  console.log(type)
 
   const classes = tv({
     base: 'col-span-12 sm:col-span-6',
     variants: {
       type: {
         location: '',
-        person: '',
+        person: 'col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2',
         article: 'md:col-span-8',
         course: '',
         event: '',

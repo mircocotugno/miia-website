@@ -39,7 +39,7 @@ export const Typography = {
   },
   code: {
     component: ({ children }: { children: string }) => (
-      <i className={`iconoir-${children} font-inherit text-inherit`} />
+      <i className={`iconoir-${children} font-inherit text-icon align-middle inline-block`} />
     ),
   },
   a: {
