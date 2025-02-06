@@ -18,9 +18,9 @@ import { Field } from '@components/field'
 import { Form } from '@components/form'
 import { Map } from '@components/map'
 import { Article } from '@components/article'
-import { Enroll } from '@components/enroll'
 import { List } from '@components/list'
 import { Carousel } from '@components/carousel'
+import { Aside } from '@components/aside'
 import { Wrapper } from '@components/wrapper'
 import { Alias } from '@components/alias'
 import { Person } from '@components/person'
@@ -31,11 +31,11 @@ import { Location } from '@components/location'
 const components = {
   page: Page,
   article: Article,
-  enroll: Enroll,
   nav: Nav,
   list: List,
   alias: Alias,
   section: Section,
+  aside:Aside,
   wrapper: Wrapper,
   gallery: Gallery,
   carousel: Carousel,

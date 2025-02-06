@@ -21,6 +21,6 @@ person_component_id=6861334
 event_component_id=6861335
 page_component_id=6486303
 article_component_id=6861336
-enroll_component_id=6861337
 carousel_component_id=6862106
 alias_component_id=6876489
+aside_component_id=6917049

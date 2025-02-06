@@ -1,6 +1,7 @@
 import type { PictureProps, WrapperProps, ImageProps } from '@props/types'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
+import Image from 'next/image'
 import { tv } from 'tailwind-variants'
 
 interface WrapperComponent {
@@ -139,6 +140,15 @@ export function Wrapper({ blok }: WrapperComponent) {
         hasBackground !== index ? (
           <StoryblokComponent key={index} blok={content} />
         ) : null
+      )}
+      {background && (
+        <Image
+          src={background.asset.filename}
+          alt={background.asset.alt}
+          priority={true}
+          fill={true}
+          className='object-cover object-center -z-20'
+        />
       )}
     </div>
   )

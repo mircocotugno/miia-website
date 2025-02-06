@@ -166,6 +166,22 @@ export type AliasProps = BlokProps & {
   order: number
 }
 
+export type AsideProps = BlokProps & {
+  component: 'aside'
+  headline: string
+  courses: Array<{
+    content: Omit<CourseProps, 'location'> & { location: string }
+  }>
+  form: StoryProps & {
+    content: FormProps
+  }
+  contents: Array<
+    PictureProps | ListProps | TextProps | ActionProps | WrapperProps
+  >
+  id: string
+  theme: 'dark'
+}
+
 export type WrapperProps = BlokProps & {
   component: 'wrapper'
   contents: (
@@ -220,9 +236,9 @@ export type SectionProps = BlokProps & {
     | CarouselProps
     | MapProps
   >
+  id: string
   theme: 'dark'
   contain: boolean
-  id: string
 }
 
 export type NavProps = BlokProps & {

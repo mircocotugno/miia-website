@@ -14,8 +14,12 @@ export default {
     },
     extend: {
       fontSize: {
-        'icon': '120%',
+        icon: '120%',
         '5xl': '2.75rem',
+      },
+      colors: {
+        dark: '#0a0a0ab3',
+        light: '#ffffffb3',
       },
       width: {
         sm: '8rem',
@@ -58,7 +62,12 @@ export default {
         '3/4': '3 / 4',
       },
       dropShadow: {
-        '8xl': [
+        light: [
+          '0 0.125rem 0.25rem rgba(256, 256, 256, 0.4)',
+          '0 0.75rem 1.25rem rgba(256, 256, 256, 0.2)',
+          '0 1.5rem 2rem rgba(256, 256, 256, 0.1)',
+        ],
+        dark: [
           '0 0.125rem 0.25rem rgba(0, 0, 0, 0.4)',
           '0 0.75rem 1.25rem rgba(0, 0, 0, 0.2)',
           '0 1.5rem 2rem rgba(0, 0, 0, 0.1)',
