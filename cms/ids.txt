@@ -24,3 +24,5 @@ article_component_id=6861336
 carousel_component_id=6862106
 alias_component_id=6876489
 aside_component_id=6917049
+layouts_group_id=496127
+layouts_group_uuid=3aee7005-d4d5-4e14-99e1-d9744a656d63

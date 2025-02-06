@@ -21,12 +21,16 @@ const displayModes = {
   dropdown: ListDropdown,
   tab: ListTab,
   accordion: ListAccordion,
+  timeline: ListTimeline,
+  process: ListProcess,
 }
 
 const displayFilters = {
   dropdown: 'action',
   tab: 'action',
   accordion: 'text',
+  timeline: 'event',
+  process: 'text',
 }
 
 export function List({ blok }: ListComponent) {
@@ -43,7 +47,7 @@ export function List({ blok }: ListComponent) {
       <ul className='space-y-2'>
         {blok.items.map((item, index) => (
           <li key={`list-${index}`}>
-            <StoryblokComponent blok={item} size="sm" />
+            <StoryblokComponent blok={item} size='sm' />
           </li>
         ))}
       </ul>
@@ -66,7 +70,7 @@ function ListDropdown(blok: ListProps) {
       >
         {blok.items.map((item, index) => (
           <DropdownItem key={`dropdown-${index}`}>
-            <StoryblokComponent blok={item}/>
+            <StoryblokComponent blok={item} />
           </DropdownItem>
         ))}
       </DropdownMenu>
@@ -78,7 +82,7 @@ function ListTab(blok: ListProps) {
   return (
     <div {...storyblokEditable(blok)} className='col-span-12 flex gap-2'>
       {blok.items.map((item, index) => (
-        <StoryblokComponent blok={item} key={index} theme="default" size="sm"/>
+        <StoryblokComponent blok={item} key={index} theme='default' size='sm' />
       ))}
     </div>
   )
@@ -111,4 +115,10 @@ function ListAccordion(blok: ListProps) {
   )
 }
 
-function ListTimeline(blok: any) {}
+function ListTimeline(blok: any) {
+  return <div className=''></div>
+}
+
+function ListProcess(blok: any) {
+  return <div className=''></div>
+}

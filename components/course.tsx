@@ -9,18 +9,28 @@ interface CourseComponent {
 }
 
 export function Course({ blok }: CourseComponent) {
-  const link = blok.page.cached_url || blok.page.url
+  const course = blok.ref?.content || blok
+  if (!course.title || !course.days || !course.hours) return null
 
+  const link = course.page?.cached_url || course.page?.url
   const Container = ({ children }: PropsWithChildren) =>
-    link ? <Link href={link}>{children}</Link> : children
+    link ? (
+      <div className='col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3'>
+        <Link href={link}>{children}</Link>
+      </div>
+    ) : (
+      <div className='col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3'>
+        {children}
+      </div>
+    )
 
   return (
     <Container>
       <Card>
         <CardHeader className='flex-col items-start'>
-          <h4 className='font-bold leading-snug text-2xl'>{blok.title}</h4>
+          <h4 className='font-bold leading-snug text-2xl'>{course.title}</h4>
           <small>
-            {blok.hours.includes('20:00/23:00')
+            {course.hours.includes('20:00/23:00')
               ? 'Frequenza serale'
               : 'Frequenza al sabato'}
           </small>
@@ -30,12 +40,12 @@ export function Course({ blok }: CourseComponent) {
             <li className='space-x-0.5'>
               <i className='iconoir-calendar pr-1' />
               <span className='md:max-lg:hidden'>lezioni:</span>
-              <span>{blok.days.join(', ')}</span>
+              <span>{course.days.join(', ')}</span>
             </li>
             <li className='space-x-0.5'>
               <i className='iconoir-clock pr-1' />
               <span className='md:max-lg:hidden'>orari:</span>
-              <span>{blok.hours.join(', ')}</span>
+              <span>{course.hours.join(', ')}</span>
             </li>
             <li className='space-x-0.5'>
               <i className='iconoir-calendar-arrow-up pr-1' />
@@ -44,18 +54,20 @@ export function Course({ blok }: CourseComponent) {
                 {blok.starts ? getLongDate(blok.starts) : 'in programmazione'}
               </span>
             </li>
-            {blok.ends && (
+            {course.ends && (
               <li className='space-x-0.5'>
                 <i className='iconoir-calendar-arrow-down pr-1' />
                 <span className='md:max-lg:hidden'>inizio:</span>
-                {getShortDate(blok.ends)}
+                {getShortDate(course.ends)}
               </li>
             )}
-            <li className='space-x-0.5'>
-              <i className='iconoir-group pr-1' />
-              <span className='md:max-lg:hidden'>posti:</span>
-              <span>{blok.seats}</span>
-            </li>
+            {course.seats && (
+              <li className='space-x-0.5'>
+                <i className='iconoir-group pr-1' />
+                <span className='md:max-lg:hidden'>posti:</span>
+                <span>{blok.seats}</span>
+              </li>
+            )}
           </ul>
         </CardBody>
       </Card>

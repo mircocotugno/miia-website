@@ -42,9 +42,12 @@ interface FormData {
 }
 
 export function Form({ blok, courses }: FormComponent) {
+  const form = blok.ref?.content || blok
+  if (!form.scope || !form.fields.length || !form.message) return null
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [data, setData] = useState((): FormData => getData(blok.fields))
-  const [message, setMessage] = useState(blok.message)
+  const [data, setData] = useState((): FormData => getData(form.fields))
+  const [message, setMessage] = useState(form.message)
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (field: DataProps) => {
@@ -63,17 +66,17 @@ export function Form({ blok, courses }: FormComponent) {
     if (!hasError) {
       const responce = async () => await (Math.random() % 2 == 0)
 
-      const keys = blok.message.match(/{{(.*?)}}/g)
+      const keys = form.message.match(/{{(.*?)}}/g)
 
       if (keys && !!keys.length) {
         keys.forEach((string) => {
           const key = string.replace('{{', '').replace('}}', '')
-          blok.message = blok.message.replace(string, data[key].value)
+          blok.message = form.message.replace(string, data[key].value)
         })
       }
 
       if (await responce) {
-        setMessage(blok.message)
+        setMessage(form.message)
         setSubmitted(true)
       }
     } else {
@@ -90,8 +93,8 @@ export function Form({ blok, courses }: FormComponent) {
 
   return (
     <>
-      <Button color='primary' className='font-bold text-md' onPress={onOpen}>
-        {callToAction[blok.scope]}
+      <Button color='primary' className='font-bold text-md col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-2' onPress={onOpen}>
+        {callToAction[form.scope]}
       </Button>
       <Drawer size='lg' isOpen={isOpen} onOpenChange={onOpenChange}>
         <DrawerContent>

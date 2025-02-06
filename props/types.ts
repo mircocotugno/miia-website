@@ -63,7 +63,7 @@ type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
 type FormScopes = 'contact' | 'openday' | 'enroll'
 
-type DisplayModes = 'dropdown' | 'tab' | 'accordion'
+type DisplayModes = 'dropdown' | 'tab' | 'accordion' | 'timeline' | 'process'
 
 type InputTypes =
   | 'text'
@@ -96,7 +96,6 @@ export type ComponentsProps =
   | NavProps
   | MetaProps
   | PageProps
-  | EnrollProps
   | ArticleProps
   | LocationProps
   | CourseProps
@@ -147,7 +146,7 @@ export type FieldProps = BlokProps & {
 export type ListProps = BlokProps & {
   component: 'list'
   label: string
-  items: Array<TextProps | ActionProps>
+  items: Array<TextProps | ActionProps | EventProps>
   display: DisplayModes
 }
 
@@ -190,7 +189,6 @@ export type WrapperProps = BlokProps & {
     | ActionProps
     | GalleryProps
     | ListProps
-    | AliasProps
     | MapProps
   )[]
   row: boolean
@@ -202,7 +200,7 @@ export type WrapperProps = BlokProps & {
 
 export type CarouselProps = BlokProps & {
   component: 'carousel'
-  slides: Array<SectionProps | WrapperProps>
+  slides: Array<SectionProps | WrapperProps | PersonProps>
   weight: 'low' | 'high'
 }
 
@@ -213,9 +211,10 @@ export type MapProps = BlokProps & {
 
 export type FormProps = BlokProps & {
   component: 'form'
-  scope: FormScopes
-  fields: Array<FieldProps>
-  message: string
+  ref: (StoryProps & { content: FormProps }) | undefined
+  scope: FormScopes | undefined
+  fields: Array<FieldProps> | []
+  message: string | string
 }
 
 export type DataProps = {
@@ -235,6 +234,12 @@ export type SectionProps = BlokProps & {
     | WrapperProps
     | CarouselProps
     | MapProps
+    | LocationProps
+    | PersonProps
+    | EventProps
+    | CourseProps
+    | ArticleProps
+    | FormProps
   >
   id: string
   theme: 'dark'
@@ -248,86 +253,78 @@ export type NavProps = BlokProps & {
 }
 
 export type MetaProps = {
-  title?: string
-  description?: string
-  image?: ImageProps
+  title: string
+  description: string
+  image: ImageProps | undefined
 }
 
-export type PageProps = BlokProps &
-  MetaProps & {
-    component: 'page'
-    header: StoryProps & {
-      content: NavProps
-    }
-    footer: StoryProps & {
-      content: NavProps
-    }
-    body: Array<SectionProps | CarouselProps | MapProps>
+export type PageProps = BlokProps & {
+  component: 'page'
+  title: string
+  description: string
+  image: ImageProps
+  header: StoryProps & {
+    content: NavProps
   }
+  footer: StoryProps & {
+    content: NavProps
+  }
+  body: Array<SectionProps | CarouselProps | MapProps | AsideProps>
+}
 
-export type EnrollProps = BlokProps &
-  MetaProps & {
-    component: 'enroll'
-    header: StoryProps & {
-      content: NavProps
-    }
-    footer: StoryProps & {
-      content: NavProps
-    }
-    headline: string
-    courses: Array<{
-      content: Omit<CourseProps, 'location'> & { location: string }
-    }>
-    form: StoryProps & {
-      content: FormProps
-    }
-    body: Array<SectionProps | CarouselProps | MapProps>
-  }
-
-export type ArticleProps = BlokProps &
-  MetaProps & {
-    component: 'article'
-    author: StoryProps & {
-      content: PersonProps
-    }
-    body: Array<SectionProps>
-  }
+export type ArticleProps = BlokProps & {
+  component: 'article'
+  ref: (StoryProps & { content: ArticleProps }) | undefined
+  title: string | ''
+  description: string | ''
+  image: ImageProps | undefined
+  author:
+    | (StoryProps & {
+        content: PersonProps
+      })
+    | undefined
+  body: Array<SectionProps | AsideProps> | undefined
+}
 
 export type LocationProps = BlokProps & {
   component: 'location'
-  title: string
-  address: string
-  gps: string
-  direction: string
+  ref: (StoryProps & { content: LocationProps }) | undefined
+  title: string | undefined
+  address: string | undefined
+  gps: string | undefined
+  direction: string | undefined
 }
 
 export type CourseProps = BlokProps & {
   component: 'course'
-  title: string
-  location: LocationProps
-  days: Array<CourseDays>
-  hours: Array<CourseHours>
-  starts: string
-  ends: string
-  seats: number
-  page: LinkProps
+  ref: (StoryProps & { content: CourseProps }) | undefined
+  title: string | undefined
+  location: LocationProps | undefined
+  days: Array<CourseDays> | undefined
+  hours: Array<CourseHours> | undefined
+  starts: string | undefined
+  ends: string | undefined
+  seats: number | undefined
+  page: LinkProps | undefined
 }
 
 export type PersonProps = BlokProps & {
   component: 'person'
-  image: Array<ImageProps>
-  title: string
-  role: 'interior' | 'style' | 'design' | 'software'
-  description: string
-  message: string
-  links: Array<ActionProps>
+  ref: (StoryProps & { content: PersonProps }) | undefined
+  image: Array<ImageProps> | []
+  title: string | undefined
+  role: 'interior' | 'style' | 'design' | 'software' | undefined
+  description: string | undefined
+  message: string | undefined
+  links: Array<ActionProps> | []
 }
 
 export type EventProps = BlokProps & {
   component: 'event'
-  title: string
-  description: string
-  location: LocationProps
-  date: string
-  page: LinkProps
+  ref: (StoryProps & { content: EventProps }) | undefined
+  title: string | undefined
+  description: string | undefined
+  location: LocationProps | undefined
+  date: string | undefined
+  page: LinkProps | undefined
 }

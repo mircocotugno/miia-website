@@ -10,15 +10,21 @@ import type {
   ArticleProps,
   NavProps,
 } from '@props/types'
+import { tv } from 'tailwind-variants'
 import { Meta } from '@components/meta'
 import { Nav } from '@components/nav'
-import { Image } from '@nextui-org/react'
+import { Image as HeroImage } from '@nextui-org/react'
+import Image from 'next/image'
 
 const relations = [
   'page.header',
   'page.footer',
-  'enroll.courses',
-  'enroll.form',
+  'form.ref',
+  'article.ref',
+  'person.ref',
+  'course.ref',
+  'event.ref',
+  'location.ref',
   'article.author',
   'alias.resource',
 ]
@@ -45,32 +51,31 @@ export default function PageStory({ story, blog }: PageStory) {
     resolveRelations: relations,
     preventClicks: true,
   })
-  if (!page) return null
-  const blok: ArticleProps = page.content
-  const author = blok.author.content
-  console.log(author)
+  if (!page?.content) return null
+
+  const article: ArticleProps = page.content
+  if (article.ref) return null
+
+  const author = article.author?.content || null
   const blogPage = blog.content
+
+  const gradientClasses = tv({
+    base: 'absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r from-dark md:to-60% -z-10',
+  })
 
   return (
     <>
-      <Meta {...blok} />
+      <Meta {...article} />
       <main className='min-h-screen'>
         {blogPage.header && (
           <Nav parent='header' blok={blogPage.header.content} />
         )}
-        <section
-          style={
-            blok?.image && {
-              backgroundImage: `linear-gradient(to right, rgb(0 0 0 / 60%), rgb(0 0 0  / 0%) 70%), url(${blok.image.filename})`,
-            }
-          }
-          className='py-6 lg:py-12 min-h-lg bg-cover bg-center text-background [&_article]:backdrop-blur-sm [&_article]:rounded-xl [&_h1]:drop-shadow-8xl [&_h2]:drop-shadow-8xl [&_h3]:drop-shadow-8xl [&_p]:drop-shadow-8xl'
-        >
+        <section className='py-6 lg:py-12 min-h-lg bg-cover bg-center text-background [&_article]:backdrop-blur-sm [&_article]:rounded-xl [&_h1]:drop-shadow-8xl [&_h2]:drop-shadow-8xl [&_h3]:drop-shadow-8xl [&_p]:drop-shadow-8xl'>
           <div className='relative z-10 px-6 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-12 items-center'>
             <div className='col-span-12 md:col-span-8 lg:col-span-6 space-y-4'>
               {author?.image[0] && (
                 <div className='flex gap-4 items-center'>
-                  <Image
+                  <HeroImage
                     src={author.image[0].filename}
                     alt={author.image[0].alt}
                     radius='full'
@@ -79,22 +84,34 @@ export default function PageStory({ story, blog }: PageStory) {
                   <h4 className='font-medium'>{author.title}</h4>
                 </div>
               )}
-              {blok.title && (
+              {article.title && (
                 <h1 className='font-serif leading-tight font-black break-words text-3xl sm:text4xl md:text-5xl'>
-                  {blok.title}
+                  {article.title}
                 </h1>
               )}
-              {blok.description && (
+              {article.description && (
                 <h3 className='font-semibold text-lg break-words line-clamp-5'>
-                  {blok.description}
+                  {article.description}
                 </h3>
               )}
               {page.first_published_at && <p>{page.first_published_at}</p>}
             </div>
           </div>
+          {article.image && (
+            <>
+              <div className={gradientClasses()} />
+              <Image
+                src={article.image.filename}
+                alt={article.image.alt}
+                priority={true}
+                fill={true}
+                className='object-cover object-center -z-20'
+              />
+            </>
+          )}
         </section>
-        {blok.body &&
-          blok.body.map((body, index) => (
+        {article.body &&
+          article.body.map((body, index) => (
             <StoryblokComponent
               blok={body}
               parent={body.component}
@@ -111,7 +128,6 @@ export default function PageStory({ story, blog }: PageStory) {
 
 export async function getStaticProps({ params }: any) {
   let slug = `blog/${params.slug.join('/')}`
-  console.log(slug)
 
   const variables = { slug, relations: relations.join(',') }
   const query = `

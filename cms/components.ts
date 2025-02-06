@@ -261,6 +261,7 @@ const list: ComponentSchema = {
         { value: 'dropdown', name: 'Menu' },
         { value: 'tab', name: 'Scheda' },
         { value: 'accordion', name: 'Fisarmonica' },
+        { value: 'timeline', name: 'Sequenza' },
       ],
     },
   },
@@ -346,7 +347,7 @@ const aside: ComponentSchema = {
       display_name: 'Corsi',
       source: 'internal_stories',
       restrict_content_types: true,
-      filter_content_type: ['course', 'event'],
+      filter_content_type: ['course'],
       required: true,
     },
     form: {
@@ -402,7 +403,13 @@ const section: ComponentSchema = {
         'text',
         'action',
         'wrapper',
-        'alias',
+        'carousel',
+        'location',
+        'person',
+        'event',
+        'course',
+        'article',
+        'form',
       ],
       required: true,
     },
@@ -542,6 +549,17 @@ const form: ComponentSchema = {
   component_group_uuid: 'containers',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['form'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['scope', 'fields', 'message'],
+    },
     scope: {
       type: 'option',
       display_name: 'Scopo',
@@ -550,14 +568,12 @@ const form: ComponentSchema = {
         { value: 'openday', name: 'Partecipazione openday' },
         { value: 'enroll', name: 'Iscrizione corso' },
       ],
-      required: true,
     },
     fields: {
       type: 'bloks',
       display_name: 'Passaggi',
       restrict_components: true,
       component_whitelist: ['field'],
-      required: true,
     },
     message: {
       type: 'markdown',
@@ -583,7 +599,6 @@ region, district, city, address, message, policy.`,
         'image',
         'inlinecode',
       ],
-      required: true,
     },
   },
 }
@@ -674,33 +689,36 @@ const article: ComponentSchema = {
   name: 'article',
   display_name: 'Articolo',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'layouts',
   preview_tmpl: ``,
   schema: {
-    preview: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['article'],
+    },
+    new: {
       type: 'section',
-      display_name: 'Anteprima metadati',
-      keys: ['title', 'description', 'image', 'author'],
+      display_name: 'Nuovo',
+      keys: ['title', 'description', 'image', 'author', 'body'],
     },
     title: {
       type: 'textarea',
       display_name: 'Titolo',
       max_length: 80,
-      required: true,
     },
     description: {
       type: 'textarea',
       display_name: 'Riassunto',
       max_length: 300,
-      required: true,
     },
     image: {
       type: 'asset',
       display_name: 'Immagine',
       description: 'Dimensione consigliata 1200x627px',
       filetypes: ['images'],
-      required: true,
     },
     author: {
       type: 'option',
@@ -721,26 +739,34 @@ const location: ComponentSchema = {
   name: 'location',
   display_name: 'Località',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['location'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['title', 'address', 'gps', 'direction'],
+    },
     title: {
       type: 'text',
       display_name: 'Nome',
-      required: true,
     },
     address: {
       type: 'textarea',
       display_name: 'Indirizzo',
       description: `Via, Civico - cap\nCittà Provincia`,
-      required: true,
     },
     gps: {
       type: 'text',
       display_name: 'Coordinate',
       description: 'Latitudine/Longitudine',
-      required: true,
     },
     direction: {
       type: 'text',
@@ -753,21 +779,39 @@ const course: ComponentSchema = {
   name: 'course',
   display_name: 'Corso',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['course'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: [
+        'title',
+        'location',
+        'days',
+        'hours',
+        'starts',
+        'ends',
+        'seats',
+        'page',
+      ],
+    },
     title: {
       type: 'text',
       display_name: 'Titolo',
-      required: true,
     },
     location: {
       type: 'option',
       display_name: 'Sede',
       source: 'internal_stories',
       filter_content_type: ['location'],
-      required: true,
     },
     days: {
       type: 'options',
@@ -780,7 +824,6 @@ const course: ComponentSchema = {
         { value: 'Venerdì', name: 'Venerdì' },
         { value: 'Sabato', name: 'Sabato' },
       ],
-      required: true,
     },
     hours: {
       type: 'options',
@@ -790,7 +833,6 @@ const course: ComponentSchema = {
         { value: '13:00/16:00', name: '13:00/16:00' },
         { value: '20:00/23:00', name: '20:00/23:00' },
       ],
-      required: true,
     },
     starts: {
       type: 'datetime',
@@ -821,22 +863,30 @@ const person: ComponentSchema = {
   name: 'person',
   display_name: 'Persona',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['image', 'title', 'role', 'description', 'message', 'links'],
+    },
     image: {
       type: 'multiasset',
       display_name: 'Immagini',
       description: 'Dimensione consigliata 500x500',
       filetypes: ['images'],
-
-      required: true,
     },
     title: {
       type: 'text',
       display_name: 'Nome Cognome',
-      required: true,
     },
     role: {
       type: 'option',
@@ -848,7 +898,6 @@ const person: ComponentSchema = {
         { value: 'design', name: 'Docente progettazione' },
         { value: 'software', name: 'Docente software' },
       ],
-      required: true,
     },
     description: {
       type: 'markdown',
@@ -880,10 +929,21 @@ const event: ComponentSchema = {
   name: 'event',
   display_name: 'Evento',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['event'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['title', 'description', 'location', 'date', 'page'],
+    },
     title: {
       type: 'text',
       display_name: 'Titolo',
