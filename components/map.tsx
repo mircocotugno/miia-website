@@ -1,5 +1,4 @@
 import type { LocationProps, MapProps } from '@props/types'
-import type { PropsWithChildren } from 'react'
 import { Map as MapGl, Marker } from 'react-map-gl'
 
 interface MapComponent {

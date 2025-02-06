@@ -39,6 +39,16 @@ export function Aside({ blok, locations }: AsideComponent) {
     },
   })
 
+  const asideClasses = tv({
+    base: 'sticky md:top-20 col-span-full md:col-span-4 flex flex-col align-start justify-start -mt-10 md:-mt-20 lg:-mt-48 px-2 py-3 order-1 md:order-last max-h-fit bg-background shadow-lg rounded-3xl border-1',
+    variants: {
+      theme: {
+        DEFAULT: 'border-neutral-200',
+        dark: 'border-neutral-900',
+      },
+    },
+  })
+
   const containerClasses = tv({
     base: 'grid grid-cols-12 gap-3 p-6 mx-auto max-w-[1280px]',
   })
@@ -62,7 +72,7 @@ export function Aside({ blok, locations }: AsideComponent) {
               ))}
           </div>
         )}
-        <div className='sticky md:top-20 col-span-full md:col-span-4 flex flex-col align-start justify-start -mt-10 md:-mt-20 lg:-mt-48 px-2 py-3 order-1 md:order-last max-h-fit bg-background shadow-lg rounded-3xl border-neutral-100/25 border-2'>
+        <div className={asideClasses({ theme: blok.theme })}>
           {blok.headline &&
             compiler(blok.headline, {
               wrapper: ({ children }) => (

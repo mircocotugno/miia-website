@@ -261,7 +261,8 @@ const list: ComponentSchema = {
         { value: 'dropdown', name: 'Menu' },
         { value: 'tab', name: 'Scheda' },
         { value: 'accordion', name: 'Fisarmonica' },
-        { value: 'timeline', name: 'Sequenza' },
+        { value: 'timeline', name: 'Linea temporale' },
+        { value: 'process', name: 'Procedura' },
       ],
     },
   },
@@ -399,6 +400,7 @@ const section: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'picture',
+        'gallery',
         'list',
         'text',
         'action',
