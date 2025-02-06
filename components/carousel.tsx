@@ -18,6 +18,7 @@ export function Carousel({ blok, parent }: CarouselComponent) {
 
   const slides = blok.slides.map((slide, index) => (
     <SwiperSlide
+      {...storyblokEditable(slide)}
       className={`p-1 ${isCarousel ? 'min-h-sm overflow-visible' : 'min-h-cover sm:min-h-lg'}`}
       key={index}
     >
