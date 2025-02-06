@@ -19,13 +19,14 @@ export function Aside({ blok, locations }: AsideComponent) {
   const courses =
     blok.courses.length > 0 &&
     blok.courses.map(({ content }) => {
-      options.push({ name: content.title, value: content.title })
+      content?.title &&
+        options.push({ name: content.title, value: content.title })
       const location =
         locations[
           locations.findIndex((location) => location.uuid === content.location)
         ]
-      const starts = getLongDate(content.starts)
-      const ends = getLongDate(content.ends)
+      const starts = content?.starts && getLongDate(content.starts)
+      const ends = content?.ends && getLongDate(content.ends)
       return { ...content, location, starts, ends }
     })
 
@@ -75,25 +76,31 @@ export function Aside({ blok, locations }: AsideComponent) {
                 <AccordionItem
                   title={<h4 className='font-bold tex-xl'>{course.title}</h4>}
                   subtitle={
-                    <small>
-                      {course.hours.includes('20:00/23:00')
-                        ? 'Frequenza serale'
-                        : 'Frequenza al sabato'}
-                    </small>
+                    course?.hours && (
+                      <small>
+                        {course.hours.includes('20:00/23:00')
+                          ? 'Frequenza serale'
+                          : 'Frequenza al sabato'}
+                      </small>
+                    )
                   }
                   key={index}
                 >
                   <ul className='text-sm space-y-1'>
-                    <li className='space-x-0.5'>
-                      <i className='iconoir-calendar pr-1' />
-                      <span className='md:max-lg:hidden'>lezioni:</span>
-                      <span>{course.days.join(', ')}</span>
-                    </li>
-                    <li className='space-x-0.5'>
-                      <i className='iconoir-clock pr-1' />
-                      <span className='md:max-lg:hidden'>orari:</span>
-                      <span>{course.hours.join(', ')}</span>
-                    </li>
+                    {course?.days && (
+                      <li className='space-x-0.5'>
+                        <i className='iconoir-calendar pr-1' />
+                        <span className='md:max-lg:hidden'>lezioni:</span>
+                        <span>{course.days.join(', ')}</span>
+                      </li>
+                    )}
+                    {course?.hours && (
+                      <li className='space-x-0.5'>
+                        <i className='iconoir-clock pr-1' />
+                        <span className='md:max-lg:hidden'>orari:</span>
+                        <span>{course.hours.join(', ')}</span>
+                      </li>
+                    )}
                     <li className='space-x-0.5'>
                       <i className='iconoir-calendar-arrow-up pr-1' />
                       <span className='md:max-lg:hidden'>inizio:</span>
