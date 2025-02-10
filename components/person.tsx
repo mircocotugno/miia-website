@@ -16,7 +16,7 @@ interface PersonComponent {
 
 const roles = {
   interior: { icon: 'graduation-cap', text: 'studente' },
-  style: { icon: 'design-nib', text: 'esttica' },
+  style: { icon: 'design-nib', text: 'estetica' },
   design: { icon: 'ruler-combine', text: 'progettazione' },
   software: { icon: 'cube-dots', text: 'modellazione' },
 }

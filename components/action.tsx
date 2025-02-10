@@ -36,7 +36,7 @@ export function Action({ blok, parent, theme, size }: ActionComponent) {
           id={blok.id}
           as={Link}
           target={blok.link.target}
-          color={theme || 'primary'}
+          color={theme || blok.color || 'primary'}
           size={size || 'lg'}
           href={link}
           className='col-auto font-bold self-start min-w-fit cursor-pointer'

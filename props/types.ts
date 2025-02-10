@@ -47,7 +47,7 @@ export type OptionProps = {
 
 // Props
 
-export type Sizes = 'small' | 'medium' | 'large' | 'extra'
+export type Sizes = 'small' | 'medium' | 'large' | 'extra' | 'full'
 
 export type Justifications = 'right' | 'center' | 'left'
 
@@ -108,6 +108,7 @@ export type ActionProps = BlokProps & {
   label: string
   link: LinkProps
   button: boolean
+  color: 'primary' | 'secondary' | 'default'
 }
 
 export type TextProps = BlokProps & {
@@ -146,7 +147,7 @@ export type FieldProps = BlokProps & {
 export type ListProps = BlokProps & {
   component: 'list'
   label: string
-  items: Array<TextProps | ActionProps | EventProps>
+  items: Array<TextProps | ActionProps | WrapperProps>
   display: DisplayModes
 }
 
@@ -190,6 +191,7 @@ export type WrapperProps = BlokProps & {
     | GalleryProps
     | ListProps
     | MapProps
+    | CourseProps
   )[]
   row: boolean
   boxed: boolean

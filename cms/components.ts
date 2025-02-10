@@ -29,6 +29,15 @@ const action: ComponentSchema = {
       display_name: 'Mostra come bottone',
       inline_label: true,
     },
+    color: {
+      type: 'option',
+      display_name: 'Colore',
+      options: [
+        { value: 'primary', name: 'Primario' },
+        { value: 'secondary', name: 'Secondario' },
+        { value: 'default', name: 'Generico' },
+      ],
+    },
     id: {
       type: 'text',
       display_name: 'Tracciamento',
@@ -251,7 +260,7 @@ const list: ComponentSchema = {
       type: 'bloks',
       display_name: 'Testi',
       restrict_components: true,
-      component_whitelist: ['text', 'action'],
+      component_whitelist: ['text', 'action', 'wrapper'],
       required: true,
     },
     display: {
@@ -261,7 +270,7 @@ const list: ComponentSchema = {
         { value: 'dropdown', name: 'Menu' },
         { value: 'tab', name: 'Scheda' },
         { value: 'accordion', name: 'Fisarmonica' },
-        { value: 'timeline', name: 'Linea temporale' },
+        // { value: 'timeline', name: 'Linea temporale' },
         { value: 'process', name: 'Procedura' },
       ],
     },
@@ -449,6 +458,7 @@ const wrapper: ComponentSchema = {
         'list',
         'alias',
         'map',
+        'course',
       ],
       required: true,
     },
@@ -470,6 +480,7 @@ const wrapper: ComponentSchema = {
         { value: 'medium', name: 'Media' },
         { value: 'large', name: 'Grande' },
         { value: 'extra', name: 'Enorme' },
+        { value: 'full', name: 'Massima' },
       ],
     },
     justify: {
@@ -511,7 +522,7 @@ const carousel: ComponentSchema = {
       type: 'bloks',
       display_name: 'Elementi',
       restrict_components: true,
-      component_whitelist: ['section', 'wrapper', 'alias', 'picture'],
+      component_whitelist: ['section', 'wrapper', 'person', 'picture'],
       required: true,
     },
     weight: {

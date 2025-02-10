@@ -9,7 +9,7 @@ export function getLongDate(date: string) {
 }
 
 export function getShortDate(date: string) {
-  if (date) return ''
+  if (!date) return ''
   return new Date(date).toLocaleDateString('it-IT', {
     month: 'long',
     year: 'numeric',

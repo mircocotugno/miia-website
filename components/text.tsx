@@ -11,6 +11,15 @@ interface TextComponent {
 const settings = { wrapper: null, overrides: Typography }
 
 export function Text({ blok }: TextComponent) {
+  const titleClases = tv({
+    base: 'space-y-6',
+    variants: {
+      hide: {
+        true: 'hidden sm:block',
+      },
+    },
+  })
+
   const Title = () => (
     <div
       className={titleClases({
@@ -20,6 +29,15 @@ export function Text({ blok }: TextComponent) {
       {compiler(blok.title, settings)}
     </div>
   )
+
+  const descriptionClasses = tv({
+    base: 'space-y-2',
+    variants: {
+      hide: {
+        true: 'hidden sm:block',
+      },
+    },
+  })
   const Description = () => (
     <div
       className={descriptionClasses({
@@ -30,6 +48,16 @@ export function Text({ blok }: TextComponent) {
     </div>
   )
 
+  const textClasses = tv({
+    base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-32 text-left',
+    variants: {
+      justify: {
+        right: 'sm:text-right',
+        center: 'sm:text-center',
+        left: 'sm:text-left',
+      },
+    },
+  })
   return (
     <article
       className={textClasses({ justify: blok.justify })}
@@ -40,32 +68,3 @@ export function Text({ blok }: TextComponent) {
     </article>
   )
 }
-
-const textClasses = tv({
-  base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-16 text-left',
-  variants: {
-    justify: {
-      right: 'sm:text-right',
-      center: 'sm:text-center',
-      left: 'sm:text-left',
-    },
-  },
-})
-
-const titleClases = tv({
-  base: 'space-y-6',
-  variants: {
-    hide: {
-      true: 'hidden sm:block',
-    },
-  },
-})
-
-const descriptionClasses = tv({
-  base: 'space-y-2',
-  variants: {
-    hide: {
-      true: 'hidden sm:block',
-    },
-  },
-})

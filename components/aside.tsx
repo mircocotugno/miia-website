@@ -2,8 +2,8 @@ import type { AsideProps } from '@props/types'
 import type { LocationProps, OptionProps } from '@props/types'
 import { tv } from 'tailwind-variants'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import { Meta } from '@components/meta'
-import { Nav } from '@components/nav'
+import { useIsVisible } from '@modules/interface'
+import { useRef } from 'react'
 import { Accordion, AccordionItem } from '@nextui-org/react'
 import { getLongDate, getShortDate } from '@modules/formats'
 import { compiler } from 'markdown-to-jsx'
@@ -15,6 +15,11 @@ interface AsideComponent {
 }
 
 export function Aside({ blok, locations }: AsideComponent) {
+  const ref = useRef(null)
+  const isVisible = useIsVisible(ref)
+
+  console.log(isVisible)
+
   const options: Array<OptionProps> = []
   const courses =
     blok.courses.length > 0 &&
@@ -26,7 +31,7 @@ export function Aside({ blok, locations }: AsideComponent) {
           locations.findIndex((location) => location.uuid === content.location)
         ]
       const starts = content?.starts && getLongDate(content.starts)
-      const ends = content?.ends && getLongDate(content.ends)
+      const ends = content?.ends && getShortDate(content.ends)
       return { ...content, location, starts, ends }
     })
 
@@ -72,7 +77,7 @@ export function Aside({ blok, locations }: AsideComponent) {
               ))}
           </div>
         )}
-        <div className={asideClasses({ theme: blok.theme })}>
+        <aside ref={ref} className={asideClasses({ theme: blok.theme })}>
           {blok.headline &&
             compiler(blok.headline, {
               wrapper: ({ children }) => (
@@ -98,32 +103,32 @@ export function Aside({ blok, locations }: AsideComponent) {
                 >
                   <ul className='text-sm space-y-1'>
                     {course?.days && (
-                      <li className='space-x-0.5'>
+                      <li className='space-x-1'>
                         <i className='iconoir-calendar pr-1' />
                         <span className='md:max-lg:hidden'>lezioni:</span>
                         <span>{course.days.join(', ')}</span>
                       </li>
                     )}
                     {course?.hours && (
-                      <li className='space-x-0.5'>
+                      <li className='space-x-1'>
                         <i className='iconoir-clock pr-1' />
                         <span className='md:max-lg:hidden'>orari:</span>
                         <span>{course.hours.join(', ')}</span>
                       </li>
                     )}
-                    <li className='space-x-0.5'>
+                    <li className='space-x-1'>
                       <i className='iconoir-calendar-arrow-up pr-1' />
                       <span className='md:max-lg:hidden'>inizio:</span>
                       <span>{course.starts || 'in programmazione'}</span>
                     </li>
                     {course.ends && (
-                      <li className='space-x-0.5'>
+                      <li className='space-x-1'>
                         <i className='iconoir-calendar-arrow-down pr-1' />
                         <span className='md:max-lg:hidden'>inizio:</span>
-                        {course.ends}
+                        <span>{course.ends}</span>
                       </li>
                     )}
-                    <li className='space-x-0.5'>
+                    <li className='space-x-1'>
                       <i className='iconoir-group pr-1' />
                       <span className='md:max-lg:hidden'>posti:</span>
                       <span>{course.seats}</span>
@@ -136,7 +141,7 @@ export function Aside({ blok, locations }: AsideComponent) {
           {blok.form && (
             <StoryblokComponent blok={blok.form.content} courses={options} />
           )}
-        </div>
+        </aside>
       </div>
     </section>
   )

@@ -29,6 +29,7 @@ export function Wrapper({ blok }: WrapperComponent) {
         medium: 'sm:col-span-4',
         large: 'sm:col-span-8',
         extra: 'sm:col-span-9',
+        full: 'sm:col-span-12',
       },
       justify: {
         right: 'items-start',
@@ -37,8 +38,8 @@ export function Wrapper({ blok }: WrapperComponent) {
       },
       boxed: {
         false:
-          'flex flex-wrap flex-col gap-2 md:gap-4 p-0 sm:p-1 md:p-2 lg:p-3',
-        true: 'p-2',
+          'flex flex-wrap flex-col gap-x-2 gap-y-4 md:gap-x-4 lg:gap-x-8 p-0 sm:p-1 md:p-2 lg:p-3',
+        true: 'p-2 ',
       },
       row: {
         true: 'flex-row',
