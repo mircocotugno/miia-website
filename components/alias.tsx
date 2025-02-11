@@ -27,6 +27,7 @@ export function Alias({ blok }: AliasComponent) {
         medium: 'sm:col-span-4',
         large: 'sm:col-span-8',
         extra: 'sm:col-span-9',
+        full: 'sm:col-span-12',
       },
       order: {
         true: `order-${blok.order}`,

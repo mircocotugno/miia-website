@@ -1,4 +1,4 @@
-import { Link, Image } from '@nextui-org/react'
+import { Link, Image } from '@heroui/react'
 
 export const Typography = {
   h1: {
@@ -54,6 +54,7 @@ export const Typography = {
       <Link
         className='text-md hover:underline'
         href={href || ''}
+        color='foreground'
       >
         {children}
       </Link>

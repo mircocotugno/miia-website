@@ -1,6 +1,6 @@
 import type { EventProps } from '@props/types'
 import type { PropsWithChildren } from 'react'
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Card, CardBody, CardHeader } from '@heroui/react'
 import { getLongDate } from '@modules/formats'
 import Link from 'next/link'
 import { compiler } from 'markdown-to-jsx'

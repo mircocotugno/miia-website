@@ -1,8 +1,9 @@
 import '@styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
+
 import type { AppProps } from 'next/app'
 import { storyblokInit, apiPlugin } from '@storyblok/react'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 import { fontSans, fontSerif } from '@config/fonts'
@@ -27,6 +28,7 @@ import { Person } from '@components/person'
 import { Event } from '@components/event'
 import { Course } from '@components/course'
 import { Location } from '@components/location'
+import { Media } from '@components/media'
 
 const components = {
   page: Page,
@@ -35,11 +37,12 @@ const components = {
   list: List,
   alias: Alias,
   section: Section,
-  aside:Aside,
+  aside: Aside,
   wrapper: Wrapper,
   gallery: Gallery,
   carousel: Carousel,
   picture: Picture,
+  media: Media,
   map: Map,
   form: Form,
   field: Field,
@@ -61,11 +64,11 @@ storyblokInit({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <NextUIProvider>
+      <HeroUIProvider>
         <NextThemesProvider attribute='class' defaultTheme='light'>
           <Component {...pageProps} />
         </NextThemesProvider>
-      </NextUIProvider>
+      </HeroUIProvider>
     </>
   )
 }

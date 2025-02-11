@@ -35,7 +35,6 @@ const action: ComponentSchema = {
       options: [
         { value: 'primary', name: 'Primario' },
         { value: 'secondary', name: 'Secondario' },
-        { value: 'default', name: 'Generico' },
       ],
     },
     id: {
@@ -155,6 +154,44 @@ const picture: ComponentSchema = {
       display_name: 'Mostra in galleria',
       inline_label: true,
       default_value: false,
+    },
+    background: {
+      type: 'boolean',
+      display_name: 'Applica come sfondo',
+      inline_label: true,
+      default_value: false,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+  },
+}
+
+const media: ComponentSchema = {
+  name: 'media',
+  display_name: 'Video',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.asset}}`,
+  schema: {
+    source: {
+      type: 'text',
+      display_name: 'Collegamento',
+      required: true,
+    },
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'sm', name: 'Piccola' },
+        { value: 'md', name: 'Media' },
+        { value: 'lg', name: 'Grande' },
+        { value: 'xl', name: 'Enorme' },
+      ],
     },
     background: {
       type: 'boolean',
@@ -409,6 +446,7 @@ const section: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'picture',
+        'media',
         'gallery',
         'list',
         'text',
@@ -424,10 +462,11 @@ const section: ComponentSchema = {
       ],
       required: true,
     },
-    theme: {
-      type: 'option',
-      display_name: 'Tema',
-      options: [{ value: 'dark', name: 'Scuro' }],
+    dark: {
+      type: 'boolean',
+      display_name: 'Tema scuro',
+      default_value: false,
+      inline_label: true,
     },
     contain: {
       type: 'boolean',
@@ -456,9 +495,9 @@ const wrapper: ComponentSchema = {
         'text',
         'action',
         'list',
-        'alias',
         'map',
         'course',
+        'person',
       ],
       required: true,
     },
@@ -1002,6 +1041,7 @@ export type Components =
   | 'action'
   | 'text'
   | 'picture'
+  | 'media'
   | 'gallery'
   | 'field'
   | 'list'
@@ -1024,6 +1064,7 @@ export const components = {
   action,
   text,
   picture,
+  media,
   gallery,
   field,
   list,

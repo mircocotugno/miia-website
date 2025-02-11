@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   Image,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 

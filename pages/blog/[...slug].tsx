@@ -13,7 +13,7 @@ import type {
 import { tv } from 'tailwind-variants'
 import { Meta } from '@components/meta'
 import { Nav } from '@components/nav'
-import { Image as HeroImage } from '@nextui-org/react'
+import { Image as HeroImage } from '@heroui/react'
 import Image from 'next/image'
 
 const relations = [
@@ -30,14 +30,14 @@ const relations = [
   'picture.author',
 ]
 
-type PageStory = {
+interface PageStory {
   story: ISbStoryData & {
     id: string
-    content: BlokProps
+    content: ArticleProps
   }
   blog: {
     content: {
-      header: {
+      header: StoryProps & {
         content: NavProps
       }
       footer: StoryProps & {
@@ -54,7 +54,7 @@ export default function PageStory({ story, blog }: PageStory) {
   })
   if (!page?.content) return null
 
-  const article: ArticleProps = page.content
+  const article = page.content
   if (article.ref) return null
 
   const author = article.author?.content || null
@@ -156,8 +156,6 @@ export async function getStaticProps({ params }: any) {
     }
   `
   const data = await storyblokApi({ query, variables })
-
-  // console.log(data?.ContentNode)
 
   return {
     props: {

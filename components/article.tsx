@@ -1,6 +1,6 @@
 import type { ArticleProps, StoryProps } from '@props/types'
 import { storyblokEditable } from '@storyblok/react'
-import { Image } from '@nextui-org/react'
+import { Image } from '@heroui/react'
 import Link from 'next/link'
 import { tv } from 'tailwind-variants'
 

@@ -10,35 +10,33 @@ import { storyblokApi } from '@modules/storyblokApi'
 import { Meta } from '../../components/meta'
 import { Nav } from '@components/nav'
 import Link from 'next/link'
-import { Image, Chip, Button } from '@nextui-org/react'
+import { Image, Chip, Button } from '@heroui/react'
 
-interface pageContent {
-  id: string
-  content: PageProps
-}
-
-interface Blog {
+interface BlogStory {
   story: ISbStoryData & {
-    page: pageContent
-    articles: Array<StoryProps & { content: ArticleProps }> | null
-    hasMore: boolean
-    tags: Array<{ name: string }> | null
+    id: string
+    content: PageProps
   }
+  articles: Array<StoryProps & { content: ArticleProps }> | null
+  hasMore: boolean
+  tags: Array<{ name: string }> | null
 }
 
 const slug = 'blog/'
 const pagination = 10
 const relations = ['article.author', 'page.header', 'page.footer']
 
-export default function Blog({ story }: Blog) {
-  const page: pageContent = useStoryblokState(story.page, {
+export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
+  const page = useStoryblokState(story, {
     resolveRelations: relations,
     preventClicks: true,
   })
 
-  if (!page?.content && !story.articles?.length) return null
+  if (!page) return null
+  if (!articles?.length) return null
+  const blog = page.content
 
-  const [articles, setArticles] = useState(story.articles)
+  const [items, setItems] = useState(articles)
   const [loadMore, setLoadMore] = useState(false)
   const [current, setCurrent] = useState(1)
 
@@ -78,29 +76,27 @@ export default function Blog({ story }: Blog) {
       `
       if (loadMore) {
         const data = await storyblokApi({ query, variables })
-        const newArticles = data?.ArticleItems.items.length
+        const updatedItems = data?.ArticleItems.items.length
           ? articles?.concat(data?.ArticleItems.items)
           : null
 
-        if (newArticles) {
-          setArticles(newArticles)
+        if (updatedItems) {
+          setItems(updatedItems)
         }
-        setCurrent(newArticles ? current + 1 : current)
+        setCurrent(updatedItems ? current + 1 : current)
         setLoadMore(false)
       }
     }
     getMoreArticle().catch((error) => console.log(error))
   }, [loadMore])
 
-  const { tags, hasMore } = story
-
   return (
     <>
-      <Meta {...page.content} />
-      {page.content.header.content && (
-        <Nav parent='header' blok={page.content.header.content} />
+      <Meta {...blog} />
+      {blog.header.content && (
+        <Nav parent='header' blok={blog.header.content} />
       )}
-      {!!articles && articles.length > 0 && (
+      {!!items && items.length > 0 && (
         <section className='py-6 pb-10 lg:py-12 lg:pb-20 space-y-8 bg-foreground text-background'>
           <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
             <div>
@@ -108,7 +104,7 @@ export default function Blog({ story }: Blog) {
                 tags.map(({ name }, index) => <Chip key={index}>{name}</Chip>)}
             </div>
             <div className='flex flex-wrap gap-6 lg:gap-8'>
-              {articles.map((post, index) => (
+              {items.map((post, index) => (
                 <article
                   className='flex-1 min-w-full sm:min-w-60 sm:max-w-72 space-y-2'
                   key={index}
@@ -162,12 +158,12 @@ export default function Blog({ story }: Blog) {
           </div>
         </section>
       )}
-      {page.content.body &&
-        page.content.body.map((body, index) => (
+      {blog.body &&
+        blog.body.map((body, index) => (
           <StoryblokComponent blok={body} parent='page' key={index} />
         ))}
-      {page.content?.footer.content && (
-        <Nav parent='footer' blok={page.content.footer.content} />
+      {blog.footer.content && (
+        <Nav parent='footer' blok={blog.footer.content} />
       )}
     </>
   )
@@ -231,12 +227,10 @@ export async function getStaticProps() {
 
   return {
     props: {
-      story: {
-        page: data?.PageItem || null,
-        articles: data?.ArticleItems.items || null,
-        hasMore: data?.ArticleItems.total > pagination,
-        tags: data?.Tags.items || null,
-      },
+      story: data?.PageItem || null,
+      articles: data?.ArticleItems.items || null,
+      hasMore: data?.ArticleItems.total > pagination,
+      tags: data?.Tags.items || null,
     },
     revalidate: 3600,
   }

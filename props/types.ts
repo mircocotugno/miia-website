@@ -130,8 +130,11 @@ export type PictureProps = BlokProps & {
   author: StoryProps & { content: PersonProps }
 }
 
-export type VideoProps = BlokProps & {
+export type MediaProps = BlokProps & {
+  component: 'media'
   source: string
+  size: 'sm' | 'md' | 'lg' | 'xl'
+  background: boolean
 }
 
 export type GalleryProps = BlokProps & {
@@ -167,7 +170,7 @@ export type AliasProps = BlokProps & {
       | ArticleProps
       | FormProps
   }
-  size: Sizes
+  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
   order: number
 }
 
@@ -201,7 +204,7 @@ export type WrapperProps = BlokProps & {
   )[]
   row: boolean
   boxed: boolean
-  size: Sizes
+  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
   justify: Justifications
   order: 'first' | 'second' | 'third' | 'fourth' | 'last'
 }
@@ -248,6 +251,7 @@ export type SectionProps = BlokProps & {
     | CourseProps
     | ArticleProps
     | FormProps
+    | MediaProps
   >
   id: string
   dark: boolean

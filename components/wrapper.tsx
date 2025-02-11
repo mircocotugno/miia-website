@@ -1,5 +1,5 @@
 import type { PictureProps, WrapperProps, ImageProps } from '@props/types'
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Card, CardBody, CardHeader } from '@heroui/react'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import Image from 'next/image'
 import { tv } from 'tailwind-variants'
@@ -25,7 +25,7 @@ export function Wrapper({ blok }: WrapperComponent) {
     base: 'col-span-12 sm:col-span-6 sm:order-none',
     variants: {
       size: {
-        small: 'sm:col-span-6 md:col-span-3',
+        small: 'md:col-span-3',
         medium: 'sm:col-span-4',
         large: 'sm:col-span-8',
         extra: 'sm:col-span-9',
