@@ -170,7 +170,7 @@ export type AliasProps = BlokProps & {
       | ArticleProps
       | FormProps
   }
-  size: Sizes
+  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
   order: number
 }
 
@@ -204,7 +204,7 @@ export type WrapperProps = BlokProps & {
   )[]
   row: boolean
   boxed: boolean
-  size: Sizes
+  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
   justify: Justifications
   order: 'first' | 'second' | 'third' | 'fourth' | 'last'
 }
