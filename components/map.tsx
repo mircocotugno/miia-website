@@ -1,5 +1,4 @@
-import type { MapProps } from '@props/types'
-import type { PropsWithChildren } from 'react'
+import type { LocationProps, MapProps } from '@props/types'
 import { Map as MapGl, Marker } from 'react-map-gl'
 
 interface MapComponent {
@@ -8,9 +7,10 @@ interface MapComponent {
 }
 
 export function Map({ blok, contain }: MapComponent) {
-  const locations = blok.locations.map(({ content }) => {
-    const pos = content.gps.split('/').map((s) => Number(s))
-    return { ...content, pos }
+  const locations: Array<LocationProps & { pos: Array<number> }> = []
+  blok.locations.forEach(({ content }) => {
+    const pos = content?.gps && content.gps.split('/').map((s) => Number(s))
+    return pos ? locations.push({ ...content, pos }) : null
   })
 
   const latitude =

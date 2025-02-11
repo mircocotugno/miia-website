@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import Image from 'next/image'
 
 interface GalleryComponent {
@@ -29,10 +29,10 @@ export function Gallery({ blok }: GalleryComponent) {
 
   return (
     <>
-      <div className='col-span-12 grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+      <div className='col-span-12 grid gap-3 grid-cols-12'>
         {blok.assets.map((image, index) => (
           <div
-            className='max-h-28 lg:max-h-32 overflow-hidden rounded'
+            className='col-span-6 sm:col-span-4 md:col-span-3 xl:col-span-2 overflow-hidden rounded aspect-4/3'
             key={index}
           >
             <Image
@@ -58,7 +58,7 @@ export function Gallery({ blok }: GalleryComponent) {
       >
         <ModalContent className='min-h-max'>
           {() => (
-            <ModalBody className='p-0 max-h-modal overflow-scroll hide-scroolbar'>
+            <ModalBody className='p-0 overflow-scroll hide-scroolbar'>
               <Image
                 src={blok.assets[current].filename}
                 alt={blok.assets[current].alt}

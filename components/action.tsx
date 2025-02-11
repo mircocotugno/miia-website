@@ -1,19 +1,26 @@
-import { Button, Link } from '@nextui-org/react'
-import type { ActionProps, Sizes } from '@props/types'
+import { Button, Link } from '@heroui/react'
+import type { ActionProps } from '@props/types'
 import { compiler } from 'markdown-to-jsx'
 import { storyblokEditable } from '@storyblok/react'
 import { Typography } from './typography'
 import type { PropsWithChildren } from 'react'
+import { useRouter } from 'next/router'
 
 interface ActionComponent {
   blok: ActionProps
   parent?: string
-  theme?: 'default' | 'primary' | 'secondary'
+  theme?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
 }
 
 export function Action({ blok, parent, theme, size }: ActionComponent) {
-  const link = blok.link.cached_url || blok.link.url
+  const router = useRouter()
+  let link = blok.link.url || `/${blok.link.cached_url}`
+  if (blok.link?.anchor) {
+    link = link.startsWith(router.asPath)
+      ? `#${blok.link.anchor}`
+      : `${link}#${blok.link.anchor}`
+  }
 
   const Container = ({ children }: PropsWithChildren) =>
     parent === 'section' ? (
@@ -29,10 +36,10 @@ export function Action({ blok, parent, theme, size }: ActionComponent) {
           id={blok.id}
           as={Link}
           target={blok.link.target}
-          color={theme || 'primary'}
+          color={theme || blok.color || 'default'}
           size={size || 'lg'}
           href={link}
-          className='col-auto font-bold self-start min-w-fit'
+          className='col-auto font-bold self-start min-w-fit cursor-pointer'
           {...storyblokEditable(blok)}
         >
           {blok.label &&
@@ -44,10 +51,10 @@ export function Action({ blok, parent, theme, size }: ActionComponent) {
   return (
     <Container>
       <Link
-        className='col-auto self-start font-medium min-w-fit'
+        className='col-auto self-start font-medium min-w-fit cursor-pointer'
         href={link}
         target={blok.link.target}
-        color='foreground'
+        color={theme || blok.color || 'foreground'}
         size={size || 'md'}
       >
         {blok.label &&

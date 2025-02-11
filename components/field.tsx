@@ -6,7 +6,7 @@ import {
   Checkbox,
   DatePicker,
   Textarea,
-} from '@nextui-org/react'
+} from '@heroui/react'
 
 interface FieldComponent {
   blok: FieldProps

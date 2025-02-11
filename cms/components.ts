@@ -20,7 +20,7 @@ const action: ComponentSchema = {
       type: 'multilink',
       display_name: 'Destinazione',
       restrict_content_types: true,
-      component_whitelist: ['page', 'article', 'enroll'],
+      component_whitelist: ['page', 'article'],
       show_anchor: true,
       asset_link_type: true,
     },
@@ -28,6 +28,14 @@ const action: ComponentSchema = {
       type: 'boolean',
       display_name: 'Mostra come bottone',
       inline_label: true,
+    },
+    color: {
+      type: 'option',
+      display_name: 'Colore',
+      options: [
+        { value: 'primary', name: 'Primario' },
+        { value: 'secondary', name: 'Secondario' },
+      ],
     },
     id: {
       type: 'text',
@@ -153,6 +161,44 @@ const picture: ComponentSchema = {
       inline_label: true,
       default_value: false,
     },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+  },
+}
+
+const media: ComponentSchema = {
+  name: 'media',
+  display_name: 'Video',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.asset}}`,
+  schema: {
+    source: {
+      type: 'text',
+      display_name: 'Collegamento',
+      required: true,
+    },
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'sm', name: 'Piccola' },
+        { value: 'md', name: 'Media' },
+        { value: 'lg', name: 'Grande' },
+        { value: 'xl', name: 'Enorme' },
+      ],
+    },
+    background: {
+      type: 'boolean',
+      display_name: 'Applica come sfondo',
+      inline_label: true,
+      default_value: false,
+    },
   },
 }
 
@@ -251,7 +297,7 @@ const list: ComponentSchema = {
       type: 'bloks',
       display_name: 'Testi',
       restrict_components: true,
-      component_whitelist: ['text', 'action'],
+      component_whitelist: ['text', 'action', 'wrapper'],
       required: true,
     },
     display: {
@@ -261,6 +307,8 @@ const list: ComponentSchema = {
         { value: 'dropdown', name: 'Menu' },
         { value: 'tab', name: 'Scheda' },
         { value: 'accordion', name: 'Fisarmonica' },
+        // { value: 'timeline', name: 'Linea temporale' },
+        { value: 'process', name: 'Procedura' },
       ],
     },
   },
@@ -304,6 +352,131 @@ const alias: ComponentSchema = {
   },
 }
 
+const aside: ComponentSchema = {
+  name: 'aside',
+  display_name: 'Fianco',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.display}}`,
+  schema: {
+    id: {
+      type: 'text',
+      display_name: 'Ancora',
+    },
+    enrollment: {
+      type: 'section',
+      display_name: 'Iscrizione',
+      keys: ['headline', 'courses', 'form'],
+    },
+    headline: {
+      type: 'markdown',
+      display_name: 'Intestazione',
+      customize_toolbar: true,
+      rich_markdown: true,
+      toolbar: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'link',
+        'inlinecode',
+        'italic',
+        'bold',
+        'hrule',
+      ],
+      required: true,
+    },
+    courses: {
+      type: 'options',
+      display_name: 'Corsi',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['course'],
+      required: true,
+    },
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+      required: true,
+    },
+    contents: {
+      type: 'bloks',
+      display_name: 'Contenuti',
+      restrict_components: true,
+      component_whitelist: [
+        'picture',
+        'list',
+        'text',
+        'action',
+        'wrapper',
+        'gallery',
+        'alias',
+      ],
+      required: true,
+    },
+    theme: {
+      type: 'option',
+      display_name: 'Tema',
+      options: [{ value: 'dark', name: 'Scuro' }],
+    },
+  },
+}
+
+const section: ComponentSchema = {
+  name: 'section',
+  display_name: 'Sezione',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'containers',
+  preview_tmpl: `{{it.id}}`,
+  schema: {
+    id: {
+      type: 'text',
+      display_name: 'Ancora',
+    },
+    contents: {
+      type: 'bloks',
+      display_name: 'Contenuti',
+      restrict_components: true,
+      component_whitelist: [
+        'picture',
+        'media',
+        'gallery',
+        'list',
+        'text',
+        'action',
+        'wrapper',
+        'carousel',
+        'location',
+        'person',
+        'event',
+        'course',
+        'article',
+        'form',
+      ],
+      required: true,
+    },
+    dark: {
+      type: 'boolean',
+      display_name: 'Tema scuro',
+      default_value: false,
+      inline_label: true,
+    },
+    contain: {
+      type: 'boolean',
+      display_name: 'Applica margini',
+      default_value: true,
+      inline_label: true,
+    },
+  },
+}
+
 const wrapper: ComponentSchema = {
   name: 'wrapper',
   display_name: 'Contenitore',
@@ -322,8 +495,9 @@ const wrapper: ComponentSchema = {
         'text',
         'action',
         'list',
-        'alias',
         'map',
+        'course',
+        'person',
       ],
       required: true,
     },
@@ -345,6 +519,7 @@ const wrapper: ComponentSchema = {
         { value: 'medium', name: 'Media' },
         { value: 'large', name: 'Grande' },
         { value: 'extra', name: 'Enorme' },
+        { value: 'full', name: 'Massima' },
       ],
     },
     justify: {
@@ -386,7 +561,7 @@ const carousel: ComponentSchema = {
       type: 'bloks',
       display_name: 'Elementi',
       restrict_components: true,
-      component_whitelist: ['section', 'wrapper', 'alias'],
+      component_whitelist: ['section', 'wrapper', 'person', 'picture'],
       required: true,
     },
     weight: {
@@ -426,6 +601,17 @@ const form: ComponentSchema = {
   component_group_uuid: 'containers',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['form'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['scope', 'fields', 'message'],
+    },
     scope: {
       type: 'option',
       display_name: 'Scopo',
@@ -434,14 +620,12 @@ const form: ComponentSchema = {
         { value: 'openday', name: 'Partecipazione openday' },
         { value: 'enroll', name: 'Iscrizione corso' },
       ],
-      required: true,
     },
     fields: {
       type: 'bloks',
       display_name: 'Passaggi',
       restrict_components: true,
       component_whitelist: ['field'],
-      required: true,
     },
     message: {
       type: 'markdown',
@@ -467,49 +651,6 @@ region, district, city, address, message, policy.`,
         'image',
         'inlinecode',
       ],
-      required: true,
-    },
-  },
-}
-
-const section: ComponentSchema = {
-  name: 'section',
-  display_name: 'Sezione',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'containers',
-  preview_tmpl: `{{it.id}}`,
-  schema: {
-    id: {
-      type: 'text',
-      display_name: 'Ancora',
-    },
-    contents: {
-      type: 'bloks',
-      display_name: 'Contenuti',
-      restrict_components: true,
-      component_whitelist: [
-        'picture',
-        'list',
-        'text',
-        'action',
-        'wrapper',
-        'alias',
-        'map',
-        'carousel',
-      ],
-      required: true,
-    },
-    theme: {
-      type: 'option',
-      display_name: 'Tema',
-      options: [{ value: 'dark', name: 'Scuro' }],
-    },
-    contain: {
-      type: 'boolean',
-      display_name: 'Applica margini',
-      default_value: true,
-      inline_label: true,
     },
   },
 }
@@ -591,105 +732,7 @@ const page: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti pagina',
       restrict_components: true,
-      component_whitelist: ['section', 'carousel', 'map'],
-    },
-  },
-}
-
-const enroll: ComponentSchema = {
-  name: 'enroll',
-  display_name: 'Iscrizione',
-  is_root: true,
-  is_nestable: false,
-  component_group_uuid: 'layouts',
-  preview_tmpl: `{{it.courses}}`,
-  schema: {
-    preview: {
-      type: 'section',
-      display_name: 'Anteprima metadati',
-      keys: ['title', 'description', 'image'],
-    },
-    title: {
-      type: 'textarea',
-      display_name: 'Titolo',
-      max_length: 80,
-    },
-    description: {
-      type: 'textarea',
-      display_name: 'Riassunto',
-      max_length: 300,
-    },
-    image: {
-      type: 'asset',
-      display_name: 'Immagine',
-      description: 'Dimensione consigliata 1200x627px',
-      filetypes: ['images'],
-    },
-    menu: {
-      type: 'section',
-      display_name: 'Menu pagina',
-      keys: ['header', 'footer'],
-    },
-    header: {
-      type: 'option',
-      display_name: 'Menu superiore',
-      description: 'Seleziona uno delle intestazioni o creane una nuova',
-      source: 'internal_stories',
-      filter_content_type: ['nav'],
-    },
-    footer: {
-      type: 'option',
-      display_name: 'Menu inferiore',
-      description: 'Seleziona uno dei pie di pagina o creane uno nuovo',
-      source: 'internal_stories',
-      filter_content_type: ['nav'],
-    },
-    enrollment: {
-      type: 'section',
-      display_name: 'Iscrizione',
-      keys: ['headline', 'courses', 'form'],
-    },
-    headline: {
-      type: 'markdown',
-      display_name: 'Intestazione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'link',
-        'inlinecode',
-        'italic',
-        'bold',
-        'hrule',
-      ],
-      required: true,
-    },
-    courses: {
-      type: 'options',
-      display_name: 'Corsi',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['course', 'event'],
-      required: true,
-    },
-    form: {
-      type: 'option',
-      display_name: 'Modulo',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
-      required: true,
-    },
-    body: {
-      type: 'bloks',
-      display_name: 'Contenuti',
-      restrict_components: true,
-      component_whitelist: ['section', 'carousel', 'map'],
+      component_whitelist: ['section', 'carousel', 'map', 'aside'],
     },
   },
 }
@@ -698,33 +741,36 @@ const article: ComponentSchema = {
   name: 'article',
   display_name: 'Articolo',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'layouts',
   preview_tmpl: ``,
   schema: {
-    preview: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['article'],
+    },
+    new: {
       type: 'section',
-      display_name: 'Anteprima metadati',
-      keys: ['title', 'description', 'image', 'author'],
+      display_name: 'Nuovo',
+      keys: ['title', 'description', 'image', 'author', 'body'],
     },
     title: {
       type: 'textarea',
       display_name: 'Titolo',
       max_length: 80,
-      required: true,
     },
     description: {
       type: 'textarea',
       display_name: 'Riassunto',
       max_length: 300,
-      required: true,
     },
     image: {
       type: 'asset',
       display_name: 'Immagine',
       description: 'Dimensione consigliata 1200x627px',
       filetypes: ['images'],
-      required: true,
     },
     author: {
       type: 'option',
@@ -745,26 +791,34 @@ const location: ComponentSchema = {
   name: 'location',
   display_name: 'Località',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['location'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['title', 'address', 'gps', 'direction'],
+    },
     title: {
       type: 'text',
       display_name: 'Nome',
-      required: true,
     },
     address: {
       type: 'textarea',
       display_name: 'Indirizzo',
       description: `Via, Civico - cap\nCittà Provincia`,
-      required: true,
     },
     gps: {
       type: 'text',
       display_name: 'Coordinate',
       description: 'Latitudine/Longitudine',
-      required: true,
     },
     direction: {
       type: 'text',
@@ -777,21 +831,39 @@ const course: ComponentSchema = {
   name: 'course',
   display_name: 'Corso',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['course'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: [
+        'title',
+        'location',
+        'days',
+        'hours',
+        'starts',
+        'ends',
+        'seats',
+        'page',
+      ],
+    },
     title: {
       type: 'text',
       display_name: 'Titolo',
-      required: true,
     },
     location: {
       type: 'option',
       display_name: 'Sede',
       source: 'internal_stories',
       filter_content_type: ['location'],
-      required: true,
     },
     days: {
       type: 'options',
@@ -804,7 +876,6 @@ const course: ComponentSchema = {
         { value: 'Venerdì', name: 'Venerdì' },
         { value: 'Sabato', name: 'Sabato' },
       ],
-      required: true,
     },
     hours: {
       type: 'options',
@@ -814,7 +885,6 @@ const course: ComponentSchema = {
         { value: '13:00/16:00', name: '13:00/16:00' },
         { value: '20:00/23:00', name: '20:00/23:00' },
       ],
-      required: true,
     },
     starts: {
       type: 'datetime',
@@ -836,49 +906,66 @@ const course: ComponentSchema = {
       type: 'multilink',
       display_name: 'Pagina',
       restrict_content_types: true,
-      component_whitelist: ['enroll'],
+      component_whitelist: ['page'],
     },
   },
 }
 
 const person: ComponentSchema = {
   name: 'person',
-  display_name: 'Perona',
+  display_name: 'Persona',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['image', 'title', 'role', 'description', 'message', 'links'],
+    },
     image: {
       type: 'multiasset',
       display_name: 'Immagini',
       description: 'Dimensione consigliata 500x500',
       filetypes: ['images'],
-
-      required: true,
     },
     title: {
       type: 'text',
       display_name: 'Nome Cognome',
-      required: true,
+    },
+    role: {
+      type: 'option',
+      display_name: 'Ruolo',
+      options: [
+        { value: 'interior', name: 'Studente interni' },
+        // { value: 'fashion', name: 'Studente moda' },
+        { value: 'style', name: 'Docente stile' },
+        { value: 'design', name: 'Docente progettazione' },
+        { value: 'software', name: 'Docente software' },
+      ],
     },
     description: {
       type: 'markdown',
       display_name: 'Descrizione',
       customize_toolbar: true,
       rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
+      toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
       max_length: 240,
-      required: true,
     },
     message: {
       type: 'markdown',
       display_name: 'Messaggio',
       customize_toolbar: true,
       rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote'],
+      toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
       max_length: 240,
-      required: true,
     },
     links: {
       type: 'bloks',
@@ -894,10 +981,21 @@ const event: ComponentSchema = {
   name: 'event',
   display_name: 'Evento',
   is_root: true,
-  is_nestable: false,
+  is_nestable: true,
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['event'],
+    },
+    new: {
+      type: 'section',
+      display_name: 'Nuovo',
+      keys: ['title', 'description', 'location', 'date', 'page'],
+    },
     title: {
       type: 'text',
       display_name: 'Titolo',
@@ -943,11 +1041,13 @@ export type Components =
   | 'action'
   | 'text'
   | 'picture'
+  | 'media'
   | 'gallery'
   | 'field'
   | 'list'
   | 'form'
   | 'alias'
+  | 'aside'
   | 'wrapper'
   | 'carousel'
   | 'map'
@@ -959,16 +1059,17 @@ export type Components =
   | 'event'
   | 'page'
   | 'article'
-  | 'enroll'
 
 export const components = {
   action,
   text,
   picture,
+  media,
   gallery,
   field,
   list,
   alias,
+  aside,
   wrapper,
   carousel,
   map,
@@ -976,7 +1077,6 @@ export const components = {
   section,
   nav,
   page,
-  enroll,
   article,
   location,
   course,

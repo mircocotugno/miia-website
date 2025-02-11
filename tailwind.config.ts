@@ -1,11 +1,11 @@
 import type { Config } from 'tailwindcss'
-import { nextui } from '@nextui-org/react'
+import { heroui } from '@heroui/react'
 
 export default {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     fontFamily: {
@@ -14,7 +14,12 @@ export default {
     },
     extend: {
       fontSize: {
+        icon: '120%',
         '5xl': '2.75rem',
+      },
+      colors: {
+        dark: '#0a0a0ad4',
+        light: '#ffffffb3',
       },
       width: {
         sm: '8rem',
@@ -41,7 +46,7 @@ export default {
       minHeight: {
         '100': '25rem',
         '120': '30rem',
-        cover: '40rem',
+        cover: 'calc(100vh - 4rem)',
         sm: '8rem',
         md: '16rem',
         lg: '32rem',
@@ -57,8 +62,13 @@ export default {
         '3/4': '3 / 4',
       },
       dropShadow: {
-        '8xl': [
-          '0 0.125rem 0.25rem rgba(0, 0, 0, 0.4)',
+        light: [
+          '0 0.125rem 0.5rem rgba(256, 256, 256, 0.5)',
+          '0 0.75rem 1.25rem rgba(256, 256, 256, 0.25)',
+          '0 1.5rem 2rem rgba(256, 256, 256, 0.125)',
+        ],
+        dark: [
+          '0 0.125rem 0.5rem rgba(0, 0, 0, 0.4)',
           '0 0.75rem 1.25rem rgba(0, 0, 0, 0.2)',
           '0 1.5rem 2rem rgba(0, 0, 0, 0.1)',
         ],
@@ -67,11 +77,12 @@ export default {
   },
   darkMode: 'class',
   plugins: [
-    nextui({
+    heroui({
+      defaultTheme: 'light',
+      addCommonColors: true,
       themes: {
         light: {
           colors: {
-            background: '#ffffff',
             foreground: '#232325',
             primary: {
               DEFAULT: '#008a45',
@@ -84,7 +95,6 @@ export default {
         dark: {
           colors: {
             background: '#232325',
-            foreground: '#ffffff',
             primary: {
               DEFAULT: '#d12934',
             },

@@ -4,9 +4,9 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { default as NextImage } from 'next/image'
-import { Image as HeroImage } from '@nextui-org/react'
+import { Image as HeroImage } from '@heroui/react'
 import { tv } from 'tailwind-variants'
 
 interface PictureComponent {
@@ -42,7 +42,7 @@ export function Picture({ blok }: PictureComponent) {
         xl: 'max-w-xl',
       },
       ratio: {
-        square: 'max-h-48 aspect-4/3 sm:aspect-square',
+        square: 'aspect-square',
         portrait: 'aspect-3/4',
         landscape: 'aspect-4/3',
         circle: 'aspect-square',
@@ -89,15 +89,15 @@ export function Picture({ blok }: PictureComponent) {
           isOpen={isOpen}
           onClose={onClose}
           shadow='lg'
-          size='5xl'
+          size='3xl'
           backdrop='blur'
           placement='center'
-          className='min-h-96'
+          className='min-h-2/3'
           hideCloseButton
         >
-          <ModalContent className='min-h-max'>
+          <ModalContent className=''>
             {() => (
-              <ModalBody className='p-0 max-h-modal overflow-scroll hide-scroolbar'>
+              <ModalBody className='p-0 overflow-scroll hide-scroolbar'>
                 <NextImage
                   src={blok.asset.filename}
                   alt={blok.asset.alt}

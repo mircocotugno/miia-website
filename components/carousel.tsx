@@ -3,7 +3,6 @@ import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { tv } from 'tailwind-variants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
-import type { PropsWithChildren } from 'react'
 
 interface CarouselComponent {
   blok: CarouselProps
@@ -18,20 +17,24 @@ export function Carousel({ blok, parent }: CarouselComponent) {
   const weight = blok.weight ? weights[blok.weight] : [2, 3, 4, 6]
 
   const slides = blok.slides.map((slide, index) => (
-    <SwiperSlide className={isCarousel ? 'min-h-sm' : 'min-h-lg'} key={index}>
+    <SwiperSlide
+      {...storyblokEditable(slide)}
+      className={`${isCarousel ? 'min-h-sm overflow-visible' : 'min-h-cover sm:min-h-lg'}`}
+      key={index}
+    >
       <StoryblokComponent blok={slide} parent={blok.component} />
     </SwiperSlide>
   ))
 
-  const Tag = parent !== 'section' ? 'div' : 'section'
+  const Tag = parent === 'section' ? 'div' : 'section'
   const classes = tv({
     variants: {
       contain: {
         true: 'col-span-12',
       },
       carousel: {
-        true: 'py-6 lg:py-12 min-h-sm',
-        false: 'min-h-lg',
+        true: 'min-h-sm',
+        false: 'min-h-cover sm:min-h-lg',
       },
     },
   })
@@ -50,8 +53,8 @@ export function Carousel({ blok, parent }: CarouselComponent) {
         autoplay={isCarousel ? { delay: 1500 } : false}
         slidesPerView={isCarousel ? weight[0] : 1}
         spaceBetween={isCarousel ? 24 : 0}
-        className={isCarousel ? 'min-h-sm' : 'min-h-lg'}
-        wrapperClass={isCarousel ? 'min-h-sm' : 'min-h-lg'}
+        className={isCarousel ? 'min-h-sm' : 'min-h-cover sm:min-h-lg'}
+        wrapperClass={isCarousel ? 'min-h-sm' : 'min-h-cover sm:min-h-lg'}
         breakpoints={{
           480: {
             slidesPerView: isCarousel ? weight[1] : 1,

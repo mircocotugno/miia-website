@@ -1,23 +1,23 @@
-import { Link, Image } from '@nextui-org/react'
+import { Link, Image } from '@heroui/react'
 
 export const Typography = {
   h1: {
-    component: ({ children }: { children: string }) => (
-      <h1 className='font-serif leading-compact font-black break-words text-5xl sm:text-6xl md:text-7xl'>
-        {children}
+    component: (props: { children: string }) => (
+      <h1 className='font-serif leading-tight font-black break-words text-6xl md:text-7xl'>
+        {props.children}
       </h1>
     ),
   },
   h2: {
     component: ({ children }: { children: string }) => (
-      <h2 className='font-serif leading-tight font-extrabold break-words text-4xl sm:text-5xl md:text-6xl'>
+      <h2 className='font-serif leading-tight font-extrabold break-words text-5xl md:text-6xl'>
         {children}
       </h2>
     ),
   },
   h3: {
     component: ({ children }: { children: string }) => (
-      <h3 className='font-serif leading-snug font-bold break-words text-3xl sm:text-4xl md:text-5xl'>
+      <h3 className='font-serif leading-tight font-bold break-words text-4xl md:text-5xl'>
         {children}
       </h3>
     ),
@@ -29,27 +29,40 @@ export const Typography = {
   },
   h5: {
     component: ({ children }: { children: string }) => (
-      <h5 className='font-semibold text-xl'>{children}</h5>
+      <h5 className='font-semibold leading-snug text-xl'>{children}</h5>
     ),
   },
   h6: {
     component: ({ children }: { children: string }) => (
-      <h6 className='font-semibold text-lg'>{children}</h6>
+      <h6 className='font-semibold leading-snug text-lg'>{children}</h6>
     ),
   },
   code: {
     component: ({ children }: { children: string }) => (
-      <i className={`iconoir-${children} font-inherit text-inherit`} />
+      <i
+        className={`iconoir-${children} font-inherit text-icon align-middle inline-block`}
+      />
+    ),
+  },
+  strong: {
+    component: ({ children }: { children: string }) => (
+      <strong className='font-semibold'>{children}</strong>
     ),
   },
   a: {
     component: ({ href, children }: { href: string; children: string }) => (
-      <Link className="text-md" color="foreground" href={href || ''}>{children}</Link>
+      <Link
+        className='text-md hover:underline'
+        href={href || ''}
+        color='foreground'
+      >
+        {children}
+      </Link>
     ),
   },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className='font-sans leading-snug max-sm:line-clamp-3'>{children}</p>
+      <p className='font-sans max-sm:line-clamp-3'>{children}</p>
     ),
   },
   ul: {
@@ -58,9 +71,7 @@ export const Typography = {
     ),
   },
   hr: {
-    component: () => (
-      <hr className='max-w-1/3'/>
-    ),
+    component: () => <hr className='max-w-1/3' />,
   },
   img: {
     component: ({

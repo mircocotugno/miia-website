@@ -1,6 +1,7 @@
 import type { PictureProps, WrapperProps, ImageProps } from '@props/types'
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Card, CardBody, CardHeader } from '@heroui/react'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
+import Image from 'next/image'
 import { tv } from 'tailwind-variants'
 
 interface WrapperComponent {
@@ -19,16 +20,16 @@ export function Wrapper({ blok }: WrapperComponent) {
     (content): content is PictureProps =>
       content.component === 'picture' && !!content?.background
   )
-  const orderClass = `order-${blok.order}`
 
   const classes = tv({
-    base: 'col-span-12 p-2 p-0 sm:p-4 md:p-6 sm:col-span-6 sm:order-none',
+    base: 'col-span-12 sm:col-span-6 sm:order-none',
     variants: {
       size: {
-        small: 'sm:col-span-6 md:col-span-3',
+        small: 'md:col-span-3',
         medium: 'sm:col-span-4',
         large: 'sm:col-span-8',
         extra: 'sm:col-span-9',
+        full: 'sm:col-span-12',
       },
       justify: {
         right: 'items-start',
@@ -36,7 +37,9 @@ export function Wrapper({ blok }: WrapperComponent) {
         left: 'items-end',
       },
       boxed: {
-        false: 'flex flex-wrap flex-col gap-2 md:gap-4 lg:gap-6',
+        false:
+          'flex flex-wrap flex-col gap-x-2 gap-y-4 md:gap-x-4 lg:gap-x-8 p-0 sm:p-1 md:p-2 lg:p-3',
+        true: 'p-2 ',
       },
       row: {
         true: 'flex-row',
@@ -138,6 +141,15 @@ export function Wrapper({ blok }: WrapperComponent) {
         hasBackground !== index ? (
           <StoryblokComponent key={index} blok={content} />
         ) : null
+      )}
+      {background && (
+        <Image
+          src={background.asset.filename}
+          alt={background.asset.alt}
+          priority={true}
+          fill={true}
+          className='object-cover object-center -z-20'
+        />
       )}
     </div>
   )
