@@ -15,10 +15,8 @@ interface AsideComponent {
 }
 
 export function Aside({ blok, locations }: AsideComponent) {
-  const ref = useRef(null)
-  const isVisible = useIsVisible(ref)
-
-  console.log(isVisible)
+  // const ref = useRef(null)
+  // const isVisible = useIsVisible(ref)
 
   const options: Array<OptionProps> = []
   const courses =
@@ -77,7 +75,10 @@ export function Aside({ blok, locations }: AsideComponent) {
               ))}
           </div>
         )}
-        <aside ref={ref} className={asideClasses({ theme: blok.theme })}>
+        <aside
+          // ref={ref}
+          className={asideClasses({ theme: blok.theme })}
+        >
           {blok.headline &&
             compiler(blok.headline, {
               wrapper: ({ children }) => (

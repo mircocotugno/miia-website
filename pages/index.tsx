@@ -25,6 +25,7 @@ const relations = [
   'event.ref',
   'location.ref',
   'map.locations',
+  'picture.author',
 ]
 
 export default function Home({ story }: Home) {

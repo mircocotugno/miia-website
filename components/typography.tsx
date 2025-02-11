@@ -53,7 +53,6 @@ export const Typography = {
     component: ({ href, children }: { href: string; children: string }) => (
       <Link
         className='text-md hover:underline'
-        color='foreground'
         href={href || ''}
       >
         {children}

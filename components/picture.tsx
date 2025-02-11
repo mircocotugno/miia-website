@@ -89,15 +89,15 @@ export function Picture({ blok }: PictureComponent) {
           isOpen={isOpen}
           onClose={onClose}
           shadow='lg'
-          size='5xl'
+          size='3xl'
           backdrop='blur'
           placement='center'
-          className='min-h-96'
+          className='min-h-2/3'
           hideCloseButton
         >
-          <ModalContent className='min-h-max'>
+          <ModalContent className=''>
             {() => (
-              <ModalBody className='p-0 max-h-modal overflow-scroll hide-scroolbar'>
+              <ModalBody className='p-0 overflow-scroll hide-scroolbar'>
                 <NextImage
                   src={blok.asset.filename}
                   alt={blok.asset.alt}

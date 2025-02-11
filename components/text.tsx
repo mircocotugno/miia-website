@@ -49,7 +49,7 @@ export function Text({ blok }: TextComponent) {
   )
 
   const textClasses = tv({
-    base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-32 text-left',
+    base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-24 text-left',
     variants: {
       justify: {
         right: 'sm:text-right',

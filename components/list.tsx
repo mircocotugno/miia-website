@@ -117,36 +117,21 @@ function ListAccordion(blok: ListProps) {
   )
 }
 
-function ListTimeline(blok: any) {
-  return <div className=''></div>
-}
-
-function ListProcess(blok: ListProps) {
+function ListTimeline(blok: ListProps) {
   const items = blok.items.filter(
     (item): item is WrapperProps => item.component === 'wrapper'
   )
-
-  const processClasses = tv({
-    base: 'relative flex flex-col items-center justify-center -space-y-4 sm:-space-y-8 sm:px-3 lg:px-6',
+  const timelineClasses = tv({
+    base: 'relative flex flex-col items-center justify-center -space-y-4 sm:-space-y-8',
   })
 
   const stepClasses = tv({
-    base: 'relative w-full sm:w-1/2 flex border-2 border-transparent border-l-neutral-500',
+    base: 'relative w-full sm:w-1/2 border-2 border-transparent border-l-neutral-500',
     variants: {
       justify: {
-        left: 'sm:self-start sm:justify-end sm:translate-x-px sm:border-r-neutral-500 sm:border-l-transparent',
+        left: 'pr-4 sm:self-start sm:translate-x-px sm:border-r-neutral-500 sm:border-l-transparent',
         right:
-          'sm:self-end sm:justify-start sm:-translate-x-px sm:border-l-neutral-500 sm:border-r-none',
-      },
-    },
-  })
-
-  const indexClasses = tv({
-    base: 'font-serif font-black text-5xl leading-snug',
-    variants: {
-      justify: {
-        left: 'sm:text-right',
-        right: '',
+          'pl-4 sm:self-end sm:-translate-x-px sm:border-l-neutral-500 sm:border-r-none',
       },
     },
   })
@@ -160,6 +145,50 @@ function ListProcess(blok: ListProps) {
       },
     },
   })
+  return (
+    <>
+      <h4 className='font-bold text-2xl'>{blok.label}</h4>
+      <div className={timelineClasses()} {...storyblokEditable(blok)}>
+        {items.map((item, index) => {
+          const justify = index % 2 ? 'right' : 'left'
+          return (
+            <div
+              className={stepClasses({ justify: justify })}
+              {...storyblokEditable(item)}
+              key={index}
+            >
+              <div className={dotClasses({ justify: justify })} />
+              {item.contents.map((content, index) => (
+                <StoryblokComponent blok={content} key={index} />
+              ))}
+            </div>
+          )
+        })}
+      </div>
+    </>
+  )
+}
+
+function ListProcess(blok: ListProps) {
+  const items = blok.items.filter(
+    (item): item is WrapperProps => item.component === 'wrapper'
+  )
+
+  const processClasses = tv({
+    base: 'relative flex flex-wrap items-baseline gap-2',
+  })
+
+  const stepClasses = tv({
+    base: 'relative flex-0 w-full sm:flex-1 sm:min-w-24 md:min-w-32 lg:min-w-48 group',
+  })
+
+  const indexClasses = tv({
+    base: 'font-serif font-black text-5xl leading-snug',
+  })
+
+  const arrowClasses = tv({
+    base: 'self-center justify-self-center rotate-90 sm:rotate-0 iconoir-arrow-right text-2xl',
+  })
 
   return (
     <>
@@ -169,24 +198,19 @@ function ListProcess(blok: ListProps) {
         {items.map((item, index) => {
           const justify = index % 2 ? 'right' : 'left'
           return (
-            <div
-              className={stepClasses({ justify: justify })}
-              {...storyblokEditable(item)}
-            >
+            <>
+              {!!index && <i className={arrowClasses()} />}
               <div
-                className={dotClasses({
-                  justify: justify,
-                })}
-              />
-              <div className='space-y-2 p-4' key={index}>
-                <h6 className={indexClasses({ justify: justify })}>
-                  {index + 1}
-                </h6>
+                className={stepClasses()}
+                {...storyblokEditable(item)}
+                key={index}
+              >
+                <h6 className={indexClasses()}>{index + 1}</h6>
                 {item.contents.map((content, index) => (
                   <StoryblokComponent blok={content} key={index} />
                 ))}
               </div>
-            </div>
+            </>
           )
         })}
       </div>

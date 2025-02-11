@@ -18,7 +18,7 @@ export default {
         '5xl': '2.75rem',
       },
       colors: {
-        dark: '#0a0a0ab3',
+        dark: '#0a0a0ad4',
         light: '#ffffffb3',
       },
       width: {
@@ -63,12 +63,12 @@ export default {
       },
       dropShadow: {
         light: [
-          '0 0.125rem 0.25rem rgba(256, 256, 256, 0.4)',
-          '0 0.75rem 1.25rem rgba(256, 256, 256, 0.2)',
-          '0 1.5rem 2rem rgba(256, 256, 256, 0.1)',
+          '0 0.125rem 0.5rem rgba(256, 256, 256, 0.5)',
+          '0 0.75rem 1.25rem rgba(256, 256, 256, 0.25)',
+          '0 1.5rem 2rem rgba(256, 256, 256, 0.125)',
         ],
         dark: [
-          '0 0.125rem 0.25rem rgba(0, 0, 0, 0.4)',
+          '0 0.125rem 0.5rem rgba(0, 0, 0, 0.4)',
           '0 0.75rem 1.25rem rgba(0, 0, 0, 0.2)',
           '0 1.5rem 2rem rgba(0, 0, 0, 0.1)',
         ],
@@ -78,10 +78,11 @@ export default {
   darkMode: 'class',
   plugins: [
     nextui({
+      defaultTheme: 'light',
+      addCommonColors: true,
       themes: {
         light: {
           colors: {
-            background: '#ffffff',
             foreground: '#232325',
             primary: {
               DEFAULT: '#008a45',
@@ -94,7 +95,6 @@ export default {
         dark: {
           colors: {
             background: '#232325',
-            foreground: '#ffffff',
             primary: {
               DEFAULT: '#d12934',
             },

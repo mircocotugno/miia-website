@@ -108,7 +108,7 @@ export type ActionProps = BlokProps & {
   label: string
   link: LinkProps
   button: boolean
-  color: 'primary' | 'secondary' | 'default'
+  color: 'primary' | 'secondary'
 }
 
 export type TextProps = BlokProps & {
@@ -127,6 +127,11 @@ export type PictureProps = BlokProps & {
   effect: 'blurred' | 'zoomed'
   background: boolean
   preview: boolean
+  author: StoryProps & { content: PersonProps }
+}
+
+export type VideoProps = BlokProps & {
+  source: string
 }
 
 export type GalleryProps = BlokProps & {
@@ -192,6 +197,7 @@ export type WrapperProps = BlokProps & {
     | ListProps
     | MapProps
     | CourseProps
+    | PersonProps
   )[]
   row: boolean
   boxed: boolean
@@ -244,7 +250,7 @@ export type SectionProps = BlokProps & {
     | FormProps
   >
   id: string
-  theme: 'dark'
+  dark: boolean
   contain: boolean
 }
 

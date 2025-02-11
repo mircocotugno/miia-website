@@ -16,6 +16,8 @@ export function Carousel({ blok, parent }: CarouselComponent) {
   const weights = { low: [1, 2, 3, 4], high: [3, 5, 7, 9] }
   const weight = blok.weight ? weights[blok.weight] : [2, 3, 4, 6]
 
+  console.log(blok.component)
+
   const slides = blok.slides.map((slide, index) => (
     <SwiperSlide
       {...storyblokEditable(slide)}

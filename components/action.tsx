@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 interface ActionComponent {
   blok: ActionProps
   parent?: string
-  theme?: 'default' | 'primary' | 'secondary'
+  theme?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
 }
 
@@ -36,7 +36,7 @@ export function Action({ blok, parent, theme, size }: ActionComponent) {
           id={blok.id}
           as={Link}
           target={blok.link.target}
-          color={theme || blok.color || 'primary'}
+          color={theme || blok.color || 'default'}
           size={size || 'lg'}
           href={link}
           className='col-auto font-bold self-start min-w-fit cursor-pointer'
@@ -54,7 +54,7 @@ export function Action({ blok, parent, theme, size }: ActionComponent) {
         className='col-auto self-start font-medium min-w-fit cursor-pointer'
         href={link}
         target={blok.link.target}
-        color='foreground'
+        color={theme || blok.color || 'foreground'}
         size={size || 'md'}
       >
         {blok.label &&
