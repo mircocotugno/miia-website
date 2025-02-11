@@ -1,5 +1,5 @@
 import type { PictureProps, WrapperProps, ImageProps } from '@props/types'
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Card, CardBody, CardHeader } from '@heroui/react'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import Image from 'next/image'
 import { tv } from 'tailwind-variants'

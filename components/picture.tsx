@@ -4,9 +4,9 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { default as NextImage } from 'next/image'
-import { Image as HeroImage } from '@nextui-org/react'
+import { Image as HeroImage } from '@heroui/react'
 import { tv } from 'tailwind-variants'
 
 interface PictureComponent {

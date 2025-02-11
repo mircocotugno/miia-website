@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import Image from 'next/image'
 
 interface GalleryComponent {

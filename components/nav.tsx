@@ -9,7 +9,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { Typography } from './typography'
 
 import { Brand } from '@public/brand'

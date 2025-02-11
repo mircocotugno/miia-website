@@ -13,7 +13,7 @@ import {
   DrawerFooter,
   useDisclosure,
   Button,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
 import { useState } from 'react'

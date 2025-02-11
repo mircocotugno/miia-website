@@ -1,4 +1,4 @@
-import { Button, Link } from '@nextui-org/react'
+import { Button, Link } from '@heroui/react'
 import type { ActionProps } from '@props/types'
 import { compiler } from 'markdown-to-jsx'
 import { storyblokEditable } from '@storyblok/react'

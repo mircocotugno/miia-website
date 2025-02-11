@@ -16,7 +16,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Link,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 
 interface ListComponent {
