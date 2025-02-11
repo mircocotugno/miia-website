@@ -92,7 +92,7 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
 
   return (
     <>
-      <Meta {...blog.content} />
+      <Meta {...blog} />
       {blog.header.content && (
         <Nav parent='header' blok={blog.header.content} />
       )}
@@ -227,9 +227,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      story: {
-        page: data?.PageItem || null,
-      },
+      story: data?.PageItem || null,
       articles: data?.ArticleItems.items || null,
       hasMore: data?.ArticleItems.total > pagination,
       tags: data?.Tags.items || null,
