@@ -483,7 +483,7 @@ const wrapper: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.display}}`,
+  preview_tmpl: `{{it.size}}`,
   schema: {
     contents: {
       type: 'bloks',

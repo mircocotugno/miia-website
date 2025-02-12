@@ -1,10 +1,5 @@
 import type { PictureProps } from '@props/types'
-import {
-  Modal,
-  ModalContent,
-  ModalBody,
-  useDisclosure,
-} from '@heroui/react'
+import { Modal, ModalContent, ModalBody, useDisclosure } from '@heroui/react'
 import { default as NextImage } from 'next/image'
 import { Image as HeroImage } from '@heroui/react'
 import { tv } from 'tailwind-variants'
@@ -13,12 +8,14 @@ interface PictureComponent {
   blok: PictureProps
 }
 
-const sizes = {
+const widths = {
   sm: 128,
   md: 256,
   lg: 512,
   xl: 1024,
 }
+// `(max-width:640px) px,(max-width:768px) px,(max-width: 1024px) px,(max-width: 1280px) px, px`
+const sizes = [480, 640, 768, 1024, 1280]
 
 const example = `https://a.storyblok.com/f/311109/5047x3368/5c996c55e7/scrivania-progettazione.jpg`
 
@@ -27,10 +24,20 @@ export function Picture({ blok }: PictureComponent) {
 
   const handleOpen = () => (blok.preview ? onOpen() : null)
 
-  const assetSize = blok.asset.filename
+  const asset = blok.asset.filename
     .match(/\/(\d+)x(\d+)\//)
     ?.map((s) => parseInt(s, 10))
-  const pictureWidth = blok.background ? '100%' : sizes[blok.size] || '100%'
+  asset?.length && asset.shift()
+
+  const ratio = asset && asset[0] / asset[1]
+
+  const width = widths[blok.size] || '100%'
+  if (blok.size && ratio) {
+    console.log('ratio: ' + ratio)
+    console.log('width: ' + width)
+    console.log('height: ' + widths[blok.size] / ratio)
+    console.log('sizes: ')
+  }
 
   const wrapperClasses = tv({
     base: 'flex-1 sm:flex-0 col-span-12 w-full sm:max-h-fit',
@@ -62,6 +69,27 @@ export function Picture({ blok }: PictureComponent) {
     },
   })
 
+  if (blok.background) {
+    return (
+      <>
+        {blok?.author && (
+          <span className='text-bold text-sm absolute bottom-4 left-8 z-10'>
+            <small>@</small> {blok.author.content.title}
+          </span>
+        )}
+        <NextImage
+          sizes='(max-width:480px) 480px,(max-width:640px) 640px,(max-width:768px) 768px,(max-width: 1024px) 1024px,(max-width: 1280px) 1280px, 100vw'
+          className='object-cover object-center -z-20 mix-blend-normal'
+          src={blok.asset.filename}
+          alt={blok.asset.alt}
+          priority={true}
+          quality={60}
+          fill
+        />
+      </>
+    )
+  }
+
   return (
     <>
       <HeroImage
@@ -80,7 +108,7 @@ export function Picture({ blok }: PictureComponent) {
         src={blok.asset.filename}
         alt={blok.asset.alt}
         radius={blok.ratio === 'circle' ? 'full' : 'lg'}
-        width={pictureWidth}
+        width={width}
         isBlurred={blok.effect.includes('blurred')}
         isZoomed={blok.effect.includes('zoomed')}
       />
@@ -101,8 +129,8 @@ export function Picture({ blok }: PictureComponent) {
                 <NextImage
                   src={blok.asset.filename}
                   alt={blok.asset.alt}
-                  width={assetSize ? assetSize[1] : 1024}
-                  height={assetSize ? assetSize[2] : 768}
+                  width={asset ? asset[1] : 1024}
+                  height={asset ? asset[2] : 768}
                 />
               </ModalBody>
             )}
