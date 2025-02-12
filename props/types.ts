@@ -204,7 +204,7 @@ export type WrapperProps = BlokProps & {
   )[]
   row: boolean
   boxed: boolean
-  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
+  size: '1/4' | '1/3' | '2/3' | '3/4' | 'full'
   justify: Justifications
   order: 'first' | 'second' | 'third' | 'fourth' | 'last'
 }

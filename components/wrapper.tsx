@@ -25,10 +25,10 @@ export function Wrapper({ blok }: WrapperComponent) {
     base: 'col-span-12 sm:col-span-6 sm:order-none',
     variants: {
       size: {
-        small: 'md:col-span-3',
-        medium: 'sm:col-span-4',
-        large: 'sm:col-span-8',
-        extra: 'sm:col-span-9',
+        '1/4': 'md:col-span-3',
+        '1/3': 'sm:col-span-4',
+        '2/3': 'sm:col-span-8',
+        '3/4': 'sm:col-span-9',
         full: 'sm:col-span-12',
       },
       justify: {
