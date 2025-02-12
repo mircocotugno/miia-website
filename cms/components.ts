@@ -513,14 +513,16 @@ const wrapper: ComponentSchema = {
     },
     size: {
       type: 'option',
-      display_name: 'Dimensione',
+      display_name: 'Largezza',
       options: [
-        { value: 'small', name: 'Piccola' },
-        { value: 'medium', name: 'Media' },
-        { value: 'large', name: 'Grande' },
-        { value: 'extra', name: 'Enorme' },
-        { value: 'full', name: 'Massima' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: 'full', name: 'Intera' },
       ],
+      description: "Default: metà",
+      tooltip: true,
     },
     justify: {
       type: 'option',
