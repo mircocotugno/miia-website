@@ -28,16 +28,16 @@ export function Picture({ blok }: PictureComponent) {
     .match(/\/(\d+)x(\d+)\//)
     ?.map((s) => parseInt(s, 10))
   asset?.length && asset.shift()
-
-  const ratio = asset && asset[0] / asset[1]
-
   const width = widths[blok.size] || '100%'
-  if (blok.size && ratio) {
-    console.log('ratio: ' + ratio)
-    console.log('width: ' + width)
-    console.log('height: ' + widths[blok.size] / ratio)
-    console.log('sizes: ')
-  }
+
+  // const ratio = asset && asset[0] / asset[1]
+
+  // if (blok.size && ratio) {
+    //   console.log('ratio: ' + ratio)
+  //   console.log('width: ' + width)
+  //   console.log('height: ' + widths[blok.size] / ratio)
+  //   console.log('sizes: ')
+  // }
 
   const wrapperClasses = tv({
     base: 'flex-1 sm:flex-0 col-span-12 w-full sm:max-h-fit',
