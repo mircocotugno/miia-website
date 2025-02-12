@@ -107,21 +107,7 @@ export function Section({ blok, parent }: SectionComponent) {
         <>
           <div className={gradientClasses({ themeDark: blok.dark })} />
           {background.component === 'picture' && (
-            <>
-              {background?.author && (
-                <span className='text-bold text-sm absolute bottom-4 left-8 z-10'>
-                  <small>@</small> {background.author.content.title}
-                </span>
-              )}
-              <Image
-                src={background.asset.filename}
-                alt={background.asset.alt}
-                priority={true}
-                fill={true}
-                quality={60}
-                className='object-cover object-center -z-20 mix-blend-normal'
-              />
-            </>
+            <StoryblokComponent blok={background} />
           )}
           {background.component === 'media' && (
             <iframe
