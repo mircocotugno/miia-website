@@ -14,13 +14,13 @@ export function Section({ blok, parent }: SectionComponent) {
 
   const hasBackground = blok.contents.findIndex(
     (content): content is PictureProps | MediaProps =>
-      content.component === 'picture' ||
-      (content.component === 'media' && !!content?.background)
+      (content.component === 'picture' || content.component === 'media') &&
+      !!content?.background
   )
   const background: PictureProps | MediaProps | undefined = blok.contents.find(
     (content): content is PictureProps | MediaProps =>
-      content.component === 'picture' ||
-      (content.component === 'media' && !!content?.background)
+      (content.component === 'picture' || content.component === 'media') &&
+      !!content?.background
   )
   let isVideo = background?.component === 'media'
 
