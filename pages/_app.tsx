@@ -28,6 +28,7 @@ import { Event } from '@components/event'
 import { Course } from '@components/course'
 import { Location } from '@components/location'
 import { Media } from '@components/media'
+import Background from '@components/background'
 
 const components = {
   page: Page,
@@ -40,6 +41,7 @@ const components = {
   wrapper: Wrapper,
   carousel: Carousel,
   picture: Picture,
+  background: Background,
   media: Media,
   map: Map,
   form: Form,

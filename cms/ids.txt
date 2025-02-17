@@ -26,3 +26,4 @@ carousel_component_id=6862106
 alias_component_id=6876489
 aside_component_id=6917049
 media_component_id=6940518
+background_component_id=6964593
