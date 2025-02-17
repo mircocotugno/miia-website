@@ -50,7 +50,7 @@ export function Section({ blok, parent }: SectionComponent) {
         false: 'light',
       },
       hasBackground: {
-        true: 'relative z-0 min-h-cover sm:min-h-lg py-0 [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
+        true: 'relative z-0 sm:min-h-cover min-h-lg py-0 [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
       },
       contain: {
         false: `${gridClasses}`,
