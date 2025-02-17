@@ -44,7 +44,6 @@ export default function Image({ blok }: ImageComponent) {
     height = ratio < 1 ? 768 : 1240 / ratio
     axis = ratio > 1 ? 'width' : 'height'
   }
-  const sizes = `(max-${axis}:768px):512px,(max-${axis}:1024px):768px,(max-${axis}:1280px):1024px,(max-${axis}:1920px):1280px`
 
   return (
     <>
@@ -52,6 +51,7 @@ export default function Image({ blok }: ImageComponent) {
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
+        sizes={`(max-${axis}:512px):256px,(max-${axis}:768px):512px,(max-${axis}:1024px):768px,(max-${axis}:1280px):1024px,1280px`}
         classNames={{ img: classes({ aspect: blok.aspect }) }}
       />
       {blok.fullScreen && (
@@ -71,7 +71,7 @@ export default function Image({ blok }: ImageComponent) {
               alt={blok.image.alt}
               width={width}
               height={height}
-              sizes={sizes}
+              sizes={`(max-${axis}:512px):256px,(max-${axis}:768px):512px,(max-${axis}:1024px):768px,(max-${axis}:1280px):1024px,1280px`}
               fill={!ratio}
             />
           </ModalContent>
