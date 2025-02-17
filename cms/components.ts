@@ -107,6 +107,44 @@ const text: ComponentSchema = {
   },
 }
 
+const image: ComponentSchema = {
+  name: 'image',
+  display_name: 'Immagine',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.image}}`,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+      required: true,
+    },
+    aspect: {
+      type: 'option',
+      display_name: 'Aspetto',
+      options: [
+        { value: '1/1', name: 'Quadrata' },
+        { value: '3/4', name: 'Verticale' },
+        { value: '4/3', name: 'Orizzontale' },
+      ],
+    },
+    fullScreen: {
+      type: 'boolean',
+      display_name: 'Mostra tutto schemo',
+      inline_label: true,
+      default_value: false,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+  },
+}
+
 const picture: ComponentSchema = {
   name: 'picture',
   display_name: 'Immagini',
@@ -176,7 +214,7 @@ const background: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.asset}}`,
+  preview_tmpl: `{{it.image}}`,
   schema: {
     image: {
       type: 'asset',
@@ -186,7 +224,7 @@ const background: ComponentSchema = {
     video: {
       type: 'text',
       display_name: 'Video',
-      description: "Id del video su youtube",
+      description: 'Id del video su youtube',
       inline_label: true,
     },
   },
@@ -204,22 +242,6 @@ const media: ComponentSchema = {
       type: 'text',
       display_name: 'Collegamento',
       required: true,
-    },
-    size: {
-      type: 'option',
-      display_name: 'Dimensione',
-      options: [
-        { value: 'sm', name: 'Piccola' },
-        { value: 'md', name: 'Media' },
-        { value: 'lg', name: 'Grande' },
-        { value: 'xl', name: 'Enorme' },
-      ],
-    },
-    background: {
-      type: 'boolean',
-      display_name: 'Applica come sfondo',
-      inline_label: true,
-      default_value: false,
     },
   },
 }
@@ -494,6 +516,7 @@ const wrapper: ComponentSchema = {
       display_name: 'Contenuti',
       restrict_components: true,
       component_whitelist: [
+        'image',
         'picture',
         'text',
         'action',
@@ -520,12 +543,11 @@ const wrapper: ComponentSchema = {
       options: [
         { value: '1/4', name: 'Un quarto' },
         { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
         { value: '2/3', name: 'Due terzi' },
         { value: '3/4', name: 'Tre quarti' },
-        { value: 'full', name: 'Intera' },
       ],
-      description: 'Default: metà',
-      tooltip: true,
+      default_value: '1/2',
     },
     justify: {
       type: 'option',
@@ -1046,6 +1068,7 @@ export type Components =
   | 'action'
   | 'text'
   | 'picture'
+  | 'image'
   | 'background'
   | 'media'
   | 'field'
@@ -1069,6 +1092,7 @@ export const components = {
   action,
   text,
   picture,
+  image,
   background,
   media,
   field,
