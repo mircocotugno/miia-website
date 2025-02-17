@@ -18,7 +18,7 @@ const BackgroundImage = ({ blok }: BackgroundComponent) => (
       className='object-cover object-center mix-blend-normal'
       src={blok.image.filename}
       alt={blok.image.alt}
-      sizes='(max-width:512px):768px,(max-width:768px):1024px,(max-width:1024px):1240px,(max-width:1240px):1920px'
+      sizes='(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px'
       quality={60}
       priority
       fill
