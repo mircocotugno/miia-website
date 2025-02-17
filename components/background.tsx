@@ -15,7 +15,7 @@ export default function Background({ blok }: BackgroundComponent) {
 const BackgroundImage = ({ blok }: BackgroundComponent) => (
   <div className='absolute -z-20 inset-0'>
     <Image
-      className='object-cover object-center mix-blend-normal'
+      className='object-cover object-center'
       src={blok.image.filename}
       alt={blok.image.alt}
       sizes='(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px'
