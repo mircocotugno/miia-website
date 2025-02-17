@@ -30,6 +30,7 @@ import { Location } from '@components/location'
 import { Media } from '@components/media'
 import Background from '@components/background'
 import Image from '@components/image'
+import Gallery from '@components/gallery'
 
 const components = {
   page: Page,
@@ -42,9 +43,10 @@ const components = {
   wrapper: Wrapper,
   carousel: Carousel,
   picture: Picture,
-  background: Background,
-  image: Image,
   media: Media,
+  image: Image,
+  background: Background,
+  gallery: Gallery,
   map: Map,
   form: Form,
   field: Field,

@@ -113,7 +113,7 @@ const image: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.image}}`,
+  preview_tmpl: `{{it.image.alt}}`,
   schema: {
     image: {
       type: 'asset',
@@ -141,6 +141,38 @@ const image: ComponentSchema = {
       display_name: 'Autore',
       source: 'internal_stories',
       filter_content_type: ['person'],
+    },
+  },
+}
+
+const gallery: ComponentSchema = {
+  name: 'gallery',
+  display_name: 'Galleria',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.images.alt}}`,
+  schema: {
+    images: {
+      type: 'multiasset',
+      display_name: 'Immagini',
+      filetypes: ['images'],
+      required: true,
+    },
+    aspect: {
+      type: 'option',
+      display_name: 'Aspetto',
+      options: [
+        { value: '1/1', name: 'Quadrata' },
+        { value: '3/4', name: 'Verticale' },
+        { value: '4/3', name: 'Orizzontale' },
+      ],
+    },
+    fullScreen: {
+      type: 'boolean',
+      display_name: 'Mostra tutto schemo',
+      inline_label: true,
+      default_value: false,
     },
   },
 }
@@ -214,7 +246,7 @@ const background: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.image}}`,
+  preview_tmpl: `{{it.image.alt}}`,
   schema: {
     image: {
       type: 'asset',
@@ -517,6 +549,7 @@ const wrapper: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'image',
+        'gallery',
         'picture',
         'text',
         'action',
@@ -1070,6 +1103,7 @@ export type Components =
   | 'picture'
   | 'image'
   | 'background'
+  | 'gallery'
   | 'media'
   | 'field'
   | 'list'
@@ -1091,9 +1125,10 @@ export type Components =
 export const components = {
   action,
   text,
-  picture,
   image,
   background,
+  gallery,
+  picture,
   media,
   field,
   list,

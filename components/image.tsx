@@ -1,12 +1,12 @@
 import type { ImageProps } from '@props/types'
 import {
-  Image as Preview,
+  Image as HeroImage,
   Modal,
   ModalContent,
   useDisclosure,
 } from '@heroui/react'
 import { tv } from 'tailwind-variants'
-import { default as Complete } from 'next/image'
+import { default as NextImage } from 'next/image'
 
 interface ImageComponent {
   blok: ImageProps
@@ -40,14 +40,14 @@ export default function Image({ blok }: ImageComponent) {
   let axis = 'width'
 
   if (!!ratio) {
-    width = ratio > 1 ? 1240 : 768 * ratio
-    height = ratio < 1 ? 768 : 1240 / ratio
+    width = ratio > 1 ? 1280 : 768 * ratio
+    height = ratio < 1 ? 768 : 1280 / ratio
     axis = ratio > 1 ? 'width' : 'height'
   }
 
   return (
     <>
-      <Preview
+      <HeroImage
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
@@ -62,11 +62,11 @@ export default function Image({ blok }: ImageComponent) {
           classNames={{
             wrapper: 'items-center',
             closeButton:
-              'fixed top-4 right-4 text-3xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
+              'fixed top-2 md:top-4 right-2 md:right-4 text-2xl md:text-4xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
           }}
         >
           <ModalContent className='p-0'>
-            <Complete
+            <NextImage
               src={blok.image.filename}
               alt={blok.image.alt}
               width={width}
