@@ -42,7 +42,7 @@ export function Wrapper({ blok }: WrapperComponent) {
         true: 'p-2 ',
       },
       row: {
-        true: 'flex-row',
+        true: 'flex-row sm:max-md:col-span-12',
       },
       hasBackground: {
         true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
@@ -96,7 +96,7 @@ export function Wrapper({ blok }: WrapperComponent) {
         })}
         style={
           background
-            ? { backgroundImage: `url(${background.asset.filename})` }
+            ? { backgroundImage: `url(${background.asset[0].filename})` }
             : undefined
         }
       >
@@ -131,11 +131,6 @@ export function Wrapper({ blok }: WrapperComponent) {
         order: blok.order,
         hasBackground: !!background,
       })}
-      style={
-        background
-          ? { backgroundImage: `url(${background.asset.filename})` }
-          : undefined
-      }
     >
       {blok.contents.map((content, index) =>
         hasBackground !== index ? (
@@ -144,8 +139,8 @@ export function Wrapper({ blok }: WrapperComponent) {
       )}
       {background && (
         <Image
-          src={background.asset.filename}
-          alt={background.asset.alt}
+          src={background.asset[0].filename}
+          alt={background.asset[0].alt}
           priority={true}
           fill={true}
           className='object-cover object-center -z-20'

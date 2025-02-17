@@ -84,7 +84,6 @@ export type ComponentsProps =
   | ActionProps
   | TextProps
   | PictureProps
-  | GalleryProps
   | FieldProps
   | ListProps
   | AliasProps
@@ -121,7 +120,7 @@ export type TextProps = BlokProps & {
 
 export type PictureProps = BlokProps & {
   component: 'picture'
-  asset: ImageProps
+  asset: Array<ImageProps>
   size: 'sm' | 'md' | 'lg' | 'xl'
   ratio: 'square' | 'portrait' | 'landscape' | 'circle'
   effect: 'blurred' | 'zoomed'
@@ -135,11 +134,6 @@ export type MediaProps = BlokProps & {
   source: string
   size: 'sm' | 'md' | 'lg' | 'xl'
   background: boolean
-}
-
-export type GalleryProps = BlokProps & {
-  component: 'gallery'
-  assets: Array<ImageProps>
 }
 
 export type FieldProps = BlokProps & {
@@ -196,7 +190,6 @@ export type WrapperProps = BlokProps & {
     | PictureProps
     | TextProps
     | ActionProps
-    | GalleryProps
     | ListProps
     | MapProps
     | CourseProps

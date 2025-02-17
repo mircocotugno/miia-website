@@ -42,6 +42,7 @@ export default {
         md: '16rem',
         lg: '32rem',
         xl: '64rem',
+        inherit: 'inherit',
       },
       minHeight: {
         '100': '25rem',
