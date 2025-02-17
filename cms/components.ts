@@ -109,15 +109,15 @@ const text: ComponentSchema = {
 
 const picture: ComponentSchema = {
   name: 'picture',
-  display_name: 'Immagine',
+  display_name: 'Immagini',
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
   preview_tmpl: `{{it.asset}}`,
   schema: {
     asset: {
-      type: 'asset',
-      display_name: 'Risorsa',
+      type: 'multiasset',
+      display_name: 'Risorse',
       filetypes: ['images'],
       required: true,
     },
@@ -198,23 +198,6 @@ const media: ComponentSchema = {
       display_name: 'Applica come sfondo',
       inline_label: true,
       default_value: false,
-    },
-  },
-}
-
-const gallery: ComponentSchema = {
-  name: 'gallery',
-  display_name: 'Galleria',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  preview_tmpl: ``,
-  schema: {
-    assets: {
-      type: 'multiasset',
-      display_name: 'Immagini',
-      filetypes: ['images'],
-      required: true,
     },
   },
 }
@@ -415,7 +398,6 @@ const aside: ComponentSchema = {
         'text',
         'action',
         'wrapper',
-        'gallery',
         'alias',
       ],
       required: true,
@@ -447,7 +429,6 @@ const section: ComponentSchema = {
       component_whitelist: [
         'picture',
         'media',
-        'gallery',
         'list',
         'text',
         'action',
@@ -491,7 +472,6 @@ const wrapper: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'picture',
-        'gallery',
         'text',
         'action',
         'list',
@@ -1044,7 +1024,6 @@ export type Components =
   | 'text'
   | 'picture'
   | 'media'
-  | 'gallery'
   | 'field'
   | 'list'
   | 'form'
@@ -1067,7 +1046,6 @@ export const components = {
   text,
   picture,
   media,
-  gallery,
   field,
   list,
   alias,

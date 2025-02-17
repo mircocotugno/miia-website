@@ -9,7 +9,6 @@ layouts_group_uuid=3aee7005-d4d5-4e14-99e1-d9744a656d63
 action_component_id=6861318
 text_component_id=6861321
 picture_component_id=6861323
-gallery_component_id=6861324
 section_component_id=6861325
 wrapper_component_id=6861326
 field_component_id=6861327
