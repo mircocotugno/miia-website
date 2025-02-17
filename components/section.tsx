@@ -15,7 +15,7 @@ export function Section({ blok, parent }: SectionComponent) {
     (content) => content.component === 'background'
   )
   const contents = blok.contents.filter(
-    (content) => content.component === 'background'
+    (content) => content.component !== 'background'
   )
 
   const gridClasses =

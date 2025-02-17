@@ -31,7 +31,7 @@ export type LinkProps = {
   anchor?: string
 }
 
-export type ImageProps = {
+export type ImageData = {
   filename: string
   alt: string
   title: string
@@ -118,9 +118,16 @@ export type TextProps = BlokProps & {
   hide: 'title' | 'description' | 'all'
 }
 
+export type ImageProps = BlokProps & {
+  image: ImageData
+  fullScreen: boolean
+  aspect: '1/1' | '3/4' | '4/3'
+  author: PersonProps
+}
+
 export type PictureProps = BlokProps & {
   component: 'picture'
-  asset: Array<ImageProps>
+  asset: Array<ImageData>
   size: 'sm' | 'md' | 'lg' | 'xl'
   ratio: 'square' | 'portrait' | 'landscape' | 'circle'
   effect: 'blurred' | 'zoomed'
@@ -131,7 +138,7 @@ export type PictureProps = BlokProps & {
 
 export type BackgroundProps = BlokProps & {
   component: 'background'
-  image: ImageProps
+  image: ImageData
   video: string
 }
 
@@ -194,6 +201,7 @@ export type WrapperProps = BlokProps & {
   component: 'wrapper'
   contents: (
     | PictureProps
+    | ImageProps
     | TextProps
     | ActionProps
     | ListProps
@@ -203,7 +211,7 @@ export type WrapperProps = BlokProps & {
   )[]
   row: boolean
   boxed: boolean
-  size: '1/4' | '1/3' | '2/3' | '3/4' | 'full'
+  size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
   justify: Justifications
   order: 'first' | 'second' | 'third' | 'fourth' | 'last'
 }
@@ -267,14 +275,14 @@ export type NavProps = BlokProps & {
 export type MetaProps = {
   title: string
   description: string
-  image: ImageProps | undefined
+  image: ImageData | undefined
 }
 
 export type PageProps = BlokProps & {
   component: 'page'
   title: string
   description: string
-  image: ImageProps
+  image: ImageData
   header: StoryProps & {
     content: NavProps
   }
@@ -289,7 +297,7 @@ export type ArticleProps = BlokProps & {
   ref: (StoryProps & { content: ArticleProps }) | undefined
   title: string | ''
   description: string | ''
-  image: ImageProps | undefined
+  image: ImageData | undefined
   author:
     | (StoryProps & {
         content: PersonProps
@@ -323,7 +331,7 @@ export type CourseProps = BlokProps & {
 export type PersonProps = BlokProps & {
   component: 'person'
   ref: (StoryProps & { content: PersonProps }) | undefined
-  image: Array<ImageProps> | []
+  image: Array<ImageData> | []
   title: string | undefined
   role: 'interior' | 'style' | 'design' | 'software' | undefined
   description: string | undefined
