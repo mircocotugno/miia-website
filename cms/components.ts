@@ -170,6 +170,28 @@ const picture: ComponentSchema = {
   },
 }
 
+const background: ComponentSchema = {
+  name: 'background',
+  display_name: 'Sfondo',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.asset}}`,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+    },
+    video: {
+      type: 'text',
+      display_name: 'Video',
+      description: "Id del video su youtube",
+      inline_label: true,
+    },
+  },
+}
+
 const media: ComponentSchema = {
   name: 'media',
   display_name: 'Video',
@@ -428,6 +450,7 @@ const section: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'picture',
+        'background',
         'media',
         'list',
         'text',
@@ -501,7 +524,7 @@ const wrapper: ComponentSchema = {
         { value: '3/4', name: 'Tre quarti' },
         { value: 'full', name: 'Intera' },
       ],
-      description: "Default: metà",
+      description: 'Default: metà',
       tooltip: true,
     },
     justify: {
@@ -1023,6 +1046,7 @@ export type Components =
   | 'action'
   | 'text'
   | 'picture'
+  | 'background'
   | 'media'
   | 'field'
   | 'list'
@@ -1045,6 +1069,7 @@ export const components = {
   action,
   text,
   picture,
+  background,
   media,
   field,
   list,

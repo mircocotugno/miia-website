@@ -129,6 +129,12 @@ export type PictureProps = BlokProps & {
   author: StoryProps & { content: PersonProps }
 }
 
+export type BackgroundProps = BlokProps & {
+  component: 'background'
+  image: ImageProps
+  video: string
+}
+
 export type MediaProps = BlokProps & {
   component: 'media'
   source: string
@@ -232,6 +238,7 @@ export type SectionProps = BlokProps & {
   component: 'section'
   contents: Array<
     | PictureProps
+    | BackgroundProps
     | ListProps
     | TextProps
     | ActionProps
