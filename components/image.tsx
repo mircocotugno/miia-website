@@ -52,7 +52,10 @@ export default function Image({ blok }: ImageComponent) {
         alt={blok.image.alt}
         onClick={onOpen}
         sizes={`(max-${axis}:512px):256px,(max-${axis}:768px):512px,(max-${axis}:1024px):768px,(max-${axis}:1280px):1024px,1280px`}
-        classNames={{ img: classes({ aspect: blok.aspect }) }}
+        classNames={{
+          wrapper: 'flex-1',
+          img: classes({ aspect: blok.aspect }),
+        }}
       />
       {blok.fullScreen && (
         <Modal

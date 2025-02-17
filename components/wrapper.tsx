@@ -9,7 +9,7 @@ interface WrapperComponent {
 }
 
 const classes = tv({
-  base: 'col-span-12 sm:order-none flex flex-col flex-wrap ',
+  base: 'col-span-12 sm:order-none flex flex-col flex-wrap gap-4',
   variants: {
     size: {
       '1/4': 'md:col-span-3',
