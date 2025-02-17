@@ -125,6 +125,18 @@ export type ImageProps = BlokProps & {
   author: PersonProps
 }
 
+export type BackgroundProps = BlokProps & {
+  component: 'background'
+  image: ImageData
+  video: string
+}
+
+export type GalleryProps = BlokProps & {
+  images: Array<ImageData>
+  fullScreen: boolean
+  aspect: '1/1' | '3/4' | '4/3'
+}
+
 export type PictureProps = BlokProps & {
   component: 'picture'
   asset: Array<ImageData>
@@ -134,12 +146,6 @@ export type PictureProps = BlokProps & {
   background: boolean
   preview: boolean
   author: StoryProps & { content: PersonProps }
-}
-
-export type BackgroundProps = BlokProps & {
-  component: 'background'
-  image: ImageData
-  video: string
 }
 
 export type MediaProps = BlokProps & {
@@ -201,6 +207,7 @@ export type WrapperProps = BlokProps & {
   component: 'wrapper'
   contents: (
     | PictureProps
+    | GalleryProps
     | ImageProps
     | TextProps
     | ActionProps

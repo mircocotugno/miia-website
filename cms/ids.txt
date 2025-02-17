@@ -28,3 +28,4 @@ aside_component_id=6917049
 media_component_id=6940518
 background_component_id=6964593
 image_component_id=6965146
+gallery_component_id=6967428
