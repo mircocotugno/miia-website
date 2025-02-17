@@ -69,14 +69,14 @@ export default function Gallery({ blok }: GalleryComponent) {
 
   const previews = images.map(({ filename, alt }, index) => (
     <div
-      className='flex-0 cursor-pointer'
+      className='flex-0 max-w-32 sm:max-w-36 md:max-w-42 cursor-pointer'
       onClick={() => handleOpen(index)}
       key={index}
     >
       <HeroImage
         src={filename}
         alt={alt}
-        height={128}
+        // height={128}
         shadow='md'
         classNames={{ img: classes({ aspect: blok.aspect }) }}
       />
@@ -102,7 +102,7 @@ export default function Gallery({ blok }: GalleryComponent) {
 
   return (
     <>
-      <div className='flex flex-wrap gap-2 items-stretch'>{previews}</div>
+      <div className='flex flex-wrap gap-2 md:gap-4 items-stretch'>{previews}</div>
       {blok.fullScreen && (
         <Modal
           isOpen={isOpen}
