@@ -43,7 +43,7 @@ export function Aside({ blok, locations }: AsideComponent) {
   })
 
   const asideClasses = tv({
-    base: 'sticky md:top-20 col-span-full md:col-span-4 flex flex-col align-start justify-start -mt-10 md:-mt-20 lg:-mt-48 px-2 py-3 order-1 md:order-last max-h-fit bg-background shadow-lg rounded-3xl border-1',
+    base: 'sticky md:top-20 col-span-full md:col-span-4 flex flex-col align-start justify-start sm:-mt-48 px-2 py-3 order-1 md:order-last max-h-fit bg-background shadow-aside rounded-3xl border-1',
     variants: {
       theme: {
         DEFAULT: 'border-neutral-200',
