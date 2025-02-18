@@ -1,6 +1,8 @@
 import type { BackgroundProps } from '@props/types'
 import { storyblokEditable } from '@storyblok/react'
+import { useDeviceSize } from '@modules/interface'
 import Image from 'next/image'
+import { getImageSizes } from '@modules/formats'
 
 interface BackgroundComponent {
   blok: BackgroundProps
@@ -12,19 +14,26 @@ export default function Background({ blok }: BackgroundComponent) {
   return <Backgrounds blok={blok} />
 }
 
-const BackgroundImage = ({ blok }: BackgroundComponent) => (
-  <div className='absolute -z-20 inset-0'>
-    <Image
-      className='object-cover object-center'
-      src={blok.image.filename}
-      alt={blok.image.alt}
-      sizes='(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px'
-      quality={60}
-      priority
-      fill
-    />
-  </div>
-)
+const BackgroundImage = ({ blok }: BackgroundComponent) => {
+  const [width] = useDeviceSize()
+  const image = getImageSizes(blok.image)
+  const desktopBackground = image.filename
+  const mobileBackground =
+    image.filename + `/m/${(image.size.height / 3) * 4}x${image.size.height}`
+  return (
+    <div className='absolute -z-20 inset-0'>
+      <Image
+        className='object-cover object-center'
+        src={width < 768 ? mobileBackground : desktopBackground}
+        alt={blok.image.alt}
+        sizes='(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px'
+        quality={60}
+        priority
+        fill
+      />
+    </div>
+  )
+}
 
 const BackgroundVideo = ({ blok }: BackgroundComponent) => (
   <iframe
