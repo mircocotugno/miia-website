@@ -55,7 +55,7 @@ export default function Gallery({ blok }: GalleryComponent) {
       <HeroImage
         src={filename}
         alt={alt}
-        height={128}
+        width={128}
         shadow='md'
         classNames={{ img: classes({ aspect: blok.aspect }) }}
       />
@@ -63,17 +63,17 @@ export default function Gallery({ blok }: GalleryComponent) {
   ))
 
   const slides = images.map(({ filename, alt, size }, index) => (
-    <SwiperSlide>
+    <SwiperSlide className='max-w-inherith max-h-inherith'>
       <NextImage
-        className='max-h-full mx-auto my-auto shadow-2xl rounded-xl'
+        className='max-h-full max-w-full w-auto h-auto mx-auto my-auto shadow-2xl rounded-xl'
         src={filename}
         alt={alt}
         width={size.ratio > 1 ? 1280 : 768 * size.ratio}
         height={size.ratio <= 1 ? 768 : 1280 / size.ratio}
         sizes={`(max-${size.axis}:512px):256px,(max-${size.axis}:768px):512px,(max-${size.axis}:1024px):768px,(max-${size.axis}:1280px):1024px,1280px`}
         style={{
-          width: size.ratio > 1 ? '80vw' : 'auto',
-          height: size.ratio < 1 ? '80vh' : 'auto',
+          height: '100%',
+          width: 'auto',
         }}
       />
     </SwiperSlide>
@@ -89,12 +89,13 @@ export default function Gallery({ blok }: GalleryComponent) {
           isOpen={isOpen}
           onClose={onClose}
           radius='none'
+          backdrop='blur'
           shadow='none'
           className='mx-auto w-auto h-auto max-w-[80vw] max-h-[80vh] overflow-hidden bg-transparent'
           classNames={{
             wrapper: 'items-center',
             closeButton:
-              'fixed top-1 right-1 text-xl md:top-4 md:right-4 md:text-3xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
+              'fixed top-2 right-3 text-3xl md:top-4 md:right-4 md:text-3xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
           }}
         >
           <ModalContent className='p-0'>
@@ -104,7 +105,7 @@ export default function Gallery({ blok }: GalleryComponent) {
                 spaceBetween={20}
                 initialSlide={current}
                 loop={true}
-                className='items-center'
+                className='items-center max-w-[80vw] max-h-[80vh]'
               >
                 {slides}
               </Swiper>
