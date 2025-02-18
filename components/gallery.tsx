@@ -9,6 +9,7 @@ import {
 import { tv } from 'tailwind-variants'
 import { default as NextImage } from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { getImageSizes } from '@modules/formats'
 
 interface GalleryComponent {
   blok: GalleryProps
@@ -43,29 +44,7 @@ export default function Gallery({ blok }: GalleryComponent) {
     onOpen()
   }
 
-  const images = blok.images.map((image) => {
-    const size: ImageSize = {
-      width: 1024,
-      height: 768,
-      ratio: 1.333,
-      axis: 'width',
-    }
-    let sizes = image.filename
-      .match(/\/(\d+)x(\d+)\//)
-      ?.filter((s, i) => !!i)
-      ?.map((s) => Number(s))
-
-    if (!!sizes) {
-      size.width = sizes[0]
-      size.height = sizes[1]
-      size.ratio = sizes[0] / sizes[1]
-      size.axis = size.ratio >= 1 ? 'width' : 'height'
-    }
-
-    console.log(image.alt + ': ' + size.axis)
-
-    return { ...image, size }
-  })
+  const images = blok.images.map((image) => getImageSizes(image))
 
   const previews = images.map(({ filename, alt }, index) => (
     <div
@@ -76,7 +55,7 @@ export default function Gallery({ blok }: GalleryComponent) {
       <HeroImage
         src={filename}
         alt={alt}
-        // height={128}
+        height={128}
         shadow='md'
         classNames={{ img: classes({ aspect: blok.aspect }) }}
       />
@@ -102,7 +81,9 @@ export default function Gallery({ blok }: GalleryComponent) {
 
   return (
     <>
-      <div className='flex flex-wrap gap-2 md:gap-4 items-stretch'>{previews}</div>
+      <div className='flex flex-wrap gap-2 md:gap-4 items-stretch'>
+        {previews}
+      </div>
       {blok.fullScreen && (
         <Modal
           isOpen={isOpen}
