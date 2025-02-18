@@ -17,15 +17,13 @@ export default function Background({ blok }: BackgroundComponent) {
 const BackgroundImage = ({ blok }: BackgroundComponent) => {
   const [width] = useDeviceSize()
   const image = getImageSizes(blok.image)
-  const desktopBackground = image.filename
-  const mobileBackground =
-    image.filename + `/m/${(image.size.height / 3) * 4}x${image.size.height}`
+  const cropped = `/m/${Math.round((image.size.height / 4) * 3)}x${image.size.height}`
   return (
     <div className='absolute -z-20 inset-0'>
       <Image
         className='object-cover object-center'
-        src={width < 768 ? mobileBackground : desktopBackground}
-        alt={blok.image.alt}
+        src={width > 768 ? image.filename : image.filename + cropped}
+        alt={image.alt}
         sizes='(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px'
         quality={60}
         priority
