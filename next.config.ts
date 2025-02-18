@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Image source
   images: {
-    domains: ['https://localhost:9080'],
     formats: ['image/webp'],
     remotePatterns: [
       {
