@@ -4,6 +4,7 @@ const baseUrl = 'https://api.brevo.com/v3/'
 const apiKey = process.env.NEXT_PUBLIC_BREVO_TOKEN
 
 const listIds = {
+  other: 19,
   course: 10,
   partner: 26,
   project: 25,
@@ -53,8 +54,7 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     })
 
   // Manage lists
-  const list = []
-  !!scope && list.push(listIds[scope])
+  const list = [listIds[scope || 'other']]
 
   if (scope === 'course') {
     const area: FormArea = data?.area?.value

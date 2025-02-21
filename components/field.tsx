@@ -30,7 +30,16 @@ const TextField = ({ blok, data, callback }: FieldComponent) => (
     isRequired={blok.required}
     errorMessage={data.error}
     isInvalid={!!data.error}
-    onValueChange={(value) => callback({ ...data, value })}
+    startContent={
+      blok.id === 'sms' && (
+        <div className='pointer-events-none flex items-center'>
+          <span className='text-default-400 text-small'>+39</span>
+        </div>
+      )
+    }
+    onValueChange={(value) =>
+      callback({ ...data, value: blok.id === 'sms' ? `+39${value}` : value })
+    }
   />
 )
 

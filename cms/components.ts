@@ -670,7 +670,7 @@ const form: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['scope', 'fields', 'message'],
+      keys: ['scope', 'title', 'label', 'fields', 'message'],
     },
     scope: {
       type: 'option',
