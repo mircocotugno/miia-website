@@ -54,7 +54,7 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     })
 
   // Manage lists
-  const list = [listIds[scope || 'other']]
+  const list = [listIds[scope ? scope : 'other']]
 
   if (scope === 'course') {
     const area: FormArea = data?.area?.value

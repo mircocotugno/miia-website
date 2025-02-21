@@ -303,6 +303,7 @@ const field: ComponentSchema = {
         { value: 'checkbox', name: 'Casella' },
         { value: 'area', name: 'Messaggio' },
         { value: 'select', name: 'Selezione' },
+        { value: 'multiple', name: 'Selezione multipla' },
         // { value: 'file', name: 'File' }, //TODO :find a module for file input
         { value: 'enroll', name: 'Iscrizione' },
         { value: 'hidden', name: 'Nascosto' },

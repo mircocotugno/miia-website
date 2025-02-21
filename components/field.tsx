@@ -11,7 +11,7 @@ import {
 interface FieldComponent {
   blok: FieldProps
   data: DataProps
-  callback: (e: any) => object
+  onChange: (e: any) => object
 }
 
 export function Field(props: FieldComponent) {
@@ -21,7 +21,7 @@ export function Field(props: FieldComponent) {
   return <Fields {...props} />
 }
 
-const TextField = ({ blok, data, callback }: FieldComponent) => (
+const TextField = ({ blok, data, onChange }: FieldComponent) => (
   <Input
     id={blok.id}
     label={blok.label}
@@ -33,33 +33,33 @@ const TextField = ({ blok, data, callback }: FieldComponent) => (
     startContent={
       blok.id === 'sms' && (
         <div className='pointer-events-none flex items-center'>
-          <span className='text-default-400 text-small'>+39</span>
+          <span className='text-small text-neutral-400'>+39</span>
         </div>
       )
     }
     onValueChange={(value) =>
-      callback({ ...data, value: blok.id === 'sms' ? `+39${value}` : value })
+      onChange({ ...data, value: blok.id === 'sms' ? `+39${value}` : value })
     }
   />
 )
 
-const AreaField = ({ blok, data, callback }: FieldComponent) => (
+const AreaField = ({ blok, data, onChange }: FieldComponent) => (
   <Textarea
     label={blok.label}
     placeholder={blok.placeholder}
     isRequired={blok.required}
     errorMessage={data.error}
     isInvalid={!!data.error}
-    onValueChange={(value) => callback({ ...data, value })}
+    onValueChange={(value) => onChange({ ...data, value })}
   />
 )
 
-const CheckboxField = ({ blok, data, callback }: FieldComponent) => (
+const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
   <Checkbox
     id={blok.id}
     isRequired={blok.required}
     color={!!data.error ? 'danger' : undefined}
-    onValueChange={(value) => callback({ ...data, value })}
+    onValueChange={(value) => onChange({ ...data, value })}
   >
     <p
       className={`text-sm ${!!data.error ? 'text-danger' : ''} ${
@@ -76,7 +76,7 @@ const CheckboxField = ({ blok, data, callback }: FieldComponent) => (
   </Checkbox>
 )
 
-const DateField = ({ blok, data, callback }: FieldComponent) => (
+const DateField = ({ blok, data, onChange }: FieldComponent) => (
   <DatePicker
     id={blok.id}
     label={blok.label}
@@ -84,11 +84,25 @@ const DateField = ({ blok, data, callback }: FieldComponent) => (
     showMonthAndYearPickers
     errorMessage={data.error}
     isInvalid={!!data.error}
-    onChange={(value) => callback({ ...data, value })}
+    onChange={(value) => onChange({ ...data, value })}
   />
 )
 
-const SelectField = ({ blok, data, callback }: FieldComponent) => (
+type value = Array<string> | string | null
+type key = string | undefined
+
+const getValue = (value: value, key: key) => {
+  if (!key) return value
+  if (Array.isArray(value)) {
+    const index = value.indexOf(key)
+    index === -1 ? value.push(key) : value.splice(index, 1)
+    return value
+  } else {
+    return value !== key ? key : null
+  }
+}
+
+const SelectField = ({ blok, data, onChange }: FieldComponent) => (
   <Select
     id={blok.id}
     label={blok.label}
@@ -96,14 +110,15 @@ const SelectField = ({ blok, data, callback }: FieldComponent) => (
     isRequired={blok.required}
     errorMessage={data.error}
     isInvalid={!!data.error}
+    selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
     onSelectionChange={({ currentKey }) =>
-      callback({
+      onChange({
         ...data,
-        value: currentKey !== data.value ? currentKey : null,
+        value: getValue(data.value, currentKey),
       })
     }
   >
-    {getOptions(blok.options).map((option, index) => (
+    {getOptions(blok.options).map((option) => (
       <SelectItem key={option.value} value={option.value}>
         {option.name}
       </SelectItem>
@@ -120,6 +135,7 @@ const fields = {
   checkbox: CheckboxField,
   area: AreaField,
   select: SelectField,
+  multiple: SelectField,
   enroll: SelectField,
   hidden: () => null,
 }

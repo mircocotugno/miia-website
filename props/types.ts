@@ -76,6 +76,7 @@ type InputTypes =
   | 'checkbox'
   | 'area'
   | 'select'
+  | 'multiple'
   // | 'file' //TODO: find a file module
   | 'enroll'
   | 'hidden'

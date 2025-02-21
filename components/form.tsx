@@ -102,7 +102,7 @@ export function Form({ blok, courses }: FormComponent) {
                           : field
                       }
                       data={data[field.id]}
-                      callback={handleChange}
+                      onChange={handleChange}
                       key={index}
                     />
                   )
@@ -137,7 +137,12 @@ function getData(body: Array<FieldProps>) {
     (field) =>
       (data[field.id] = {
         id: field.id,
-        value: field.input === 'hidden' ? field.placeholder : null,
+        value:
+          field.input === 'hidden'
+            ? field.placeholder
+            : field.input === 'multiple'
+              ? []
+              : null,
         required: field.required,
         error: null,
       })
