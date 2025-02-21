@@ -28,7 +28,7 @@ interface FormComponent {
 
 export function Form({ blok, courses }: FormComponent) {
   const form = blok.ref?.content || blok
-  if (!form.scope || !form.fields.length || !form.message) return null
+  if (!form.fields.length || !form.message) return null
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [data, setData] = useState((): FormData => getData(form.fields))
