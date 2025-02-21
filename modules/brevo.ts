@@ -1,0 +1,133 @@
+import type { FormScopes, FormData, BrevoProps, FormArea } from '@props/types'
+
+const baseUrl = 'https://api.brevo.com/v3/'
+const apiKey = process.env.NEXT_PUBLIC_BREVO_TOKEN
+
+const listIds = {
+  course: 10,
+  partner: 26,
+  project: 25,
+  teaches: 29,
+  interior: 27,
+  fashion: 28,
+}
+
+export async function brevoApi(scope: FormScopes, data: FormData) {
+  const validation = data?.validation?.value
+  if (!!validation)
+    return {
+      success: false,
+      error: false,
+    }
+
+  const email = data?.email?.value
+  const name = data?.nome?.value
+  const surname = data?.cognome?.value
+  const sms = data?.sms?.value
+  if (!email || !name || !surname || !sms)
+    return {
+      success: false,
+      error: `###Indirizzo email non trovato!\nLa invitiamo a scriverci all'indirizzo email che trova nella nostra pagina [contatti](https://madeinitalyacademy.com/contatti)`,
+    }
+
+  // Manage attributes
+  const contact: BrevoProps = {
+    attributes: {
+      NOME: name,
+      COGNOME: surname,
+      SMS: sms,
+    },
+  }
+
+  Object.keys(data)
+    .filter(
+      (key) =>
+        !['nome', 'cognome', 'sms', 'email'].includes(key) && !!data[key].value
+    )
+    .forEach((key) => {
+      let value = data[key].value
+      if (['data_nascita'].includes(key)) {
+        value = `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+      }
+      contact.attributes[key.toUpperCase()] = value
+    })
+
+  // Manage lists
+  const list = []
+  !!scope && list.push(listIds[scope])
+
+  if (scope === 'course') {
+    const area: FormArea = data?.area?.value
+    area && list.push(listIds[area])
+  }
+
+  contact.listIds = list
+
+  // Check if exist
+  let response: any = null
+  response = await apiGet(`contacts/${email}`)
+  const userId = response?.id
+  // console.log(userId)
+
+  if (userId) {
+    response = await apiPut('contacts', userId, contact)
+  } else {
+    contact.updateEnabled = true
+    contact.email = email
+    response = await apiPost('contacts', contact)
+  }
+  // console.log(contact)
+
+  if (!!response?.message) {
+    const name = data?.nome?.value
+    response.message = `###Ops, qualcosa è andato storto ${
+      name || ''
+    }!\nÈ stato trovato il seguente errore: ${
+      response.message
+    }\nLa invitiamo a riprovare più tardi oppure ci scriva all'indirizzo email che trova nella nostra pagina [contantti](https://madeinitalyacademy.com/contatti)`
+  }
+
+  return { success: !response?.code, error: response?.message }
+}
+
+const apiGet = async (path: string, limit = null, offset = null) =>
+  await fetch(
+    `${baseUrl}${path}${limit ? `?limit=${limit}` : ''}${
+      offset ? `&offset=${offset}&sort=desc` : ''
+    }`,
+    {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'api-key': apiKey || '',
+      },
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => console.error(err))
+
+const apiPost = async (path: string, body: BrevoProps) =>
+  await fetch(`${baseUrl}${path}`, {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      'api-key': apiKey || '',
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.error(err))
+
+const apiPut = async (path: string, identifier: string, body: BrevoProps) =>
+  await fetch(`${baseUrl}${path}/${identifier}`, {
+    method: 'PUT',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      'api-key': apiKey || '',
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.error(err))

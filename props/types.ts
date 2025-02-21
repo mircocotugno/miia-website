@@ -61,7 +61,9 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-type FormScopes = 'contact' | 'openday' | 'enroll'
+export type FormScopes = 'course' | 'project' | 'partner' | 'teaches'
+
+export type FormArea = 'interior' | 'fashion'
 
 type DisplayModes = 'dropdown' | 'tab' | 'accordion' | 'timeline' | 'process'
 
@@ -236,10 +238,16 @@ export type MapProps = BlokProps & {
 
 export type FormProps = BlokProps & {
   component: 'form'
-  ref: (StoryProps & { content: FormProps }) | undefined
-  scope: FormScopes | undefined
+  ref: StoryProps & { content: FormProps }
+  scope: FormScopes
+  title: string
+  label: string
   fields: Array<FieldProps> | []
   message: string | string
+}
+
+export type FormData = {
+  [key: string]: DataProps
 }
 
 export type DataProps = {
@@ -247,6 +255,25 @@ export type DataProps = {
   value: any
   required: boolean
   error: string | null
+}
+
+export type BrevoProps = {
+  email?: string
+  id?: number
+  emailBlacklisted?: boolean
+  smsBlacklisted?: boolean
+  createdAt?: Date
+  modifiedAt?: Date
+  updateEnabled?: boolean
+  listIds?: Array<number>
+  attributes: BrevoAttributes
+}
+
+export type BrevoAttributes = {
+  COGNOME: string
+  NOME: string
+  SMS: number
+  [key: string]: string | number | Date
 }
 
 export type SectionProps = BlokProps & {

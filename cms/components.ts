@@ -676,10 +676,19 @@ const form: ComponentSchema = {
       type: 'option',
       display_name: 'Scopo',
       options: [
-        { value: 'contact', name: 'Richiesta informazioni' },
-        { value: 'openday', name: 'Partecipazione openday' },
-        { value: 'enroll', name: 'Iscrizione corso' },
+        { value: 'course', name: 'Corsi' },
+        { value: 'progetti', name: 'Progetti' },
+        { value: 'partner', name: 'Collaborazione' },
+        { value: 'teaches', name: 'Docenza' },
       ],
+    },
+    title: {
+      type: 'text',
+      display_name: 'Titolo',
+    },
+    label: {
+      type: 'text',
+      display_name: 'Azione',
     },
     fields: {
       type: 'bloks',
