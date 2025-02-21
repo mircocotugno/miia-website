@@ -77,9 +77,9 @@ type InputTypes =
   | 'area'
   | 'select'
   | 'multiple'
+  | 'hidden'
   // | 'file' //TODO: find a file module
   | 'enroll'
-  | 'hidden'
 
 // Components Props
 
@@ -218,6 +218,7 @@ export type WrapperProps = BlokProps & {
     | MapProps
     | CourseProps
     | PersonProps
+    | EventProps
   )[]
   row: boolean
   boxed: boolean
@@ -382,4 +383,5 @@ export type EventProps = BlokProps & {
   location: LocationProps | undefined
   date: string | undefined
   page: LinkProps | undefined
+  form: (StoryProps & { content: FormProps }) | undefined
 }

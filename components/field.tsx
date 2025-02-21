@@ -31,7 +31,7 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     errorMessage={data.error}
     isInvalid={!!data.error}
     startContent={
-      blok.id === 'sms' && (
+      blok.input === 'tel' && (
         <div className='pointer-events-none flex items-center'>
           <span className='text-small text-neutral-400'>+39</span>
         </div>
@@ -137,6 +137,7 @@ const fields = {
   select: SelectField,
   multiple: SelectField,
   enroll: SelectField,
+  openday: () => null,
   hidden: () => null,
 }
 

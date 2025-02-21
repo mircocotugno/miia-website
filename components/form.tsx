@@ -24,14 +24,22 @@ import { brevoApi } from '@modules/brevo'
 interface FormComponent {
   blok: FormProps
   courses?: Array<OptionProps>
+  openday?: DataProps
 }
 
-export function Form({ blok, courses }: FormComponent) {
+export function Form({ blok, courses, openday }: FormComponent) {
   const form = blok.ref?.content || blok
   if (!form.fields.length || !form.message) return null
 
+  const initData: FormData = {}
+  if (openday) {
+    initData.openday = openday
+  }
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [data, setData] = useState((): FormData => getData(form.fields))
+  const [data, setData] = useState(
+    (): FormData => getData(form.fields, initData)
+  )
   const [message, setMessage] = useState(form.message)
   const [submitted, setSubmitted] = useState(false)
 
@@ -71,7 +79,7 @@ export function Form({ blok, courses }: FormComponent) {
   }
 
   const handleReset = () => {
-    setData(getData(form.fields))
+    setData(getData(form.fields, initData))
     setSubmitted(false)
 
     onOpenChange()
@@ -131,8 +139,7 @@ export function Form({ blok, courses }: FormComponent) {
   )
 }
 
-function getData(body: Array<FieldProps>) {
-  const data: FormData = {}
+function getData(body: Array<FieldProps>, data: FormData) {
   body.forEach(
     (field) =>
       (data[field.id] = {

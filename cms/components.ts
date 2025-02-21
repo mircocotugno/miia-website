@@ -558,6 +558,7 @@ const wrapper: ComponentSchema = {
         'map',
         'course',
         'person',
+        'event',
       ],
       required: true,
     },
@@ -1061,6 +1062,13 @@ const event: ComponentSchema = {
       source: 'internal_stories',
       filter_content_type: ['event'],
     },
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
@@ -1069,7 +1077,6 @@ const event: ComponentSchema = {
     title: {
       type: 'text',
       display_name: 'Titolo',
-      required: true,
     },
     description: {
       type: 'markdown',
@@ -1096,7 +1103,6 @@ const event: ComponentSchema = {
     date: {
       type: 'datetime',
       display_name: 'Data',
-      required: true,
     },
     page: {
       type: 'multilink',
