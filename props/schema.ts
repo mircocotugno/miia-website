@@ -63,11 +63,11 @@ type FieldSchema = {
 type FieldBaseSchema = FieldSchema & {
   type: string
   default_value?: string | boolean
+  inline_label?: boolean
 }
 
 type FieldBooleanSchema = FieldBaseSchema & {
   type: 'boolean'
-  inline_label?: boolean
 }
 
 type FieldBloksSchema = FieldBaseSchema & {

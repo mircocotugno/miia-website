@@ -84,7 +84,12 @@ function ListTab(blok: ListProps) {
   return (
     <div {...storyblokEditable(blok)} className='col-span-12 flex gap-2'>
       {blok.items.map((item, index) => (
-        <StoryblokComponent blok={item} key={index} theme='default' size='sm' />
+        <StoryblokComponent
+          blok={item}
+          key={`tab-${index}`}
+          theme='default'
+          size='sm'
+        />
       ))}
     </div>
   )
@@ -98,7 +103,7 @@ function ListAccordion(blok: ListProps) {
     <Accordion className='col-span-12' {...storyblokEditable(blok)}>
       {items.map((item, index) => (
         <AccordionItem
-          key={index}
+          key={`accordion-${index}`}
           aria-label={`accordion-${index}`}
           title={compiler(item.title, {
             wrapper: null,
@@ -155,11 +160,11 @@ function ListTimeline(blok: ListProps) {
             <div
               className={stepClasses({ justify: justify })}
               {...storyblokEditable(item)}
-              key={index}
+              key={`step-${index}`}
             >
               <div className={dotClasses({ justify: justify })} />
               {item.contents.map((content, index) => (
-                <StoryblokComponent blok={content} key={index} />
+                <StoryblokComponent blok={content} key={`content-${index}`} />
               ))}
             </div>
           )
@@ -195,24 +200,21 @@ function ListProcess(blok: ListProps) {
       <h4 className='font-bold text-2xl'>{blok.label}</h4>
       <div className={processClasses()} {...storyblokEditable(blok)}>
         {/* <div className='w-2 h-2 absolute -top-2 left-px sm:left-1/2 -translate-x-1/2 rounded-full bg-neutral-500' /> */}
-        {items.map((item, index) => {
-          const justify = index % 2 ? 'right' : 'left'
-          return (
-            <>
-              {!!index && <i className={arrowClasses()} />}
-              <div
-                className={stepClasses()}
-                {...storyblokEditable(item)}
-                key={index}
-              >
-                <h6 className={indexClasses()}>{index + 1}</h6>
-                {item.contents.map((content, index) => (
-                  <StoryblokComponent blok={content} key={index} />
-                ))}
-              </div>
-            </>
-          )
-        })}
+        {items.map((item, index) => (
+          <>
+            {!!index && <i className={arrowClasses()} />}
+            <div
+              className={stepClasses()}
+              {...storyblokEditable(item)}
+              key={item._uid}
+            >
+              <h6 className={indexClasses()}>{index + 1}</h6>
+              {item.contents.map((content) => (
+                <StoryblokComponent blok={content} key={content._uid} />
+              ))}
+            </div>
+          </>
+        ))}
       </div>
     </>
   )

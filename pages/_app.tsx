@@ -13,7 +13,6 @@ import { Section } from '@components/section'
 import { Nav } from '@components/nav'
 import { Text } from '@components/text'
 import { Action } from '@components/action'
-import { Gallery } from '@components/gallery'
 import { Picture } from '@components/picture'
 import { Field } from '@components/field'
 import { Form } from '@components/form'
@@ -29,6 +28,9 @@ import { Event } from '@components/event'
 import { Course } from '@components/course'
 import { Location } from '@components/location'
 import { Media } from '@components/media'
+import Background from '@components/background'
+import Image from '@components/image'
+import Gallery from '@components/gallery'
 
 const components = {
   page: Page,
@@ -39,10 +41,12 @@ const components = {
   section: Section,
   aside: Aside,
   wrapper: Wrapper,
-  gallery: Gallery,
   carousel: Carousel,
   picture: Picture,
   media: Media,
+  image: Image,
+  background: Background,
+  gallery: Gallery,
   map: Map,
   form: Form,
   field: Field,

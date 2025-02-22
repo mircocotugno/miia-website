@@ -107,17 +107,87 @@ const text: ComponentSchema = {
   },
 }
 
+const image: ComponentSchema = {
+  name: 'image',
+  display_name: 'Immagine',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.image.alt}}`,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+      required: true,
+    },
+    aspect: {
+      type: 'option',
+      display_name: 'Aspetto',
+      options: [
+        { value: '1/1', name: 'Quadrata' },
+        { value: '3/4', name: 'Verticale' },
+        { value: '4/3', name: 'Orizzontale' },
+      ],
+    },
+    fullScreen: {
+      type: 'boolean',
+      display_name: 'Mostra tutto schemo',
+      inline_label: true,
+      default_value: false,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
+    },
+  },
+}
+
+const gallery: ComponentSchema = {
+  name: 'gallery',
+  display_name: 'Galleria',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.images.alt}}`,
+  schema: {
+    images: {
+      type: 'multiasset',
+      display_name: 'Immagini',
+      filetypes: ['images'],
+      required: true,
+    },
+    aspect: {
+      type: 'option',
+      display_name: 'Aspetto',
+      options: [
+        { value: '1/1', name: 'Quadrata' },
+        { value: '3/4', name: 'Verticale' },
+        { value: '4/3', name: 'Orizzontale' },
+      ],
+    },
+    fullScreen: {
+      type: 'boolean',
+      display_name: 'Mostra tutto schemo',
+      inline_label: true,
+      default_value: false,
+    },
+  },
+}
+
 const picture: ComponentSchema = {
   name: 'picture',
-  display_name: 'Immagine',
+  display_name: 'Immagini',
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
   preview_tmpl: `{{it.asset}}`,
   schema: {
     asset: {
-      type: 'asset',
-      display_name: 'Risorsa',
+      type: 'multiasset',
+      display_name: 'Risorse',
       filetypes: ['images'],
       required: true,
     },
@@ -170,6 +240,28 @@ const picture: ComponentSchema = {
   },
 }
 
+const background: ComponentSchema = {
+  name: 'background',
+  display_name: 'Sfondo',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.image.alt}}`,
+  schema: {
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+    },
+    video: {
+      type: 'text',
+      display_name: 'Video',
+      description: 'Id del video su youtube',
+      inline_label: true,
+    },
+  },
+}
+
 const media: ComponentSchema = {
   name: 'media',
   display_name: 'Video',
@@ -181,39 +273,6 @@ const media: ComponentSchema = {
     source: {
       type: 'text',
       display_name: 'Collegamento',
-      required: true,
-    },
-    size: {
-      type: 'option',
-      display_name: 'Dimensione',
-      options: [
-        { value: 'sm', name: 'Piccola' },
-        { value: 'md', name: 'Media' },
-        { value: 'lg', name: 'Grande' },
-        { value: 'xl', name: 'Enorme' },
-      ],
-    },
-    background: {
-      type: 'boolean',
-      display_name: 'Applica come sfondo',
-      inline_label: true,
-      default_value: false,
-    },
-  },
-}
-
-const gallery: ComponentSchema = {
-  name: 'gallery',
-  display_name: 'Galleria',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  preview_tmpl: ``,
-  schema: {
-    assets: {
-      type: 'multiasset',
-      display_name: 'Immagini',
-      filetypes: ['images'],
       required: true,
     },
   },
@@ -244,6 +303,7 @@ const field: ComponentSchema = {
         { value: 'checkbox', name: 'Casella' },
         { value: 'area', name: 'Messaggio' },
         { value: 'select', name: 'Selezione' },
+        { value: 'multiple', name: 'Selezione multipla' },
         // { value: 'file', name: 'File' }, //TODO :find a module for file input
         { value: 'enroll', name: 'Iscrizione' },
         { value: 'hidden', name: 'Nascosto' },
@@ -415,7 +475,6 @@ const aside: ComponentSchema = {
         'text',
         'action',
         'wrapper',
-        'gallery',
         'alias',
       ],
       required: true,
@@ -446,8 +505,8 @@ const section: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'picture',
+        'background',
         'media',
-        'gallery',
         'list',
         'text',
         'action',
@@ -483,21 +542,23 @@ const wrapper: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.display}}`,
+  preview_tmpl: `{{it.size}}`,
   schema: {
     contents: {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
       component_whitelist: [
-        'picture',
+        'image',
         'gallery',
+        'picture',
         'text',
         'action',
         'list',
         'map',
         'course',
         'person',
+        'event',
       ],
       required: true,
     },
@@ -513,14 +574,15 @@ const wrapper: ComponentSchema = {
     },
     size: {
       type: 'option',
-      display_name: 'Dimensione',
+      display_name: 'Largezza',
       options: [
-        { value: 'small', name: 'Piccola' },
-        { value: 'medium', name: 'Media' },
-        { value: 'large', name: 'Grande' },
-        { value: 'extra', name: 'Enorme' },
-        { value: 'full', name: 'Massima' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
       ],
+      default_value: '1/2',
     },
     justify: {
       type: 'option',
@@ -610,16 +672,25 @@ const form: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['scope', 'fields', 'message'],
+      keys: ['scope', 'title', 'label', 'fields', 'message'],
     },
     scope: {
       type: 'option',
       display_name: 'Scopo',
       options: [
-        { value: 'contact', name: 'Richiesta informazioni' },
-        { value: 'openday', name: 'Partecipazione openday' },
-        { value: 'enroll', name: 'Iscrizione corso' },
+        { value: 'course', name: 'Corsi' },
+        { value: 'progetti', name: 'Progetti' },
+        { value: 'partner', name: 'Collaborazione' },
+        { value: 'teaches', name: 'Docenza' },
       ],
+    },
+    title: {
+      type: 'text',
+      display_name: 'Titolo',
+    },
+    label: {
+      type: 'text',
+      display_name: 'Azione',
     },
     fields: {
       type: 'bloks',
@@ -991,6 +1062,13 @@ const event: ComponentSchema = {
       source: 'internal_stories',
       filter_content_type: ['event'],
     },
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
@@ -999,7 +1077,6 @@ const event: ComponentSchema = {
     title: {
       type: 'text',
       display_name: 'Titolo',
-      required: true,
     },
     description: {
       type: 'markdown',
@@ -1026,7 +1103,6 @@ const event: ComponentSchema = {
     date: {
       type: 'datetime',
       display_name: 'Data',
-      required: true,
     },
     page: {
       type: 'multilink',
@@ -1041,8 +1117,10 @@ export type Components =
   | 'action'
   | 'text'
   | 'picture'
-  | 'media'
+  | 'image'
+  | 'background'
   | 'gallery'
+  | 'media'
   | 'field'
   | 'list'
   | 'form'
@@ -1063,9 +1141,11 @@ export type Components =
 export const components = {
   action,
   text,
+  image,
+  background,
+  gallery,
   picture,
   media,
-  gallery,
   field,
   list,
   alias,

@@ -5,8 +5,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Image source
   images: {
-    imageSizes: [64, 128, 256, 384, 512, 1280],
-    deviceSizes: [480, 1024, 1439],
+    formats: ['image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

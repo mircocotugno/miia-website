@@ -42,6 +42,7 @@ export default {
         md: '16rem',
         lg: '32rem',
         xl: '64rem',
+        inherit: 'inherit',
       },
       minHeight: {
         '100': '25rem',
@@ -60,6 +61,13 @@ export default {
       aspectRatio: {
         '4/3': '4 / 3',
         '3/4': '3 / 4',
+      },
+      boxShadow: {
+        aside: [
+          '0 0.125rem 0.5rem rgba(0, 0, 0, 0.2)',
+          '0 0.75rem 1.25rem rgba(0, 0, 0, 0.15)',
+          '0 0 2rem rgba(0, 0, 0, 0.05)',
+        ],
       },
       dropShadow: {
         light: [

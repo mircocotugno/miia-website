@@ -31,7 +31,7 @@ export type LinkProps = {
   anchor?: string
 }
 
-export type ImageProps = {
+export type ImageData = {
   filename: string
   alt: string
   title: string
@@ -61,7 +61,9 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-type FormScopes = 'contact' | 'openday' | 'enroll'
+export type FormScopes = 'course' | 'project' | 'partner' | 'teaches'
+
+export type FormArea = 'interior' | 'fashion'
 
 type DisplayModes = 'dropdown' | 'tab' | 'accordion' | 'timeline' | 'process'
 
@@ -74,9 +76,10 @@ type InputTypes =
   | 'checkbox'
   | 'area'
   | 'select'
+  | 'multiple'
+  | 'hidden'
   // | 'file' //TODO: find a file module
   | 'enroll'
-  | 'hidden'
 
 // Components Props
 
@@ -84,7 +87,6 @@ export type ComponentsProps =
   | ActionProps
   | TextProps
   | PictureProps
-  | GalleryProps
   | FieldProps
   | ListProps
   | AliasProps
@@ -119,9 +121,28 @@ export type TextProps = BlokProps & {
   hide: 'title' | 'description' | 'all'
 }
 
+export type ImageProps = BlokProps & {
+  image: ImageData
+  fullScreen: boolean
+  aspect: '1/1' | '3/4' | '4/3'
+  author: PersonProps
+}
+
+export type BackgroundProps = BlokProps & {
+  component: 'background'
+  image: ImageData
+  video: string
+}
+
+export type GalleryProps = BlokProps & {
+  images: Array<ImageData>
+  fullScreen: boolean
+  aspect: '1/1' | '3/4' | '4/3'
+}
+
 export type PictureProps = BlokProps & {
   component: 'picture'
-  asset: ImageProps
+  asset: Array<ImageData>
   size: 'sm' | 'md' | 'lg' | 'xl'
   ratio: 'square' | 'portrait' | 'landscape' | 'circle'
   effect: 'blurred' | 'zoomed'
@@ -135,11 +156,6 @@ export type MediaProps = BlokProps & {
   source: string
   size: 'sm' | 'md' | 'lg' | 'xl'
   background: boolean
-}
-
-export type GalleryProps = BlokProps & {
-  component: 'gallery'
-  assets: Array<ImageProps>
 }
 
 export type FieldProps = BlokProps & {
@@ -194,17 +210,19 @@ export type WrapperProps = BlokProps & {
   component: 'wrapper'
   contents: (
     | PictureProps
+    | GalleryProps
+    | ImageProps
     | TextProps
     | ActionProps
-    | GalleryProps
     | ListProps
     | MapProps
     | CourseProps
     | PersonProps
+    | EventProps
   )[]
   row: boolean
   boxed: boolean
-  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
+  size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
   justify: Justifications
   order: 'first' | 'second' | 'third' | 'fourth' | 'last'
 }
@@ -222,10 +240,16 @@ export type MapProps = BlokProps & {
 
 export type FormProps = BlokProps & {
   component: 'form'
-  ref: (StoryProps & { content: FormProps }) | undefined
-  scope: FormScopes | undefined
+  ref: StoryProps & { content: FormProps }
+  scope: FormScopes
+  title: string
+  label: string
   fields: Array<FieldProps> | []
   message: string | string
+}
+
+export type FormData = {
+  [key: string]: DataProps
 }
 
 export type DataProps = {
@@ -235,10 +259,30 @@ export type DataProps = {
   error: string | null
 }
 
+export type BrevoProps = {
+  email?: string
+  id?: number
+  emailBlacklisted?: boolean
+  smsBlacklisted?: boolean
+  createdAt?: Date
+  modifiedAt?: Date
+  updateEnabled?: boolean
+  listIds?: Array<number>
+  attributes: BrevoAttributes
+}
+
+export type BrevoAttributes = {
+  COGNOME: string
+  NOME: string
+  SMS: number
+  [key: string]: string | number | Date
+}
+
 export type SectionProps = BlokProps & {
   component: 'section'
   contents: Array<
     | PictureProps
+    | BackgroundProps
     | ListProps
     | TextProps
     | ActionProps
@@ -267,14 +311,14 @@ export type NavProps = BlokProps & {
 export type MetaProps = {
   title: string
   description: string
-  image: ImageProps | undefined
+  image: ImageData | undefined
 }
 
 export type PageProps = BlokProps & {
   component: 'page'
   title: string
   description: string
-  image: ImageProps
+  image: ImageData
   header: StoryProps & {
     content: NavProps
   }
@@ -289,7 +333,7 @@ export type ArticleProps = BlokProps & {
   ref: (StoryProps & { content: ArticleProps }) | undefined
   title: string | ''
   description: string | ''
-  image: ImageProps | undefined
+  image: ImageData | undefined
   author:
     | (StoryProps & {
         content: PersonProps
@@ -323,7 +367,7 @@ export type CourseProps = BlokProps & {
 export type PersonProps = BlokProps & {
   component: 'person'
   ref: (StoryProps & { content: PersonProps }) | undefined
-  image: Array<ImageProps> | []
+  image: Array<ImageData> | []
   title: string | undefined
   role: 'interior' | 'style' | 'design' | 'software' | undefined
   description: string | undefined
@@ -339,4 +383,5 @@ export type EventProps = BlokProps & {
   location: LocationProps | undefined
   date: string | undefined
   page: LinkProps | undefined
+  form: (StoryProps & { content: FormProps }) | undefined
 }
