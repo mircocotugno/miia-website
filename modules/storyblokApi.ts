@@ -1,10 +1,7 @@
 interface StoryblokApi {
   query: string
   variables?: {
-    slug?: string
-    excluding_slugs?: string
-    relations?: string
-    pagination?: number
+    [key: string]: string | number | boolean
   }
 }
 

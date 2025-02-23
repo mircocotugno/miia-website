@@ -61,7 +61,9 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-type FormScopes = 'contact' | 'openday' | 'enroll'
+export type FormScopes = 'course' | 'project' | 'partner' | 'teaches'
+
+export type FormArea = 'interior' | 'fashion'
 
 type DisplayModes = 'dropdown' | 'tab' | 'accordion' | 'timeline' | 'process'
 
@@ -74,9 +76,10 @@ type InputTypes =
   | 'checkbox'
   | 'area'
   | 'select'
+  | 'multiple'
+  | 'hidden'
   // | 'file' //TODO: find a file module
   | 'enroll'
-  | 'hidden'
 
 // Components Props
 
@@ -174,17 +177,8 @@ export type ListProps = BlokProps & {
 
 export type AliasProps = BlokProps & {
   component: 'alias'
-  resource: StoryProps & {
-    content?:
-      | LocationProps
-      | PersonProps
-      | EventProps
-      | CourseProps
-      | ArticleProps
-      | FormProps
-  }
-  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
-  order: number
+  resource: 'next-event' | 'last-article'
+  form: StoryProps & { content: FormProps }
 }
 
 export type AsideProps = BlokProps & {
@@ -215,6 +209,7 @@ export type WrapperProps = BlokProps & {
     | MapProps
     | CourseProps
     | PersonProps
+    | EventProps
   )[]
   row: boolean
   boxed: boolean
@@ -236,10 +231,16 @@ export type MapProps = BlokProps & {
 
 export type FormProps = BlokProps & {
   component: 'form'
-  ref: (StoryProps & { content: FormProps }) | undefined
-  scope: FormScopes | undefined
+  ref: StoryProps & { content: FormProps }
+  scope: FormScopes
+  title: string
+  label: string
   fields: Array<FieldProps> | []
   message: string | string
+}
+
+export type FormData = {
+  [key: string]: DataProps
 }
 
 export type DataProps = {
@@ -247,6 +248,25 @@ export type DataProps = {
   value: any
   required: boolean
   error: string | null
+}
+
+export type BrevoProps = {
+  email?: string
+  id?: number
+  emailBlacklisted?: boolean
+  smsBlacklisted?: boolean
+  createdAt?: Date
+  modifiedAt?: Date
+  updateEnabled?: boolean
+  listIds?: Array<number>
+  attributes: BrevoAttributes
+}
+
+export type BrevoAttributes = {
+  COGNOME: string
+  NOME: string
+  SMS: number
+  [key: string]: string | number | Date
 }
 
 export type SectionProps = BlokProps & {
@@ -301,57 +321,55 @@ export type PageProps = BlokProps & {
 
 export type ArticleProps = BlokProps & {
   component: 'article'
-  ref: (StoryProps & { content: ArticleProps }) | undefined
+  ref: StoryProps & { content: ArticleProps }
   title: string | ''
   description: string | ''
-  image: ImageData | undefined
-  author:
-    | (StoryProps & {
-        content: PersonProps
-      })
-    | undefined
-  body: Array<SectionProps | AsideProps> | undefined
+  image: ImageData
+  author: StoryProps & {
+    content: PersonProps
+  }
+  body: Array<SectionProps | AsideProps>
 }
 
 export type LocationProps = BlokProps & {
   component: 'location'
-  ref: (StoryProps & { content: LocationProps }) | undefined
-  title: string | undefined
-  address: string | undefined
-  gps: string | undefined
-  direction: string | undefined
+  ref: StoryProps & { content: LocationProps }
+  title: string
+  address: string
+  gps: string
+  direction: string
 }
 
 export type CourseProps = BlokProps & {
   component: 'course'
-  ref: (StoryProps & { content: CourseProps }) | undefined
-  title: string | undefined
-  location: LocationProps | undefined
-  days: Array<CourseDays> | undefined
-  hours: Array<CourseHours> | undefined
-  starts: string | undefined
-  ends: string | undefined
-  seats: number | undefined
-  page: LinkProps | undefined
+  ref: StoryProps & { content: CourseProps }
+  title: string
+  location: LocationProps
+  days: Array<CourseDays>
+  hours: Array<CourseHours>
+  starts: string
+  ends: string
+  seats: number
+  page: LinkProps
 }
 
 export type PersonProps = BlokProps & {
   component: 'person'
-  ref: (StoryProps & { content: PersonProps }) | undefined
+  ref: StoryProps & { content: PersonProps }
   image: Array<ImageData> | []
-  title: string | undefined
-  role: 'interior' | 'style' | 'design' | 'software' | undefined
-  description: string | undefined
-  message: string | undefined
+  title: string
+  role: 'interior' | 'style' | 'design' | 'software'
+  description: string
+  message: string
   links: Array<ActionProps> | []
 }
 
 export type EventProps = BlokProps & {
   component: 'event'
-  ref: (StoryProps & { content: EventProps }) | undefined
-  title: string | undefined
-  description: string | undefined
-  location: LocationProps | undefined
-  date: string | undefined
-  page: LinkProps | undefined
+  ref: StoryProps & { content: EventProps }
+  title: string
+  description: string
+  location: LocationProps
+  date: string
+  page: LinkProps
 }

@@ -23,9 +23,11 @@ const relations = [
   'person.ref',
   'course.ref',
   'event.ref',
+  'event.form',
   'location.ref',
   'map.locations',
   'picture.author',
+  'alias.form',
 ]
 
 export default function Home({ story }: Home) {
