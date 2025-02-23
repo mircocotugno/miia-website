@@ -22,17 +22,6 @@ export function Event({ blok, parent }: EventComponent) {
 
   const date = new Date(event.date)
 
-  const fieldOpenday = {
-    id: 'openday',
-    value: date.toLocaleDateString('it-IT', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }),
-    required: true,
-    error: null,
-  }
-
   if (parent === 'section') {
     return (
       <div
@@ -66,14 +55,6 @@ export function Event({ blok, parent }: EventComponent) {
               forceWrapper: true,
               overrides: Typography,
             })}
-        </div>
-        <div className='flex-0'>
-          {blok.form && (
-            <StoryblokComponent
-              blok={blok.form.content}
-              openday={fieldOpenday}
-            />
-          )}
         </div>
       </div>
     )
