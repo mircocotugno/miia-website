@@ -177,17 +177,8 @@ export type ListProps = BlokProps & {
 
 export type AliasProps = BlokProps & {
   component: 'alias'
-  resource: StoryProps & {
-    content?:
-      | LocationProps
-      | PersonProps
-      | EventProps
-      | CourseProps
-      | ArticleProps
-      | FormProps
-  }
-  size: 'small' | 'medium' | 'large' | 'extra' | 'full'
-  order: number
+  resource: 'next-event' | 'last-article'
+  form: StoryProps & { content: FormProps }
 }
 
 export type AsideProps = BlokProps & {
@@ -330,58 +321,56 @@ export type PageProps = BlokProps & {
 
 export type ArticleProps = BlokProps & {
   component: 'article'
-  ref: (StoryProps & { content: ArticleProps }) | undefined
+  ref: StoryProps & { content: ArticleProps }
   title: string | ''
   description: string | ''
-  image: ImageData | undefined
-  author:
-    | (StoryProps & {
-        content: PersonProps
-      })
-    | undefined
-  body: Array<SectionProps | AsideProps> | undefined
+  image: ImageData
+  author: StoryProps & {
+    content: PersonProps
+  }
+
+  body: Array<SectionProps | AsideProps>
 }
 
 export type LocationProps = BlokProps & {
   component: 'location'
-  ref: (StoryProps & { content: LocationProps }) | undefined
-  title: string | undefined
-  address: string | undefined
-  gps: string | undefined
-  direction: string | undefined
+  ref: StoryProps & { content: LocationProps }
+  title: string
+  address: string
+  gps: string
+  direction: string
 }
 
 export type CourseProps = BlokProps & {
   component: 'course'
-  ref: (StoryProps & { content: CourseProps }) | undefined
-  title: string | undefined
-  location: LocationProps | undefined
-  days: Array<CourseDays> | undefined
-  hours: Array<CourseHours> | undefined
-  starts: string | undefined
-  ends: string | undefined
-  seats: number | undefined
-  page: LinkProps | undefined
+  ref: StoryProps & { content: CourseProps }
+  title: string
+  location: LocationProps
+  days: Array<CourseDays>
+  hours: Array<CourseHours>
+  starts: string
+  ends: string
+  seats: number
+  page: LinkProps
 }
 
 export type PersonProps = BlokProps & {
   component: 'person'
-  ref: (StoryProps & { content: PersonProps }) | undefined
+  ref: StoryProps & { content: PersonProps }
   image: Array<ImageData> | []
-  title: string | undefined
-  role: 'interior' | 'style' | 'design' | 'software' | undefined
-  description: string | undefined
-  message: string | undefined
+  title: string
+  role: 'interior' | 'style' | 'design' | 'software'
+  description: string
+  message: string
   links: Array<ActionProps> | []
 }
 
 export type EventProps = BlokProps & {
   component: 'event'
-  ref: (StoryProps & { content: EventProps }) | undefined
-  title: string | undefined
-  description: string | undefined
-  location: LocationProps | undefined
-  date: string | undefined
-  page: LinkProps | undefined
-  form: (StoryProps & { content: FormProps }) | undefined
+  ref: StoryProps & { content: EventProps }
+  title: string
+  description: string
+  location: LocationProps
+  date: string
+  page: LinkProps
 }
