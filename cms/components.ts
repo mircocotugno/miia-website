@@ -303,6 +303,7 @@ const field: ComponentSchema = {
         { value: 'checkbox', name: 'Casella' },
         { value: 'area', name: 'Messaggio' },
         { value: 'select', name: 'Selezione' },
+        { value: 'multiple', name: 'Selezione multipla' },
         // { value: 'file', name: 'File' }, //TODO :find a module for file input
         { value: 'enroll', name: 'Iscrizione' },
         { value: 'hidden', name: 'Nascosto' },
@@ -548,6 +549,7 @@ const wrapper: ComponentSchema = {
         'map',
         'course',
         'person',
+        'event',
       ],
       required: true,
     },
@@ -661,16 +663,25 @@ const form: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['scope', 'fields', 'message'],
+      keys: ['scope', 'title', 'label', 'fields', 'message'],
     },
     scope: {
       type: 'option',
       display_name: 'Scopo',
       options: [
-        { value: 'contact', name: 'Richiesta informazioni' },
-        { value: 'openday', name: 'Partecipazione openday' },
-        { value: 'enroll', name: 'Iscrizione corso' },
+        { value: 'course', name: 'Corsi' },
+        { value: 'progetti', name: 'Progetti' },
+        { value: 'partner', name: 'Collaborazione' },
+        { value: 'teaches', name: 'Docenza' },
       ],
+    },
+    title: {
+      type: 'text',
+      display_name: 'Titolo',
+    },
+    label: {
+      type: 'text',
+      display_name: 'Azione',
     },
     fields: {
       type: 'bloks',
@@ -1042,6 +1053,13 @@ const event: ComponentSchema = {
       source: 'internal_stories',
       filter_content_type: ['event'],
     },
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
@@ -1050,7 +1068,6 @@ const event: ComponentSchema = {
     title: {
       type: 'text',
       display_name: 'Titolo',
-      required: true,
     },
     description: {
       type: 'markdown',
@@ -1077,7 +1094,6 @@ const event: ComponentSchema = {
     date: {
       type: 'datetime',
       display_name: 'Data',
-      required: true,
     },
     page: {
       type: 'multilink',

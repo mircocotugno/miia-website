@@ -58,7 +58,11 @@ export function Wrapper({ blok }: WrapperComponent) {
       })}
     >
       {blok.contents.map((content, index) => (
-        <StoryblokComponent key={index} blok={content} />
+        <StoryblokComponent
+          key={index}
+          blok={content}
+          parent={blok.component}
+        />
       ))}
     </div>
   )

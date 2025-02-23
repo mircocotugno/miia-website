@@ -21,6 +21,7 @@ const relations = [
   'person.ref',
   'course.ref',
   'event.ref',
+  'event.form',
   'location.ref',
   'alias.form',
   'map.locations',
