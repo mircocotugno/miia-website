@@ -383,30 +383,20 @@ const alias: ComponentSchema = {
   schema: {
     resource: {
       type: 'option',
-      display_name: 'Risorsa',
-      source: 'internal_stories',
-      filter_content_type: [
-        'location',
-        'person',
-        'event',
-        'course',
-        'article',
-        'form',
-      ],
-    },
-    size: {
-      type: 'option',
-      display_name: 'Dimensione',
+      display_name: 'Tipo',
       options: [
-        { value: 'small', name: 'Piccola' },
-        { value: 'medium', name: 'Media' },
-        { value: 'large', name: 'Grande' },
-        { value: 'extra', name: 'Enorme' },
+        { value: 'next-event', name: 'Prossimo evento' },
+        { value: 'last-article', name: 'Ultimo articolo' },
       ],
+      required: true,
     },
-    order: {
-      type: 'number',
-      display_name: 'Ordinamento mobile',
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+      required: true,
     },
   },
 }
@@ -504,6 +494,7 @@ const section: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'picture',
+        'alias',
         'background',
         'media',
         'list',
