@@ -89,6 +89,8 @@ export type ComponentsProps =
   | PictureProps
   | FieldProps
   | ListProps
+  | ProcessProps
+  | MenuProps
   | AliasProps
   | WrapperProps
   | CarouselProps
@@ -151,11 +153,10 @@ export type PictureProps = BlokProps & {
   author: StoryProps & { content: PersonProps }
 }
 
-export type MediaProps = BlokProps & {
+export type VideoProps = BlokProps & {
   component: 'media'
   source: string
   size: 'sm' | 'md' | 'lg' | 'xl'
-  background: boolean
 }
 
 export type FieldProps = BlokProps & {
@@ -168,11 +169,23 @@ export type FieldProps = BlokProps & {
   options: string | Array<OptionProps>
 }
 
+export type MenuProps = BlokProps & {
+  component: 'menu'
+  title: string
+  links: Array<ActionProps>
+  inline: boolean
+}
+
+export type ProcessProps = BlokProps & {
+  component: 'process'
+  title: string
+  steps: Array<WrapperProps>
+}
+
 export type ListProps = BlokProps & {
   component: 'list'
-  label: string
-  items: Array<TextProps | ActionProps | WrapperProps>
-  display: DisplayModes
+  items: Array<TextProps>
+  size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
 }
 
 export type AliasProps = BlokProps & {
@@ -200,12 +213,13 @@ export type AsideProps = BlokProps & {
 export type WrapperProps = BlokProps & {
   component: 'wrapper'
   contents: (
-    | PictureProps
-    | GalleryProps
     | ImageProps
+    | VideoProps
     | TextProps
     | ActionProps
+    | GalleryProps
     | ListProps
+    | MenuProps
     | MapProps
     | CourseProps
     | PersonProps
@@ -220,6 +234,7 @@ export type WrapperProps = BlokProps & {
 
 export type CarouselProps = BlokProps & {
   component: 'carousel'
+  id: string
   slides: Array<SectionProps | WrapperProps | PersonProps>
   weight: 'low' | 'high'
 }
@@ -272,12 +287,12 @@ export type BrevoAttributes = {
 export type SectionProps = BlokProps & {
   component: 'section'
   contents: Array<
-    | PictureProps
+    | WrapperProps
     | BackgroundProps
+    | ProcessProps
     | ListProps
     | TextProps
     | ActionProps
-    | WrapperProps
     | CarouselProps
     | MapProps
     | LocationProps
@@ -286,7 +301,6 @@ export type SectionProps = BlokProps & {
     | CourseProps
     | ArticleProps
     | FormProps
-    | MediaProps
   >
   id: string
   dark: boolean
@@ -295,7 +309,7 @@ export type SectionProps = BlokProps & {
 
 export type NavProps = BlokProps & {
   component: 'nav'
-  contents: Array<ActionProps | ListProps>
+  contents: Array<ActionProps | MenuProps | ListProps>
   message: string
 }
 

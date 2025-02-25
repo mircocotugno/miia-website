@@ -12,6 +12,7 @@ import {
   DrawerBody,
   DrawerFooter,
   useDisclosure,
+  Checkbox,
   Button,
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
@@ -27,7 +28,7 @@ interface FormComponent {
   openday?: DataProps
 }
 
-export function Form({ blok, courses, openday }: FormComponent) {
+export default function Form({ blok, courses, openday }: FormComponent) {
   const form = blok.ref?.content || blok
   if (!form.fields.length || !form.message) return null
 
@@ -89,12 +90,20 @@ export function Form({ blok, courses, openday }: FormComponent) {
     <>
       <Button
         color='primary'
-        className='font-bold text-md col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-2'
+        className='font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3'
+        size='lg'
         onPress={onOpen}
       >
         {form.label || 'Compila il modulo'}
       </Button>
-      <Drawer size='lg' isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Drawer
+        size='lg'
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        classNames={{
+          closeButton: 'text-xl hover:bg-transparent active:bg-transparent',
+        }}
+      >
         <DrawerContent>
           <DrawerHeader className='flex flex-col gap-1'>
             {form.title || 'Compila il modulo'}
@@ -128,6 +137,7 @@ export function Form({ blok, courses, openday }: FormComponent) {
             )}
             <Button
               color={!submitted ? 'default' : 'primary'}
+              className={!submitted ? 'bg-neutral-400' : ''}
               onPress={() => handleReset()}
             >
               {!submitted ? 'Cancella' : 'Continua la navigazione'}

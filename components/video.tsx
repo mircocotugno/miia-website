@@ -1,9 +1,9 @@
-import type { MediaProps } from '@props/types'
+import type { VideoProps } from '@props/types'
 import { YouTubeEmbed } from '@next/third-parties/google'
 import { storyblokEditable } from '@storyblok/react'
 
-interface MediaComponent {
-  blok: MediaProps
+interface VideoComponent {
+  blok: VideoProps
 }
 
 const sizes = {
@@ -13,7 +13,7 @@ const sizes = {
   xl: 1024,
 }
 
-export function Media({ blok }: MediaComponent) {
+export default function Video({ blok }: VideoComponent) {
   if (!blok.source) return null
 
   const size = blok.size ? sizes[blok.size] : 512

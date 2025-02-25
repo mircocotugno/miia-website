@@ -48,7 +48,7 @@ export default function Gallery({ blok }: GalleryComponent) {
 
   const previews = images.map(({ filename, alt }, index) => (
     <div
-      className='flex-0 max-w-32 sm:max-w-36 md:max-w-42 cursor-pointer'
+      className='flex-none max-w-32 sm:max-w-36 md:max-w-42 cursor-pointer'
       onClick={() => handleOpen(index)}
       key={index}
     >

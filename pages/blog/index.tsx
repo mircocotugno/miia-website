@@ -7,8 +7,8 @@ import {
 } from '@storyblok/react'
 
 import { storyblokApi } from '@modules/storyblokApi'
-import { Meta } from '../../components/meta'
-import { Nav } from '@components/nav'
+import Meta from '../../components/meta'
+import Nav from '@components/nav'
 import Link from 'next/link'
 import { Image, Chip, Button } from '@heroui/react'
 

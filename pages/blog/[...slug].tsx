@@ -11,8 +11,8 @@ import type {
   NavProps,
 } from '@props/types'
 import { tv } from 'tailwind-variants'
-import { Meta } from '@components/meta'
-import { Nav } from '@components/nav'
+import Meta from '@components/meta'
+import  Nav  from '@components/nav'
 import { Image as HeroImage } from '@heroui/react'
 import Image from 'next/image'
 

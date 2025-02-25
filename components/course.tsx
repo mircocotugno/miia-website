@@ -9,7 +9,7 @@ interface CourseComponent {
   parent?: string
 }
 
-export function Course({ blok, parent }: CourseComponent) {
+export default function Course({ blok, parent }: CourseComponent) {
   const course = blok.ref?.content || blok
   if (!course.title || !course.days || !course.hours) return null
 

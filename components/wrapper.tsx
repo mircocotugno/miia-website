@@ -1,7 +1,5 @@
-import type { PictureProps, WrapperProps } from '@props/types'
-import { Card, CardBody, CardHeader } from '@heroui/react'
+import type { WrapperProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import Image from 'next/image'
 import { tv } from 'tailwind-variants'
 
 interface WrapperComponent {
@@ -19,9 +17,9 @@ const classes = tv({
       '3/4': 'sm:col-span-9',
     },
     justify: {
-      'items-right': 'items-start',
+      'items-right': 'items-end',
       'items-center': 'items-center',
-      'items-left': 'items-end',
+      'items-left': 'items-start',
       'justify-right': 'justify-start',
       'justify-center': 'justify-center',
       'justify-left': 'justify-end',
@@ -46,7 +44,7 @@ const classes = tv({
   },
 })
 
-export function Wrapper({ blok }: WrapperComponent) {
+export default function Wrapper({ blok }: WrapperComponent) {
   return (
     <div
       {...storyblokEditable(blok)}

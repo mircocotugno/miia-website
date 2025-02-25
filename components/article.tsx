@@ -9,7 +9,7 @@ interface ArticleComponent {
   story: StoryProps
 }
 
-export function Article({ blok, story }: ArticleComponent) {
+export default function Article({ blok, story }: ArticleComponent) {
   const article = blok.ref?.content || blok
   if (!article.title || !article.description || !article.image) return null
 

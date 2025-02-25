@@ -8,42 +8,46 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 import { fontSans, fontSerif } from '@config/fonts'
 
-import { Page } from '@components/page'
-import { Section } from '@components/section'
-import { Nav } from '@components/nav'
-import { Text } from '@components/text'
-import { Action } from '@components/action'
-import { Picture } from '@components/picture'
-import { Field } from '@components/field'
-import { Form } from '@components/form'
-import { Map } from '@components/map'
-import { Article } from '@components/article'
-import { List } from '@components/list'
-import { Carousel } from '@components/carousel'
-import { Aside } from '@components/aside'
-import { Wrapper } from '@components/wrapper'
-import { Person } from '@components/person'
-import { Event } from '@components/event'
-import { Course } from '@components/course'
-import { Location } from '@components/location'
-import { Media } from '@components/media'
+import Page from '@components/page'
+import Section from '@components/section'
+import Nav from '@components/nav'
+import Text from '@components/text'
+import Action from '@components/action'
+import Picture from '@components/picture'
+import Field from '@components/field'
+import Form from '@components/form'
+import Map from '@components/map'
+import Article from '@components/article'
+import List from '@components/list'
+import Carousel from '@components/carousel'
+import Aside from '@components/aside'
+import Person from '@components/person'
+import Event from '@components/event'
+import Course from '@components/course'
+import Location from '@components/location'
+import Video from '@components/video'
+import Wrapper from '@components/wrapper'
 import Alias from '@components/alias'
 import Background from '@components/background'
 import Image from '@components/image'
 import Gallery from '@components/gallery'
+import Menu from '@components/menu'
+import Process from '@components/process'
 
 const components = {
   page: Page,
   article: Article,
   nav: Nav,
   list: List,
+  menu: Menu,
+  process: Process,
   alias: Alias,
   section: Section,
   aside: Aside,
   wrapper: Wrapper,
   carousel: Carousel,
   picture: Picture,
-  media: Media,
+  video: Video,
   image: Image,
   background: Background,
   gallery: Gallery,

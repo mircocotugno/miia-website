@@ -14,7 +14,7 @@ interface FieldComponent {
   onChange: (e: any) => object
 }
 
-export function Field(props: FieldComponent) {
+export default function Field(props: FieldComponent) {
   if (!props.blok.input) return null
   const Fields = fields[props.blok.input]
 
@@ -60,6 +60,7 @@ const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
     isRequired={blok.required}
     color={!!data.error ? 'danger' : undefined}
     onValueChange={(value) => onChange({ ...data, value })}
+    className={blok.id === 'validation' ? 'hidden' : ''}
   >
     <p
       className={`text-sm ${!!data.error ? 'text-danger' : ''} ${
@@ -119,7 +120,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => (
     }
   >
     {getOptions(blok.options).map((option) => (
-      <SelectItem key={option.value} value={option.value}>
+      <SelectItem className='data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium' key={option.value} value={option.value}>
         {option.name}
       </SelectItem>
     ))}

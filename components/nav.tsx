@@ -27,7 +27,7 @@ const templates = {
   footer: Footer,
 }
 
-export function Nav({ blok, parent }: NavComponent) {
+export default function Nav({ blok, parent }: NavComponent) {
   const Template = templates[parent]
   return <Template blok={blok} />
 }
@@ -70,9 +70,9 @@ function Header({ blok }: { blok: NavProps }) {
         />
       </NavbarContent>
 
-      <NavbarMenu className='py-6 px-10 gap-6 items-end'>
+      <NavbarMenu className='p-8 pt-12 gap-10 items-end dark'>
         {blok.contents.map((item, index) => (
-          <NavbarMenuItem key={index}>
+          <NavbarMenuItem key={index} className=''>
             <StoryblokComponent blok={item} key={index} />
           </NavbarMenuItem>
         ))}
