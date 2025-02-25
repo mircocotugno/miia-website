@@ -12,7 +12,6 @@ import {
   DrawerBody,
   DrawerFooter,
   useDisclosure,
-  Checkbox,
   Button,
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
@@ -81,6 +80,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
   const handleReset = () => {
     setData(getData(form.fields, initData))
+    setMessage(form.message)
     setSubmitted(false)
 
     onOpenChange()
@@ -137,7 +137,6 @@ export default function Form({ blok, courses, openday }: FormComponent) {
             )}
             <Button
               color={!submitted ? 'default' : 'primary'}
-              className={!submitted ? 'bg-neutral-400' : ''}
               onPress={() => handleReset()}
             >
               {!submitted ? 'Cancella' : 'Continua la navigazione'}
@@ -157,7 +156,7 @@ function getData(body: Array<FieldProps>, data: FormData) {
         value:
           field.input === 'hidden'
             ? field.placeholder
-            : field.input === 'multiple'
+            : ['select', 'multiple'].includes(field.input)
               ? []
               : null,
         required: field.required,

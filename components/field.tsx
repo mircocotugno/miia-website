@@ -89,43 +89,48 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
   />
 )
 
-type value = Array<string> | string | null
-type key = string | undefined
+const SelectField = ({ blok, data, onChange }: FieldComponent) => {
+  type value = Array<string>
+  type key = string | undefined
 
-const getValue = (value: value, key: key) => {
-  if (!key) return value
-  if (Array.isArray(value)) {
+  const getValue = (value: value, key: key) => {
+    if (!key) return value
     const index = value.indexOf(key)
-    index === -1 ? value.push(key) : value.splice(index, 1)
-    return value
-  } else {
-    return value !== key ? key : null
-  }
-}
-
-const SelectField = ({ blok, data, onChange }: FieldComponent) => (
-  <Select
-    id={blok.id}
-    label={blok.label}
-    placeholder={blok.placeholder}
-    isRequired={blok.required}
-    errorMessage={data.error}
-    isInvalid={!!data.error}
-    selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
-    onSelectionChange={({ currentKey }) =>
-      onChange({
-        ...data,
-        value: getValue(data.value, currentKey),
-      })
+    if (blok.input === 'multiple') {
+      index === -1 ? value.push(key) : value.splice(index, 1)
+    } else {
+      value = [key]
     }
-  >
-    {getOptions(blok.options).map((option) => (
-      <SelectItem className='data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium' key={option.value} value={option.value}>
-        {option.name}
-      </SelectItem>
-    ))}
-  </Select>
-)
+    return value
+  }
+  return (
+    <Select
+      id={blok.id}
+      label={blok.label}
+      placeholder={blok.placeholder}
+      isRequired={blok.required}
+      errorMessage={data.error}
+      isInvalid={!!data.error}
+      selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
+      onSelectionChange={({ currentKey }) =>
+        onChange({
+          ...data,
+          value: getValue(data.value, currentKey),
+        })
+      }
+    >
+      {getOptions(blok.options).map((option) => (
+        <SelectItem
+          className='data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium'
+          key={option.value}
+          value={option.value}
+        >
+          {option.name}
+        </SelectItem>
+      ))}
+    </Select>
+  )
+}
 
 const fields = {
   text: TextField,
