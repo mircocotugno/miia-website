@@ -8,9 +8,9 @@ interface TextComponent {
   blok: TextProps
 }
 
-const settings = { wrapper: null, overrides: Typography }
+const settings = { wrapper: null,forceWrapper: true , overrides: Typography }
 
-export function Text({ blok }: TextComponent) {
+export default function Text({ blok }: TextComponent) {
   const titleClases = tv({
     base: 'space-y-6',
     variants: {
@@ -26,7 +26,11 @@ export function Text({ blok }: TextComponent) {
         hide: blok.hide === 'all' || blok.hide.includes('title'),
       })}
     >
-      {compiler(blok.title, settings)}
+      {compiler(blok.title, {
+        wrapper: null,
+        forceWrapper: true,
+        overrides: Typography,
+      })}
     </div>
   )
 
@@ -49,7 +53,7 @@ export function Text({ blok }: TextComponent) {
   )
 
   const textClasses = tv({
-    base: 'flex flex-0 sm:flex-1 flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-32 text-left',
+    base: 'flex-1 flex flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-32 text-left',
     variants: {
       justify: {
         right: 'sm:text-right',

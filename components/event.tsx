@@ -12,7 +12,7 @@ interface EventComponent {
   parent?: string
 }
 
-export function Event({ blok, parent }: EventComponent) {
+export default function Event({ blok, parent }: EventComponent) {
   const event = blok.ref?.content || blok
   if (!event.title || !event.date) return null
 
@@ -21,6 +21,22 @@ export function Event({ blok, parent }: EventComponent) {
     link ? <Link href={link}>{children}</Link> : children
 
   const date = new Date(event.date)
+
+  const fieldOpenday = {
+    id: 'openday',
+    value: date.toLocaleDateString('it-IT', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }),
+    required: true,
+    error: null,
+  }
+
+  const prevDate = new Date()
+  const nextDate = new Date('February 21, 2025 22:20:00')
+
+  const dateStamp = prevDate > nextDate ? 'data precedente' : 'data successiva'
 
   if (parent === 'section') {
     return (
@@ -46,6 +62,7 @@ export function Event({ blok, parent }: EventComponent) {
           </span>
         </div>
         <div className='flex-1 space-y-3'>
+          <span className='text-5xl'>{dateStamp}</span>
           <h3 className='font-serif leading-tight font-bold break-words text-3xl md:text-4xl xl:text-5xl'>
             {event.title}
           </h3>

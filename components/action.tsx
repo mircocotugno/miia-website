@@ -13,7 +13,7 @@ interface ActionComponent {
   size?: 'sm' | 'md' | 'lg'
 }
 
-export function Action({ blok, parent, theme, size }: ActionComponent) {
+export default function Action({ blok, parent, theme, size }: ActionComponent) {
   const router = useRouter()
   let link = blok.link.url || `/${blok.link.cached_url}`
   if (blok.link?.anchor) {
@@ -37,7 +37,7 @@ export function Action({ blok, parent, theme, size }: ActionComponent) {
           as={Link}
           target={blok.link.target}
           color={theme || blok.color || 'default'}
-          size={size || 'lg'}
+          size={size}
           href={link}
           className='col-auto font-bold self-start min-w-fit cursor-pointer'
           {...storyblokEditable(blok)}

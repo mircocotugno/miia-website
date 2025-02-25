@@ -8,7 +8,7 @@ interface SectionComponent {
   parent?: 'page' | 'carousel'
 }
 
-export function Section({ blok, parent }: SectionComponent) {
+export default function Section({ blok, parent }: SectionComponent) {
   const Tag = parent !== 'carousel' ? 'section' : 'div'
 
   const background = blok.contents.find(
@@ -74,7 +74,7 @@ export function Section({ blok, parent }: SectionComponent) {
 
   return (
     <Tag
-      id={blok.id}
+      id={blok.id && blok.id.replaceAll(' ', '-')}
       className={tagClasses({
         themeDark: blok.dark,
         hasBackground: !!background,

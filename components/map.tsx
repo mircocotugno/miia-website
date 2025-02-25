@@ -6,7 +6,7 @@ interface MapComponent {
   contain?: boolean
 }
 
-export function Map({ blok, contain }: MapComponent) {
+export default function Map({ blok, contain }: MapComponent) {
   const locations: Array<LocationProps & { pos: Array<number> }> = []
   blok.locations.forEach(({ content }) => {
     const pos = content?.gps && content.gps.split('/').map((s) => Number(s))

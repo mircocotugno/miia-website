@@ -11,7 +11,7 @@ const meta = {
   },
 }
 
-export function Meta(blok: MetaProps) {
+export default function Meta(blok: MetaProps) {
   const router = useRouter()
 
   return (

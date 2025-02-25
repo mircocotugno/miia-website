@@ -14,7 +14,7 @@ interface AsideComponent {
   locations: Array<LocationProps>
 }
 
-export function Aside({ blok, locations }: AsideComponent) {
+export default function Aside({ blok, locations }: AsideComponent) {
   // const ref = useRef(null)
   // const isVisible = useIsVisible(ref)
 

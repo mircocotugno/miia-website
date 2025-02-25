@@ -9,7 +9,7 @@ interface CarouselComponent {
   parent?: 'page' | 'enroll' | 'section'
 }
 
-export function Carousel({ blok, parent }: CarouselComponent) {
+export default function Carousel({ blok, parent }: CarouselComponent) {
   if (!blok.slides.length) return null
 
   const isCarousel = blok.slides[0].component !== 'section'
@@ -41,6 +41,7 @@ export function Carousel({ blok, parent }: CarouselComponent) {
 
   return (
     <Tag
+      id={blok.id && blok.id.replaceAll(' ', '-')}
       className={classes({
         carousel: isCarousel,
         contain: parent == 'section',

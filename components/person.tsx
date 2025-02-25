@@ -21,7 +21,7 @@ const roles = {
   software: { icon: 'cube-dots', text: 'modellazione' },
 }
 
-export function Person({ blok }: PersonComponent) {
+export default function Person({ blok }: PersonComponent) {
   const person = blok.ref?.content || blok
   if (!person.title || !person.image || !person.role) return null
 

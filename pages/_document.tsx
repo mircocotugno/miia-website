@@ -3,7 +3,7 @@ import { fontSans, fontSerif } from '@config/fonts'
 
 export default function Document() {
   return (
-    <Html lang='en'>
+    <Html lang='en' className='scroll-pt-14 scroll-smooth'>
       <Head>
         <link
           rel='stylesheet'

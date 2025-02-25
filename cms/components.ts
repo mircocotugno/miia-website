@@ -177,69 +177,6 @@ const gallery: ComponentSchema = {
   },
 }
 
-const picture: ComponentSchema = {
-  name: 'picture',
-  display_name: 'Immagini',
-  is_root: false,
-  is_nestable: true,
-  component_group_uuid: 'elements',
-  preview_tmpl: `{{it.asset}}`,
-  schema: {
-    asset: {
-      type: 'multiasset',
-      display_name: 'Risorse',
-      filetypes: ['images'],
-      required: true,
-    },
-    size: {
-      type: 'option',
-      display_name: 'Dimensione',
-      options: [
-        { value: 'sm', name: 'Piccola' },
-        { value: 'md', name: 'Media' },
-        { value: 'lg', name: 'Grande' },
-        { value: 'xl', name: 'Enorme' },
-      ],
-    },
-    ratio: {
-      type: 'option',
-      display_name: 'Forma',
-      options: [
-        { value: 'square', name: 'Quadrata' },
-        { value: 'portrait', name: 'Verticale' },
-        { value: 'landscape', name: 'Orizzontale' },
-        { value: 'circle', name: 'Tonda' },
-      ],
-    },
-    effect: {
-      type: 'option',
-      display_name: 'Effetto',
-      options: [
-        { value: 'blurred', name: 'Sfocato' },
-        { value: 'zoomed', name: 'Zoom' },
-      ],
-    },
-    preview: {
-      type: 'boolean',
-      display_name: 'Mostra in galleria',
-      inline_label: true,
-      default_value: false,
-    },
-    background: {
-      type: 'boolean',
-      display_name: 'Applica come sfondo',
-      inline_label: true,
-      default_value: false,
-    },
-    author: {
-      type: 'option',
-      display_name: 'Autore',
-      source: 'internal_stories',
-      filter_content_type: ['person'],
-    },
-  },
-}
-
 const background: ComponentSchema = {
   name: 'background',
   display_name: 'Sfondo',
@@ -262,18 +199,28 @@ const background: ComponentSchema = {
   },
 }
 
-const media: ComponentSchema = {
-  name: 'media',
+const video: ComponentSchema = {
+  name: 'video',
   display_name: 'Video',
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.asset}}`,
+  preview_tmpl: '',
   schema: {
     source: {
       type: 'text',
       display_name: 'Collegamento',
       required: true,
+    },
+    size: {
+      type: 'option',
+      display_name: 'Grandezza',
+      options: [
+        { value: 'sm', name: 'Piccolo' },
+        { value: 'md', name: 'Medio' },
+        { value: 'lg', name: 'Grande' },
+        { value: 'xl', name: 'Enorme' },
+      ],
     },
   },
 }
@@ -340,36 +287,78 @@ const field: ComponentSchema = {
   },
 }
 
-const list: ComponentSchema = {
-  name: 'list',
-  display_name: 'Lista',
+const menu: ComponentSchema = {
+  name: 'menu',
+  display_name: 'Menu',
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.display}}`,
+  preview_tmpl: `{{it.title}}`,
   schema: {
-    label: {
+    title: {
       type: 'text',
-      display_name: 'Etichetta',
+      display_name: 'Titolo',
+    },
+    links: {
+      type: 'bloks',
+      display_name: 'Collegamenti',
+      restrict_components: true,
+      component_whitelist: ['action'],
       required: true,
     },
+    inline: {
+      type: 'boolean',
+      display_name: 'Disponi in linea',
+      default_value: false,
+      inline_label: true,
+    },
+  },
+}
+
+const process: ComponentSchema = {
+  name: 'process',
+  display_name: 'Procedura',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{it.title}}`,
+  schema: {
+    links: {
+      type: 'bloks',
+      display_name: 'Passaggi',
+      restrict_components: true,
+      component_whitelist: ['wrapper'],
+      required: true,
+    },
+  },
+}
+
+const list: ComponentSchema = {
+  name: 'list',
+  display_name: 'Fisarmonica',
+  is_root: false,
+  is_nestable: true,
+  component_group_uuid: 'elements',
+  preview_tmpl: `{{@each(it.title)}}`,
+  schema: {
     items: {
       type: 'bloks',
       display_name: 'Testi',
       restrict_components: true,
-      component_whitelist: ['text', 'action', 'wrapper'],
+      component_whitelist: ['text'],
       required: true,
     },
-    display: {
+    size: {
       type: 'option',
-      display_name: 'Mostra come',
+      display_name: 'Largezza',
       options: [
-        { value: 'dropdown', name: 'Menu' },
-        { value: 'tab', name: 'Scheda' },
-        { value: 'accordion', name: 'Fisarmonica' },
-        // { value: 'timeline', name: 'Linea temporale' },
-        { value: 'process', name: 'Procedura' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
       ],
+      default_value: '1/2',
     },
   },
 }
@@ -459,14 +448,7 @@ const aside: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti',
       restrict_components: true,
-      component_whitelist: [
-        'picture',
-        'list',
-        'text',
-        'action',
-        'wrapper',
-        'alias',
-      ],
+      component_whitelist: ['process', 'text', 'action', 'wrapper', 'alias'],
       required: true,
     },
     theme: {
@@ -494,11 +476,10 @@ const section: ComponentSchema = {
       display_name: 'Contenuti',
       restrict_components: true,
       component_whitelist: [
-        'picture',
         'alias',
         'background',
-        'media',
         'list',
+        'process',
         'text',
         'action',
         'wrapper',
@@ -541,15 +522,17 @@ const wrapper: ComponentSchema = {
       restrict_components: true,
       component_whitelist: [
         'image',
+        'video',
         'gallery',
-        'picture',
         'text',
         'action',
         'list',
+        'menu',
         'map',
         'course',
         'person',
         'event',
+        'form',
       ],
       required: true,
     },
@@ -610,11 +593,15 @@ const carousel: ComponentSchema = {
   component_group_uuid: 'containers',
   preview_tmpl: ``,
   schema: {
+    id: {
+      type: 'text',
+      display_name: 'Ancora',
+    },
     slides: {
       type: 'bloks',
       display_name: 'Elementi',
       restrict_components: true,
-      component_whitelist: ['section', 'wrapper', 'person', 'picture'],
+      component_whitelist: ['section', 'wrapper', 'person'],
       required: true,
     },
     weight: {
@@ -729,7 +716,7 @@ const nav: ComponentSchema = {
       type: 'bloks',
       display_name: 'Collegamenti',
       restrict_components: true,
-      component_whitelist: ['action', 'list'],
+      component_whitelist: ['action', 'menu'],
       required: true,
     },
     message: {
@@ -1047,19 +1034,6 @@ const event: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
-      type: 'option',
-      display_name: 'Collega',
-      source: 'internal_stories',
-      filter_content_type: ['event'],
-    },
-    form: {
-      type: 'option',
-      display_name: 'Modulo',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
-    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
@@ -1101,18 +1075,32 @@ const event: ComponentSchema = {
       restrict_content_types: true,
       component_whitelist: ['page'],
     },
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['event'],
+    },
+    form: {
+      type: 'option',
+      display_name: 'Modulo',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+    },
   },
 }
 
 export type Components =
   | 'action'
   | 'text'
-  | 'picture'
   | 'image'
   | 'background'
   | 'gallery'
-  | 'media'
+  | 'video'
   | 'field'
+  | 'menu'
+  | 'process'
   | 'list'
   | 'form'
   | 'alias'
@@ -1135,9 +1123,10 @@ export const components = {
   image,
   background,
   gallery,
-  picture,
-  media,
+  video,
   field,
+  menu,
+  process,
   list,
   alias,
   aside,

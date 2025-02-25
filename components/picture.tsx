@@ -28,7 +28,7 @@ const pictureQualities = {
   background: 70,
 }
 
-export function Picture({ blok }: PictureComponent) {
+export default function Picture({ blok }: PictureComponent) {
   if (!blok.asset.length) return null
 
   if (!blok.background && blok.asset.length > 1) {
@@ -58,7 +58,7 @@ export function Picture({ blok }: PictureComponent) {
     variants: {
       background: {
         true: 'absolute -z-20 inset-0',
-        false: 'flex-0 sm:flex-1 col-span-12 sm:col-span-6 rounded-lg min-w-32',
+        false: 'flex-none sm:flex-1 col-span-12 sm:col-span-6 rounded-lg min-w-32',
       },
       ratio: {
         square: 'aspect-square',
