@@ -1,4 +1,4 @@
-import type { ImageData } from '@props/types'
+import type { ImageArray, ImageData } from '@props/types'
 
 export function getLongDate(date: string) {
   if (!date) return ''
@@ -25,7 +25,7 @@ interface ImageSize {
   axis: 'width' | 'height'
 }
 
-export function getImageSizes(image: ImageData) {
+export function getImageSizes(image: any) {
   const size: ImageSize = {
     width: 1024,
     height: 768,

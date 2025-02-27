@@ -40,7 +40,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   const [data, setData] = useState(
     (): FormData => getData(form.fields, initData)
   )
-  const [message, setMessage] = useState(form.message)
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (field: DataProps) => {
@@ -57,22 +58,28 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       ({ error }: DataProps): boolean => !!error
     )
     if (!hasError) {
-      const { success, error } = await brevoApi(blok.scope, _data)
+      const response = await brevoApi(form.scope, _data)
+      if (!response) return handleReset()
 
-      if (await success) {
-        const keys = form.message.match(/{{(.*?)}}/g)
+      const parseText = (text: string) => {
+        const keys = text.match(/{{(.*?)}}/g)
         if (keys && !!keys.length) {
           keys.forEach((string) => {
             const key = string.replace('{{', '').replace('}}', '')
-            form.message = form.message.replace(string, data[key].value)
+            if (!data[key]?.value) return text
+            text = text.replace(string, data[key].value)
           })
         }
+        return text
       }
-      if (!success && !error) {
-        handleReset()
+
+      if (response.success) {
+        setError('')
+        setMessage(parseText(form.message))
+      } else if (response.error) {
+        setError(parseText(response.error))
       }
-      setMessage(error || form.message)
-      setSubmitted(success)
+      setSubmitted(response.success)
     } else {
       setData(_data)
     }
@@ -80,7 +87,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
   const handleReset = () => {
     setData(getData(form.fields, initData))
-    setMessage(form.message)
+    setError('')
+    setMessage('')
     setSubmitted(false)
 
     onOpenChange()
@@ -128,6 +136,14 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                   wrapper: null,
                   overrides: Typography,
                 })}
+            {error && (
+              <div className='text-danger mt-auto'>
+                {compiler(error, {
+                  wrapper: null,
+                  overrides: Typography,
+                })}
+              </div>
+            )}
           </DrawerBody>
           <DrawerFooter className='justify-start'>
             {!submitted && (
@@ -156,7 +172,7 @@ function getData(body: Array<FieldProps>, data: FormData) {
         value:
           field.input === 'hidden'
             ? field.placeholder
-            : ['select', 'multiple'].includes(field.input)
+            : ['select', 'multiple', 'enroll'].includes(field.input)
               ? []
               : null,
         required: field.required,

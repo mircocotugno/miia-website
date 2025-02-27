@@ -656,10 +656,10 @@ const form: ComponentSchema = {
       type: 'option',
       display_name: 'Scopo',
       options: [
-        { value: 'course', name: 'Corsi' },
+        { value: 'corsi', name: 'Corsi' },
         { value: 'progetti', name: 'Progetti' },
-        { value: 'partner', name: 'Collaborazione' },
-        { value: 'teaches', name: 'Docenza' },
+        { value: 'aziende', name: 'Aziende' },
+        { value: 'docenza', name: 'Docenza' },
       ],
     },
     title: {
@@ -894,6 +894,7 @@ const course: ComponentSchema = {
       type: 'section',
       display_name: 'Nuovo',
       keys: [
+        'id',
         'title',
         'location',
         'days',
@@ -903,6 +904,13 @@ const course: ComponentSchema = {
         'seats',
         'page',
       ],
+    },
+    id: {
+      type: 'text',
+      display_name: 'Id del corso',
+      required: true,
+      description: `[numero]-[sede]-[area]-[frequenza]\nEsempio: 01-treviso-interni-serale`,
+      inline_label: true,
     },
     title: {
       type: 'text',

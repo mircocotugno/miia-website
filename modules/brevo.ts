@@ -4,22 +4,18 @@ const baseUrl = 'https://api.brevo.com/v3/'
 const apiKey = process.env.NEXT_PUBLIC_BREVO_TOKEN
 
 const listIds = {
-  other: 19,
-  course: 10,
-  partner: 26,
-  project: 25,
-  teaches: 29,
-  interior: 27,
-  fashion: 28,
+  corsi: 10,
+  aziende: 26,
+  progetti: 25,
+  docenza: 29,
+  interni: 27,
+  moda: 28,
+  generici: 37,
 }
 
 export async function brevoApi(scope: FormScopes, data: FormData) {
   const validation = data?.validation?.value
-  if (!!validation)
-    return {
-      success: false,
-      error: false,
-    }
+  if (!!validation) return false
 
   const email = data?.email?.value
   const name = data?.nome?.value
@@ -28,7 +24,8 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
   if (!email || !name || !surname || !sms)
     return {
       success: false,
-      error: `###Indirizzo email non trovato!\nLa invitiamo a scriverci all'indirizzo email che trova nella nostra pagina [contatti](https://madeinitalyacademy.com/contatti)`,
+      error: `###Indirizzo email non trovato!
+      \nLa invitiamo a scriverci all'indirizzo email che trova nella nostra pagina [contatti](https://madeinitalyacademy.com/contatti)`,
     }
 
   // Manage attributes
@@ -54,14 +51,23 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     })
 
   // Manage lists
-  const list = [listIds[scope ? scope : 'other']]
+  const list = []
+  if (scope) {
+    list.push(listIds[scope])
+  } else if (data?.scopo) {
+    const dataScope: FormScopes = data.scopo.value[0]
+    list.push(listIds[dataScope])
+  } else {
+    list.push(listIds.generici)
+  }
 
-  if (scope === 'course') {
+  if (list[0] === listIds.corsi) {
     const area: FormArea = data?.area?.value
     area && list.push(listIds[area])
   }
 
   contact.listIds = list
+  console.log(list)
 
   // Check if exist
   let response: any = null
@@ -80,11 +86,9 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
 
   if (!!response?.message) {
     const name = data?.nome?.value
-    response.message = `###Ops, qualcosa è andato storto ${
-      name || ''
-    }!\nÈ stato trovato il seguente errore: ${
-      response.message
-    }\nLa invitiamo a riprovare più tardi oppure ci scriva all'indirizzo email che trova nella nostra pagina [contantti](https://madeinitalyacademy.com/contatti)`
+    response.message = `#####Ops, qualcosa è andato storto ${name || ''}!
+    \nÈ stato trovato il seguente errore: **${response.message}**
+    \nSe l'errore dovesse persistere, ci contatti all'indirizzo email info@miia.it`
   }
 
   return { success: !response?.code, error: response?.message }
@@ -131,3 +135,7 @@ const apiPut = async (path: string, identifier: string, body: BrevoProps) =>
   })
     .then((res) => res.json())
     .catch((err) => console.error(err))
+
+const errorMessages = {
+  'Invalid phone number': 'Numero di telefono non valido',
+}
