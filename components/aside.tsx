@@ -2,8 +2,6 @@ import type { AsideProps } from '@props/types'
 import type { LocationProps, OptionProps } from '@props/types'
 import { tv } from 'tailwind-variants'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import { useIsVisible } from '@modules/interface'
-import { useRef } from 'react'
 import { Accordion, AccordionItem } from '@heroui/react'
 import { getLongDate, getShortDate } from '@modules/formats'
 import { compiler } from 'markdown-to-jsx'
@@ -15,15 +13,11 @@ interface AsideComponent {
 }
 
 export default function Aside({ blok, locations }: AsideComponent) {
-  // const ref = useRef(null)
-  // const isVisible = useIsVisible(ref)
-
   const options: Array<OptionProps> = []
   const courses =
     blok.courses.length > 0 &&
     blok.courses.map(({ content }) => {
-      content?.title &&
-        options.push({ name: content.title, value: content.title })
+      content?.title && options.push({ name: content.title, value: content.id })
       const location =
         locations[
           locations.findIndex((location) => location.uuid === content.location)
@@ -75,10 +69,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
               ))}
           </div>
         )}
-        <aside
-          // ref={ref}
-          className={asideClasses({ theme: blok.theme })}
-        >
+        <aside className={asideClasses({ theme: blok.theme })}>
           {blok.headline &&
             compiler(blok.headline, {
               wrapper: ({ children }) => (

@@ -1,5 +1,6 @@
 import { ProcessProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
+import { Fragment } from 'react'
 import { tv } from 'tailwind-variants'
 
 interface ProcessComponent {
@@ -28,19 +29,15 @@ export default function Process({ blok }: ProcessComponent) {
       <h4 className='font-bold text-2xl'>{blok.title}</h4>
       <div className={processClasses()}>
         {blok.steps.map((step, index) => (
-          <>
+          <Fragment key={step._uid}>
             {!!index && <i className={arrowClasses()} />}
-            <div
-              className={stepClasses()}
-              {...storyblokEditable(step)}
-              key={step._uid}
-            >
+            <div className={stepClasses()} {...storyblokEditable(step)}>
               <h6 className={indexClasses()}>{index + 1}</h6>
               {step.contents.map((content) => (
                 <StoryblokComponent blok={content} key={content._uid} />
               ))}
             </div>
-          </>
+          </Fragment>
         ))}
       </div>
     </div>

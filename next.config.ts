@@ -17,11 +17,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Basic redirect
-      {
-        source: '/',
-        destination: 'https://madeinitalyacademy.com/',
-        permanent: true,
-      },
+      // {
+      //   source: '/',
+      //   destination: 'https://madeinitalyacademy.com/',
+      //   permanent: true,
+      // },
       // // Wildcard path matching
       // {
       //   source: '/blog/:slug',

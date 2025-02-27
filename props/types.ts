@@ -40,6 +40,10 @@ export type ImageData = {
   focus: string
 }
 
+export type ImageArray = ImageData & {
+  id: number
+}
+
 export type OptionProps = {
   name: string
   value: string
@@ -61,11 +65,9 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-export type FormScopes = 'course' | 'project' | 'partner' | 'teaches'
+export type FormScopes = 'corsi' | 'aziende' | 'progetti' | 'docenza'
 
-export type FormArea = 'interior' | 'fashion'
-
-type DisplayModes = 'dropdown' | 'tab' | 'accordion' | 'timeline' | 'process'
+export type FormArea = 'interni' | 'moda'
 
 type InputTypes =
   | 'text'
@@ -87,6 +89,7 @@ export type ComponentsProps =
   | ActionProps
   | TextProps
   | PictureProps
+  | GalleryProps
   | FieldProps
   | ListProps
   | ProcessProps
@@ -137,7 +140,7 @@ export type BackgroundProps = BlokProps & {
 }
 
 export type GalleryProps = BlokProps & {
-  images: Array<ImageData>
+  images: Array<ImageArray>
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3'
 }
@@ -251,7 +254,7 @@ export type FormProps = BlokProps & {
   title: string
   label: string
   fields: Array<FieldProps> | []
-  message: string | string
+  message: string
 }
 
 export type FormData = {
@@ -358,6 +361,7 @@ export type LocationProps = BlokProps & {
 export type CourseProps = BlokProps & {
   component: 'course'
   ref: StoryProps & { content: CourseProps }
+  id: string
   title: string
   location: LocationProps
   days: Array<CourseDays>

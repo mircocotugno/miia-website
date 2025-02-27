@@ -26,13 +26,6 @@ const classes = tv({
   },
 })
 
-interface ImageSize {
-  width: number
-  height: number
-  ratio: number
-  axis: 'width' | 'height'
-}
-
 export default function Gallery({ blok }: GalleryComponent) {
   if (!blok.images.length) return null
 
@@ -46,11 +39,11 @@ export default function Gallery({ blok }: GalleryComponent) {
 
   const images = blok.images.map((image) => getImageSizes(image))
 
-  const previews = images.map(({ filename, alt }, index) => (
+  const previews = images.map(({ filename, alt, id }, index) => (
     <div
+      key={id}
       className='flex-none max-w-32 sm:max-w-36 md:max-w-42 cursor-pointer'
       onClick={() => handleOpen(index)}
-      key={index}
     >
       <HeroImage
         src={filename}
@@ -62,8 +55,8 @@ export default function Gallery({ blok }: GalleryComponent) {
     </div>
   ))
 
-  const slides = images.map(({ filename, alt, size }, index) => (
-    <SwiperSlide className='max-w-inherith max-h-inherith'>
+  const slides = images.map(({ filename, alt, size, id }, index) => (
+    <SwiperSlide className='max-w-inherith max-h-inherith' key={id}>
       <NextImage
         className='max-h-full max-w-full w-auto h-auto mx-auto my-auto shadow-2xl rounded-xl'
         src={filename}

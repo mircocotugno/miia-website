@@ -1,5 +1,5 @@
 import type { NavProps } from '@props/types'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import {
   Navbar,
   NavbarBrand,
@@ -56,27 +56,31 @@ function Header({ blok }: { blok: NavProps }) {
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent justify='start' className='max-sm:hidden gap-6'>
-        {blok.contents.map((item, index) => (
-          <NavbarItem key={index}>
-            <StoryblokComponent blok={item} />
-          </NavbarItem>
-        ))}
-      </NavbarContent>
-      <NavbarContent justify='end'>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          className='sm:hidden'
-        />
-      </NavbarContent>
+      {!!blok.contents.length && (
+        <Fragment>
+          <NavbarContent justify='start' className='max-sm:hidden gap-6'>
+            {blok.contents.map((item, index) => (
+              <NavbarItem key={index}>
+                <StoryblokComponent blok={item} />
+              </NavbarItem>
+            ))}
+          </NavbarContent>
+          <NavbarContent justify='end'>
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              className='sm:hidden'
+            />
+          </NavbarContent>
 
-      <NavbarMenu className='p-8 pt-12 gap-10 items-end dark'>
-        {blok.contents.map((item, index) => (
-          <NavbarMenuItem key={index} className=''>
-            <StoryblokComponent blok={item} key={index} />
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
+          <NavbarMenu className='p-8 pt-12 gap-10 items-end dark'>
+            {blok.contents.map((item, index) => (
+              <NavbarMenuItem key={index} className=''>
+                <StoryblokComponent blok={item} key={index} />
+              </NavbarMenuItem>
+            ))}
+          </NavbarMenu>
+        </Fragment>
+      )}
     </Navbar>
   )
 }
@@ -99,13 +103,15 @@ function Footer({ blok }: { blok: NavProps }) {
             color='#F3F3F2'
           />
         </Link>
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-6 lg:gap-8'>
-          {blok.contents.map((item, index) => (
-            <div className='flex-1' key={index}>
-              <StoryblokComponent parent='footer' blok={item} />
-            </div>
-          ))}
-        </div>
+        {!!blok.contents.length && (
+          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-6 lg:gap-8'>
+            {blok.contents.map((item, index) => (
+              <div className='flex-1' key={index}>
+                <StoryblokComponent parent='footer' blok={item} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
         <p className='text-xs '>

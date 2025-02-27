@@ -24,14 +24,14 @@ export const Typography = {
   },
   h4: {
     component: ({ children }: { children: string }) => (
-      <h4 className='font-bold leading-snug text-2xl xl:text-3xl'>
+      <h4 className='font-bold leading-snug text-xl md:text-2xl xl:text-3xl'>
         {children}
       </h4>
     ),
   },
   h5: {
     component: ({ children }: { children: string }) => (
-      <h5 className='font-semibold leading-snug text-xl xl:text-2xl'>
+      <h5 className='font-semibold leading-snug text-lg md:text-xl xl:text-2xl'>
         {children}
       </h5>
     ),
