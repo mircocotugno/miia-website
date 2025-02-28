@@ -3,11 +3,12 @@ import { useRouter } from 'next/router'
 import { MetaProps } from '@props/types'
 
 const meta = {
-  title: '',
-  description: '',
+  title: 'Made in italy academy, fashion e interior design',
+  description:
+    'Scuola specializzata in corsi di formazione per arredatori, stilisti e modellisti Made in italy',
   image: {
-    fielname: '',
-    alt: '',
+    filename: 'public/meta-image.jpg',
+    alt: 'immagine',
   },
 }
 
@@ -46,11 +47,11 @@ export default function Meta(blok: MetaProps) {
 
       <meta
         name='og:image'
-        content={blok.image?.filename || meta.image.fielname}
+        content={blok.image?.filename || meta.image.filename}
       />
       <meta
         name='twitter:image'
-        content={blok.image?.filename || meta.image.fielname}
+        content={blok.image?.filename || meta.image.filename}
       />
       <meta
         name='twitter:image:alt'
