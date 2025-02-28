@@ -6,9 +6,14 @@ import { tv } from 'tailwind-variants'
 interface SectionComponent {
   blok: SectionProps
   parent?: 'page' | 'carousel'
+  singleSection?: boolean
 }
 
-export default function Section({ blok, parent }: SectionComponent) {
+export default function Section({
+  blok,
+  parent,
+  singleSection,
+}: SectionComponent) {
   const Tag = parent !== 'carousel' ? 'section' : 'div'
 
   const background = blok.contents.find(
@@ -24,7 +29,7 @@ export default function Section({ blok, parent }: SectionComponent) {
   const Container = ({ children }: PropsWithChildren) =>
     parent !== 'carousel' || blok.contain ? (
       <div
-        className={`px-6 max-w-[1280px] min-h-inherit mx-auto ${gridClasses}`}
+        className={`py-6 sm:py-8 md:py-10 lg:py-12 px-6 max-w-[1280px] min-h-inherit mx-auto ${gridClasses}`}
       >
         {children}
       </div>
@@ -43,20 +48,33 @@ export default function Section({ blok, parent }: SectionComponent) {
   })
 
   const tagClasses = tv({
-    base: 'py-6 sm:py-8 md:py-10 lg:py-12 min-h-12 overflow-hidden',
+    base: 'overflow-hidden',
     variants: {
       themeDark: {
         true: 'dark text-foreground bg-background',
         false: 'light',
       },
       hasBackground: {
-        true: 'relative z-0 min-h-cover sm:min-h-lg py-0 [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
+        true: 'relative z-0 py-0 min-h-cover [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
+      },
+      singleSection: {
+        true: 'min-h-cover',
       },
       contain: {
-        false: `${gridClasses}`,
+        false: `py-6 sm:py-8 md:py-10 lg:py-12 ${gridClasses}`,
       },
     },
     compoundVariants: [
+      {
+        singleSection: true,
+        hasBackground: true,
+        class: 'sm:min-h-cover',
+      },
+      {
+        singleSection: false,
+        hasBackground: true,
+        class: 'sm:min-h-3/4',
+      },
       {
         hasBackground: true,
         themeDark: true,
@@ -78,6 +96,7 @@ export default function Section({ blok, parent }: SectionComponent) {
       className={tagClasses({
         themeDark: blok.dark,
         hasBackground: !!background,
+        singleSection: singleSection,
         contain: parent !== 'carousel' || blok.contain,
       })}
       {...storyblokEditable(blok)}

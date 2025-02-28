@@ -36,6 +36,9 @@ export default {
         lg: '32rem',
         xl: '64rem',
       },
+      height: {
+        cover: 'calc(100vh - 4rem)',
+      },
       maxHeight: {
         modal: '40rem',
         sm: '8rem',
@@ -43,6 +46,7 @@ export default {
         lg: '32rem',
         xl: '64rem',
         inherit: 'inherit',
+        cover: 'calc(100vh - 4rem)',
       },
       minHeight: {
         '100': '25rem',
@@ -52,6 +56,8 @@ export default {
         md: '16rem',
         lg: '32rem',
         xl: '64rem',
+        '2/3': 'calc(66vh - 4rem)',
+        '3/4': 'calc(75vh - 4rem)',
         inherit: 'inherit',
       },
       lineHeight: {
