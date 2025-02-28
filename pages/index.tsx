@@ -39,8 +39,8 @@ export default function Home({ story }: Home) {
   return <StoryblokComponent blok={page.content} />
 }
 
-export async function getStaticProps({ preview }: any) {
-  const slug = 'home'
+export async function getStaticProps() {
+  const slug = 'splash'
 
   const variables = { slug, relations: relations.join(',') }
   const query = `
