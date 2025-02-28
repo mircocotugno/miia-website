@@ -7,7 +7,7 @@ import {
   StoryblokComponent,
 } from '@storyblok/react'
 
-const excluding_slugs = ['home', 'blog/']
+const excluding_slugs = ['home', 'splash', 'blog/']
 
 const relations = [
   'page.header',
