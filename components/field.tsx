@@ -17,7 +17,9 @@ interface FieldComponent {
 export default function Field(props: FieldComponent) {
   if (!props.blok.input) return null
   const Fields = fields[props.blok.input]
-
+  // if (props.blok.id === 'nome') {
+  //   debugger
+  // }
   return <Fields {...props} />
 }
 
@@ -30,6 +32,8 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     isRequired={blok.required}
     errorMessage={data.error}
     isInvalid={!!data.error}
+    // TODO: try to fill the value from api call
+    value={data.value}
     startContent={
       blok.input === 'tel' && (
         <div className='pointer-events-none flex items-center'>

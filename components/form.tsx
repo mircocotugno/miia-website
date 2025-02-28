@@ -19,7 +19,7 @@ import { fieldValidation } from '@modules/validations'
 import { useState } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
-import { brevoApi } from '@modules/brevo'
+import { brevoApi, checkContact } from '@modules/brevo'
 
 interface FormComponent {
   blok: FormProps
@@ -45,8 +45,25 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (field: DataProps) => {
-    field.error = fieldValidation(field)
+    debugger
+    const hasError = fieldValidation(field)
+    field.error = hasError
+    if (!hasError && field.id === 'email') {
+      handleCheck(field.value)
+    }
+
     setData({ ...data, [field.id]: field })
+  }
+
+  const handleCheck = async (email: string) => {
+    const response = await checkContact(email)
+    // debugger
+    // TODO if the exist contact? Need to find a UI bahviours
+    if (response?.id) {
+      const _data = { ...data }
+      _data.nome.value = response.attributes['NOME']
+      setData(_data)
+    }
   }
 
   const handleSubmit = async () => {
