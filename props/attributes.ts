@@ -1,31 +1,26 @@
-// TODO: Add type for Brevo contacts attributes
+// TODO needs to maintain sheet synched https://docs.google.com/spreadsheets/d/194ZRHzQbaomR0efNm9tyCQGFEigk8tOg0MZOqjOY8i0
 
-export type Attributes = NameAttribute
+export type AreaAttribute = 'interni' | 'moda'
+export const interesse_area = ['interni', 'moda']
 
-type NameAttribute = {
-  id: 'nome'
-  value: string
-}
+export type SedeAttribute = 'padova' | 'treviso' | 'bassano'
+export const interesse_sede = ['padova', 'treviso', 'bassano']
 
-type SurnameAttribute = {
-  id: 'cognome'
-  value: string
-}
+export type FrequenzaAttribute = 'serale' | 'sabato'
+export const interesse_frequenza = ['serale', 'sabato']
 
-type EmailAttribute = {
-  id: 'email'
-  value: string
-}
+export type InizioAttribute = 'marzo' | 'ottobre'
+export const interesse_inizio = ['marzo', 'ottobre']
 
-type PhoneAttribute = {
-  id: 'sms'
-  value: string
-}
+export type FatturaAttribute = ['privato', 'azienda']
+export const pagamento_fattura = ['privato', 'azienda']
 
-type AreaAttribute = {
-  id: 'area'
-  value: Array<'interni' | 'moda'>
-}
+export type InterventoAttribute = ['arredare', 'rinnovare', 'ristrutturare']
+export const progetto_intervento = ['arredare', 'rinnovare', 'ristrutturare']
 
-const area: AreaAttribute['value'] = ['interni','moda']
-
+export type RichiestaAttribute = 'studenti' | 'commerciale' | 'formazione'
+export const collaborazione_richiesta = [
+  'studenti',
+  'commerciale',
+  'formazione',
+]

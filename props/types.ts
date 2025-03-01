@@ -80,7 +80,6 @@ type InputTypes =
   | 'select'
   | 'multiple'
   | 'hidden'
-  // | 'file' //TODO: find a file module
   | 'enroll'
 
 // Components Props
