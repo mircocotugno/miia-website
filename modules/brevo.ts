@@ -27,7 +27,7 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
   const email = data?.email?.value
   const name = data?.nome?.value
   const surname = data?.cognome?.value
-  const sms = data?.sms?.value
+  const sms = data?.sms?.value.replace(/^/, '+39')
   if (!email || !name || !surname || !sms)
     return {
       success: false,
@@ -51,7 +51,7 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     )
     .forEach((key) => {
       let value = data[key].value
-      if (['data_nascita'].includes(key)) {
+      if (['persona_nascita', 'openday_data'].includes(key)) {
         value = `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
       }
       contact.attributes[key.toUpperCase()] = value
