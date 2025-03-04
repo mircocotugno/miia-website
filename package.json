@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start - p 9090",
     "lint": "next lint",
-    "cms": "tsx ./cms/index.ts"
+    "cms": "tsx ./cms/index.ts",
+    "crm": "tsx ./crm/index.ts"
   },
   "dependencies": {
     "@heroui/react": "^2.6.14",

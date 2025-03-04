@@ -17,7 +17,9 @@ interface FieldComponent {
 export default function Field(props: FieldComponent) {
   if (!props.blok.input) return null
   const Fields = fields[props.blok.input]
-
+  // if (props.data.id === 'nome' && !!props.data.value) {
+  //   debugger
+  // }
   return <Fields {...props} />
 }
 
@@ -30,6 +32,8 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     isRequired={blok.required}
     errorMessage={data.error}
     isInvalid={!!data.error}
+    value={data.value}
+    className={blok.id === 'email' ? 'relative z-30' : ''}
     startContent={
       blok.input === 'tel' && (
         <div className='pointer-events-none flex items-center'>
@@ -37,9 +41,7 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
         </div>
       )
     }
-    onValueChange={(value) =>
-      onChange({ ...data, value: blok.id === 'sms' ? `+39${value}` : value })
-    }
+    onValueChange={(value) => onChange({ ...data, value })}
   />
 )
 
@@ -48,6 +50,7 @@ const AreaField = ({ blok, data, onChange }: FieldComponent) => (
     label={blok.label}
     placeholder={blok.placeholder}
     isRequired={blok.required}
+    value={data.value}
     errorMessage={data.error}
     isInvalid={!!data.error}
     onValueChange={(value) => onChange({ ...data, value })}
@@ -82,6 +85,7 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
     id={blok.id}
     label={blok.label}
     isRequired={blok.required}
+    value={data.value}
     showMonthAndYearPickers
     errorMessage={data.error}
     isInvalid={!!data.error}
@@ -93,6 +97,8 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
   type value = Array<string>
   type key = string | undefined
 
+  const options = getOptions(blok.options)
+
   const getValue = (value: value, key: key) => {
     if (!key) return value
     const index = value.indexOf(key)
@@ -103,6 +109,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
     }
     return value
   }
+
   return (
     <Select
       id={blok.id}
@@ -110,6 +117,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
       placeholder={blok.placeholder}
       isRequired={blok.required}
       errorMessage={data.error}
+      selectedKeys={data.value}
       isInvalid={!!data.error}
       selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
       onSelectionChange={({ currentKey }) =>
@@ -119,7 +127,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
         })
       }
     >
-      {getOptions(blok.options).map((option) => (
+      {options.map((option) => (
         <SelectItem
           className='data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium'
           key={option.value}
@@ -150,11 +158,13 @@ const fields = {
 const getOptions = (fieldOptions: string | Array<OptionProps>) => {
   if (typeof fieldOptions !== 'string') return fieldOptions
   const options: Array<{ name: string; value: string }> = []
+
   fieldOptions.split('\n').forEach((option) => {
     const [name, value] = option.split(':')
     if (name && value) {
       options.push({ name, value })
     }
   })
+
   return options
 }

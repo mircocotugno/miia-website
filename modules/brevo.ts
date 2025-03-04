@@ -13,6 +13,13 @@ const listIds = {
   generici: 37,
 }
 
+export async function checkContact(email: string) {
+  // TODO: some attributes are type multi-select but return index of value...
+  if (!email) return console.error('Email non trovata')
+  const response = await apiGet(`contacts/${email}`)
+  return response
+}
+
 export async function brevoApi(scope: FormScopes, data: FormData) {
   const validation = data?.validation?.value
   if (!!validation) return false
@@ -20,7 +27,7 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
   const email = data?.email?.value
   const name = data?.nome?.value
   const surname = data?.cognome?.value
-  const sms = data?.sms?.value
+  const sms = data?.sms?.value.replace(/^/, '+39')
   if (!email || !name || !surname || !sms)
     return {
       success: false,
@@ -44,7 +51,7 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     )
     .forEach((key) => {
       let value = data[key].value
-      if (['data_nascita'].includes(key)) {
+      if (['persona_nascita', 'openday_data'].includes(key)) {
         value = `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
       }
       contact.attributes[key.toUpperCase()] = value
@@ -67,7 +74,6 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
   }
 
   contact.listIds = list
-  console.log(list)
 
   // Check if exist
   let response: any = null

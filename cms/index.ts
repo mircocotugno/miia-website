@@ -95,6 +95,11 @@ async function storyblok(
         name: `${schema?.datasource_id}`,
         type: 'source',
       })
+    } else if( type === "preset") {
+      schema.component_id = getRecord({
+        name: schema.component_id,
+        type: "component",
+      })
     }
   }
 
@@ -170,6 +175,7 @@ async function storyblok(
     // CREATE
     case 'create':
       if (schema) {
+        // return console.log(schema)
         element = await storyblokCreate({ schema, type })
         if (element) {
           printRecord({ name, type, id: element.id, uuid: element?.uuid })
