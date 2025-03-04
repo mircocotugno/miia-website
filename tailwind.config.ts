@@ -97,7 +97,9 @@ export default {
       themes: {
         light: {
           colors: {
-            foreground: '#232325',
+            foreground: {
+              DEFAULT: '#232325',
+            },
             primary: {
               DEFAULT: '#008a45',
             },
@@ -108,7 +110,9 @@ export default {
         },
         dark: {
           colors: {
-            background: '#232325',
+            background: {
+              DEFAULT: '#232325',
+            },
             primary: {
               DEFAULT: '#d12934',
             },

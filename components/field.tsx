@@ -17,9 +17,6 @@ interface FieldComponent {
 export default function Field(props: FieldComponent) {
   if (!props.blok.input) return null
   const Fields = fields[props.blok.input]
-  // if (props.data.id === 'nome' && !!props.data.value) {
-  //   debugger
-  // }
   return <Fields {...props} />
 }
 
