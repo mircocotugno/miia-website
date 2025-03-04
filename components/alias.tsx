@@ -105,7 +105,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
 
   if (isEvent) {
     const fieldOpenday = {
-      id: 'openday',
+      id: 'openday_data',
       value: alias.content.date.toLocaleDateString('it-IT', {
         day: '2-digit',
         month: '2-digit',

@@ -68,7 +68,7 @@ export const Typography = {
   },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className='font-sans max-sm:line-clamp-3 xl:text-lg'>{children}</p>
+      <p className='font-sans max-sm:line-clamp-3'>{children}</p>
     ),
   },
   ul: {
