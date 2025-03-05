@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Iubenda
+  transpilePackages: ['@mep-agency/next-iubenda'],
   // Redirects
   async redirects() {
     return [
