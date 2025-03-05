@@ -41,6 +41,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [isLoading, setLoading] = useState(false)
+  const [isChecked, setChecked] = useState(false)
   const [isSubmitted, setSubmitted] = useState(false)
 
   const [data, setData] = useState(
@@ -60,6 +61,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
     setLoading(true)
     const response = await checkContact(email)
     if (response?.id) {
+      setChecked(true)
       const _data = { ...data }
       _data.email.value = response.email
 
@@ -71,8 +73,10 @@ export default function Form({ blok, courses, openday }: FormComponent) {
             value = value.substring(2)
           }
           if (attribute && attribute.type === 'category') {
-            value = (attributes[key] as CategoryAttribute).enumeration[value]
-              .label
+            const category = (
+              attributes[key] as CategoryAttribute
+            ).enumeration.find((category) => category.value == value)
+            value = category?.label
           }
           if (Array.isArray(data[key].value)) {
             value = [value]
@@ -81,6 +85,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
         }
       )
       setData(_data)
+    } else {
+      setChecked(false)
     }
     setLoading(false)
   }
@@ -152,6 +158,15 @@ export default function Form({ blok, courses, openday }: FormComponent) {
         <DrawerContent>
           <DrawerHeader className='flex flex-col gap-1'>
             {form.title || 'Compila il modulo'}
+            {isChecked && (
+              <p className='font-medium text-medium text-foreground-800'>
+                <span>Ben tornato, </span>
+                <strong className='text-primary'>
+                  {data.nome.value} {data.cognome.value}
+                </strong>
+                !
+              </p>
+            )}
           </DrawerHeader>
           <DrawerBody className='relative'>
             {isLoading && (
@@ -162,26 +177,6 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                 />
               </div>
             )}
-            {/* {!isChecked && (
-              <>
-                <h5 className='font-semibold'>
-                  Ti sei già messo in contatto con noi?
-                </h5>
-                <small>
-                  Inserisci il tuo indirizzo email per caricare i tuoi dati.
-                </small>
-                <Input
-                  id={blok.id}
-                  label='Indirizzo email'
-                  type='email'
-                  isRequired={data.email.required}
-                  errorMessage={data.email.error}
-                  onValueChange={(value) =>
-                    handleChange({ ...data.email, value })
-                  }
-                />
-              </>
-            )} */}
             {!isSubmitted
               ? form.fields.map((field, index) =>
                   field.input === 'enroll' && !courses?.length ? null : (
