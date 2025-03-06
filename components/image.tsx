@@ -1,4 +1,5 @@
 import type { ImageProps } from '@props/types'
+import { widths } from '@styles/variants'
 import {
   Image as HeroImage,
   Modal,
@@ -7,21 +8,11 @@ import {
 } from '@heroui/react'
 import { tv } from 'tailwind-variants'
 import { default as NextImage } from 'next/image'
+import { storyblokEditable } from '@storyblok/react'
 
 interface ImageComponent {
   blok: ImageProps
 }
-
-const classes = tv({
-  base: 'inset-0 object-cover',
-  variants: {
-    aspect: {
-      '1/1': 'aspect-square',
-      '4/3': 'aspect-4/3',
-      '3/4': 'aspect-3/4',
-    },
-  },
-})
 
 export default function Image({ blok }: ImageComponent) {
   if (!blok.image?.filename) return null
@@ -48,13 +39,19 @@ export default function Image({ blok }: ImageComponent) {
   return (
     <>
       <HeroImage
+        {...storyblokEditable(blok)}
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
         sizes={`(max-${axis}:512px):256px,(max-${axis}:768px):512px,(max-${axis}:1024px):768px,(max-${axis}:1280px):1024px,1280px`}
         classNames={{
-          wrapper: 'flex-1',
-          img: classes({ aspect: blok.aspect }),
+          wrapper: wrapperClasses({
+            sm: blok.width?.[0],
+            md: blok.width?.[1],
+            lg: blok.width?.[2],
+            xl: blok.width?.[3],
+          }),
+          img: imageClasses({ aspect: blok.aspect }),
         }}
       />
       {blok.fullScreen && (
@@ -83,3 +80,24 @@ export default function Image({ blok }: ImageComponent) {
     </>
   )
 }
+
+const wrapperClasses = tv({
+  base: 'flex-1 items-stretch col-span-12',
+  variants: {
+    sm: widths.sm,
+    md: widths.md,
+    lg: widths.lg,
+    xl: widths.xl,
+  },
+})
+
+const imageClasses = tv({
+  base: 'inset-0 object-cover',
+  variants: {
+    aspect: {
+      '1/1': 'aspect-square',
+      '4/3': 'aspect-4/3',
+      '3/4': 'aspect-3/4',
+    },
+  },
+})
