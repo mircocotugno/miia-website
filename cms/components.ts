@@ -104,6 +104,7 @@ const text: ComponentSchema = {
         { value: '1/2', name: 'Metà' },
         { value: '2/3', name: 'Due terzi' },
         { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
       ],
       default_value: '1/2',
       description:
