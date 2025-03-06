@@ -95,6 +95,22 @@ const text: ComponentSchema = {
         { value: 'left', name: 'Sinistra' },
       ],
     },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+      ],
+      default_value: '1/2',
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
     hide: {
       type: 'option',
       display_name: 'Nascondi mobile',
