@@ -1,5 +1,4 @@
 import type { ImageProps } from '@props/types'
-import {  widths } from '@styles/variants'
 import {
   Image as HeroImage,
   Modal,
@@ -12,9 +11,10 @@ import { storyblokEditable } from '@storyblok/react'
 
 interface ImageComponent {
   blok: ImageProps
+  parent?: string
 }
 
-export default function Image({ blok }: ImageComponent) {
+export default function Image({ blok, parent }: ImageComponent) {
   if (!blok.image?.filename) return null
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -47,10 +47,11 @@ export default function Image({ blok }: ImageComponent) {
         sizes={`(max-${axis}:512px)::512px,(max-${axis}:768px)::768px,(max-${axis}:1024px):1024px,(max-${axis}:1280px):1280px,1280px`}
         classNames={{
           wrapper: wrapperClasses({
-            width_sm: blok.width?.[0],
-            width_md: blok.width?.[1],
-            width_lg: blok.width?.[2],
-            width_xl: blok.width?.[3],
+            wrapper: parent === 'wrapper',
+            sm: blok.width?.[0],
+            md: blok.width?.[1],
+            lg: blok.width?.[2],
+            xl: blok.width?.[3],
           }),
           img: imageClasses({
             aspect: blok.aspect,
@@ -85,12 +86,43 @@ export default function Image({ blok }: ImageComponent) {
 }
 
 const wrapperClasses = tv({
-  base: 'flex-1 self-stretch col-span-12',
+  base: 'flex-1 col-span-12',
   variants: {
-    width_sm: widths.sm,
-    width_md: widths.md,
-    width_lg: widths.lg,
-    width_xl: widths.xl,
+    wrapper: {
+      false: 'self-stretch',
+    },
+    sm: {
+      '1/4': 'sm:col-span-3',
+      '1/3': 'sm:col-span-4',
+      '1/2': 'sm:col-span-6',
+      '2/3': 'sm:col-span-8',
+      '3/4': 'sm:col-span-9',
+      '1/1': 'sm:col-span-12',
+    },
+    md: {
+      '1/4': 'md:col-span-3',
+      '1/3': 'md:col-span-4',
+      '1/2': 'md:col-span-6',
+      '2/3': 'md:col-span-8',
+      '3/4': 'md:col-span-9',
+      '1/1': 'md:col-span-12',
+    },
+    lg: {
+      '1/4': 'lg:col-span-3',
+      '1/3': 'lg:col-span-4',
+      '1/2': 'lg:col-span-6',
+      '2/3': 'lg:col-span-8',
+      '3/4': 'lg:col-span-9',
+      '1/1': 'lg:col-span-12',
+    },
+    xl: {
+      '1/4': 'xl:col-span-3',
+      '1/3': 'xl:col-span-4',
+      '1/2': 'xl:col-span-6',
+      '2/3': 'xl:col-span-8',
+      '3/4': 'xl:col-span-9',
+      '1/1': 'xl:col-span-12',
+    },
   },
 })
 
