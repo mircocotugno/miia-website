@@ -161,8 +161,12 @@ const image: ComponentSchema = {
       options: [
         { value: '1/1', name: 'Quadrata' },
         { value: '3/4', name: 'Verticale' },
+        { value: '4/9', name: 'Verticale stretta' },
         { value: '4/3', name: 'Orizzontale' },
+        { value: '9/4', name: 'Orizzontale larga' },
       ],
+      description: 'Proporzioni immagine',
+      tooltip: true,
     },
     fullScreen: {
       type: 'boolean',
