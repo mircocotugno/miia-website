@@ -106,7 +106,7 @@ const text: ComponentSchema = {
         { value: '3/4', name: 'Tre quarti' },
         { value: '1/1', name: 'Intera' },
       ],
-      default_value: '1/2',
+      default_value: ['1/2'],
       description:
         'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
       tooltip: true,
@@ -149,7 +149,7 @@ const image: ComponentSchema = {
         { value: '3/4', name: 'Tre quarti' },
         { value: '1/1', name: 'Intera' },
       ],
-      default_value: '1/2',
+      default_value: ['1/2'],
       description:
         'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
       tooltip: true,
@@ -552,7 +552,7 @@ const wrapper: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.size}}`,
+  preview_tmpl: `{{it.width}}`,
   schema: {
     contents: {
       type: 'bloks',
@@ -583,6 +583,23 @@ const wrapper: ComponentSchema = {
       type: 'boolean',
       display_name: 'Incorniciato',
       inline_label: true,
+    },
+    width: {
+      type: 'options',
+      display_name: 'New Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
     },
     size: {
       type: 'option',
