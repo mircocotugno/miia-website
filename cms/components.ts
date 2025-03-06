@@ -95,6 +95,23 @@ const text: ComponentSchema = {
         { value: 'left', name: 'Sinistra' },
       ],
     },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
     hide: {
       type: 'option',
       display_name: 'Nascondi mobile',
@@ -121,14 +138,35 @@ const image: ComponentSchema = {
       filetypes: ['images'],
       required: true,
     },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
     aspect: {
       type: 'option',
       display_name: 'Aspetto',
       options: [
         { value: '1/1', name: 'Quadrata' },
         { value: '3/4', name: 'Verticale' },
+        { value: '4/9', name: 'Verticale stretta' },
         { value: '4/3', name: 'Orizzontale' },
+        { value: '9/4', name: 'Orizzontale larga' },
       ],
+      description: 'Proporzioni immagine',
+      tooltip: true,
     },
     fullScreen: {
       type: 'boolean',
@@ -478,6 +516,7 @@ const section: ComponentSchema = {
       component_whitelist: [
         'alias',
         'background',
+        'image',
         'list',
         'process',
         'text',
@@ -492,6 +531,16 @@ const section: ComponentSchema = {
         'form',
       ],
       required: true,
+    },
+    align: {
+      type: 'option',
+      display_name: 'Allinea',
+      options: [
+        { name: 'Sopra', value: 'start' },
+        { name: 'Centro', value: 'center' },
+        { name: 'Sotto', value: 'end' },
+        { name: 'Riempi', value: 'stretch' },
+      ],
     },
     dark: {
       type: 'boolean',
@@ -514,7 +563,7 @@ const wrapper: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.size}}`,
+  preview_tmpl: `{{it.width}}`,
   schema: {
     contents: {
       type: 'bloks',
@@ -545,6 +594,23 @@ const wrapper: ComponentSchema = {
       type: 'boolean',
       display_name: 'Incorniciato',
       inline_label: true,
+    },
+    width: {
+      type: 'options',
+      display_name: 'New Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
     },
     size: {
       type: 'option',

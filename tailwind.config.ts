@@ -65,8 +65,10 @@ export default {
         compact: '.9',
       },
       aspectRatio: {
+        '9/4': '9 / 4',
         '4/3': '4 / 3',
         '3/4': '3 / 4',
+        '4/9': '4 / 9',
       },
       boxShadow: {
         aside: [
