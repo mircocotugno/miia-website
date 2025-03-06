@@ -249,46 +249,6 @@ export type MapProps = BlokProps & {
   locations: Array<StoryProps & { content: LocationProps }>
 }
 
-export type FormProps = BlokProps & {
-  component: 'form'
-  ref: StoryProps & { content: FormProps }
-  scope: FormScopes
-  title: string
-  label: string
-  fields: Array<FieldProps> | []
-  message: string
-}
-
-export type FormData = {
-  [key: string]: DataProps
-}
-
-export type DataProps = {
-  id: string
-  value: any
-  required: boolean
-  error: string | null
-}
-
-export type BrevoProps = {
-  email?: string
-  id?: number
-  emailBlacklisted?: boolean
-  smsBlacklisted?: boolean
-  createdAt?: Date
-  modifiedAt?: Date
-  updateEnabled?: boolean
-  listIds?: Array<number>
-  attributes: BrevoAttributes
-}
-
-export type BrevoAttributes = {
-  COGNOME: string
-  NOME: string
-  SMS: number
-  [key: string]: string | number | Date
-}
-
 export type SectionProps = BlokProps & {
   component: 'section'
   contents: Array<
@@ -310,6 +270,7 @@ export type SectionProps = BlokProps & {
   id: string
   dark: boolean
   contain: boolean
+  align: 'start' | 'center' | 'end' | 'stretch'
 }
 
 export type NavProps = BlokProps & {
@@ -393,4 +354,46 @@ export type EventProps = BlokProps & {
   location: LocationProps
   date: string
   page: LinkProps
+}
+
+// Brevo and form props
+
+export type FormProps = BlokProps & {
+  component: 'form'
+  ref: StoryProps & { content: FormProps }
+  scope: FormScopes
+  title: string
+  label: string
+  fields: Array<FieldProps> | []
+  message: string
+}
+
+export type FormData = {
+  [key: string]: DataProps
+}
+
+export type DataProps = {
+  id: string
+  value: any
+  required: boolean
+  error: string | null
+}
+
+export type BrevoProps = {
+  email?: string
+  id?: number
+  emailBlacklisted?: boolean
+  smsBlacklisted?: boolean
+  createdAt?: Date
+  modifiedAt?: Date
+  updateEnabled?: boolean
+  listIds?: Array<number>
+  attributes: BrevoAttributes
+}
+
+export type BrevoAttributes = {
+  COGNOME: string
+  NOME: string
+  SMS: number
+  [key: string]: string | number | Date
 }

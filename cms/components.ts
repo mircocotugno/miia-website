@@ -516,6 +516,7 @@ const section: ComponentSchema = {
       component_whitelist: [
         'alias',
         'background',
+        'image',
         'list',
         'process',
         'text',
@@ -530,6 +531,16 @@ const section: ComponentSchema = {
         'form',
       ],
       required: true,
+    },
+    align: {
+      type: 'option',
+      display_name: 'Allinea',
+      options: [
+        { name: 'Sopra', value: 'start' },
+        { name: 'Centro', value: 'center' },
+        { name: 'Sotto', value: 'end' },
+        { name: 'Riempi', value: 'stretch' },
+      ],
     },
     dark: {
       type: 'boolean',

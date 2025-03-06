@@ -9,7 +9,7 @@ interface PageComponent {
 }
 
 export default function Page({ blok, locations }: PageComponent) {
-  const singleSection = blok.body.length === 1
+  const singleSection = !!blok.body && blok.body.length === 1
   return (
     <>
       <Meta {...blok} />
