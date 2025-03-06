@@ -1,5 +1,5 @@
 import type { ImageProps } from '@props/types'
-import { widths } from '@styles/variants'
+import {  widths } from '@styles/variants'
 import {
   Image as HeroImage,
   Modal,
@@ -43,15 +43,18 @@ export default function Image({ blok }: ImageComponent) {
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
-        sizes={`(max-${axis}:512px):256px,(max-${axis}:768px):512px,(max-${axis}:1024px):768px,(max-${axis}:1280px):1024px,1280px`}
+        height={'100%'}
+        sizes={`(max-${axis}:512px)::512px,(max-${axis}:768px)::768px,(max-${axis}:1024px):1024px,(max-${axis}:1280px):1280px,1280px`}
         classNames={{
           wrapper: wrapperClasses({
-            sm: blok.width?.[0],
-            md: blok.width?.[1],
-            lg: blok.width?.[2],
-            xl: blok.width?.[3],
+            width_sm: blok.width?.[0],
+            width_md: blok.width?.[1],
+            width_lg: blok.width?.[2],
+            width_xl: blok.width?.[3],
           }),
-          img: imageClasses({ aspect: blok.aspect }),
+          img: imageClasses({
+            aspect: blok.aspect,
+          }),
         }}
       />
       {blok.fullScreen && (
@@ -82,22 +85,24 @@ export default function Image({ blok }: ImageComponent) {
 }
 
 const wrapperClasses = tv({
-  base: 'flex-1 items-stretch col-span-12',
+  base: 'flex-1 self-stretch col-span-12',
   variants: {
-    sm: widths.sm,
-    md: widths.md,
-    lg: widths.lg,
-    xl: widths.xl,
+    width_sm: widths.sm,
+    width_md: widths.md,
+    width_lg: widths.lg,
+    width_xl: widths.xl,
   },
 })
 
 const imageClasses = tv({
-  base: 'inset-0 object-cover',
+  base: 'inset-0 object-cover aspect-auto',
   variants: {
     aspect: {
-      '1/1': 'aspect-square',
-      '4/3': 'aspect-4/3',
-      '3/4': 'aspect-3/4',
+      '9/4': 'sm:aspect-9/4',
+      '4/3': 'sm:aspect-4/3',
+      '1/1': 'sm:aspect-square',
+      '3/4': 'sm:aspect-3/4',
+      '4/9': 'sm:aspect-4/9',
     },
   },
 })
