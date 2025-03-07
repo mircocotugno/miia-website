@@ -24,8 +24,6 @@ const relations = [
 type AliasData = (StoryProps & { content: any }) | null
 
 export default function Alias({ blok, parent }: AliasComponent) {
-  const typography = {}
-
   const isArticle = blok.resource === 'last-article'
   const isEvent = blok.resource === 'next-event'
   const [alias, setAlias] = useState<AliasData>(null)
@@ -143,7 +141,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
             compiler(alias.content.description, {
               wrapper: 'p',
               forceWrapper: true,
-              overrides: Typography(typography),
+              overrides: Typography({}),
             })}
         </div>
         {blok.form.content && (

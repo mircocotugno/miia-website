@@ -1,12 +1,6 @@
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { PersonProps, StoryProps } from '@props/types'
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Image,
-} from '@heroui/react'
+import type { PersonProps } from '@props/types'
+import { Card, CardBody, CardFooter, CardHeader, Image } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 
@@ -63,7 +57,7 @@ export default function Person({ blok }: PersonComponent) {
               <p className='text-sm align-middle'>{children}</p>
             ),
             forceWrapper: true,
-            overrides: Typography,
+            overrides: Typography({}),
           })}
       </CardBody>
       {!!person.links.length && (

@@ -12,6 +12,7 @@ export default function Text({ blok }: TextComponent) {
   const typography = {
     theme: blok.theme,
   }
+
   return (
     <article
       key={blok._uid}

@@ -1,5 +1,4 @@
 import { Link, Image } from '@heroui/react'
-import { error } from 'console'
 import { tv } from 'tailwind-variants'
 
 interface TypographyComponents {

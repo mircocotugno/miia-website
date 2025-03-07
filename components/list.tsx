@@ -35,13 +35,13 @@ export default function List({ blok }: ListComponent) {
           aria-label={`accordion-${index}`}
           title={compiler(item.title, {
             wrapper: null,
-            overrides: Typography(typography),
+            overrides: Typography({}),
           })}
         >
           <div className='font-light'>
             {compiler(item.description, {
               wrapper: null,
-              overrides: Typography(typography),
+              overrides: Typography({}),
             })}
           </div>
         </AccordionItem>
