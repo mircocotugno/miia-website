@@ -124,6 +124,8 @@ export type TextProps = BlokProps & {
   justify: Justifications
   hide: 'title' | 'description' | 'all'
   width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  order: number
+  theme: 'primary' | 'secondary'
 }
 
 export type ImageProps = BlokProps & {
@@ -131,6 +133,8 @@ export type ImageProps = BlokProps & {
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3' | '9/4' | '4/9'
   width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  size: 'sm' | 'md' | 'lg'
+  order: number
   author: PersonProps
 }
 
@@ -138,6 +142,7 @@ export type BackgroundProps = BlokProps & {
   component: 'background'
   image: ImageData
   video: string
+  author: PersonProps
 }
 
 export type GalleryProps = BlokProps & {
@@ -234,7 +239,7 @@ export type WrapperProps = BlokProps & {
   size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
   width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
   justify: Justifications
-  order: 'first' | 'second' | 'third' | 'fourth' | 'last'
+  order: number
 }
 
 export type CarouselProps = BlokProps & {
@@ -242,6 +247,7 @@ export type CarouselProps = BlokProps & {
   id: string
   slides: Array<SectionProps | WrapperProps | PersonProps>
   weight: 'low' | 'high'
+  order: number
 }
 
 export type MapProps = BlokProps & {

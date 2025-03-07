@@ -36,6 +36,10 @@ export default function Image({ blok, parent }: ImageComponent) {
     axis = ratio > 1 ? 'width' : 'height'
   }
 
+  const isFullWith = blok.width?.[0] === '1/1'
+
+  const order: any = !!blok.order ? blok.order.toString() : 'none'
+
   return (
     <>
       <HeroImage
@@ -43,17 +47,21 @@ export default function Image({ blok, parent }: ImageComponent) {
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
-        height={'100%'}
+        removeWrapper={!!blok.size}
         sizes={`(max-${axis}:512px)::512px,(max-${axis}:768px)::768px,(max-${axis}:1024px):1024px,(max-${axis}:1280px):1280px,1280px`}
         classNames={{
           wrapper: wrapperClasses({
-            wrapper: parent === 'wrapper',
+            order: order,
+            wrapperChild: parent === 'wrapper',
             sm: blok.width?.[0],
             md: blok.width?.[1],
             lg: blok.width?.[2],
             xl: blok.width?.[3],
           }),
           img: imageClasses({
+            order: order,
+            normalized: !!blok.size || isFullWith,
+            size: blok.size,
             aspect: blok.aspect,
           }),
         }}
@@ -86,10 +94,18 @@ export default function Image({ blok, parent }: ImageComponent) {
 }
 
 const wrapperClasses = tv({
-  base: 'flex-1 col-span-12',
+  base: 'flex-1 col-span-12 sm:order-none',
   variants: {
-    wrapper: {
+    wrapperChild: {
       false: 'self-stretch',
+    },
+    order: {
+      '1': "-order-1",
+      '2': "-order-2",
+      '3': "-order-3",
+      '4': "-order-4",
+      '5': "-order-5",
+      '6': "-order-6",
     },
     sm: {
       '1/4': 'sm:col-span-3',
@@ -127,14 +143,31 @@ const wrapperClasses = tv({
 })
 
 const imageClasses = tv({
-  base: 'inset-0 object-cover aspect-auto',
+  base: 'h-auto',
   variants: {
+    size: {
+      sm: 'max-w-32',
+      md: 'max-w-48',
+      lg: 'max-w-64',
+    },
+    normalized: {
+      true: 'md:h-full sm:aspect-auto md:inset-0 md:object-cover',
+      false: 'inset-0 object-cover sm:h-full',
+    },
+    order: {
+      '1': "-order-1",
+      '2': "-order-2",
+      '3': "-order-3",
+      '4': "-order-4",
+      '5': "-order-5",
+      '6': "-order-6",
+    },
     aspect: {
-      '9/4': 'sm:aspect-9/4',
-      '4/3': 'sm:aspect-4/3',
-      '1/1': 'sm:aspect-square',
-      '3/4': 'sm:aspect-3/4',
-      '4/9': 'sm:aspect-4/9',
+      '9/4': 'sm:aspect-9/4 md:aspect-9/4',
+      '4/3': 'sm:aspect-4/3 md:aspect-4/3',
+      '1/1': 'sm:aspect-square md:aspect-square',
+      '3/4': 'sm:aspect-3/4 md:aspect-3/4',
+      '4/9': 'sm:aspect-4/9 md:aspect-4/9',
     },
   },
 })

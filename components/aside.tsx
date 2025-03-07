@@ -75,7 +75,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
               wrapper: ({ children }) => (
                 <div className='font-serif mb-3 px-2'>{children}</div>
               ),
-              overrides: Typography,
+              overrides: Typography({}),
             })}
           {!!courses && (
             <Accordion selectionMode='multiple'>

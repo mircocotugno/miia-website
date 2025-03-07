@@ -8,36 +8,52 @@ interface TextComponent {
   blok: TextProps
 }
 
-const settings = { wrapper: null, forceWrapper: true, overrides: Typography }
-
 export default function Text({ blok }: TextComponent) {
-  const Title = () => (
-    <div
-      className={titleClases({
-        hide: blok.hide === 'all' || blok.hide.includes('title'),
-      })}
-    >
-      {compiler(blok.title, {
-        wrapper: null,
-        forceWrapper: true,
-        overrides: Typography,
-      })}
-    </div>
-  )
+  const typography = {
+    theme: blok.theme,
+  }
 
-  const Description = () => (
-    <div
-      className={descriptionClasses({
-        hide: blok.hide === 'all' || blok.hide.includes('description'),
-      })}
-    >
-      {compiler(blok.description, settings)}
-    </div>
-  )
+  const Title = () =>
+    blok.title &&
+    compiler(blok.title, {
+      wrapper: ({ children }) => (
+        <div
+          key={`${blok._uid}_title`}
+          className={titleClases({
+            hide: blok.hide === 'all' || blok.hide.includes('title'),
+          })}
+        >
+          {children}
+        </div>
+      ),
+      forceWrapper: true,
+      overrides: Typography(typography),
+    })
+
+  const Description = () =>
+    blok.description &&
+    compiler(blok.description, {
+      wrapper: ({ children }) => (
+        <div
+          key={`${blok._uid}_description`}
+          className={descriptionClasses({
+            hide: blok.hide === 'all' || blok.hide.includes('description'),
+          })}
+        >
+          {children}
+        </div>
+      ),
+      forceWrapper: true,
+      overrides: Typography(typography),
+    })
+
+  const order: any = !!blok.order ? blok.order.toString() : 'none'
 
   return (
     <article
+      key={blok._uid}
       className={textClasses({
+        order: order,
         justify: blok.justify,
         sm: blok.width?.[0],
         md: blok.width?.[1],
@@ -46,14 +62,14 @@ export default function Text({ blok }: TextComponent) {
       })}
       {...storyblokEditable(blok)}
     >
-      {blok.title && <Title />}
-      {blok.description && <Description />}
+      <Title />
+      <Description />
     </article>
   )
 }
 
 const titleClases = tv({
-  base: 'space-y-6',
+  base: 'space-y-6 leading-tight',
   variants: {
     hide: {
       true: 'hidden sm:block',
@@ -62,7 +78,7 @@ const titleClases = tv({
 })
 
 const descriptionClasses = tv({
-  base: 'space-y-2',
+  base: 'space-y-2 leading-relaxed opacity-85',
   variants: {
     hide: {
       true: 'hidden sm:block',
@@ -77,6 +93,14 @@ const textClasses = tv({
       right: 'sm:text-right',
       center: 'sm:text-center',
       left: 'sm:text-left',
+    },
+    order: {
+      1: '-order-1',
+      2: '-order-2',
+      3: '-order-3',
+      4: '-order-4',
+      5: '-order-5',
+      6: '-order-6',
     },
     sm: {
       '1/4': 'sm:col-span-3',

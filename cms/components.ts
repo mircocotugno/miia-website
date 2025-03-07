@@ -112,6 +112,20 @@ const text: ComponentSchema = {
       tooltip: true,
       max_options: 4,
     },
+    theme: {
+      type: 'option',
+      display_name: 'Tema',
+      options: [
+        { value: 'primary', name: 'Primario' },
+        { value: 'secondary', name: 'Secondario' },
+      ],
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
+    },
     hide: {
       type: 'option',
       display_name: 'Nascondi mobile',
@@ -155,6 +169,17 @@ const image: ComponentSchema = {
       tooltip: true,
       max_options: 4,
     },
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'sm', name: 'Piccola' },
+        { value: 'md', name: 'Media' },
+        { value: 'lg', name: 'Grande' },
+      ],
+      description: 'Dimensione fissa immagine',
+      tooltip: true,
+    },
     aspect: {
       type: 'option',
       display_name: 'Aspetto',
@@ -167,6 +192,12 @@ const image: ComponentSchema = {
       ],
       description: 'Proporzioni immagine',
       tooltip: true,
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
     fullScreen: {
       type: 'boolean',
@@ -233,6 +264,12 @@ const background: ComponentSchema = {
       display_name: 'Video',
       description: 'Id del video su youtube',
       inline_label: true,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
     },
   },
 }
@@ -634,19 +671,10 @@ const wrapper: ComponentSchema = {
       ],
     },
     order: {
-      type: 'option',
+      type: 'number',
       display_name: 'Riordino mobile',
-      options: [
-        { value: 'first', name: 'Primo' },
-        { value: 'second', name: 'Secondo' },
-        { value: 'third', name: 'Terzo' },
-        { value: 'fourth', name: 'Quarto' },
-        { value: 'fifth', name: 'Quinto' },
-        { value: 'sixth', name: 'Sesto' },
-        { value: 'seventh', name: 'Settimo' },
-        { value: 'eighth', name: 'Ottavo' },
-        { value: 'last', name: 'Ultimo' },
-      ],
+      max_value: 6,
+      min_value: 0,
     },
   },
 }
@@ -677,6 +705,12 @@ const carousel: ComponentSchema = {
         { value: 'low', name: 'Bassa' },
         { value: 'high', name: 'Alta' },
       ],
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
   },
 }

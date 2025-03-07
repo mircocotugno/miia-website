@@ -116,10 +116,10 @@ export default {
               DEFAULT: '#232325',
             },
             primary: {
-              DEFAULT: '#d12934',
+              DEFAULT: '#008a45',
             },
             secondary: {
-              DEFAULT: '#008a45',
+              DEFAULT: '#d12934',
             },
           },
         },

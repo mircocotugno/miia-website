@@ -141,7 +141,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
             compiler(alias.content.description, {
               wrapper: 'p',
               forceWrapper: true,
-              overrides: Typography,
+              overrides: Typography({}),
             })}
         </div>
         {blok.form.content && (

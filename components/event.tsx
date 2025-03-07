@@ -53,7 +53,7 @@ export default function Event({ blok, parent }: EventComponent) {
             compiler(event.description, {
               wrapper: 'p',
               forceWrapper: true,
-              overrides: Typography,
+              overrides: Typography({}),
             })}
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function Event({ blok, parent }: EventComponent) {
             compiler(event.description, {
               wrapper: 'p',
               forceWrapper: true,
-              overrides: Typography,
+              overrides: Typography({}),
             })}
           {event.date && (
             <p className='space-x-0.5'>

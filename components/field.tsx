@@ -110,6 +110,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
   return (
     <Select
       id={blok.id}
+      title={blok.id}
       label={blok.label}
       placeholder={blok.placeholder}
       isRequired={blok.required}
