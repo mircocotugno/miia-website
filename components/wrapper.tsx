@@ -7,17 +7,18 @@ interface WrapperComponent {
 }
 
 export default function Wrapper({ blok }: WrapperComponent) {
+  const order: any = !!blok.order ? blok.order.toString() : 'none'
   return (
     <div
       {...storyblokEditable(blok)}
       className={classes({
+        order: order,
         sm: blok.width?.[0],
         md: blok.width?.[1],
         lg: blok.width?.[2],
         xl: blok.width?.[3],
         row: blok.row,
         justify: `${blok.row ? 'justify' : 'items'}-${blok.justify}`,
-        order: blok.order,
       })}
     >
       {blok.contents.map((content, index) => (
@@ -32,8 +33,31 @@ export default function Wrapper({ blok }: WrapperComponent) {
 }
 
 const classes = tv({
-  base: 'col-span-12 order-none sm:order-none flex flex-col flex-wrap gap-4 min-h-12',
+  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12',
   variants: {
+    row: {
+      true: 'flex-row sm:max-md:col-span-12',
+    },
+    hasBackground: {
+      true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
+    },
+    justify: {
+      'items-right': 'items-end',
+      'items-center': 'items-center',
+      'items-left': 'items-start',
+      'justify-right': 'justify-start',
+      'justify-center': 'justify-center',
+      'justify-left': 'justify-end',
+    },
+    order: {
+      none: 'order-none',
+      '1': '-order-1',
+      '2': '-order-2',
+      '3': '-order-3',
+      '4': '-order-4',
+      '5': '-order-5',
+      '6': '-order-6',
+    },
     sm: {
       '1/4': 'sm:col-span-3',
       '1/3': 'sm:col-span-4',
@@ -66,31 +90,6 @@ const classes = tv({
       '3/4': 'xl:col-span-9',
       '1/1': 'xl:col-span-12',
     },
-    justify: {
-      'items-right': 'items-end',
-      'items-center': 'items-center',
-      'items-left': 'items-start',
-      'justify-right': 'justify-start',
-      'justify-center': 'justify-center',
-      'justify-left': 'justify-end',
-    },
-    row: {
-      true: 'flex-row sm:max-md:col-span-12',
-    },
-    hasBackground: {
-      true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
-    },
-    order: {
-      first: 'order-first',
-      second: '-order-7',
-      third: '-order-6',
-      fourth: '-order-5',
-      fifth: '-order-4',
-      sixth: '-order-3',
-      seventh: '-order-2',
-      eighth: '-order-1',
-      last: 'order-last',
-    },
   },
 })
 
@@ -102,7 +101,7 @@ const classes = tv({
       size: blok.size,
       row: blok.row,
       boxed: true,
-      order: blok.order,
+      order: blok.order.toString(),
       hasBackground: hasBackground >= 0,
     })}
     style={

@@ -13,10 +13,13 @@ export default function Text({ blok }: TextComponent) {
     theme: blok.theme,
   }
 
+  const order: any = !!blok.order ? blok.order.toString() : 'none'
+
   return (
     <article
       key={blok._uid}
       className={textClasses({
+        order: order,
         justify: blok.justify,
         sm: blok.width?.[0],
         md: blok.width?.[1],
@@ -84,6 +87,14 @@ const textClasses = tv({
       right: 'sm:text-right',
       center: 'sm:text-center',
       left: 'sm:text-left',
+    },
+    order: {
+      1: '-order-1',
+      2: '-order-2',
+      3: '-order-3',
+      4: '-order-4',
+      5: '-order-5',
+      6: '-order-6',
     },
     sm: {
       '1/4': 'sm:col-span-3',

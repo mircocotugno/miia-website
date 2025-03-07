@@ -120,6 +120,12 @@ const text: ComponentSchema = {
         { value: 'secondary', name: 'Secondario' },
       ],
     },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
+    },
     hide: {
       type: 'option',
       display_name: 'Nascondi mobile',
@@ -186,6 +192,12 @@ const image: ComponentSchema = {
       ],
       description: 'Proporzioni immagine',
       tooltip: true,
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
     fullScreen: {
       type: 'boolean',
@@ -659,19 +671,10 @@ const wrapper: ComponentSchema = {
       ],
     },
     order: {
-      type: 'option',
+      type: 'number',
       display_name: 'Riordino mobile',
-      options: [
-        { value: 'first', name: 'Primo' },
-        { value: 'second', name: 'Secondo' },
-        { value: 'third', name: 'Terzo' },
-        { value: 'fourth', name: 'Quarto' },
-        { value: 'fifth', name: 'Quinto' },
-        { value: 'sixth', name: 'Sesto' },
-        { value: 'seventh', name: 'Settimo' },
-        { value: 'eighth', name: 'Ottavo' },
-        { value: 'last', name: 'Ultimo' },
-      ],
+      max_value: 6,
+      min_value: 0,
     },
   },
 }
@@ -702,6 +705,12 @@ const carousel: ComponentSchema = {
         { value: 'low', name: 'Bassa' },
         { value: 'high', name: 'Alta' },
       ],
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
   },
 }

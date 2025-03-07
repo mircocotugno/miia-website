@@ -31,7 +31,7 @@ export default function Menu({ blok, parent }: MenuComponent) {
   }
   if (blok.inline) {
     return (
-      <div {...storyblokEditable(blok)} className='flex gap-2'>
+      <div {...storyblokEditable(blok)} className='flex flex-wrap gap-x-2 gap-y-4'>
         {blok.links.map((link, index) => (
           <StoryblokComponent
             blok={link}

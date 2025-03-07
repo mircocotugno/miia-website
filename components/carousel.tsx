@@ -27,22 +27,14 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
   ))
 
   const Tag = parent === 'section' ? 'div' : 'section'
-  const classes = tv({
-    variants: {
-      contain: {
-        true: 'col-span-12',
-      },
-      carousel: {
-        true: 'min-h-sm',
-        false: 'min-h-cover sm:min-h-lg',
-      },
-    },
-  })
+
+  const order: any = !!blok.order ? blok.order.toString() : 'none'
 
   return (
     <Tag
       id={blok.id && blok.id.replaceAll(' ', '-')}
       className={classes({
+        order: order,
         carousel: isCarousel,
         contain: parent == 'section',
       })}
@@ -73,3 +65,24 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
     </Tag>
   )
 }
+
+const classes = tv({
+  base: 'order-last sm:order-none',
+  variants: {
+    order: {
+      '1': '-order-1',
+      '2': '-order-2',
+      '3': '-order-3',
+      '4': '-order-4',
+      '5': '-order-5',
+      '6': '-order-6',
+    },
+    contain: {
+      true: 'col-span-12',
+    },
+    carousel: {
+      true: 'min-h-sm',
+      false: 'min-h-cover sm:min-h-lg',
+    },
+  },
+})
