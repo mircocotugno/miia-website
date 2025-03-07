@@ -93,8 +93,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
   const handleSubmit = async () => {
     const _data = { ...data }
-    Object.values(_data).forEach(
-      (field: DataProps) => (_data[field.id].error = fieldValidation(field))
+    Object.entries(_data).forEach(
+      ([name, field]) => (_data[name].error = fieldValidation(field))
     )
     const hasError: boolean = Object.values(_data).some(
       ({ error }: DataProps): boolean => !!error
