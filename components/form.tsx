@@ -194,13 +194,13 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                 )
               : compiler(message, {
                   wrapper: null,
-                  overrides: Typography,
+                  overrides: Typography({ theme: 'primary' }),
                 })}
             {error && (
-              <div className='text-danger mt-auto'>
+              <div className='mt-auto'>
                 {compiler(error, {
                   wrapper: null,
-                  overrides: Typography,
+                  overrides: Typography({ error: true }),
                 })}
               </div>
             )}

@@ -13,6 +13,7 @@ interface AsideComponent {
 }
 
 export default function Aside({ blok, locations }: AsideComponent) {
+  const typography = {}
   const options: Array<OptionProps> = []
   const courses =
     blok.courses.length > 0 &&
@@ -75,7 +76,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
               wrapper: ({ children }) => (
                 <div className='font-serif mb-3 px-2'>{children}</div>
               ),
-              overrides: Typography,
+              overrides: Typography(typography),
             })}
           {!!courses && (
             <Accordion selectionMode='multiple'>

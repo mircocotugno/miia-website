@@ -23,6 +23,7 @@ const classes = tv({
 })
 
 export default function List({ blok }: ListComponent) {
+  const typography = {}
   return (
     <Accordion
       className={classes({ size: blok.size })}
@@ -34,13 +35,13 @@ export default function List({ blok }: ListComponent) {
           aria-label={`accordion-${index}`}
           title={compiler(item.title, {
             wrapper: null,
-            overrides: Typography,
+            overrides: Typography(typography),
           })}
         >
           <div className='font-light'>
             {compiler(item.description, {
               wrapper: null,
-              overrides: Typography,
+              overrides: Typography(typography),
             })}
           </div>
         </AccordionItem>

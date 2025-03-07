@@ -1,9 +1,15 @@
 import { Link, Image } from '@heroui/react'
+import { error } from 'console'
 import { tv } from 'tailwind-variants'
 
-export const Typography = (theme?: 'primary' | 'secondary') => ({
+interface TypographyComponents {
+  theme?: 'primary' | 'secondary'
+  error?: boolean
+}
+
+export const Typography = ({ theme, error }: TypographyComponents) => ({
   h1: {
-    component: (props: { children: string }) => (
+    component: ({ children }: { children: string }) => (
       <h1
         className={titleClasses({
           class:
@@ -11,7 +17,7 @@ export const Typography = (theme?: 'primary' | 'secondary') => ({
           theme: theme,
         })}
       >
-        {props.children}
+        {children}
       </h1>
     ),
   },
@@ -87,7 +93,7 @@ export const Typography = (theme?: 'primary' | 'secondary') => ({
   },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className='font-sans leading-snug'>{children}</p>
+      <p className={paragraphClasses({ error: error })}>{children}</p>
     ),
   },
   ul: {
@@ -119,5 +125,12 @@ const titleClasses = tv({
       primary: 'text-primary',
       secondary: 'text-secondary',
     },
+  },
+})
+
+const paragraphClasses = tv({
+  base: 'font-sans leading-snug',
+  variants: {
+    error: { true: 'text-small text-dander' },
   },
 })

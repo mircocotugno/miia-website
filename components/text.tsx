@@ -9,6 +9,9 @@ interface TextComponent {
 }
 
 export default function Text({ blok }: TextComponent) {
+  const typography = {
+    theme: blok.theme,
+  }
   return (
     <article
       key={blok._uid}
@@ -34,7 +37,7 @@ export default function Text({ blok }: TextComponent) {
             </div>
           ),
           forceWrapper: true,
-          overrides: Typography(blok.theme),
+          overrides: Typography(typography),
         })}
       {blok.description &&
         compiler(blok.description, {
@@ -49,7 +52,7 @@ export default function Text({ blok }: TextComponent) {
             </div>
           ),
           forceWrapper: true,
-          overrides: Typography(blok.theme),
+          overrides: Typography(typography),
         })}
     </article>
   )
