@@ -115,7 +115,7 @@ function Footer({ blok }: { blok: NavProps }) {
       </div>
       <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
         <p className='text-xs '>
-          {compiler(blok.message, { wrapper: null, overrides: Typography })}
+          {compiler(blok.message, { wrapper: null, overrides: Typography({}) })}
         </p>
       </div>
     </footer>
