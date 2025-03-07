@@ -13,6 +13,40 @@ export default function Text({ blok }: TextComponent) {
     theme: blok.theme,
   }
 
+  const Title = () =>
+    blok.title &&
+    compiler(blok.title, {
+      wrapper: ({ children }) => (
+        <div
+          key={`${blok._uid}_title`}
+          className={titleClases({
+            hide: blok.hide === 'all' || blok.hide.includes('title'),
+          })}
+        >
+          {children}
+        </div>
+      ),
+      forceWrapper: true,
+      overrides: Typography(typography),
+    })
+
+  const Description = () =>
+    blok.description &&
+    compiler(blok.description, {
+      wrapper: ({ children }) => (
+        <div
+          key={`${blok._uid}_description`}
+          className={descriptionClasses({
+            hide: blok.hide === 'all' || blok.hide.includes('description'),
+          })}
+        >
+          {children}
+        </div>
+      ),
+      forceWrapper: true,
+      overrides: Typography(typography),
+    })
+
   const order: any = !!blok.order ? blok.order.toString() : 'none'
 
   return (
@@ -28,36 +62,8 @@ export default function Text({ blok }: TextComponent) {
       })}
       {...storyblokEditable(blok)}
     >
-      {blok.title &&
-        compiler(blok.title, {
-          wrapper: ({ children }) => (
-            <div
-              key={`${blok._uid}_title`}
-              className={titleClases({
-                hide: blok.hide === 'all' || blok.hide.includes('title'),
-              })}
-            >
-              {children}
-            </div>
-          ),
-          forceWrapper: true,
-          overrides: Typography(typography),
-        })}
-      {blok.description &&
-        compiler(blok.description, {
-          wrapper: ({ children }) => (
-            <div
-              key={`${blok._uid}_description`}
-              className={descriptionClasses({
-                hide: blok.hide === 'all' || blok.hide.includes('description'),
-              })}
-            >
-              {children}
-            </div>
-          ),
-          forceWrapper: true,
-          overrides: Typography(typography),
-        })}
+      <Title />
+      <Description />
     </article>
   )
 }
