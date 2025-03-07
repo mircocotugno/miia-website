@@ -132,6 +132,7 @@ export type ImageProps = BlokProps & {
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3' | '9/4' | '4/9'
   width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  size: 'sm' | 'md' | 'lg'
   author: PersonProps
 }
 
@@ -139,6 +140,7 @@ export type BackgroundProps = BlokProps & {
   component: 'background'
   image: ImageData
   video: string
+  author: PersonProps
 }
 
 export type GalleryProps = BlokProps & {

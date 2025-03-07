@@ -163,6 +163,17 @@ const image: ComponentSchema = {
       tooltip: true,
       max_options: 4,
     },
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'sm', name: 'Piccola' },
+        { value: 'md', name: 'Media' },
+        { value: 'lg', name: 'Grande' },
+      ],
+      description: 'Dimensione fissa immagine',
+      tooltip: true,
+    },
     aspect: {
       type: 'option',
       display_name: 'Aspetto',
@@ -241,6 +252,12 @@ const background: ComponentSchema = {
       display_name: 'Video',
       description: 'Id del video su youtube',
       inline_label: true,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
     },
   },
 }

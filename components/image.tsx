@@ -43,16 +43,19 @@ export default function Image({ blok, parent }: ImageComponent) {
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
+        removeWrapper={!!blok.size}
         sizes={`(max-${axis}:512px)::512px,(max-${axis}:768px)::768px,(max-${axis}:1024px):1024px,(max-${axis}:1280px):1280px,1280px`}
         classNames={{
           wrapper: wrapperClasses({
-            wrapper: parent === 'wrapper',
+            wrapperChild: parent === 'wrapper',
             sm: blok.width?.[0],
             md: blok.width?.[1],
             lg: blok.width?.[2],
             xl: blok.width?.[3],
           }),
           img: imageClasses({
+            wrapped: !blok.size,
+            size: blok.size,
             aspect: blok.aspect,
           }),
         }}
@@ -87,7 +90,7 @@ export default function Image({ blok, parent }: ImageComponent) {
 const wrapperClasses = tv({
   base: 'flex-1 col-span-12',
   variants: {
-    wrapper: {
+    wrapperChild: {
       false: 'self-stretch',
     },
     sm: {
@@ -126,8 +129,16 @@ const wrapperClasses = tv({
 })
 
 const imageClasses = tv({
-  base: 'inset-0 object-cover aspect-auto sm:h-full',
   variants: {
+    size: {
+      sm: 'max-w-32',
+      md: 'max-w-48',
+      lg: 'max-w-64',
+    },
+    wrapped: {
+      true: 'inset-0 object-cover aspect-auto sm:h-full',
+      false: 'h-auto',
+    },
     aspect: {
       '9/4': 'sm:aspect-9/4',
       '4/3': 'sm:aspect-4/3',
