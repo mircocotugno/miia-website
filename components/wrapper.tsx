@@ -33,7 +33,7 @@ export default function Wrapper({ blok }: WrapperComponent) {
 }
 
 const classes = tv({
-  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12',
+  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12 sm:order-none',
   variants: {
     row: {
       true: 'flex-row sm:max-md:col-span-12',

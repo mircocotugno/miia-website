@@ -87,7 +87,7 @@ const descriptionClasses = tv({
 })
 
 const textClasses = tv({
-  base: 'flex-1 flex flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-32 text-left',
+  base: 'flex-1 flex flex-col align-stretch gap-2 lg:gap-4 col-span-12 min-w-32 text-left sm:order-none',
   variants: {
     justify: {
       right: 'sm:text-right',
