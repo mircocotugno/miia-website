@@ -43,7 +43,6 @@ export default function Image({ blok, parent }: ImageComponent) {
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
-        height={'100%'}
         sizes={`(max-${axis}:512px)::512px,(max-${axis}:768px)::768px,(max-${axis}:1024px):1024px,(max-${axis}:1280px):1280px,1280px`}
         classNames={{
           wrapper: wrapperClasses({
@@ -127,7 +126,7 @@ const wrapperClasses = tv({
 })
 
 const imageClasses = tv({
-  base: 'inset-0 object-cover aspect-auto',
+  base: 'inset-0 object-cover aspect-auto sm:h-full',
   variants: {
     aspect: {
       '9/4': 'sm:aspect-9/4',
