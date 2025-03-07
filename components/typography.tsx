@@ -1,44 +1,63 @@
 import { Link, Image } from '@heroui/react'
+import { tv } from 'tailwind-variants'
 
-export const Typography = {
+export const Typography = (theme?: 'primary' | 'secondary') => ({
   h1: {
     component: (props: { children: string }) => (
-      <h1 className='font-serif leading-tight font-black break-words text-5xl md:text-6xl xl:text-7xl'>
+      <h1
+        className={titleClasses({
+          class:
+            'text-5xl leading-tight md:text-6xl md:leading-tight xl:text-7xl xl:leading-none font-serif font-black break-words',
+          theme: theme,
+        })}
+      >
         {props.children}
       </h1>
     ),
   },
   h2: {
     component: ({ children }: { children: string }) => (
-      <h2 className='font-serif leading-tight font-extrabold break-words text-4xl md:text-5xl xl:text-6xl'>
+      <h2
+        className={titleClasses({
+          class:
+            'text-4xl leading-tight md:text-5xl md:leading-tight xl:text-6xl xl:leading-none font-serif font-extrabold break-words',
+          theme: theme,
+        })}
+      >
         {children}
       </h2>
     ),
   },
   h3: {
     component: ({ children }: { children: string }) => (
-      <h3 className='font-serif leading-tight font-bold break-words text-3xl md:text-4xl xl:text-5xl'>
+      <h3
+        className={titleClasses({
+          class:
+            'text-3xl leading-tight md:text-4xl md:leading-tight xl:text-5xl xl:leading-none font-serif font-bold break-words',
+          theme: theme,
+        })}
+      >
         {children}
       </h3>
     ),
   },
   h4: {
     component: ({ children }: { children: string }) => (
-      <h4 className='font-bold leading-snug text-xl md:text-2xl xl:text-3xl'>
+      <h4 className='font-bold text-xl leading-snug md:text-2xl md:leading-snug xl:text-3xl xl:leading-snug'>
         {children}
       </h4>
     ),
   },
   h5: {
     component: ({ children }: { children: string }) => (
-      <h5 className='font-semibold leading-snug text-lg md:text-xl xl:text-2xl'>
+      <h5 className='font-semibold text-lg leading-snug md:text-xl md:leading-snug xl:text-2xl xl:leading-snug'>
         {children}
       </h5>
     ),
   },
   h6: {
     component: ({ children }: { children: string }) => (
-      <h6 className='font-semibold leading-snug text-lg xl:text-xl'>
+      <h6 className='font-semibold text-lg leading-snug xl:text-xl xl:leading-snug'>
         {children}
       </h6>
     ),
@@ -68,7 +87,7 @@ export const Typography = {
   },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className='font-sans'>{children}</p>
+      <p className='font-sans leading-snug'>{children}</p>
     ),
   },
   ul: {
@@ -92,4 +111,13 @@ export const Typography = {
       <Image removeWrapper src={src} alt={alt} title={title} width='100%' />
     ),
   },
-}
+})
+
+const titleClasses = tv({
+  variants: {
+    theme: {
+      primary: 'text-primary',
+      secondary: 'text-secondary',
+    },
+  },
+})

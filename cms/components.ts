@@ -112,6 +112,14 @@ const text: ComponentSchema = {
       tooltip: true,
       max_options: 4,
     },
+    theme: {
+      type: 'option',
+      display_name: 'Tema',
+      options: [
+        { value: 'primary', name: 'Primario' },
+        { value: 'secondary', name: 'Secondario' },
+      ],
+    },
     hide: {
       type: 'option',
       display_name: 'Nascondi mobile',

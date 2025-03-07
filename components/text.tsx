@@ -8,35 +8,10 @@ interface TextComponent {
   blok: TextProps
 }
 
-const settings = { wrapper: null, forceWrapper: true, overrides: Typography }
-
 export default function Text({ blok }: TextComponent) {
-  const Title = () => (
-    <div
-      className={titleClases({
-        hide: blok.hide === 'all' || blok.hide.includes('title'),
-      })}
-    >
-      {compiler(blok.title, {
-        wrapper: null,
-        forceWrapper: true,
-        overrides: Typography,
-      })}
-    </div>
-  )
-
-  const Description = () => (
-    <div
-      className={descriptionClasses({
-        hide: blok.hide === 'all' || blok.hide.includes('description'),
-      })}
-    >
-      {compiler(blok.description, settings)}
-    </div>
-  )
-
   return (
     <article
+      key={blok._uid}
       className={textClasses({
         justify: blok.justify,
         sm: blok.width?.[0],
@@ -46,14 +21,42 @@ export default function Text({ blok }: TextComponent) {
       })}
       {...storyblokEditable(blok)}
     >
-      {blok.title && <Title />}
-      {blok.description && <Description />}
+      {blok.title &&
+        compiler(blok.title, {
+          wrapper: ({ children }) => (
+            <div
+              key={`${blok._uid}_title`}
+              className={titleClases({
+                hide: blok.hide === 'all' || blok.hide.includes('title'),
+              })}
+            >
+              {children}
+            </div>
+          ),
+          forceWrapper: true,
+          overrides: Typography(blok.theme),
+        })}
+      {blok.description &&
+        compiler(blok.description, {
+          wrapper: ({ children }) => (
+            <div
+              key={`${blok._uid}_description`}
+              className={descriptionClasses({
+                hide: blok.hide === 'all' || blok.hide.includes('description'),
+              })}
+            >
+              {children}
+            </div>
+          ),
+          forceWrapper: true,
+          overrides: Typography(blok.theme),
+        })}
     </article>
   )
 }
 
 const titleClases = tv({
-  base: 'space-y-6',
+  base: 'space-y-6 leading-tight',
   variants: {
     hide: {
       true: 'hidden sm:block',
@@ -62,7 +65,7 @@ const titleClases = tv({
 })
 
 const descriptionClasses = tv({
-  base: 'space-y-2',
+  base: 'space-y-2 leading-relaxed opacity-85',
   variants: {
     hide: {
       true: 'hidden sm:block',
