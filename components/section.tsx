@@ -27,6 +27,7 @@ export default function Section({
       id={blok.id && blok.id.replaceAll(' ', '-')}
       className={tagClasses({
         themeDark: blok.dark,
+        rounded: parent === 'carousel',
         hasBackground: !!background,
         singleSection: singleSection,
       })}
@@ -79,6 +80,9 @@ const tagClasses = tv({
     themeDark: {
       true: 'dark text-foreground bg-background',
       false: 'light',
+    },
+    rounded: {
+      true: 'rounded-lg',
     },
     hasBackground: {
       true: 'relative z-0 py-0 min-h-cover [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
