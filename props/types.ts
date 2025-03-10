@@ -200,6 +200,7 @@ export type ListProps = BlokProps & {
 export type AliasProps = BlokProps & {
   component: 'alias'
   resource: 'next-event' | 'last-article'
+  filter: string
   form: StoryProps & { content: FormProps }
 }
 
@@ -246,7 +247,8 @@ export type CarouselProps = BlokProps & {
   component: 'carousel'
   id: string
   slides: Array<SectionProps | WrapperProps | PersonProps>
-  weight: 'low' | 'high'
+  view: number
+  delay: number
   order: number
 }
 

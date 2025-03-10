@@ -13,51 +13,49 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
   if (!blok.slides.length) return null
 
   const isCarousel = blok.slides[0].component !== 'section'
-  const weights = { low: [1, 2, 3, 4], high: [3, 5, 7, 9] }
-  const weight = blok.weight ? weights[blok.weight] : [2, 3, 4, 6]
 
   const slides = blok.slides.map((slide, index) => (
     <SwiperSlide
       {...storyblokEditable(slide)}
-      className={`${isCarousel ? 'min-h-sm overflow-visible' : 'min-h-cover sm:min-h-lg'}`}
+      className='overflow-visible min-h-inherit'
       key={index}
     >
       <StoryblokComponent blok={slide} parent={blok.component} />
     </SwiperSlide>
   ))
 
-  const Tag = parent === 'section' ? 'div' : 'section'
+  const Tag = parent === 'page' ? 'section' : 'div'
 
   const order: any = !!blok.order ? blok.order.toString() : 'none'
+
+  const autoplay = blok.delay > 0 ? { delay: 6500 - 1000 * blok.delay } : false
+
+  const view = blok.view > 0 ? Number(blok.view) : 1
+  const smView = blok.view > 0 ? view + 1 : 1
+  const mdView = blok.view > 0 ? (view > 1 ? view * 2 : view + 1) : 1
+  const xlView = blok.view > 0 ? (view > 1 ? view * 3 : view + 1) : 1
 
   return (
     <Tag
       id={blok.id && blok.id.replaceAll(' ', '-')}
       className={classes({
         order: order,
-        carousel: isCarousel,
-        contain: parent == 'section',
+        isFullHeight: blok.slides[0].component === 'section',
       })}
     >
       <Swiper
         {...storyblokEditable(blok)}
         modules={[Autoplay]}
         loop={true}
-        autoplay={isCarousel ? { delay: 1500 } : false}
-        slidesPerView={isCarousel ? weight[0] : 1}
-        spaceBetween={isCarousel ? 24 : 0}
-        className={isCarousel ? 'min-h-sm' : 'min-h-cover sm:min-h-lg'}
-        wrapperClass={isCarousel ? 'min-h-sm' : 'min-h-cover sm:min-h-lg'}
+        autoplay={autoplay}
+        slidesPerView={view}
+        spaceBetween={blok.view ? 24 : 0}
+        className={'min-h-inherit'}
+        wrapperClass={'min-h-inherit'}
         breakpoints={{
-          480: {
-            slidesPerView: isCarousel ? weight[1] : 1,
-          },
-          1024: {
-            slidesPerView: isCarousel ? weight[2] : 1,
-          },
-          1280: {
-            slidesPerView: isCarousel ? weight[3] : 1,
-          },
+          480: { slidesPerView: smView },
+          1024: { slidesPerView: mdView },
+          1280: { slidesPerView: xlView },
         }}
       >
         {slides}
@@ -67,7 +65,7 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
 }
 
 const classes = tv({
-  base: 'order-last sm:order-none',
+  base: 'order-last sm:order-none w-full col-span-12',
   variants: {
     order: {
       '1': '-order-1',
@@ -77,12 +75,9 @@ const classes = tv({
       '5': '-order-5',
       '6': '-order-6',
     },
-    contain: {
-      true: 'col-span-12',
-    },
-    carousel: {
-      true: 'min-h-sm',
-      false: 'min-h-cover sm:min-h-lg',
+    isFullHeight: {
+      false: 'min-h-sm',
+      true: 'min-h-cover sm:min-h-lg',
     },
   },
 })
