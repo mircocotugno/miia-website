@@ -3,10 +3,11 @@ import { tv } from 'tailwind-variants'
 
 interface TypographyComponents {
   theme?: 'primary' | 'secondary'
+  size?: 'small' | 'large'
   error?: boolean
 }
 
-export const Typography = ({ theme, error }: TypographyComponents) => ({
+export const Typography = ({ theme, size, error }: TypographyComponents) => ({
   h1: {
     component: ({ children }: { children: string }) => (
       <h1
@@ -92,7 +93,9 @@ export const Typography = ({ theme, error }: TypographyComponents) => ({
   },
   p: {
     component: ({ children }: { children: string }) => (
-      <p className={paragraphClasses({ error: error })}>{children}</p>
+      <p className={paragraphClasses({ error: error, size: size })}>
+        {children}
+      </p>
     ),
   },
   ul: {
@@ -131,5 +134,9 @@ const paragraphClasses = tv({
   base: 'font-sans leading-snug',
   variants: {
     error: { true: 'text-small text-dander' },
+    size: {
+      small: 'text-sm',
+      large: 'text-xl',
+    },
   },
 })
