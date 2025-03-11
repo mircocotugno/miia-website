@@ -1,5 +1,6 @@
 import type { NavProps } from '@props/types'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef } from 'react'
+import { tv } from 'tailwind-variants'
 import {
   Navbar,
   NavbarBrand,
@@ -16,6 +17,7 @@ import { Brand } from '@public/brand'
 import { Logo } from '@public/logo'
 import { compiler } from 'markdown-to-jsx'
 import { StoryblokComponent } from '@storyblok/react'
+import { useOnClickOutside } from 'usehooks-ts'
 
 interface NavComponent {
   blok: NavProps
@@ -34,10 +36,25 @@ export default function Nav({ blok, parent }: NavComponent) {
 
 function Header({ blok }: { blok: NavProps }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [subMenuOpen, setSubMenuOpen] = useState(NaN)
+
+  const ref = useRef(null)
+  useOnClickOutside(ref, () => setSubMenuOpen(NaN))
+
+  const submenuClasses = tv({
+    base: 'hidden md:block absolute top-full left-0 right-0 dark md:bg-background text-foreground border-t-1 border-transparent invisible opacity-0 h-0 transition-all duration-150 ease-in-out',
+    variants: {
+      isOpen: {
+        true: 'md:py-4 visible opacity-100 h-10 transition-all duration-250 ease-in-out delay-75 border-foreground-200',
+      },
+    },
+  })
+
   return (
     <Navbar
+      ref={ref}
       onMenuOpenChange={setIsMenuOpen}
-      className='dark bg-background text-foreground'
+      className='dark bg-background text-foreground relative'
       classNames={{ wrapper: 'max-w-[1280px] mx-auto' }}
     >
       <NavbarBrand className='grow-0'>
@@ -59,25 +76,41 @@ function Header({ blok }: { blok: NavProps }) {
       {!!blok.contents.length && (
         <Fragment>
           <NavbarContent justify='start' className='max-sm:hidden gap-6'>
-            {blok.contents.map((item, index) => (
-              <NavbarItem key={index}>
-                <StoryblokComponent blok={item} />
-              </NavbarItem>
-            ))}
+            {blok.contents.map((item, index) => {
+              const isOpen = index === subMenuOpen
+              return (
+                <NavbarItem key={index} className='relative'>
+                  <StoryblokComponent
+                    blok={item}
+                    parent='header'
+                    isOpen={isOpen}
+                    handleOpen={() => setSubMenuOpen(isOpen ? NaN : index)}
+                  />
+                </NavbarItem>
+              )
+            })}
+            <div className={submenuClasses({ isOpen: !isNaN(subMenuOpen) })} />
           </NavbarContent>
-          <NavbarContent justify='end'>
+          <NavbarContent justify='end' className='sm:hidden'>
             <NavbarMenuToggle
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              className='sm:hidden'
             />
           </NavbarContent>
 
-          <NavbarMenu className='p-8 pt-12 gap-10 items-end dark'>
-            {blok.contents.map((item, index) => (
-              <NavbarMenuItem key={index} className=''>
-                <StoryblokComponent blok={item} key={index} />
-              </NavbarMenuItem>
-            ))}
+          <NavbarMenu className='p-8 pt-12 gap-10 items-end dark '>
+            {blok.contents.map((item, index) => {
+              const isOpen = index === subMenuOpen
+              return (
+                <NavbarMenuItem key={index} className='w-full text-right'>
+                  <StoryblokComponent
+                    blok={item}
+                    parent='header'
+                    isOpen={isOpen}
+                    handleOpen={() => setSubMenuOpen(isOpen ? NaN : index)}
+                  />
+                </NavbarMenuItem>
+              )
+            })}
           </NavbarMenu>
         </Fragment>
       )}
