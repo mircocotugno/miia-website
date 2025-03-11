@@ -162,7 +162,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
               overrides: Typography({}),
             })}
         </Link>
-        {blok.form.content && (
+        {blok.form?.content && (
           <div className='flex-0'>
             <StoryblokComponent
               blok={blok.form.content}
