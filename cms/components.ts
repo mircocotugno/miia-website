@@ -455,13 +455,17 @@ const alias: ComponentSchema = {
       ],
       required: true,
     },
+    filter: {
+      type: 'text',
+      display_name: 'Filtra per nome',
+      description: 'Il nome della risorsa contiene il filtro',
+    },
     form: {
       type: 'option',
       display_name: 'Modulo',
       source: 'internal_stories',
       restrict_content_types: true,
       filter_content_type: ['form'],
-      required: true,
     },
   },
 }
@@ -619,6 +623,7 @@ const wrapper: ComponentSchema = {
         'person',
         'event',
         'form',
+        'carousel',
       ],
       required: true,
     },
@@ -698,13 +703,24 @@ const carousel: ComponentSchema = {
       component_whitelist: ['section', 'wrapper', 'person', 'image'],
       required: true,
     },
-    weight: {
-      type: 'option',
-      display_name: 'Densità',
-      options: [
-        { value: 'low', name: 'Bassa' },
-        { value: 'high', name: 'Alta' },
-      ],
+    view: {
+      type: 'number',
+      display_name: 'Mostra',
+      max_value: 3,
+      min_value: 0,
+      default_value: 0,
+      description:
+        'Numero minimo di elementi da mostrare per volta.\nZero mostra un solo elemento per volta',
+      tooltip: true,
+    },
+    delay: {
+      type: 'number',
+      display_name: 'Scorrimento',
+      max_value: 5,
+      min_value: 0,
+      default_value: 0,
+      description: 'Velocità di scorrimento automatica',
+      tooltip: true,
     },
     order: {
       type: 'number',
@@ -1142,6 +1158,12 @@ const event: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['event'],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
@@ -1182,12 +1204,6 @@ const event: ComponentSchema = {
       display_name: 'Pagina',
       restrict_content_types: true,
       component_whitelist: ['page'],
-    },
-    ref: {
-      type: 'option',
-      display_name: 'Collega',
-      source: 'internal_stories',
-      filter_content_type: ['event'],
     },
     form: {
       type: 'option',
