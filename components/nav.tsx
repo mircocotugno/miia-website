@@ -55,9 +55,9 @@ function Header({ blok }: { blok: NavProps }) {
       ref={ref}
       onMenuOpenChange={setIsMenuOpen}
       className='dark bg-background text-foreground'
-      classNames={{ wrapper: 'max-w-[1280px] mx-auto' }}
+      classNames={{ wrapper: 'max-w-[1280px] mx-auto static' }}
     >
-      <NavbarBrand className='grow-0 relative'>
+      <NavbarBrand className='grow-0'>
         <Link href='/'>
           <Logo
             classes='sm:max-md:hidden'
