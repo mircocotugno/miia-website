@@ -69,7 +69,7 @@ export default function Text({ blok }: TextComponent) {
 }
 
 const titleClases = tv({
-  base: 'space-y-6 leading-tight',
+  base: 'space-y-6',
   variants: {
     hide: {
       true: 'hidden sm:block',
@@ -78,7 +78,7 @@ const titleClases = tv({
 })
 
 const descriptionClasses = tv({
-  base: 'space-y-2 leading-relaxed opacity-85',
+  base: 'space-y-2 opacity-85',
   variants: {
     hide: {
       true: 'hidden sm:block',
