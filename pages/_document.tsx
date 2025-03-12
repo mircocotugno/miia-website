@@ -1,19 +1,8 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-import Script from 'next/script'
 import { fontSans, fontSerif } from '@config/fonts'
-import {
-  IubendaProvider,
-  IubendaCookieSolutionBannerConfigInterface,
-} from '@mep-agency/next-iubenda'
-
-// See https://www.iubenda.com/en/help/1205-how-to-configure-your-cookie-solution-advanced-guide
-const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
-  siteId: Number(process.env.NEXT_PUBLIC_SITE_ID),
-  cookiePolicyId: Number(process.env.NEXT_PUBLIC_POLICY_ID),
-  lang: 'it',
-}
 
 export default function Document() {
+  debugger
   return (
     <Html lang='en' className='scroll-pt-14 scroll-smooth'>
       <Head>
@@ -29,10 +18,8 @@ export default function Document() {
       <body
         className={`font-sans light text-foreground bg-background min-h-screen ${fontSans.variable} ${fontSerif.variable}`}
       >
-        <IubendaProvider bannerConfig={iubendaBannerConfig}>
-          <Main />
-          <NextScript />
-        </IubendaProvider>
+        <Main />
+        <NextScript />
       </body>
     </Html>
   )
