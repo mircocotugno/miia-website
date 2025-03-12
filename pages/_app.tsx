@@ -3,7 +3,12 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 import type { AppProps } from 'next/app'
 import { GoogleTagManager } from '@next/third-parties/google'
-import { ConsentAwareWrapper } from '@mep-agency/next-iubenda'
+import {
+  IubendaProvider,
+  IubendaCookieSolutionBannerConfigInterface,
+  ConsentAwareWrapper,
+} from '@mep-agency/next-iubenda'
+
 import { storyblokInit, apiPlugin } from '@storyblok/react'
 import { HeroUIProvider } from '@heroui/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
@@ -71,16 +76,25 @@ storyblokInit({
   components,
 })
 
+// See https://www.iubenda.com/en/help/1205-how-to-configure-your-cookie-solution-advanced-guide
+const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
+  siteId: Number(process.env.NEXT_PUBLIC_SITE_ID),
+  cookiePolicyId: Number(process.env.NEXT_PUBLIC_POLICY_ID),
+  lang: 'it',
+}
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <HeroUIProvider>
-        <NextThemesProvider attribute='class' defaultTheme='light'>
-          <Component {...pageProps} />
-        </NextThemesProvider>
-      </HeroUIProvider>
-      {/* TODO check which components needs to be Wrapped <ConsentAwareWrapper requiredGdprPurposes={[]}></ConsentAwareWrapper>*/}
-      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
+      <IubendaProvider bannerConfig={iubendaBannerConfig}>
+        <HeroUIProvider>
+          <NextThemesProvider attribute='class' defaultTheme='light'>
+            <Component {...pageProps} />
+          </NextThemesProvider>
+        </HeroUIProvider>
+        {/* TODO check which components needs to be Wrapped <ConsentAwareWrapper requiredGdprPurposes={[]}></ConsentAwareWrapper>*/}
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
+      </IubendaProvider>
     </>
   )
 }
