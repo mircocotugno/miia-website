@@ -1,12 +1,12 @@
 import '@styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
-
+import { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { GoogleTagManager } from '@next/third-parties/google'
 import {
   IubendaProvider,
   IubendaCookieSolutionBannerConfigInterface,
-  ConsentAwareWrapper,
+  useIubenda,
 } from '@mep-agency/next-iubenda'
 
 import { storyblokInit, apiPlugin } from '@storyblok/react'
@@ -92,10 +92,18 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </NextThemesProvider>
         </HeroUIProvider>
-        {/* TODO check which components needs to be Wrapped <ConsentAwareWrapper requiredGdprPurposes={[]}></ConsentAwareWrapper>*/}
-        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
+        <Tracking />
       </IubendaProvider>
     </>
+  )
+}
+
+const Tracking = () => {
+  const { userPreferences } = useIubenda()
+  return (
+    userPreferences.hasBeenLoaded && (
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
+    )
   )
 }
 
