@@ -80,7 +80,6 @@ type InputTypes =
   | 'select'
   | 'multiple'
   | 'hidden'
-  // | 'file' //TODO: find a file module
   | 'enroll'
 
 // Components Props
@@ -124,12 +123,18 @@ export type TextProps = BlokProps & {
   description: string
   justify: Justifications
   hide: 'title' | 'description' | 'all'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  order: number
+  theme: 'primary' | 'secondary'
 }
 
 export type ImageProps = BlokProps & {
   image: ImageData
   fullScreen: boolean
-  aspect: '1/1' | '3/4' | '4/3'
+  aspect: '1/1' | '3/4' | '4/3' | '9/4' | '4/9'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  size: 'sm' | 'md' | 'lg'
+  order: number
   author: PersonProps
 }
 
@@ -137,6 +142,7 @@ export type BackgroundProps = BlokProps & {
   component: 'background'
   image: ImageData
   video: string
+  author: PersonProps
 }
 
 export type GalleryProps = BlokProps & {
@@ -194,6 +200,7 @@ export type ListProps = BlokProps & {
 export type AliasProps = BlokProps & {
   component: 'alias'
   resource: 'next-event' | 'last-article'
+  filter: string
   form: StoryProps & { content: FormProps }
 }
 
@@ -231,60 +238,23 @@ export type WrapperProps = BlokProps & {
   row: boolean
   boxed: boolean
   size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
   justify: Justifications
-  order: 'first' | 'second' | 'third' | 'fourth' | 'last'
+  order: number
 }
 
 export type CarouselProps = BlokProps & {
   component: 'carousel'
   id: string
   slides: Array<SectionProps | WrapperProps | PersonProps>
-  weight: 'low' | 'high'
+  view: number
+  delay: number
+  order: number
 }
 
 export type MapProps = BlokProps & {
   component: 'map'
   locations: Array<StoryProps & { content: LocationProps }>
-}
-
-export type FormProps = BlokProps & {
-  component: 'form'
-  ref: StoryProps & { content: FormProps }
-  scope: FormScopes
-  title: string
-  label: string
-  fields: Array<FieldProps> | []
-  message: string
-}
-
-export type FormData = {
-  [key: string]: DataProps
-}
-
-export type DataProps = {
-  id: string
-  value: any
-  required: boolean
-  error: string | null
-}
-
-export type BrevoProps = {
-  email?: string
-  id?: number
-  emailBlacklisted?: boolean
-  smsBlacklisted?: boolean
-  createdAt?: Date
-  modifiedAt?: Date
-  updateEnabled?: boolean
-  listIds?: Array<number>
-  attributes: BrevoAttributes
-}
-
-export type BrevoAttributes = {
-  COGNOME: string
-  NOME: string
-  SMS: number
-  [key: string]: string | number | Date
 }
 
 export type SectionProps = BlokProps & {
@@ -308,6 +278,7 @@ export type SectionProps = BlokProps & {
   id: string
   dark: boolean
   contain: boolean
+  align: 'start' | 'center' | 'end' | 'stretch'
 }
 
 export type NavProps = BlokProps & {
@@ -391,4 +362,46 @@ export type EventProps = BlokProps & {
   location: LocationProps
   date: string
   page: LinkProps
+}
+
+// Brevo and form props
+
+export type FormProps = BlokProps & {
+  component: 'form'
+  ref: StoryProps & { content: FormProps }
+  scope: FormScopes
+  title: string
+  label: string
+  fields: Array<FieldProps> | []
+  message: string
+}
+
+export type FormData = {
+  [key: string]: DataProps
+}
+
+export type DataProps = {
+  id: string
+  value: any
+  required: boolean
+  error: string | null
+}
+
+export type BrevoProps = {
+  email?: string
+  id?: number
+  emailBlacklisted?: boolean
+  smsBlacklisted?: boolean
+  createdAt?: Date
+  modifiedAt?: Date
+  updateEnabled?: boolean
+  listIds?: Array<number>
+  attributes: BrevoAttributes
+}
+
+export type BrevoAttributes = {
+  COGNOME: string
+  NOME: string
+  SMS: number
+  [key: string]: string | number | Date
 }

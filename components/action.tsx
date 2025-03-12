@@ -29,6 +29,13 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
       children
     )
 
+  const Label = blok.label
+    ? compiler(blok.label, {
+        wrapper: null,
+        overrides: Typography({}),
+      })
+    : 'Azione'
+
   if (blok.button)
     return (
       <Container>
@@ -42,8 +49,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
           className='col-auto font-bold self-start min-w-fit cursor-pointer'
           {...storyblokEditable(blok)}
         >
-          {blok.label &&
-            compiler(blok.label, { wrapper: null, overrides: Typography })}
+          {Label}
         </Button>
       </Container>
     )
@@ -57,8 +63,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
         color={theme || blok.color || 'foreground'}
         size={size || 'md'}
       >
-        {blok.label &&
-          compiler(blok.label, { wrapper: null, overrides: Typography })}
+        {Label}
       </Link>
     </Container>
   )

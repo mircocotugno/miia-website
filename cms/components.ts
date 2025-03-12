@@ -95,6 +95,37 @@ const text: ComponentSchema = {
         { value: 'left', name: 'Sinistra' },
       ],
     },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
+    theme: {
+      type: 'option',
+      display_name: 'Tema',
+      options: [
+        { value: 'primary', name: 'Primario' },
+        { value: 'secondary', name: 'Secondario' },
+      ],
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
+    },
     hide: {
       type: 'option',
       display_name: 'Nascondi mobile',
@@ -121,14 +152,52 @@ const image: ComponentSchema = {
       filetypes: ['images'],
       required: true,
     },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
+    size: {
+      type: 'option',
+      display_name: 'Dimensione',
+      options: [
+        { value: 'sm', name: 'Piccola' },
+        { value: 'md', name: 'Media' },
+        { value: 'lg', name: 'Grande' },
+      ],
+      description: 'Dimensione fissa immagine',
+      tooltip: true,
+    },
     aspect: {
       type: 'option',
       display_name: 'Aspetto',
       options: [
         { value: '1/1', name: 'Quadrata' },
         { value: '3/4', name: 'Verticale' },
+        { value: '4/9', name: 'Verticale stretta' },
         { value: '4/3', name: 'Orizzontale' },
+        { value: '9/4', name: 'Orizzontale larga' },
       ],
+      description: 'Proporzioni immagine',
+      tooltip: true,
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
     fullScreen: {
       type: 'boolean',
@@ -195,6 +264,12 @@ const background: ComponentSchema = {
       display_name: 'Video',
       description: 'Id del video su youtube',
       inline_label: true,
+    },
+    author: {
+      type: 'option',
+      display_name: 'Autore',
+      source: 'internal_stories',
+      filter_content_type: ['person'],
     },
   },
 }
@@ -380,13 +455,17 @@ const alias: ComponentSchema = {
       ],
       required: true,
     },
+    filter: {
+      type: 'text',
+      display_name: 'Filtra per nome',
+      description: 'Il nome della risorsa contiene il filtro',
+    },
     form: {
       type: 'option',
       display_name: 'Modulo',
       source: 'internal_stories',
       restrict_content_types: true,
       filter_content_type: ['form'],
-      required: true,
     },
   },
 }
@@ -478,6 +557,7 @@ const section: ComponentSchema = {
       component_whitelist: [
         'alias',
         'background',
+        'image',
         'list',
         'process',
         'text',
@@ -492,6 +572,16 @@ const section: ComponentSchema = {
         'form',
       ],
       required: true,
+    },
+    align: {
+      type: 'option',
+      display_name: 'Allinea',
+      options: [
+        { name: 'Sopra', value: 'start' },
+        { name: 'Centro', value: 'center' },
+        { name: 'Sotto', value: 'end' },
+        { name: 'Riempi', value: 'stretch' },
+      ],
     },
     dark: {
       type: 'boolean',
@@ -514,7 +604,7 @@ const wrapper: ComponentSchema = {
   is_root: false,
   is_nestable: true,
   component_group_uuid: 'elements',
-  preview_tmpl: `{{it.size}}`,
+  preview_tmpl: `{{it.width}}`,
   schema: {
     contents: {
       type: 'bloks',
@@ -533,6 +623,7 @@ const wrapper: ComponentSchema = {
         'person',
         'event',
         'form',
+        'carousel',
       ],
       required: true,
     },
@@ -545,6 +636,23 @@ const wrapper: ComponentSchema = {
       type: 'boolean',
       display_name: 'Incorniciato',
       inline_label: true,
+    },
+    width: {
+      type: 'options',
+      display_name: 'New Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
     },
     size: {
       type: 'option',
@@ -568,19 +676,10 @@ const wrapper: ComponentSchema = {
       ],
     },
     order: {
-      type: 'option',
+      type: 'number',
       display_name: 'Riordino mobile',
-      options: [
-        { value: 'first', name: 'Primo' },
-        { value: 'second', name: 'Secondo' },
-        { value: 'third', name: 'Terzo' },
-        { value: 'fourth', name: 'Quarto' },
-        { value: 'fifth', name: 'Quinto' },
-        { value: 'sixth', name: 'Sesto' },
-        { value: 'seventh', name: 'Settimo' },
-        { value: 'eighth', name: 'Ottavo' },
-        { value: 'last', name: 'Ultimo' },
-      ],
+      max_value: 6,
+      min_value: 0,
     },
   },
 }
@@ -601,16 +700,33 @@ const carousel: ComponentSchema = {
       type: 'bloks',
       display_name: 'Elementi',
       restrict_components: true,
-      component_whitelist: ['section', 'wrapper', 'person'],
+      component_whitelist: ['section', 'wrapper', 'person', 'image'],
       required: true,
     },
-    weight: {
-      type: 'option',
-      display_name: 'Densità',
-      options: [
-        { value: 'low', name: 'Bassa' },
-        { value: 'high', name: 'Alta' },
-      ],
+    view: {
+      type: 'number',
+      display_name: 'Mostra',
+      max_value: 3,
+      min_value: 0,
+      default_value: 0,
+      description:
+        'Numero minimo di elementi da mostrare per volta.\nZero mostra un solo elemento per volta',
+      tooltip: true,
+    },
+    delay: {
+      type: 'number',
+      display_name: 'Scorrimento',
+      max_value: 5,
+      min_value: 0,
+      default_value: 0,
+      description: 'Velocità di scorrimento automatica',
+      tooltip: true,
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
   },
 }
@@ -1042,6 +1158,12 @@ const event: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
+    ref: {
+      type: 'option',
+      display_name: 'Collega',
+      source: 'internal_stories',
+      filter_content_type: ['event'],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
@@ -1082,12 +1204,6 @@ const event: ComponentSchema = {
       display_name: 'Pagina',
       restrict_content_types: true,
       component_whitelist: ['page'],
-    },
-    ref: {
-      type: 'option',
-      display_name: 'Collega',
-      source: 'internal_stories',
-      filter_content_type: ['event'],
     },
     form: {
       type: 'option',

@@ -1,6 +1,5 @@
 import type { SectionProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { PropsWithChildren } from 'react'
 import { tv } from 'tailwind-variants'
 
 interface SectionComponent {
@@ -23,85 +22,18 @@ export default function Section({
     (content) => content.component !== 'background'
   )
 
-  const gridClasses =
-    'grid grid-cols-12 gap-x-3 sm:gap-x-4 md:gap-x-5 lg:gap-x-6 gap-y-2 sm:gap-y-3 md:gap-y-4 lg:gap-y-5 items-center'
-
-  const Container = ({ children }: PropsWithChildren) =>
-    parent !== 'carousel' || blok.contain ? (
-      <div
-        className={`py-6 sm:py-8 md:py-10 lg:py-12 px-6 max-w-[1280px] min-h-inherit mx-auto ${gridClasses}`}
-      >
-        {children}
-      </div>
-    ) : (
-      children
-    )
-
-  const gradientClasses = tv({
-    base: 'absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r  md:to-60% -z-10',
-    variants: {
-      themeDark: {
-        true: 'from-dark mix-blend-multiply',
-        false: 'from-light mix-blend-screen',
-      },
-    },
-  })
-
-  const tagClasses = tv({
-    base: 'overflow-hidden',
-    variants: {
-      themeDark: {
-        true: 'dark text-foreground bg-background',
-        false: 'light',
-      },
-      hasBackground: {
-        true: 'relative z-0 py-0 min-h-cover [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
-      },
-      singleSection: {
-        true: 'min-h-cover',
-      },
-      contain: {
-        false: `py-6 sm:py-8 md:py-10 lg:py-12 ${gridClasses}`,
-      },
-    },
-    compoundVariants: [
-      {
-        singleSection: true,
-        hasBackground: true,
-        class: 'sm:min-h-cover',
-      },
-      {
-        singleSection: false,
-        hasBackground: true,
-        class: 'sm:min-h-3/4',
-      },
-      {
-        hasBackground: true,
-        themeDark: true,
-        class:
-          '[&_h1]:drop-shadow-dark [&_h2]:drop-shadow-dark [&_h3]:drop-shadow-dark [&_h4]:drop-shadow-dark [&_h5]:drop-shadow-dark [&_h6]:drop-shadow-dark [&_p]:drop-shadow-dark',
-      },
-      {
-        hasBackground: true,
-        themeDark: false,
-        class:
-          '[&_h1]:drop-shadow-light [&_h2]:drop-shadow-light [&_h3]:drop-shadow-light [&_h4]:drop-shadow-light [&_h5]:drop-shadow-light [&_h6]:drop-shadow-light [&_p]:drop-shadow-light',
-      },
-    ],
-  })
-
   return (
     <Tag
       id={blok.id && blok.id.replaceAll(' ', '-')}
       className={tagClasses({
         themeDark: blok.dark,
+        rounded: parent === 'carousel',
         hasBackground: !!background,
         singleSection: singleSection,
-        contain: parent !== 'carousel' || blok.contain,
       })}
       {...storyblokEditable(blok)}
     >
-      <Container>
+      <div className={containerClasses({ align: blok.align })}>
         {contents.map((content, index) => (
           <StoryblokComponent
             key={index}
@@ -109,7 +41,7 @@ export default function Section({
             parent={blok.component}
           />
         ))}
-      </Container>
+      </div>
       {!!background && (
         <>
           <div className={gradientClasses({ themeDark: blok.dark })} />
@@ -119,3 +51,68 @@ export default function Section({
     </Tag>
   )
 }
+
+const gradientClasses = tv({
+  base: 'absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r  md:to-60% -z-10',
+  variants: {
+    themeDark: {
+      true: 'from-dark mix-blend-multiply',
+      false: 'from-light mix-blend-screen',
+    },
+  },
+})
+
+const containerClasses = tv({
+  base: 'px-6 py-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-3 sm:gap-x-4 md:gap-x-5 lg:gap-x-6 gap-y-2 sm:gap-y-3 md:gap-y-4 lg:gap-y-5 items-baseline',
+  variants: {
+    align: {
+      start: 'items-start',
+      center: 'items-center',
+      end: 'items-end',
+      stretch: 'items-stretch',
+    },
+  },
+})
+
+const tagClasses = tv({
+  base: 'overflow-hidden',
+  variants: {
+    themeDark: {
+      true: 'dark text-foreground bg-background',
+      false: 'light',
+    },
+    rounded: {
+      true: 'rounded-lg',
+    },
+    hasBackground: {
+      true: 'relative z-0 py-0 min-h-cover [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',
+    },
+    singleSection: {
+      true: 'min-h-cover',
+    },
+  },
+  compoundVariants: [
+    {
+      singleSection: true,
+      hasBackground: true,
+      class: 'sm:min-h-cover',
+    },
+    {
+      singleSection: false,
+      hasBackground: true,
+      class: 'sm:min-h-3/4',
+    },
+    {
+      hasBackground: true,
+      themeDark: true,
+      class:
+        '[&_h1]:drop-shadow-dark [&_h2]:drop-shadow-dark [&_h3]:drop-shadow-dark [&_h4]:drop-shadow-dark [&_h5]:drop-shadow-dark [&_h6]:drop-shadow-dark [&_p]:drop-shadow-dark',
+    },
+    {
+      hasBackground: true,
+      themeDark: false,
+      class:
+        '[&_h1]:drop-shadow-light [&_h2]:drop-shadow-light [&_h3]:drop-shadow-light [&_h4]:drop-shadow-light [&_h5]:drop-shadow-light [&_h6]:drop-shadow-light [&_p]:drop-shadow-light',
+    },
+  ],
+})

@@ -65,8 +65,10 @@ export default {
         compact: '.9',
       },
       aspectRatio: {
+        '9/4': '9 / 4',
         '4/3': '4 / 3',
         '3/4': '3 / 4',
+        '4/9': '4 / 9',
       },
       boxShadow: {
         aside: [
@@ -97,7 +99,9 @@ export default {
       themes: {
         light: {
           colors: {
-            foreground: '#232325',
+            foreground: {
+              DEFAULT: '#232325',
+            },
             primary: {
               DEFAULT: '#008a45',
             },
@@ -108,12 +112,14 @@ export default {
         },
         dark: {
           colors: {
-            background: '#232325',
+            background: {
+              DEFAULT: '#232325',
+            },
             primary: {
-              DEFAULT: '#d12934',
+              DEFAULT: '#008a45',
             },
             secondary: {
-              DEFAULT: '#008a45',
+              DEFAULT: '#d12934',
             },
           },
         },

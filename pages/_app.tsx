@@ -2,6 +2,8 @@ import '@styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import type { AppProps } from 'next/app'
+import { GoogleTagManager } from '@next/third-parties/google'
+import { ConsentAwareWrapper } from '@mep-agency/next-iubenda'
 import { storyblokInit, apiPlugin } from '@storyblok/react'
 import { HeroUIProvider } from '@heroui/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
@@ -77,6 +79,8 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </NextThemesProvider>
       </HeroUIProvider>
+      {/* TODO check which components needs to be Wrapped <ConsentAwareWrapper requiredGdprPurposes={[]}></ConsentAwareWrapper>*/}
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
     </>
   )
 }

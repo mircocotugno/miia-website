@@ -5,7 +5,7 @@ interface Validation {
 }
 
 export function fieldValidation({ id, value, required }: Validation) {
-  if (!value && required) return 'Il campo è obbligatorio'
+  if (!value?.length && required) return 'Il campo è obbligatorio'
   const validation = validations[id]
   if (value && validation) return validation(value)
 
@@ -16,7 +16,7 @@ type Validations = {
   [key: string]: (value: string) => string | null
 }
 
-const validations: Validations = {
+export const validations: Validations = {
   nome: (value: string) => {
     if (!min_length(value, 3))
       return 'Il nome deve essere di almeno 3 caratteri'
@@ -87,7 +87,7 @@ const has_number = (value: string) => /[0-9]/.test(value)
 const email_format = (value: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.toLowerCase())
 const phone_format = (value: string) =>
-  /^(\+\d{1,3}(\s?[\(\)-]?)?)?\d{9}$/.test(value)
+  /^(\+\d{1,3}(\s?[\(\)-]?)?)?\d{10}$/.test(value)
 const european_identity_format = (value: string) =>
   /^[A-Z]{2}[0-9]{5}[A-Z]{2}/.test(value)
 const italian_identity_format = (value: string) =>

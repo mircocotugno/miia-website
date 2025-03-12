@@ -4,6 +4,7 @@ import { storyblokApi } from '@modules/storyblokApi'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
+import { Link } from '@heroui/react'
 
 interface AliasComponent {
   blok: AliasProps
@@ -37,6 +38,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
           ArticleItems( per_page: 1, sort_by:"published_at:desc", resolve_relations: "article.author")
           @include(if: $isArticle) {
             items {
+              name
               full_slug
               published_at
               tag_list
@@ -55,6 +57,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
           EventItems(sort_by: "position:asc", resolve_relations: "event.location")
           @include(if: $isEvent) {
             items {
+              name
               full_slug
               content {
                 title
@@ -79,19 +82,22 @@ export default function Alias({ blok, parent }: AliasComponent) {
         item = data?.ArticleItems.items[0]
       } else if (data?.EventItems) {
         const today = new Date().toISOString()
-        type storyEvent = { content: EventProps }
+        type storyEvent = StoryProps & { content: EventProps }
 
         const events = data.EventItems.items
-          .filter((item: storyEvent) => !!item.content.date)
-          .sort(
-            (a: storyEvent, b: storyEvent) =>
-              Date.parse(b.content.date) - Date.parse(a.content.date)
+          .filter((item: storyEvent) =>
+            !!item.content.date && !!blok.filter
+              ? item.name.includes(blok.filter)
+              : true
           )
+          .sort((a: storyEvent, b: storyEvent) => {
+            let A = new Date(a.content.date)
+            let B = new Date(b.content.date)
+            return A < B ? -1 : A > B ? 1 : 0
+          })
 
-        item = events.find(
-          (item: storyEvent) =>
-            Date.parse(item.content.date) > Date.parse(today)
-        )
+        item = events.find((item: storyEvent) => item.content.date >= today)
+
         item.content.date = new Date(item.content.date)
       }
       setAlias(item)
@@ -105,7 +111,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
 
   if (isEvent) {
     const fieldOpenday = {
-      id: 'openday',
+      id: 'openday_data',
       value: alias.content.date.toLocaleDateString('it-IT', {
         day: '2-digit',
         month: '2-digit',
@@ -114,13 +120,17 @@ export default function Alias({ blok, parent }: AliasComponent) {
       required: true,
       error: null,
     }
-
     return (
       <div
         {...storyblokEditable(blok)}
-        className='flex flex-col sm:flex-row col-span-12'
+        className='flex flex-col gap-2 sm:gap-4 sm:flex-row col-span-12 items-center'
       >
-        <div className='flex-1 sm:max-w-24 gap-2 sm:gap-1 flex sm:flex-col sm:justify-center items-baseline sm:items-center sm:px-6 py-2 text-center'>
+        <Link
+          href={alias.content.page.cachedUrl}
+          isDisabled={!alias.content.page.cachedUrl}
+          color='foreground'
+          className='flex-1 sm:max-w-24 gap-2 sm:gap-1 flex sm:flex-col sm:justify-center items-baseline sm:items-center sm:px-6 sm:py-2 text-center'
+        >
           <span className='text-xl sm:text-3xl font-bold'>
             {alias.content.date.toLocaleDateString('it-IT', { day: '2-digit' })}
           </span>
@@ -132,19 +142,27 @@ export default function Alias({ blok, parent }: AliasComponent) {
               year: 'numeric',
             })}
           </span>
-        </div>
-        <div className='flex-1 space-y-3'>
-          <h3 className='font-serif leading-tight font-bold break-words text-3xl md:text-4xl xl:text-5xl'>
-            {alias.content.title}
-          </h3>
+        </Link>
+
+        <Link
+          href={alias.content.page.cachedUrl}
+          isDisabled={!alias.content.page.cachedUrl}
+          color='foreground'
+          className='flex-1 space-y-3'
+        >
+          {alias.content.title && (
+            <h3 className='font-serif leading-tight font-bold break-words text-3xl md:text-4xl xl:text-5xl'>
+              {alias.content.title}
+            </h3>
+          )}
           {alias.content.description &&
             compiler(alias.content.description, {
               wrapper: 'p',
               forceWrapper: true,
-              overrides: Typography,
+              overrides: Typography({}),
             })}
-        </div>
-        {blok.form.content && (
+        </Link>
+        {blok.form?.content && (
           <div className='flex-0'>
             <StoryblokComponent
               blok={blok.form.content}

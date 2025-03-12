@@ -62,7 +62,7 @@ type FieldSchema = {
 
 type FieldBaseSchema = FieldSchema & {
   type: string
-  default_value?: string | boolean
+  default_value?: string | number | boolean | Array<string>
   inline_label?: boolean
 }
 
