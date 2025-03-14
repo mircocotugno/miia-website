@@ -92,18 +92,9 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </NextThemesProvider>
         </HeroUIProvider>
-        <Tracking />
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
       </IubendaProvider>
     </>
-  )
-}
-
-const Tracking = () => {
-  const { userPreferences } = useIubenda()
-  return (
-    userPreferences.hasBeenLoaded && (
-      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
-    )
   )
 }
 
