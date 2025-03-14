@@ -131,7 +131,7 @@ const titleClasses = tv({
 })
 
 const paragraphClasses = tv({
-  base: 'font-sans leading-snug',
+  base: 'font-sans',
   variants: {
     error: { true: 'text-small text-dander' },
     size: {

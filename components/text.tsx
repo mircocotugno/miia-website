@@ -78,7 +78,7 @@ const titleClases = tv({
 })
 
 const descriptionClasses = tv({
-  base: 'space-y-2 opacity-85',
+  base: 'space-y-2',
   variants: {
     hide: {
       true: 'hidden sm:block',
