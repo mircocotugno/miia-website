@@ -8,6 +8,12 @@ export default {
     './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+    },
     fontFamily: {
       sans: ['var(--font-sans)'],
       serif: ['var(--font-serif)'],
