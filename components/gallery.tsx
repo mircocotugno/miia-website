@@ -58,16 +58,12 @@ export default function Gallery({ blok }: GalleryComponent) {
   const slides = images.map(({ filename, alt, size, id }, index) => (
     <SwiperSlide className='max-w-inherith max-h-inherith' key={id}>
       <NextImage
-        className='max-h-full max-w-full w-auto h-auto mx-auto my-auto shadow-2xl rounded-xl'
+        className='max-h-full max-w-full w-auto h-auto mx-auto my-auto rounded-xl'
         src={filename}
         alt={alt}
         width={size.ratio > 1 ? 1280 : 768 * size.ratio}
         height={size.ratio <= 1 ? 768 : 1280 / size.ratio}
         sizes={`(max-${size.axis}:512px):256px,(max-${size.axis}:768px):512px,(max-${size.axis}:1024px):768px,(max-${size.axis}:1280px):1024px,1280px`}
-        style={{
-          height: '100%',
-          width: 'auto',
-        }}
       />
     </SwiperSlide>
   ))
@@ -98,7 +94,7 @@ export default function Gallery({ blok }: GalleryComponent) {
                 spaceBetween={20}
                 initialSlide={current}
                 loop={true}
-                className='items-center max-w-[80vw] max-h-[80vh]'
+                className='items-center max-w-[80vw] max-h-[80vh] rounded-xl'
               >
                 {slides}
               </Swiper>
