@@ -82,10 +82,6 @@ const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  if (process.env.NEXT_PUBLIC_IS_PREVIEW === 'true') {
-    console.log('logger')
-    debugger
-  }
   return (
     <>
       <IubendaProvider bannerConfig={iubendaBannerConfig}>

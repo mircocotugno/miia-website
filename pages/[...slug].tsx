@@ -39,6 +39,7 @@ type PageStory = {
 }
 
 export default function PageStory({ story, locations }: PageStory) {
+  console.log('Logger')
   const page = useStoryblokState(story, {
     resolveRelations: relations,
     preventClicks: true,
