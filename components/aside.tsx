@@ -35,7 +35,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
       {...storyblokEditable(blok)}
     >
       <div className={containerClasses()}>
-        {!!blok.courses.length && (
+        {!!blok.contents.length && (
           <div className='order-last md:order-1 col-span-full md:col-span-8 space-y-4 md:space-y-6'>
             {!!blok.contents.length &&
               blok.contents.map((content, index) => (
