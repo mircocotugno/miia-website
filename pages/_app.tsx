@@ -82,6 +82,7 @@ const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  debugger
   return (
     <>
       <IubendaProvider bannerConfig={iubendaBannerConfig}>
