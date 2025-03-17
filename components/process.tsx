@@ -20,7 +20,7 @@ const indexClasses = tv({
 })
 
 const arrowClasses = tv({
-  base: 'rotate-90 md:rotate-0 iconoir-arrow-right text-2xl',
+  base: 'rotate-90 md:rotate-0 iconoir-arrow-right text-2xl lg:px-4',
 })
 
 export default function Process({ blok }: ProcessComponent) {
