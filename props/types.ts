@@ -129,6 +129,7 @@ export type TextProps = BlokProps & {
 }
 
 export type ImageProps = BlokProps & {
+  component: 'image'
   image: ImageData
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3' | '9/4' | '4/9'
@@ -146,6 +147,7 @@ export type BackgroundProps = BlokProps & {
 }
 
 export type GalleryProps = BlokProps & {
+  component: "gallery"
   images: Array<ImageArray>
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3'
