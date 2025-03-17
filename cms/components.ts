@@ -287,15 +287,28 @@ const video: ComponentSchema = {
       display_name: 'Collegamento',
       required: true,
     },
-    size: {
-      type: 'option',
-      display_name: 'Grandezza',
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
       options: [
-        { value: 'sm', name: 'Piccolo' },
-        { value: 'md', name: 'Medio' },
-        { value: 'lg', name: 'Grande' },
-        { value: 'xl', name: 'Enorme' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
       ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
   },
 }
@@ -558,6 +571,7 @@ const section: ComponentSchema = {
         'alias',
         'background',
         'image',
+        'video',
         'list',
         'process',
         'text',

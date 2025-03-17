@@ -87,7 +87,7 @@ type InputTypes =
 export type ComponentsProps =
   | ActionProps
   | TextProps
-  | PictureProps
+  | ImageProps
   | GalleryProps
   | FieldProps
   | ListProps
@@ -151,21 +151,11 @@ export type GalleryProps = BlokProps & {
   aspect: '1/1' | '3/4' | '4/3'
 }
 
-export type PictureProps = BlokProps & {
-  component: 'picture'
-  asset: Array<ImageData>
-  size: 'sm' | 'md' | 'lg' | 'xl'
-  ratio: 'square' | 'portrait' | 'landscape' | 'circle'
-  effect: 'blurred' | 'zoomed'
-  background: boolean
-  preview: boolean
-  author: StoryProps & { content: PersonProps }
-}
-
 export type VideoProps = BlokProps & {
-  component: 'media'
+  component: 'video'
   source: string
-  size: 'sm' | 'md' | 'lg' | 'xl'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  order: number
 }
 
 export type FieldProps = BlokProps & {
@@ -214,7 +204,7 @@ export type AsideProps = BlokProps & {
     content: FormProps
   }
   contents: Array<
-    PictureProps | ListProps | TextProps | ActionProps | WrapperProps
+    ImageProps | ListProps | TextProps | ActionProps | WrapperProps
   >
   id: string
   theme: 'dark'

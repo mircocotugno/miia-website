@@ -19,8 +19,8 @@ import Page from '@components/page'
 import Section from '@components/section'
 import Nav from '@components/nav'
 import Text from '@components/text'
+import Image from '@components/image'
 import Action from '@components/action'
-import Picture from '@components/picture'
 import Field from '@components/field'
 import Form from '@components/form'
 import Map from '@components/map'
@@ -36,7 +36,6 @@ import Video from '@components/video'
 import Wrapper from '@components/wrapper'
 import Alias from '@components/alias'
 import Background from '@components/background'
-import Image from '@components/image'
 import Gallery from '@components/gallery'
 import Menu from '@components/menu'
 import Process from '@components/process'
@@ -53,7 +52,6 @@ const components = {
   aside: Aside,
   wrapper: Wrapper,
   carousel: Carousel,
-  picture: Picture,
   video: Video,
   image: Image,
   background: Background,
