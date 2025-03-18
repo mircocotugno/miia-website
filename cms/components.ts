@@ -276,6 +276,7 @@ const background: ComponentSchema = {
         { value: 'center', name: 'Centro' },
         { value: 'left', name: 'Sinistra' },
       ],
+      max_options: 2,
     },
     author: {
       type: 'option',
@@ -608,6 +609,7 @@ const section: ComponentSchema = {
         { name: 'Sotto', value: 'end' },
         { name: 'Riempi', value: 'stretch' },
       ],
+      max_options: 2,
     },
     dark: {
       type: 'boolean',
