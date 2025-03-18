@@ -265,6 +265,18 @@ const background: ComponentSchema = {
       description: 'Id del video su youtube',
       inline_label: true,
     },
+    position: {
+      type: 'options',
+      display_name: 'Posizione',
+      description:
+        "Posizionamento dell'immagine rispetto ai margini.\nla prima selezione per mobile, la seconda per desktop.",
+      tooltip: true,
+      options: [
+        { value: 'right', name: 'Destra' },
+        { value: 'center', name: 'Centro' },
+        { value: 'left', name: 'Sinistra' },
+      ],
+    },
     author: {
       type: 'option',
       display_name: 'Autore',
@@ -588,7 +600,7 @@ const section: ComponentSchema = {
       required: true,
     },
     align: {
-      type: 'option',
+      type: 'options',
       display_name: 'Allinea',
       options: [
         { name: 'Sopra', value: 'start' },

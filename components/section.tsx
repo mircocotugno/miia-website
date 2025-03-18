@@ -33,7 +33,12 @@ export default function Section({
       })}
       {...storyblokEditable(blok)}
     >
-      <div className={containerClasses({ align: blok.align })}>
+      <div
+        className={containerClasses({
+          align: blok.align?.[0],
+          smAlign: blok.align?.[1],
+        })}
+      >
         {contents.map((content, index) => (
           <StoryblokComponent
             key={index}
@@ -63,13 +68,19 @@ const gradientClasses = tv({
 })
 
 const containerClasses = tv({
-  base: 'px-6 py-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-2 sm:gap-x-4 md:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-10 items-baseline',
+  base: 'px-6 py-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-2 sm:gap-x-4 md:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-10 items-baseline sm:items-baseline',
   variants: {
     align: {
       start: 'items-start',
       center: 'items-center',
       end: 'items-end',
       stretch: 'items-stretch',
+    },
+    smAlign: {
+      start: 'sm:items-start',
+      center: 'sm:items-center',
+      end: 'sm:items-end',
+      stretch: 'sm:items-stretch',
     },
   },
 })

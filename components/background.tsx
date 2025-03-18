@@ -3,6 +3,7 @@ import { storyblokEditable } from '@storyblok/react'
 import { useDeviceSize } from '@modules/interface'
 import Image from 'next/image'
 import { getImageSizes } from '@modules/formats'
+import { tv } from 'tailwind-variants'
 
 interface BackgroundComponent {
   blok: BackgroundProps
@@ -21,7 +22,10 @@ const BackgroundImage = ({ blok }: BackgroundComponent) => {
   return (
     <div className='absolute -z-20 inset-0'>
       <Image
-        className='object-cover object-center'
+        className={backgroundClasses({
+          position: blok.position?.[0],
+          smPosition: blok.position?.[1],
+        })}
         src={width > 768 ? image.filename : image.filename + cropped}
         alt={image.alt}
         sizes='(max-width:480px):320px,(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px'
@@ -48,3 +52,19 @@ const backgrounds = {
   image: BackgroundImage,
   video: BackgroundVideo,
 }
+
+const backgroundClasses = tv({
+  base: 'object-cover object-center ',
+  variants: {
+    position: {
+      right: 'object-right',
+      center: 'object-center',
+      left: 'object-left',
+    },
+    smPosition: {
+      right: 'sm:object-right',
+      center: 'sm:object-center',
+      left: 'sm:object-left',
+    },
+  },
+})

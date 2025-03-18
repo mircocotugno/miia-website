@@ -143,11 +143,12 @@ export type BackgroundProps = BlokProps & {
   component: 'background'
   image: ImageData
   video: string
+  position: Array<'right' | 'center' | 'left'>
   author: PersonProps
 }
 
 export type GalleryProps = BlokProps & {
-  component: "gallery"
+  component: 'gallery'
   images: Array<ImageArray>
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3'
@@ -270,7 +271,7 @@ export type SectionProps = BlokProps & {
   id: string
   dark: boolean
   contain: boolean
-  align: 'start' | 'center' | 'end' | 'stretch'
+  align: Array<'start' | 'center' | 'end' | 'stretch'>
 }
 
 export type NavProps = BlokProps & {
