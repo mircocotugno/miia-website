@@ -33,10 +33,10 @@ export default function Menu({
     })
 
     const submenuClasses = tv({
-      base: 'z-50 overflow-hidden sm:overflow-visible whitespace-nowrap md:absolute top-full md:top-12 left-0 py-0 text-foreground flex flex-col md:flex-row items-end justify-center md:justify-start [&>a]:self-end gap-6 invisible opacity-0 h-0 transition-all duration-150 ease-in-out',
+      base: 'z-50 overflow-hidden md:overflow-visible whitespace-nowrap md:absolute top-full md:bottom-0 md:right-0 md:left-0 py-0 text-foreground flex flex-col md:flex-row items-end md:items-center justify-center md:justify-start max-md:[&>a]:self-end md:[&>a]:self-center gap-6 invisible opacity-0 h-0 transition-all duration-150 ease-in-out',
       variants: {
         isOpen: {
-          true: 'py-2 md:py-0 visible opacity-100 h-full transition-all duration-250 ease-in-out delay-75',
+          true: 'py-2 md:p-0 visible opacity-100 h-full md:h-10 transition-all duration-250 ease-in-out delay-75',
         },
       },
     })
@@ -48,7 +48,7 @@ export default function Menu({
           onClick={() => handleOpen()}
         >
           {blok.title}
-          <i className={`iconoir-nav-arrow-${isOpen ? 'down' : 'up'}`} />
+          <i className={`-order-1 md:order-none iconoir-nav-arrow-${isOpen ? 'down' : 'up'}`} />
         </button>
 
         <div className={submenuClasses({ isOpen })}>

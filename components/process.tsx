@@ -8,11 +8,11 @@ interface ProcessComponent {
 }
 
 const processClasses = tv({
-  base: 'flex flex-col md:flex-row flex-wrap gap-2 items-center sm:items-start md:items-center',
+  base: 'flex flex-col md:flex-row flex-wrap gap-2 items-start sm:items-center md:items-start',
 })
 
 const stepClasses = tv({
-  base: 'flex flex-col sm:flex-row md:flex-col gap-4 flex-1 items-center md:items-start',
+  base: 'flex flex-col sm:flex-row md:flex-col gap-4 flex-1 items-start sm:items-center md:items-start',
 })
 
 const indexClasses = tv({
@@ -20,7 +20,7 @@ const indexClasses = tv({
 })
 
 const arrowClasses = tv({
-  base: 'rotate-90 md:rotate-0 iconoir-arrow-right text-2xl lg:px-4',
+  base: 'rotate-90 md:rotate-0 iconoir-arrow-right text-2xl lg:px-4 md:self-center',
 })
 
 export default function Process({ blok }: ProcessComponent) {

@@ -42,10 +42,10 @@ function Header({ blok }: { blok: NavProps }) {
   useOnClickOutside(ref, () => setSubMenuOpen(NaN))
 
   const submenuClasses = tv({
-    base: 'hidden md:block absolute top-full left-0 right-0 dark md:bg-background text-foreground border-t-1 border-transparent invisible opacity-0 h-0 transition-all duration-150 ease-in-out',
+    base: 'hidden md:block absolute top-full left-0 right-0 dark sm:bg-background text-foreground border-t-1 border-transparent invisible opacity-0 h-0 transition-all duration-150 ease-in-out',
     variants: {
       isOpen: {
-        true: 'md:py-4 visible opacity-100 h-10 transition-all duration-250 ease-in-out delay-75 border-foreground-200',
+        true: 'visible opacity-100 h-10 transition-all duration-250 ease-in-out delay-75 border-foreground-200',
       },
     },
   })
@@ -60,14 +60,14 @@ function Header({ blok }: { blok: NavProps }) {
       <NavbarBrand className='grow-0'>
         <Link href='/'>
           <Logo
-            classes='sm:max-md:hidden'
+            classes='md:max-lg:hidden'
             // primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
             // secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}
             primary='#F3F3F2'
             secondary='#686D6C'
           />
           <Brand
-            classes='max-sm:hidden md:hidden'
+            classes='max-md:hidden lg:hidden'
             // color={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
             color='#F3F3F2'
           />
@@ -75,11 +75,14 @@ function Header({ blok }: { blok: NavProps }) {
       </NavbarBrand>
       {!!blok.contents.length && (
         <Fragment>
-          <NavbarContent justify='start' className='max-sm:hidden gap-6'>
+          <NavbarContent justify='start' className='max-md:hidden gap-3 md:gap-6'>
             {blok.contents.map((item, index) => {
               const isOpen = index === subMenuOpen
               return (
-                <NavbarItem key={index} className='relative'>
+                <NavbarItem 
+                  key={index}
+                  className='relative self-stretch inline-flex items-center'
+                >
                   <StoryblokComponent
                     blok={item}
                     parent='header'
@@ -89,15 +92,15 @@ function Header({ blok }: { blok: NavProps }) {
                 </NavbarItem>
               )
             })}
-            <div className={submenuClasses({ isOpen: !isNaN(subMenuOpen) })} />
           </NavbarContent>
-          <NavbarContent justify='end' className='sm:hidden'>
+          <NavbarContent justify='end' className='md:hidden'>
             <NavbarMenuToggle
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             />
           </NavbarContent>
+          <div className={submenuClasses({ isOpen: !isNaN(subMenuOpen) })} />
 
-          <NavbarMenu className='p-8 pt-12 gap-10 items-end dark '>
+          <NavbarMenu className='p-8 pt-12 gap-12 items-end dark'>
             {blok.contents.map((item, index) => {
               const isOpen = index === subMenuOpen
               return (

@@ -56,7 +56,7 @@ export default function Person({ blok }: PersonComponent) {
         <Image
           src={firstImage.filename}
           alt={firstImage.alt}
-          width={128}
+          width={256}
           radius='full'
           isZoomed={true}
         />

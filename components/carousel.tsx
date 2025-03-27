@@ -53,7 +53,7 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
         className={'min-h-inherit'}
         wrapperClass={'min-h-inherit'}
         breakpoints={{
-          480: { slidesPerView: smView },
+          768: { slidesPerView: smView },
           1024: { slidesPerView: mdView },
           1280: { slidesPerView: xlView },
         }}
