@@ -4,6 +4,7 @@ import { Card, CardBody, CardFooter, CardHeader, Image } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
+import Student from './test'
 
 interface PersonComponent {
   blok: PersonProps
@@ -21,6 +22,12 @@ export default function Person({ blok }: PersonComponent) {
   if (!person.title || !person.image || !person.role) return null
 
   const isStudent = person.role === 'interior'
+  if (isStudent)
+    return (
+      <div className='col-span-3'>
+        <Student />
+      </div>
+    )
 
   const firstImage = person.image[0]
   const secondImage = person.image[1]
