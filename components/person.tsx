@@ -1,10 +1,11 @@
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { PersonProps } from '@props/types'
+import type { ImageData, PersonProps } from '@props/types'
 import { Card, CardBody, CardFooter, CardHeader, Image } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
-import Student from './test'
+import { useRef, useState } from 'react'
+import { useOnClickOutside } from 'usehooks-ts'
 
 interface PersonComponent {
   blok: PersonProps
@@ -17,39 +18,16 @@ const roles = {
   software: { icon: 'cube-dots', text: 'modellazione' },
 }
 
-export default function Person({ blok }: PersonComponent) {
+const Person = ({ blok }: PersonComponent) => {
   const person = blok.ref?.content || blok
   if (!person.title || !person.image || !person.role) return null
 
   const isStudent = person.role === 'interior'
-  if (isStudent)
-    return (
-      <div className='col-span-3'>
-        <Student />
-      </div>
-    )
-
-  const firstImage = person.image[0]
-  const secondImage = person.image[1]
   const role = roles[person.role]
 
-  const description =
-    person.description &&
-    compiler(person.description, {
-      wrapper: ({ children }) => <p className='align-middle'>{children}</p>,
-      forceWrapper: true,
-      overrides: Typography({ size: 'small' }),
-    })
-
-  const message =
-    person.message &&
-    compiler(person.message, {
-      wrapper: ({ children }) => (
-        <p className='align-middle leading-relaxed'>{children}</p>
-      ),
-      forceWrapper: true,
-      overrides: Typography({ size: 'large' }),
-    })
+  const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <p className='align-middle'>{children}</p>
+  )
 
   return (
     <Card
@@ -58,15 +36,9 @@ export default function Person({ blok }: PersonComponent) {
       {...storyblokEditable(blok)}
     >
       <CardHeader
-        className={isStudent ? 'justify-start w-auto' : 'justify-center'}
+        className={`p-0 ${isStudent ? 'justify-start w-auto' : 'justify-center'}`}
       >
-        <Image
-          src={firstImage.filename}
-          alt={firstImage.alt}
-          width={256}
-          radius='full'
-          isZoomed={true}
-        />
+        <Thumb uuid={blok._uid} name={person.title} image={person.image} />
       </CardHeader>
       <CardBody
         as={'article'}
@@ -83,7 +55,20 @@ export default function Person({ blok }: PersonComponent) {
             <small className='font-medium'>{role.text}</small>
           </h6>
         )}
-        {isStudent ? message : description}
+        {isStudent &&
+          person.description &&
+          compiler(person.description, {
+            wrapper: Wrapper,
+            forceWrapper: true,
+            overrides: Typography({ size: 'small' }),
+          })}
+        {!isStudent &&
+          person.message &&
+          compiler(person.message, {
+            wrapper: Wrapper,
+            forceWrapper: true,
+            overrides: Typography({ size: 'large' }),
+          })}
       </CardBody>
       {!isStudent && !!person.links.length && (
         <CardFooter>
@@ -96,6 +81,82 @@ export default function Person({ blok }: PersonComponent) {
   )
 }
 
+interface ThumbComponent {
+  image: Array<ImageData>
+  name: string
+  uuid: string
+}
+
+const Thumb = ({ uuid, image, name }: ThumbComponent) => {
+  const firstImage = image[0]
+  const secondImage = image[1]
+  name = name.replaceAll(' ', '-')
+
+  const video = useRef<HTMLVideoElement | null>(null)
+  const wrapper = useRef(null)
+  const [isPlaing, setIsPlaing] = useState(false)
+
+  const handlePlay = () => {
+    if (video.current) {
+      isPlaing ? video.current.pause() : video.current.play()
+    }
+    setIsPlaing(!isPlaing)
+  }
+
+  const handleStop = () => {
+    if (video.current) {
+      video.current.pause()
+    }
+    setIsPlaing(false)
+  }
+
+  useOnClickOutside(wrapper, handleStop)
+
+  return (
+    <div
+      id={uuid}
+      ref={wrapper}
+      className='realtive aspect-square w-64 h-64 flex items-center justify-center transition-all [&>i]:hover:translate-y-0 [&>i]:hover:opacity-100'
+    >
+      <i className={iconClasses({ isPlaing: isPlaing })} onClick={handlePlay} />
+      <video
+        id={uuid}
+        ref={video}
+        className={thumbClasses({ isPlaing: isPlaing })}
+      >
+        <source src={`/${name}.webm`} type='video/webm' />
+      </video>
+      <Image
+        classNames={{ wrapper: thumbClasses({ isPlaing: !isPlaing }) }}
+        src={firstImage.filename}
+        alt={firstImage.alt}
+        width={256}
+        isZoomed={true}
+      />
+    </div>
+  )
+}
+
+const thumbClasses = tv({
+  base: 'absolute inset-0 w-64 h-64 rounded-full overflow-hidden transition-opacity',
+  variants: {
+    isPlaing: {
+      true: 'z-20 opacity-100',
+      false: 'z-10 opacity-0',
+    },
+  },
+})
+
+const iconClasses = tv({
+  base: 'z-50 text-3xl text-white p-2 opacity-0 cursor-pointer transition-all translate-y-12',
+  variants: {
+    isPlaing: {
+      true: 'iconoir-pause-solid',
+      false: 'iconoir-play-solid',
+    },
+  },
+})
+
 const cardClasses = tv({
   base: 'bg-transparent border-none',
   variants: {
@@ -105,3 +166,5 @@ const cardClasses = tv({
     },
   },
 })
+
+export default Person
