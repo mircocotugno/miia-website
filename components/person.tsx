@@ -1,11 +1,12 @@
-import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { ImageData, PersonProps } from '@props/types'
-import { Card, CardBody, CardFooter, CardHeader, Image } from '@heroui/react'
+import { storyblokEditable } from '@storyblok/react'
+import type { PersonProps } from '@props/types'
+import { Image, Modal, ModalContent, useDisclosure } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
 import { useRef, useState } from 'react'
 import { useOnClickOutside } from 'usehooks-ts'
+import { YouTubeEmbed } from '@next/third-parties/google'
 
 interface PersonComponent {
   blok: PersonProps
@@ -19,150 +20,112 @@ const roles = {
 }
 
 const Person = ({ blok }: PersonComponent) => {
-  const person = blok.ref?.content || blok
-  if (!person.title || !person.image || !person.role) return null
+  blok = blok.ref?.content || blok
+  if (!blok.title || !blok.image || !blok.role) return null
 
-  const isStudent = person.role === 'interior'
-  const role = roles[person.role]
+  const role = roles[blok.role]
 
-  const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <p className='align-middle'>{children}</p>
-  )
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const {
+    cardClasses,
+    headerClasses,
+    thumbClasses,
+    iconClasses,
+    bodyClasses,
+    titleClasses,
+    roleClasses,
+    textClasses,
+  } = classes()
 
   return (
-    <Card
-      shadow='none'
-      className={cardClasses({ isStudent: isStudent })}
+    <article
+      id={blok.uuid}
+      className={cardClasses()}
       {...storyblokEditable(blok)}
     >
-      <CardHeader
-        className={`p-0 ${isStudent ? 'justify-start w-auto' : 'justify-center'}`}
+      <div
+        className={headerClasses({ hasPlayer: !!blok.video })}
+        onClick={onOpen}
       >
-        <Thumb uuid={blok._uid} name={person.title} image={person.image} />
-      </CardHeader>
-      <CardBody
-        as={'article'}
-        className={isStudent ? 'text-left' : 'text-center'}
-      >
-        <h4 className='font-bold leading-snug text-sm sm:text-medium md:text-lg'>
-          {person.title}
-        </h4>
-        {person.role && (
-          <h6 className='text-xs sm:text-sm md:text-medium'>
-            <i
-              className={`iconoir-${role.icon} font-inherit align-middle inline-block mr-1`}
-            />
-            <small className='font-medium'>{role.text}</small>
-          </h6>
+        {blok.video && (
+          <i
+            className={iconClasses({
+              class: 'iconoir-play-solid',
+              hasPlayer: true,
+            })}
+          />
         )}
-        {isStudent &&
-          person.description &&
-          compiler(person.description, {
-            wrapper: Wrapper,
+        <Image
+          classNames={{
+            wrapper: thumbClasses(),
+          }}
+          src={blok.image[0].filename}
+          alt={blok.image[0].alt}
+          width={'100%'}
+          isZoomed={true}
+        />
+      </div>
+      <div className={bodyClasses()}>
+        <h4 className={titleClasses()}>{blok.title}</h4>
+        <h6 className={roleClasses()}>
+          <i className={iconClasses({ class: `iconoir-${role.icon}` })} />
+          <span>{role.text}</span>
+        </h6>
+        {blok.description &&
+          compiler(blok.description, {
+            wrapper: (children) => <p className={textClasses()}>{children}</p>,
             forceWrapper: true,
             overrides: Typography({ size: 'small' }),
           })}
-        {!isStudent &&
-          person.message &&
-          compiler(person.message, {
-            wrapper: Wrapper,
-            forceWrapper: true,
-            overrides: Typography({ size: 'large' }),
-          })}
-      </CardBody>
-      {!isStudent && !!person.links.length && (
-        <CardFooter>
-          {person.links.map((link, index) => (
-            <StoryblokComponent blok={link} key={index} size='lg' />
-          ))}
-        </CardFooter>
+      </div>
+      {blok.video && isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          className='max-w-none mx-auto w-auto overflow-hidden max-h-[80vh]'
+          classNames={{
+            wrapper: 'items-center',
+            closeButton:
+              'fixed top-2 md:top-4 right-2 md:right-4 text-2xl md:text-4xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
+          }}
+        >
+          <ModalContent>
+            <YouTubeEmbed
+              videoid={blok.video}
+              params='?rel=0&modestbranding=1&autohide=1&showinfo=0&showinfo=0&controls=0'
+              width={280}
+              height={500}
+              style='contain:none;height:inherit;width:inherit;'
+            />
+          </ModalContent>
+        </Modal>
       )}
-    </Card>
+    </article>
   )
 }
 
-interface ThumbComponent {
-  image: Array<ImageData>
-  name: string
-  uuid: string
-}
-
-const Thumb = ({ uuid, image, name }: ThumbComponent) => {
-  const firstImage = image[0]
-  const secondImage = image[1]
-  name = name.replaceAll(' ', '-')
-
-  const video = useRef<HTMLVideoElement | null>(null)
-  const wrapper = useRef(null)
-  const [isPlaing, setIsPlaing] = useState(false)
-
-  const handlePlay = () => {
-    if (video.current) {
-      isPlaing ? video.current.pause() : video.current.play()
-    }
-    setIsPlaing(!isPlaing)
-  }
-
-  const handleStop = () => {
-    if (video.current) {
-      video.current.pause()
-    }
-    setIsPlaing(false)
-  }
-
-  useOnClickOutside(wrapper, handleStop)
-
-  return (
-    <div
-      id={uuid}
-      ref={wrapper}
-      className='realtive aspect-square w-64 h-64 flex items-center justify-center transition-all [&>i]:hover:translate-y-0 [&>i]:hover:opacity-100'
-    >
-      <i className={iconClasses({ isPlaing: isPlaing })} onClick={handlePlay} />
-      <video
-        id={uuid}
-        ref={video}
-        className={thumbClasses({ isPlaing: isPlaing })}
-      >
-        <source src={`/${name}.webm`} type='video/webm' />
-      </video>
-      <Image
-        classNames={{ wrapper: thumbClasses({ isPlaing: !isPlaing }) }}
-        src={firstImage.filename}
-        alt={firstImage.alt}
-        width={256}
-        isZoomed={true}
-      />
-    </div>
-  )
-}
-
-const thumbClasses = tv({
-  base: 'absolute inset-0 w-64 h-64 rounded-full overflow-hidden transition-opacity',
-  variants: {
-    isPlaing: {
-      true: 'z-20 opacity-100',
-      false: 'z-10 opacity-0',
-    },
+const classes = tv({
+  slots: {
+    cardClasses:
+      'col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 flex flex-col items-center gap-3',
+    headerClasses:
+      'flex items-center justify-center w-full aspect-square relative cursor-pointer',
+    iconClasses: 'text-foreground transition-all pointer-events-none',
+    thumbClasses: 'absolute inset-8 rounded-full overflow-hidden z-10',
+    bodyClasses: 'text-center',
+    titleClasses: 'font-semibold text-xl',
+    roleClasses: 'text-sm leading-none inline-flex items-center gap-2',
+    textClasses: '',
   },
-})
-
-const iconClasses = tv({
-  base: 'z-50 text-3xl text-white p-2 opacity-0 cursor-pointer transition-all translate-y-12',
   variants: {
-    isPlaing: {
-      true: 'iconoir-pause-solid',
-      false: 'iconoir-play-solid',
-    },
-  },
-})
-
-const cardClasses = tv({
-  base: 'bg-transparent border-none',
-  variants: {
-    isStudent: {
-      true: 'col-span-12 md:col-span-8 lg:col-span-6 flex-row items-center',
-      false: 'col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2',
+    hasPlayer: {
+      true: {
+        headerClasses:
+          '[&_.player]:hover:opacity-100 [&_.player]:hover:translate-y-0 [&_.thumb]:hover:scale-125 ',
+        iconClasses:
+          'player z-30 translate-y-12 opacity-0 text-3xl text-background',
+      },
     },
   },
 })

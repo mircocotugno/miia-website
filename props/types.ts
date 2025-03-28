@@ -340,10 +340,10 @@ export type PersonProps = BlokProps & {
   component: 'person'
   ref: StoryProps & { content: PersonProps }
   image: Array<ImageData> | []
+  video: string
   title: string
   role: 'interior' | 'style' | 'design' | 'software'
   description: string
-  message: string
   links: Array<ActionProps> | []
 }
 

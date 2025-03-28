@@ -1117,13 +1117,20 @@ const person: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['image', 'title', 'role', 'description', 'message', 'links'],
+      keys: ['image', 'video', 'title', 'role', 'description', 'links'],
     },
     image: {
       type: 'multiasset',
       display_name: 'Immagini',
       description: 'Dimensione consigliata 500x500',
       filetypes: ['images'],
+    },
+    video: {
+      type: 'text',
+      display_name: 'Video',
+      description: 'id del video di youtube',
+      tooltip: true,
+      required: true,
     },
     title: {
       type: 'text',
@@ -1143,14 +1150,6 @@ const person: ComponentSchema = {
     description: {
       type: 'markdown',
       display_name: 'Descrizione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
-      max_length: 240,
-    },
-    message: {
-      type: 'markdown',
-      display_name: 'Messaggio',
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
