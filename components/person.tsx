@@ -1,4 +1,4 @@
-import { storyblokEditable } from '@storyblok/react'
+import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import type { PersonProps } from '@props/types'
 import { Image, Modal, ModalContent, useDisclosure } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
@@ -74,10 +74,19 @@ const Person = ({ blok }: PersonComponent) => {
         </h6>
         {blok.description &&
           compiler(blok.description, {
-            wrapper: (children) => <p className={textClasses()}>{children}</p>,
+            wrapper: ({ children }) => (
+              <p className={textClasses()}>{children}</p>
+            ),
             forceWrapper: true,
             overrides: Typography({ size: 'small' }),
           })}
+        {!!blok.links.length && (
+          <div className='flex items-center justify-center'>
+            {blok.links.map((link, index) => (
+              <StoryblokComponent blok={link} key={index} />
+            ))}
+          </div>
+        )}
       </div>
       {blok.video && isOpen && (
         <Modal
@@ -113,10 +122,10 @@ const classes = tv({
       'flex items-center justify-center w-full aspect-square relative cursor-pointer',
     iconClasses: 'text-foreground transition-all pointer-events-none',
     thumbClasses: 'absolute inset-8 rounded-full overflow-hidden z-10',
-    bodyClasses: 'text-center',
+    bodyClasses: 'text-center space-y-2',
     titleClasses: 'font-semibold text-xl',
     roleClasses: 'text-sm leading-none inline-flex items-center gap-2',
-    textClasses: '',
+    textClasses: 'text-small',
   },
   variants: {
     hasPlayer: {
