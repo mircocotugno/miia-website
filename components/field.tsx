@@ -82,7 +82,7 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
     id={blok.id}
     label={blok.label}
     isRequired={blok.required}
-    value={data.value}
+    value={data.value || null}
     showMonthAndYearPickers
     errorMessage={data.error}
     isInvalid={!!data.error}
