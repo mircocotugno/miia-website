@@ -16,7 +16,7 @@ interface GalleryComponent {
 }
 
 const classes = tv({
-  base: 'inset-0 object-cover',
+  base: 'inset-0 object-cover rounded-md sm:rounded-xl',
   variants: {
     aspect: {
       '1/1': 'aspect-square',
@@ -42,15 +42,15 @@ export default function Gallery({ blok }: GalleryComponent) {
   const previews = images.map(({ filename, alt, id }, index) => (
     <div
       key={id}
-      className='flex-none max-w-32 sm:max-w-36 md:max-w-42 cursor-pointer'
+      className='flex-none sm:flex-none w-1/2 md:w-1/3 lg:w-1/4 cursor-pointer'
       onClick={() => handleOpen(index)}
     >
       <HeroImage
         src={filename}
         alt={alt}
-        width={128}
+        width={'100%'}
         shadow='md'
-        classNames={{ img: classes({ aspect: blok.aspect }) }}
+        classNames={{wrapper:"m-1", img: classes({ aspect: blok.aspect }) }}
       />
     </div>
   ))
@@ -70,7 +70,7 @@ export default function Gallery({ blok }: GalleryComponent) {
 
   return (
     <>
-      <div className='flex flex-wrap gap-2 md:gap-4 items-stretch'>
+      <div className='flex flex-wrap items-stretch w-full'>
         {previews}
       </div>
       {blok.fullScreen && (

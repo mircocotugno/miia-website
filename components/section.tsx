@@ -69,7 +69,7 @@ const gradientClasses = tv({
 })
 
 const containerClasses = tv({
-  base: 'p-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-2 sm:gap-x-4 md:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-10 items-baseline sm:items-baseline',
+  base: 'p-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-2 sm:gap-x-4 md:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-10 items-baseline',
   variants: {
     hasBackground: {
       true: 'max-md:pb-24',

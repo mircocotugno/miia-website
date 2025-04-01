@@ -30,9 +30,10 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
 
   const autoplay = blok.delay > 0 ? { delay: 6500 - 1000 * blok.delay } : false
 
-  const view = blok.view > 0 ? Number(blok.view) : 1
-  const smView = blok.view > 0 ? view + 1 : 1
-  const mdView = blok.view > 0 ? (view > 1 ? view * 2 : view + 1) : 1
+  const view = Number(blok.view)
+  const smView = blok.view > 0 ? view : 1
+  const mdView = blok.view > 0 ? view + 1 : 1
+  const lgView = blok.view > 0 ? (view > 1 ? view * 2 : view + 1) : 1
   const xlView = blok.view > 0 ? (view > 1 ? view * 3 : view + 1) : 1
 
   return (
@@ -48,13 +49,14 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
         modules={[Autoplay]}
         loop={true}
         autoplay={autoplay}
-        slidesPerView={view}
+        slidesPerView={1}
         spaceBetween={blok.view ? 24 : 0}
         className={'min-h-inherit'}
         wrapperClass={'min-h-inherit'}
         breakpoints={{
-          768: { slidesPerView: smView },
-          1024: { slidesPerView: mdView },
+          384: { slidesPerView: smView },
+          768: { slidesPerView: mdView },
+          1024: { slidesPerView: lgView },
           1280: { slidesPerView: xlView },
         }}
       >

@@ -4,8 +4,6 @@ import { Image, Modal, ModalContent, useDisclosure } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
-import { useRef, useState } from 'react'
-import { useOnClickOutside } from 'usehooks-ts'
 import { YouTubeEmbed } from '@next/third-parties/google'
 
 interface PersonComponent {
@@ -16,14 +14,19 @@ const roles = {
   interior: { icon: 'graduation-cap', text: 'studente' },
   style: { icon: 'design-nib', text: 'estetica' },
   design: { icon: 'ruler-combine', text: 'progettazione' },
-  software: { icon: 'cube-dots', text: 'modellazione' },
+  cad: { icon: 'one-point-circle', text: 'modellazione' },
+  '3d': { icon: 'sphere', text: 'rendering' },
+  building: { icon: 'tools', text: 'cantieristica' },
+  lighting: { icon: 'light-bulb-on', text: 'illuminotecnica' },
 }
 
 const Person = ({ blok }: PersonComponent) => {
-  blok = blok.ref?.content || blok
-  if (!blok.title || !blok.image || !blok.role) return null
-
-  const role = roles[blok.role]
+  const role = blok.role || blok.ref?.content?.role
+  const video = blok.video || blok.ref?.content?.video
+  const image = blok.image[0] || blok.ref?.content?.image[0]
+  const title = blok.title || blok.ref?.content?.title
+  const description = blok.description || blok.ref?.content?.description
+  const links = blok.links || blok.ref?.content?.links
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -44,55 +47,59 @@ const Person = ({ blok }: PersonComponent) => {
       className={cardClasses()}
       {...storyblokEditable(blok)}
     >
-      <div
-        className={headerClasses({ hasPlayer: !!blok.video })}
-        onClick={onOpen}
-      >
-        {blok.video && (
-          <i
-            className={iconClasses({
-              class: 'iconoir-play-solid',
-              hasPlayer: true,
-            })}
+      {image && (
+        <div className={headerClasses({ hasPlayer: !!video })} onClick={onOpen}>
+          {video && (
+            <i
+              className={iconClasses({
+                class: 'iconoir-play-solid',
+                hasPlayer: true,
+              })}
+            />
+          )}
+
+          <Image
+            classNames={{
+              wrapper: thumbClasses(),
+            }}
+            src={image.filename}
+            alt={image.alt}
+            width={'100%'}
+            isZoomed={true}
           />
-        )}
-        <Image
-          classNames={{
-            wrapper: thumbClasses(),
-          }}
-          src={blok.image[0].filename}
-          alt={blok.image[0].alt}
-          width={'100%'}
-          isZoomed={true}
-        />
-      </div>
+        </div>
+      )}
       <div className={bodyClasses()}>
-        <h4 className={titleClasses()}>{blok.title}</h4>
-        <h6 className={roleClasses()}>
-          <i className={iconClasses({ class: `iconoir-${role.icon}` })} />
-          <span>{role.text}</span>
-        </h6>
-        {blok.description &&
-          compiler(blok.description, {
+        {title && <h4 className={titleClasses()}>{title}</h4>}
+        {role && (
+          <h6 className={roleClasses()}>
+            <i
+              className={iconClasses({ class: `iconoir-${roles[role].icon}` })}
+            />
+            <span>{roles[role].text}</span>
+          </h6>
+        )}
+        {description &&
+          compiler(description, {
             wrapper: ({ children }) => (
               <p className={textClasses()}>{children}</p>
             ),
             forceWrapper: true,
             overrides: Typography({ size: 'small' }),
           })}
-        {!!blok.links.length && (
-          <div className='flex items-center justify-center'>
-            {blok.links.map((link, index) => (
+        {!!links.length && (
+          <div className="flex items-center justify-center">
+            {links.map((link, index) => (
               <StoryblokComponent blok={link} key={index} />
             ))}
           </div>
         )}
       </div>
-      {blok.video && isOpen && (
+      {!!video && isOpen && (
         <Modal
           isOpen={isOpen}
           onClose={onClose}
-          className='max-w-none mx-auto w-auto overflow-hidden max-h-[80vh]'
+          className="max-w-none mx-auto w-auto overflow-hidden max-h-[80vh]"
           classNames={{
             wrapper: 'items-center',
             closeButton:
@@ -101,11 +108,11 @@ const Person = ({ blok }: PersonComponent) => {
         >
           <ModalContent>
             <YouTubeEmbed
-              videoid={blok.video}
-              params='?rel=0&modestbranding=1&autohide=1&showinfo=0&showinfo=0&controls=0'
+              videoid={video}
+              params="?rel=0&modestbranding=1&autohide=1&showinfo=0&showinfo=0&controls=0"
               width={280}
               height={500}
-              style='contain:none;height:inherit;width:inherit;'
+              style="contain:none;height:inherit;width:inherit;"
             />
           </ModalContent>
         </Modal>
@@ -119,10 +126,10 @@ const classes = tv({
     cardClasses:
       'col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 flex flex-col items-center gap-3',
     headerClasses:
-      'flex items-center justify-center w-full aspect-square relative cursor-pointer',
+      'flex items-center justify-center w-full aspect-square relative cursor-pointer sm:max-w-32 min-w-32',
     iconClasses: 'text-foreground transition-all pointer-events-none',
-    thumbClasses: 'absolute inset-8 rounded-full overflow-hidden z-10',
-    bodyClasses: 'text-center space-y-2',
+    thumbClasses: 'absolute inset-0 rounded-full overflow-hidden z-10',
+    bodyClasses: 'sm:text-center space-y-2',
     titleClasses: 'font-semibold text-xl',
     roleClasses: 'text-sm leading-none inline-flex items-center gap-2',
     textClasses: 'text-small',

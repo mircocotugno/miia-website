@@ -270,7 +270,6 @@ export type SectionProps = BlokProps & {
   >
   id: string
   dark: boolean
-  contain: boolean
   align: Array<'start' | 'center' | 'end' | 'stretch'>
 }
 
@@ -342,7 +341,7 @@ export type PersonProps = BlokProps & {
   image: Array<ImageData> | []
   video: string
   title: string
-  role: 'interior' | 'style' | 'design' | 'software'
+  role: 'interior' | 'style' | 'design' | 'cad' | '3d' | 'building' | 'lighting'
   description: string
   links: Array<ActionProps> | []
 }

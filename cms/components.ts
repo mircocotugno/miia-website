@@ -617,12 +617,6 @@ const section: ComponentSchema = {
       default_value: false,
       inline_label: true,
     },
-    contain: {
-      type: 'boolean',
-      display_name: 'Applica margini',
-      default_value: true,
-      inline_label: true,
-    },
   },
 }
 
@@ -1130,7 +1124,6 @@ const person: ComponentSchema = {
       display_name: 'Video',
       description: 'id del video di youtube',
       tooltip: true,
-      required: true,
     },
     title: {
       type: 'text',
@@ -1141,10 +1134,12 @@ const person: ComponentSchema = {
       display_name: 'Ruolo',
       options: [
         { value: 'interior', name: 'Studente interni' },
-        // { value: 'fashion', name: 'Studente moda' },
         { value: 'style', name: 'Docente stile' },
         { value: 'design', name: 'Docente progettazione' },
-        { value: 'software', name: 'Docente software' },
+        { value: 'cad', name: 'Docente software' },
+        { value: '3d', name: 'Docente modellazione' },
+        { value: 'building', name: 'Docente cantieristica' },
+        { value: 'lighting', name: 'Docente illuminotecnica' },
       ],
     },
     description: {
