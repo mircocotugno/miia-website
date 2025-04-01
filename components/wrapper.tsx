@@ -13,10 +13,10 @@ export default function Wrapper({ blok }: WrapperComponent) {
       {...storyblokEditable(blok)}
       className={classes({
         order: order,
-        sm: blok.width?.[0],
-        md: blok.width?.[1],
-        lg: blok.width?.[2],
-        xl: blok.width?.[3],
+        smWidth: blok.width?.[0],
+        mdWidth: blok.width?.[1],
+        lgWidth: blok.width?.[2],
+        xlWidth: blok.width?.[3],
         row: blok.row,
         justify: `${blok.row ? 'justify' : 'items'}-${blok.justify}`,
       })}
@@ -58,7 +58,7 @@ const classes = tv({
       '5': '-order-5',
       '6': '-order-6',
     },
-    sm: {
+    smWidth: {
       '1/4': 'sm:col-span-3',
       '1/3': 'sm:col-span-4',
       '1/2': 'sm:col-span-6',
@@ -66,7 +66,7 @@ const classes = tv({
       '3/4': 'sm:col-span-9',
       '1/1': 'sm:col-span-12',
     },
-    md: {
+    mdWidth: {
       '1/4': 'md:col-span-3',
       '1/3': 'md:col-span-4',
       '1/2': 'md:col-span-6',
@@ -74,7 +74,7 @@ const classes = tv({
       '3/4': 'md:col-span-9',
       '1/1': 'md:col-span-12',
     },
-    lg: {
+    lgWidth: {
       '1/4': 'lg:col-span-3',
       '1/3': 'lg:col-span-4',
       '1/2': 'lg:col-span-6',
@@ -82,7 +82,7 @@ const classes = tv({
       '3/4': 'lg:col-span-9',
       '1/1': 'lg:col-span-12',
     },
-    xl: {
+    xlWidth: {
       '1/4': 'xl:col-span-3',
       '1/3': 'xl:col-span-4',
       '1/2': 'xl:col-span-6',

@@ -32,6 +32,7 @@ export default {
         md: '16rem',
         lg: '32rem',
         xl: '64rem',
+        '1/8': '12.5%',
       },
       maxWidth: {
         '1/2': '50%',

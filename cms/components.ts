@@ -228,6 +228,18 @@ const gallery: ComponentSchema = {
       filetypes: ['images'],
       required: true,
     },
+    size: {
+      type: 'option',
+      display_name: 'Grandezza',
+      options: [
+        { value: '1/2', name: 'Metà' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/8', name: 'Un ottavo' },
+      ],
+      default_value: ['1/2'],
+      description: 'Grandezza delle anteprime',
+      tooltip: true,
+    },
     aspect: {
       type: 'option',
       display_name: 'Aspetto',
@@ -236,6 +248,23 @@ const gallery: ComponentSchema = {
         { value: '3/4', name: 'Verticale' },
         { value: '4/3', name: 'Orizzontale' },
       ],
+    },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
     },
     fullScreen: {
       type: 'boolean',
@@ -584,6 +613,7 @@ const section: ComponentSchema = {
         'alias',
         'background',
         'image',
+        'gallery',
         'video',
         'list',
         'process',
@@ -652,11 +682,6 @@ const wrapper: ComponentSchema = {
     row: {
       type: 'boolean',
       display_name: 'Orizontale',
-      inline_label: true,
-    },
-    boxed: {
-      type: 'boolean',
-      display_name: 'Incorniciato',
       inline_label: true,
     },
     width: {

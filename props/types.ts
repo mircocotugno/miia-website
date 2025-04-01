@@ -152,6 +152,8 @@ export type GalleryProps = BlokProps & {
   images: Array<ImageArray>
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3'
+  size: '1/2' | '1/4' | '1/8'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
 }
 
 export type VideoProps = BlokProps & {
@@ -229,8 +231,6 @@ export type WrapperProps = BlokProps & {
     | EventProps
   )[]
   row: boolean
-  boxed: boolean
-  size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
   width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
   justify: Justifications
   order: number
@@ -256,6 +256,7 @@ export type SectionProps = BlokProps & {
     | WrapperProps
     | BackgroundProps
     | ProcessProps
+    | GalleryProps
     | ListProps
     | TextProps
     | ActionProps
