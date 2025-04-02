@@ -14,6 +14,7 @@ import {
   useDisclosure,
   Button,
   Spinner,
+  select,
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
@@ -140,15 +141,15 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   return (
     <>
       <Button
-        color='primary'
-        className='font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3'
-        size='lg'
+        color="primary"
+        className="font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+        size="lg"
         onPress={onOpen}
       >
         {form.label || 'Compila il modulo'}
       </Button>
       <Drawer
-        size='lg'
+        size="lg"
         isOpen={isOpen}
         onOpenChange={() => handleReset()}
         classNames={{
@@ -156,23 +157,23 @@ export default function Form({ blok, courses, openday }: FormComponent) {
         }}
       >
         <DrawerContent>
-          <DrawerHeader className='flex flex-col gap-1'>
+          <DrawerHeader className="flex flex-col gap-1">
             {form.title || 'Compila il modulo'}
             {isChecked && (
-              <p className='font-medium text-medium text-foreground-800'>
+              <p className="font-medium text-medium text-foreground-800">
                 <span>Ben tornato, </span>
-                <strong className='text-primary'>
+                <strong className="text-primary">
                   {data.nome.value} {data.cognome.value}
                 </strong>
                 !
               </p>
             )}
           </DrawerHeader>
-          <DrawerBody className='relative'>
+          <DrawerBody className="relative">
             {isLoading && (
-              <div className='absolute inset-0 flex items-center justify-center z-20 bg-opacity-30 bg-background backdrop-blur-sm'>
+              <div className="absolute inset-0 flex items-center justify-center z-20 bg-opacity-30 bg-background backdrop-blur-sm">
                 <Spinner
-                  label='Ricerca contatto'
+                  label="Ricerca contatto"
                   classNames={{ label: 'text-neutral-500' }}
                 />
               </div>
@@ -197,7 +198,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                   overrides: Typography({ theme: 'primary' }),
                 })}
             {error && (
-              <div className='mt-auto'>
+              <div className="mt-auto">
                 {compiler(error, {
                   wrapper: null,
                   overrides: Typography({ error: true }),
@@ -205,10 +206,10 @@ export default function Form({ blok, courses, openday }: FormComponent) {
               </div>
             )}
           </DrawerBody>
-          <DrawerFooter className='justify-start'>
+          <DrawerFooter className="justify-start">
             {!isSubmitted && (
               <Button
-                color='primary'
+                color="primary"
                 onPress={() => handleSubmit()}
                 isDisabled={isLoading}
               >
