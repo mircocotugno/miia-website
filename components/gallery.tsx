@@ -1,5 +1,5 @@
-import { GalleryProps } from '@props/types'
-import { useState } from 'react'
+import { GalleryProps, type ImageData } from '@props/types'
+import { Fragment, useState, type ReactNode } from 'react'
 import {
   Image as HeroImage,
   Modal,
@@ -8,16 +8,26 @@ import {
 } from '@heroui/react'
 import { tv } from 'tailwind-variants'
 import { default as NextImage } from 'next/image'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { getImageSizes } from '@modules/formats'
+import { Swiper, SwiperSlide, SwiperProps } from 'swiper/react'
+import { Autoplay, Navigation } from 'swiper/modules'
+import { getImageSizes, type ImageSize } from '@modules/formats'
 import { storyblokEditable } from '@storyblok/react'
 
 interface GalleryComponent {
   blok: GalleryProps
 }
 
+const sliderSettings: SwiperProps = {
+  loop: true,
+  slidesPerView: 1,
+  spaceBetween: 24,
+  modules: [Autoplay, Navigation],
+  navigation: { enabled: true },
+}
+
 export default function Gallery({ blok }: GalleryComponent) {
   if (!blok.images.length) return null
+  const { containerClasses, wrapperClasses, closeClasses } = modalClasses()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [current, setCurrent] = useState(0)
@@ -27,89 +37,140 @@ export default function Gallery({ blok }: GalleryComponent) {
     onOpen()
   }
 
+  const sizes = [256, 512, 768, 1024, 1280, 1440]
+
+  const getSizes = (axis: 'width' | 'height') =>
+    sizes
+      .map((size, i) =>
+        i + 1 !== sizes.length
+          ? `(max-${axis}:${sizes[i + 1]}px):${size}px`
+          : `${size}px`
+      )
+      .join(',')
+
   const images = blok.images.map((image) => getImageSizes(image))
 
-  const previews = images.map(({ filename, alt, id }, index) => (
-    <div
-      key={id}
-      className={previewClasses({ size: blok.size })}
-      onClick={() => handleOpen(index)}
-    >
-      <HeroImage
-        src={filename}
-        alt={alt}
-        width={'100%'}
-        shadow="md"
-        classNames={{
-          wrapper: 'm-1',
-          img: imageClasses({ aspect: blok.aspect }),
-        }}
-      />
-    </div>
-  ))
+  const slides = images.map(
+    (slide: ImageData & { size: ImageSize } & { id: string }) => {
+      const { wrapperClasses, imageClasses } = slideClasses()
+      return (
+        <SwiperSlide key={slide.id} className={wrapperClasses()}>
+          <NextImage
+            src={slide.filename}
+            alt={slide.alt}
+            width={
+              slide.size.ratio > 1 ? sizes[5] : sizes[2] * slide.size.ratio
+            }
+            height={
+              slide.size.ratio <= 1 ? sizes[2] : sizes[5] / slide.size.ratio
+            }
+            sizes={getSizes(slide.size.axis)}
+            className={imageClasses({ class: 'h-auto' })}
+          />
+        </SwiperSlide>
+      )
+    }
+  )
 
-  const slides = images.map(({ filename, alt, size, id }, index) => (
-    <SwiperSlide className="max-w-inherith max-h-inherith rounded-xl" key={id}>
-      <NextImage
-        className="max-h-full max-w-full rounded-xl"
-        src={filename}
-        alt={alt}
-        width={size.ratio > 1 ? 1440 : 768 * size.ratio}
-        height={size.ratio <= 1 ? 768 : 1440 / size.ratio}
-        sizes={`(max-${size.axis}:512px):256px,(max-${size.axis}:768px):512px,(max-${size.axis}:1024px):768px,(max-${size.axis}:1280px):1024px,1440px`}
-      />
-    </SwiperSlide>
-  ))
+  const SlideShow = (
+    <Swiper
+      {...sliderSettings}
+      className="min-h-inherit rounded-xl"
+      wrapperClass="min-h-inherit"
+    >
+      {images.map((slide: ImageData & { size: ImageSize } & { id: string }) => {
+        const { wrapperClasses, imageClasses } = slideClasses()
+        return (
+          <SwiperSlide key={slide.id} className={wrapperClasses()}>
+            <NextImage
+              src={slide.filename}
+              alt={slide.alt}
+              width={
+                slide.size.ratio > 1 ? sizes[5] : sizes[2] * slide.size.ratio
+              }
+              height={
+                slide.size.ratio <= 1 ? sizes[2] : sizes[5] / slide.size.ratio
+              }
+              sizes={getSizes(slide.size.axis)}
+              className={imageClasses({ class: 'h-auto' })}
+            />
+          </SwiperSlide>
+        )
+      })}
+    </Swiper>
+  )
+
+  const FullScreen = (
+    <Fragment>
+      {images.map((image, index) => (
+        <div
+          key={index}
+          className={thumbClasses({ size: blok.size })}
+          onClick={() => handleOpen(index)}
+        >
+          <HeroImage
+            src={image.filename}
+            alt={image.alt}
+            width={'100%'}
+            shadow="md"
+            classNames={{
+              wrapper: 'm-1',
+              img: 'inset-0 object-cover rounded-md sm:rounded-xl',
+            }}
+          />
+        </div>
+      ))}
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        radius="none"
+        backdrop="blur"
+        shadow="none"
+        className={containerClasses()}
+        classNames={{
+          wrapper: wrapperClasses(),
+          closeButton: closeClasses(),
+        }}
+      >
+        <ModalContent className="p-0">
+          <div>
+            <Swiper
+              {...sliderSettings}
+              initialSlide={current}
+              className="items-center max-w-full max-h-full rounded-xl"
+              wrapperClass="min-h-inherit"
+            >
+              {slides}
+            </Swiper>
+          </div>
+        </ModalContent>
+      </Modal>
+    </Fragment>
+  )
 
   return (
-    <>
-      <div
-        className={galleryClasses({
-          smWidth: blok.width?.[0],
-          mdWidth: blok.width?.[1],
-          lgWidth: blok.width?.[2],
-          xlWidth: blok.width?.[3],
-        })}
-        {...storyblokEditable(blok)}
-      >
-        {previews}
-      </div>
-      {blok.fullScreen && (
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          radius="none"
-          backdrop="blur"
-          shadow="none"
-          className="mx-auto w-auto h-auto max-w-[calc(100vw-2rem)] lg:max-w-[calc(100vw-8rem)] overflow-hidden bg-transparent"
-          classNames={{
-            wrapper: 'items-center',
-            closeButton:
-              'fixed z-50 top-2 right-3 text-3xl md:top-4 md:right-4 md:text-3xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
-          }}
-        >
-          <ModalContent className="p-0">
-            <div>
-              <Swiper
-                slidesPerView={1}
-                spaceBetween={20}
-                initialSlide={current}
-                loop={true}
-                className="items-center max-w-full max-h-full rounded-xl"
-              >
-                {slides}
-              </Swiper>
-            </div>
-          </ModalContent>
-        </Modal>
-      )}
-    </>
+    <div
+      {...storyblokEditable(blok)}
+      className={galleryClasses({
+        isFullScreen: blok.fullScreen,
+        smWidth: blok.width?.[0],
+        mdWidth: blok.width?.[1],
+        lgWidth: blok.width?.[2],
+        xlWidth: blok.width?.[3],
+      })}
+    >
+      {blok.fullScreen ? FullScreen : SlideShow}
+    </div>
   )
 }
 
 const galleryClasses = tv({
-  base: 'flex flex-wrap items-stretch w-full col-span-12',
+  base: 'order-last sm:order-none w-full col-span-12',
   variants: {
+    isFullScreen: {
+      false: 'min-h-sm',
+      true: 'flex flex-wrap items-stretch',
+    },
     smWidth: {
       '1/4': 'sm:col-span-3',
       '1/3': 'sm:col-span-4',
@@ -145,7 +206,17 @@ const galleryClasses = tv({
   },
 })
 
-const previewClasses = tv({
+const modalClasses = tv({
+  slots: {
+    containerClasses:
+      'mx-auto w-auto h-auto max-w-[calc(100vw-2rem)] lg:max-w-[calc(100vw-8rem)] overflow-hidden bg-transparent',
+    wrapperClasses: 'items-center',
+    closeClasses:
+      'fixed z-50 top-2 right-3 text-3xl md:top-4 md:right-4 md:text-3xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
+  },
+})
+
+const thumbClasses = tv({
   base: 'flex-none cursor-pointer min-w-24 w-1/6',
   variants: {
     size: {
@@ -156,13 +227,11 @@ const previewClasses = tv({
   },
 })
 
-const imageClasses = tv({
-  base: 'inset-0 object-cover rounded-md sm:rounded-xl',
-  variants: {
-    aspect: {
-      '1/1': 'aspect-square',
-      '4/3': 'aspect-4/3',
-      '3/4': 'aspect-3/4',
-    },
+const slideClasses = tv({
+  slots: {
+    wrapperClasses: 'max-w-inherith max-h-inherith rounded-xl',
+    imageClasses: 'max-h-full max-w-full rounded-xl',
   },
 })
+
+// sizes={`(max-${slide.size.axis}:512px):256px,(max-${slide.size.axis}:768px):512px,(max-${slide.size.axis}:1024px):768px,(max-${slide.size.axis}:1280px):1024px,1440px`}

@@ -1,5 +1,3 @@
-import type { ImageArray, ImageData } from '@props/types'
-
 export function getLongDate(date: string) {
   if (!date) return ''
   return new Date(date).toLocaleDateString('it-IT', {
@@ -18,7 +16,7 @@ export function getShortDate(date: string) {
   })
 }
 
-interface ImageSize {
+export interface ImageSize {
   width: number
   height: number
   ratio: number
