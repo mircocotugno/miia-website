@@ -144,7 +144,7 @@ export type BackgroundProps = BlokProps & {
   image: ImageData
   video: string
   position: Array<'right' | 'center' | 'left'>
-  author: PersonProps
+  author: StoryProps & { content: PersonProps }
 }
 
 export type GalleryProps = BlokProps & {
@@ -345,6 +345,7 @@ export type PersonProps = BlokProps & {
   role: 'interior' | 'style' | 'design' | 'cad' | '3d' | 'building' | 'lighting'
   description: string
   links: Array<ActionProps> | []
+  hide: Array<string>
 }
 
 export type EventProps = BlokProps & {

@@ -1133,6 +1133,16 @@ const person: ComponentSchema = {
       source: 'internal_stories',
       filter_content_type: ['person'],
     },
+    hide: {
+      type: 'option',
+      display_name: 'Nascondi',
+      options: [
+        { value: 'video', name: 'Video' },
+        { value: 'description', name: 'Descrizione' },
+        { value: 'role', name: 'Ruolo' },
+        { value: 'links', name: 'Collegamenti' },
+      ],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',

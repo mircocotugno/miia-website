@@ -28,6 +28,8 @@ const Person = ({ blok }: PersonComponent) => {
   const description = blok.description || blok.ref?.content?.description
   const links = blok.links || blok.ref?.content?.links
 
+  const showElement = (e: string) => !blok.hide.includes(e)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const {
@@ -49,7 +51,7 @@ const Person = ({ blok }: PersonComponent) => {
     >
       {image && (
         <div className={headerClasses({ hasPlayer: !!video })} onClick={onOpen}>
-          {video && (
+          {video && showElement('video') && (
             <i
               className={iconClasses({
                 class: 'iconoir-play-solid',
@@ -57,7 +59,6 @@ const Person = ({ blok }: PersonComponent) => {
               })}
             />
           )}
-
           <Image
             classNames={{
               wrapper: thumbClasses(),
@@ -71,7 +72,7 @@ const Person = ({ blok }: PersonComponent) => {
       )}
       <div className={bodyClasses()}>
         {title && <h4 className={titleClasses()}>{title}</h4>}
-        {role && (
+        {role && showElement('role') && (
           <h6 className={roleClasses()}>
             <i
               className={iconClasses({ class: `iconoir-${roles[role].icon}` })}
@@ -80,6 +81,7 @@ const Person = ({ blok }: PersonComponent) => {
           </h6>
         )}
         {description &&
+          showElement('description') &&
           compiler(description, {
             wrapper: ({ children }) => (
               <p className={textClasses()}>{children}</p>
@@ -87,7 +89,7 @@ const Person = ({ blok }: PersonComponent) => {
             forceWrapper: true,
             overrides: Typography({ size: 'small' }),
           })}
-        {!!links.length && (
+        {!!links.length && showElement('links') && (
           <div className="flex items-center justify-center">
             {links.map((link, index) => (
               <StoryblokComponent blok={link} key={index} />
@@ -95,7 +97,7 @@ const Person = ({ blok }: PersonComponent) => {
           </div>
         )}
       </div>
-      {!!video && isOpen && (
+      {!!video && isOpen && showElement('video') && (
         <Modal
           isOpen={isOpen}
           onClose={onClose}

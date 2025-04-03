@@ -103,12 +103,12 @@ const textClasses = tv({
       6: '-order-6',
     },
     sm: {
-      '1/4': 'sm:col-span-3',
-      '1/3': 'sm:col-span-4',
-      '1/2': 'sm:col-span-6',
-      '2/3': 'sm:col-span-8',
-      '3/4': 'sm:col-span-9',
-      '1/1': 'sm:col-span-12',
+      '1/4': 'sm:col-span-3 sm:max-w-1/4',
+      '1/3': 'sm:col-span-4 sm:max-w-1/3',
+      '1/2': 'sm:col-span-6 sm:max-w-1/3',
+      '2/3': 'sm:col-span-8 sm:max-w-2/3',
+      '3/4': 'sm:col-span-9 sm:max-w-3/4',
+      '1/1': 'sm:col-span-12 sm:max-w-full',
     },
     md: {
       '1/4': 'md:col-span-3',

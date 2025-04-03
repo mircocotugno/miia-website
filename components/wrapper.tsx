@@ -33,7 +33,7 @@ export default function Wrapper({ blok }: WrapperComponent) {
 }
 
 const classes = tv({
-  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12 sm:order-none sm:items-start',
+  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12 sm:order-none items-start',
   variants: {
     row: {
       true: 'flex-row sm:max-md:col-span-12',
@@ -42,12 +42,12 @@ const classes = tv({
       true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
     },
     justify: {
-      'items-right': 'items-end',
-      'items-center': 'items-center',
-      'items-left': 'items-start',
-      'justify-right': 'justify-start',
-      'justify-center': 'justify-center',
-      'justify-left': 'justify-end',
+      'items-right': 'sm:items-end',
+      'items-center': 'sm:items-center',
+      'items-left': 'sm:items-start',
+      'justify-right': 'sm:justify-start',
+      'justify-center': 'sm:justify-center',
+      'justify-left': 'sm:justify-end',
     },
     order: {
       none: 'order-none',

@@ -25,7 +25,7 @@ const relations = [
   'location.ref',
   'alias.form',
   'map.locations',
-  'picture.author',
+  'background.author',
 ]
 
 type PageStory = {
