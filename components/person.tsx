@@ -28,7 +28,8 @@ const Person = ({ blok }: PersonComponent) => {
   const description = blok.description || blok.ref?.content?.description
   const links = blok.links || blok.ref?.content?.links
 
-  const showElement = (e: string) => !blok.hide.includes(e)
+  const showElement = (e: string) =>
+    !!blok?.hide ? blok.hide.includes(e) : true
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
