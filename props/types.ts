@@ -51,6 +51,15 @@ export type OptionProps = {
 
 // Props
 
+export type Roles =
+  | 'interior'
+  | 'style'
+  | 'design'
+  | 'cad'
+  | '3d'
+  | 'building'
+  | 'lighting'
+
 export type Sizes = 'small' | 'medium' | 'large' | 'extra' | 'full'
 
 export type Justifications = 'right' | 'center' | 'left'
@@ -336,17 +345,21 @@ export type CourseProps = BlokProps & {
   page: LinkProps
 }
 
-export type PersonProps = BlokProps & {
-  component: 'person'
-  ref: StoryProps & { content: PersonProps }
+export type PersonData = {
   image: Array<ImageData> | []
   video: string
   title: string
-  role: 'interior' | 'style' | 'design' | 'cad' | '3d' | 'building' | 'lighting'
+  role: Roles
   description: string
   links: Array<ActionProps> | []
-  hide: Array<string>
 }
+
+export type PersonProps = BlokProps &
+  PersonData & {
+    component: 'person'
+    ref: StoryProps & { content: PersonProps }
+    hide: Array<string>
+  }
 
 export type EventProps = BlokProps & {
   component: 'event'

@@ -1,5 +1,11 @@
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
-import type { PersonProps } from '@props/types'
+import type {
+  PersonProps,
+  Roles,
+  ImageData,
+  ActionProps,
+  PersonData,
+} from '@props/types'
 import { Image, Modal, ModalContent, useDisclosure } from '@heroui/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
@@ -10,7 +16,7 @@ interface PersonComponent {
   blok: PersonProps
 }
 
-const roles = {
+const roles: { [key in Roles]: { icon: string; text: string } } = {
   interior: { icon: 'graduation-cap', text: 'studente' },
   style: { icon: 'design-nib', text: 'estetica' },
   design: { icon: 'ruler-combine', text: 'progettazione' },
@@ -20,16 +26,51 @@ const roles = {
   lighting: { icon: 'light-bulb-on', text: 'illuminotecnica' },
 }
 
-const Person = ({ blok }: PersonComponent) => {
-  const role = blok.role || blok.ref?.content?.role
-  const video = blok.video || blok.ref?.content?.video
-  const image = blok.image[0] || blok.ref?.content?.image[0]
-  const title = blok.title || blok.ref?.content?.title
-  const description = blok.description || blok.ref?.content?.description
-  const links = blok.links || blok.ref?.content?.links
+const data: Array<keyof PersonData> = [
+  'title',
+  'description',
+  'role',
+  'image',
+  'video',
+  'links',
+]
 
-  const showElement = (e: string) =>
-    !!blok?.hide ? blok.hide.includes(e) : true
+type Person = {
+  title: string | null
+  description: string | null
+  role: Roles | null
+  image: ImageData | null
+  video: string | null
+  links: Array<ActionProps> | null
+}
+
+const defaultPerson: Person = {
+  title: null,
+  description: null,
+  role: null,
+  image: null,
+  video: null,
+  links: null,
+}
+
+const Person = ({ blok }: PersonComponent) => {
+  const person: Person = {
+    ...defaultPerson,
+    ...Object.fromEntries(
+      data.map((key) => {
+        let ref = blok.ref?.content
+        let value =
+          key === 'image' ? blok[key][0] || ref[key][0] : blok[key] || ref[key]
+        if (!blok.hide) {
+          return [key, value]
+        } else {
+          return [key, !blok.hide.includes(key) ? value : null]
+        }
+      })
+    ),
+  }
+
+  console.log(person)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -50,9 +91,12 @@ const Person = ({ blok }: PersonComponent) => {
       className={cardClasses()}
       {...storyblokEditable(blok)}
     >
-      {image && (
-        <div className={headerClasses({ hasPlayer: !!video })} onClick={onOpen}>
-          {video && showElement('video') && (
+      {person.image && (
+        <div
+          className={headerClasses({ hasPlayer: !!person.video })}
+          onClick={onOpen}
+        >
+          {person.video && (
             <i
               className={iconClasses({
                 class: 'iconoir-play-solid',
@@ -64,41 +108,42 @@ const Person = ({ blok }: PersonComponent) => {
             classNames={{
               wrapper: thumbClasses(),
             }}
-            src={image.filename}
-            alt={image.alt}
+            src={person.image.filename}
+            alt={person.image.alt}
             width={'100%'}
             isZoomed={true}
           />
         </div>
       )}
       <div className={bodyClasses()}>
-        {title && <h4 className={titleClasses()}>{title}</h4>}
-        {role && showElement('role') && (
+        {person.title && <h4 className={titleClasses()}>{person.title}</h4>}
+        {person.role && (
           <h6 className={roleClasses()}>
             <i
-              className={iconClasses({ class: `iconoir-${roles[role].icon}` })}
+              className={iconClasses({
+                class: `iconoir-${roles[person.role].icon}`,
+              })}
             />
-            <span>{roles[role].text}</span>
+            <span>{roles[person.role].text}</span>
           </h6>
         )}
-        {description &&
-          showElement('description') &&
-          compiler(description, {
+        {person.description &&
+          compiler(person.description, {
             wrapper: ({ children }) => (
               <p className={textClasses()}>{children}</p>
             ),
             forceWrapper: true,
             overrides: Typography({ size: 'small' }),
           })}
-        {!!links.length && showElement('links') && (
+        {!!person.links && (
           <div className="flex items-center justify-center">
-            {links.map((link, index) => (
+            {person.links.map((link, index) => (
               <StoryblokComponent blok={link} key={index} />
             ))}
           </div>
         )}
       </div>
-      {!!video && isOpen && showElement('video') && (
+      {!!person.video && isOpen && (
         <Modal
           isOpen={isOpen}
           onClose={onClose}
@@ -111,7 +156,7 @@ const Person = ({ blok }: PersonComponent) => {
         >
           <ModalContent>
             <YouTubeEmbed
-              videoid={video}
+              videoid={person.video}
               params="?rel=0&modestbranding=1&autohide=1&showinfo=0&showinfo=0&controls=0"
               width={280}
               height={500}
