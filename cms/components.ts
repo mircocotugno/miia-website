@@ -666,6 +666,7 @@ const wrapper: ComponentSchema = {
         'image',
         'video',
         'gallery',
+        'background',
         'text',
         'action',
         'list',

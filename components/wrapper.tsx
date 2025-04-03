@@ -8,6 +8,14 @@ interface WrapperComponent {
 
 export default function Wrapper({ blok }: WrapperComponent) {
   const order: any = !!blok.order ? blok.order.toString() : 'none'
+
+  const background = blok.contents.find(
+    (content) => content.component === 'background'
+  )
+  const contents = blok.contents.filter(
+    (content) => content.component !== 'background'
+  )
+
   return (
     <div
       {...storyblokEditable(blok)}
@@ -19,6 +27,7 @@ export default function Wrapper({ blok }: WrapperComponent) {
         xlWidth: blok.width?.[3],
         row: blok.row,
         justify: `${blok.row ? 'justify' : 'items'}-${blok.justify}`,
+        hasBackground: !!background,
       })}
     >
       {blok.contents.map((content, index) => (
@@ -28,9 +37,19 @@ export default function Wrapper({ blok }: WrapperComponent) {
           parent={blok.component}
         />
       ))}
+      {!!background && (
+        <>
+          <div className={gradientClasses()} />
+          <StoryblokComponent blok={background} />
+        </>
+      )}
     </div>
   )
 }
+
+const gradientClasses = tv({
+  base: 'gradient absolute inset-0 bg-gradient-to-tr to-60% -z-10 from-dark mix-blend-multiply',
+})
 
 const classes = tv({
   base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12 sm:order-none items-start',
@@ -39,7 +58,7 @@ const classes = tv({
       true: 'flex-row sm:max-md:col-span-12',
     },
     hasBackground: {
-      true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
+      true: 'relative aspect-4/3 shadow-inner z-0 rounded-xl p-3 md:p-6 overflow-hidden justify-end [&_article]:flex-none [&_article]:backdrop-blur-sm [&_article]:rounded-3xl [&_article]:gap-1 ',
     },
     justify: {
       'items-right': 'sm:items-end',

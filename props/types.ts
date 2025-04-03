@@ -232,6 +232,7 @@ export type WrapperProps = BlokProps & {
     | TextProps
     | ActionProps
     | GalleryProps
+    | BackgroundProps
     | ListProps
     | MenuProps
     | MapProps

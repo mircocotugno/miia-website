@@ -60,7 +60,9 @@ const Person = ({ blok }: PersonComponent) => {
       data.map((key) => {
         let ref = blok.ref?.content
         let value =
-          key === 'image' ? blok[key][0] || ref[key][0] : blok[key] || ref[key]
+          key === 'image'
+            ? blok[key][0] || ref?.[key][0] || null
+            : blok[key] || ref?.[key] || null
         if (!blok.hide) {
           return [key, value]
         } else {

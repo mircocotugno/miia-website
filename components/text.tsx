@@ -69,7 +69,7 @@ export default function Text({ blok }: TextComponent) {
 }
 
 const titleClases = tv({
-  base: 'space-y-6',
+  base: 'space-y-2',
   variants: {
     hide: {
       true: 'hidden sm:block',
