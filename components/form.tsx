@@ -31,7 +31,7 @@ interface FormComponent {
 }
 
 export default function Form({ blok, courses, openday }: FormComponent) {
-  const form = blok.ref?.content || blok
+  const form = blok.alias?.content || blok
   if (!form.fields.length || !form.message) return null
 
   const initData: FormData = {}

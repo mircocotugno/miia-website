@@ -13,10 +13,10 @@ interface AliasComponent {
 
 const relations = [
   'article.author',
-  'person.ref',
-  'course.ref',
-  'event.ref',
-  'location.ref',
+  'person.alias',
+  'course.alias',
+  'event.alias',
+  'location.alias',
   'alias.resource',
   'map.locations',
   'picture.author',

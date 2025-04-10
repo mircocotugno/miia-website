@@ -793,7 +793,7 @@ const form: ComponentSchema = {
   component_group_uuid: 'containers',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -946,7 +946,7 @@ const article: ComponentSchema = {
   component_group_uuid: 'layouts',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -983,7 +983,7 @@ const article: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti articolo',
       restrict_components: true,
-      component_whitelist: ['section', 'carousel'],
+      component_whitelist: ['section', 'carousel', 'aside'],
     },
   },
 }
@@ -996,7 +996,7 @@ const location: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -1036,7 +1036,7 @@ const course: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -1128,7 +1128,7 @@ const person: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -1204,7 +1204,7 @@ const event: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',

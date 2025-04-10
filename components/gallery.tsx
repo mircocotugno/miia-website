@@ -210,7 +210,7 @@ const modalClasses = tv({
   slots: {
     containerClasses:
       'mx-auto w-auto h-auto max-w-[calc(100vw-2rem)] lg:max-w-[calc(100vw-8rem)] overflow-hidden bg-transparent',
-    wrapperClasses: 'items-center',
+    wrapperClasses: 'items-center mx-auto',
     closeClasses:
       'fixed z-50 top-2 right-3 text-3xl md:top-4 md:right-4 md:text-3xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
   },

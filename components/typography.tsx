@@ -15,7 +15,8 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
       component: ({ children }: { children: string }) => (
         <h1
           className={title({
-            class: 'text-5xl md:text-6xl xl:text-7xl font-black',
+            class:
+              'text-5xl md:text-6xl xl:text-7xl font-black leading-tight md:leading-tight xl:leading-none',
             theme: theme,
           })}
         >
@@ -27,7 +28,8 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
       component: ({ children }: { children: string }) => (
         <h2
           className={title({
-            class: 'text-4xl md:text-5xl xl:text-6xl font-extrabold',
+            class:
+              'text-4xl md:text-5xl xl:text-6xl font-extrabold leading-tight md:leading-tight xl:leading-none',
             theme: theme,
           })}
         >
@@ -39,7 +41,8 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
       component: ({ children }: { children: string }) => (
         <h3
           className={title({
-            class: 'text-3xl md:text-4xl xl:text-5xl font-bold',
+            class:
+              'text-3xl md:text-4xl xl:text-5xl font-bold leading-tight md:leading-tight xl:leading-none',
             theme: theme,
           })}
         >
@@ -51,7 +54,8 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
       component: ({ children }: { children: string }) => (
         <h4
           className={subtitle({
-            class: 'text-xl md:text-2xl xl:text-3xl font-bold',
+            class:
+              'text-xl md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug',
             theme: theme,
           })}
         >
@@ -63,7 +67,8 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
       component: ({ children }: { children: string }) => (
         <h5
           className={subtitle({
-            class: 'font-semibold text-lg md:text-xl',
+            class:
+              'font-semibold text-lg md:text-xl leading-snug md:leading-snug xl:leading-snug',
             theme: theme,
           })}
         >
@@ -74,7 +79,11 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
     h6: {
       component: ({ children }: { children: string }) => (
         <h6
-          className={subtitle({ class: 'text-lg font-semibold', theme: theme })}
+          className={subtitle({
+            class:
+              'text-lg font-semibold leading-snug md:leading-snug xl:leading-snug',
+            theme: theme,
+          })}
         >
           {children}
         </h6>
@@ -134,9 +143,8 @@ export const Typography = ({ theme, size, error }: TypographyComponents) => {
 
 const classes = tv({
   slots: {
-    title:
-      'font-serif leading-tight md:leading-tight xl:leading-none break-words',
-    subtitle: 'font-sans leading-snug md:leading-snug xl:leading-snug',
+    title: 'font-serif break-words',
+    subtitle: 'font-sans',
     text: 'font-sans',
     list: 'list-disc list-outside',
     link: 'text-md opacity-90 hover:opacity-100 hover:underline',

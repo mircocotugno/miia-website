@@ -58,11 +58,11 @@ const Person = ({ blok }: PersonComponent) => {
     ...defaultPerson,
     ...Object.fromEntries(
       data.map((key) => {
-        let ref = blok.ref?.content
+        let alias = blok.alias?.content
         let value =
           key === 'image'
-            ? blok[key][0] || ref?.[key][0] || null
-            : blok[key] || ref?.[key] || null
+            ? blok[key][0] || alias?.[key][0] || null
+            : blok[key] || alias?.[key] || null
         if (!blok.hide) {
           return [key, value]
         } else {

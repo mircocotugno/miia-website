@@ -4,30 +4,23 @@ import {
   useStoryblokState,
   StoryblokComponent,
 } from '@storyblok/react'
-import type {
-  StoryProps,
-  BlokProps,
-  ArticleProps,
-  NavProps,
-} from '@props/types'
-import { tv } from 'tailwind-variants'
+import type { StoryProps, ArticleProps, NavProps } from '@props/types'
 import Meta from '@components/meta'
-import  Nav  from '@components/nav'
+import Nav from '@components/nav'
 import { Image as HeroImage } from '@heroui/react'
-import Image from 'next/image'
 
 const relations = [
   'page.header',
   'page.footer',
-  'form.ref',
-  'article.ref',
-  'person.ref',
-  'course.ref',
-  'event.ref',
-  'location.ref',
-  'article.author',
+  'form.alias',
+  'content.alias',
+  'person.alias',
+  'course.alias',
+  'event.alias',
+  'location.alias',
+  'content.author',
   'alias.resource',
-  'picture.author',
+  'article.author',
 ]
 
 interface PageStory {
@@ -55,61 +48,55 @@ export default function PageStory({ story, blog }: PageStory) {
   if (!page?.content) return null
 
   const article = page.content
-  if (article.ref) return null
+  if (article.alias) return null
 
   const author = article.author?.content || null
   const blogPage = blog.content
 
-  const gradientClasses = tv({
-    base: 'absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-r from-dark md:to-60% -z-10',
-  })
-
   return (
     <>
       <Meta {...article} />
-      <main className='min-h-screen'>
+      <main className="min-h-screen">
         {blogPage.header && (
-          <Nav parent='header' blok={blogPage.header.content} />
+          <Nav parent="header" blok={blogPage.header.content} />
         )}
-        <section className='py-6 lg:py-12 min-h-lg bg-cover bg-center text-background [&_article]:backdrop-blur-sm [&_article]:rounded-xl [&_h1]:drop-shadow-8xl [&_h2]:drop-shadow-8xl [&_h3]:drop-shadow-8xl [&_p]:drop-shadow-8xl'>
-          <div className='relative z-10 px-6 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-12 items-center'>
-            <div className='col-span-12 md:col-span-8 lg:col-span-6 space-y-4'>
-              {author?.image[0] && (
-                <div className='flex gap-4 items-center'>
-                  <HeroImage
-                    src={author.image[0].filename}
-                    alt={author.image[0].alt}
-                    radius='full'
-                    width={64}
-                  />
-                  <h4 className='font-medium'>{author.title}</h4>
+        <section className="py-6">
+          <div className="px-6 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-12 items-center">
+            {!!article.image?.filename && (
+              <HeroImage
+                src={article.image.filename}
+                alt={article.image.alt}
+                sizes={`(max-width:512px)::512px,(max-width:768px)::768px,(max-width:1024px):1024px,(max-width:1280px):1280px,1280px`}
+                classNames={{
+                  wrapper: 'col-span-12',
+                  img: 'h-auto',
+                }}
+              />
+            )}
+            <div className="col-span-12 sm:col-span-8">
+              {(!!author?.title || !!page?.first_published_at) && (
+                <div className="inline-flex gap-6 w-full">
+                  {page.first_published_at && (
+                    <h4 className="font-medium inline-flex items-center gap-2">
+                      <i className="iconoir-calendar" />
+                      <span>{page.first_published_at}</span>
+                    </h4>
+                  )}
+                  {author.title && (
+                    <h4 className="font-medium inline-flex items-center gap-2">
+                      <i className="iconoir-profile-circle" />
+                      <span>{author.title}</span>
+                    </h4>
+                  )}
                 </div>
               )}
               {article.title && (
-                <h1 className='font-serif leading-tight font-black break-words text-3xl sm:text4xl md:text-5xl'>
+                <h1 className="font-serif break-words text-5xl md:text-6xl xl:text-7xl font-black leading-tight md:leading-tight xl:leading-none">
                   {article.title}
                 </h1>
               )}
-              {article.description && (
-                <h3 className='font-semibold text-lg break-words line-clamp-5'>
-                  {article.description}
-                </h3>
-              )}
-              {page.first_published_at && <p>{page.first_published_at}</p>}
             </div>
           </div>
-          {article.image && (
-            <>
-              <div className={gradientClasses()} />
-              <Image
-                src={article.image.filename}
-                alt={article.image.alt}
-                priority={true}
-                fill={true}
-                className='object-cover object-center -z-20'
-              />
-            </>
-          )}
         </section>
         {article.body &&
           article.body.map((body, index) => (
@@ -121,7 +108,7 @@ export default function PageStory({ story, blog }: PageStory) {
           ))}
       </main>
       {blogPage.footer && (
-        <Nav parent='footer' blok={blogPage.footer.content} />
+        <Nav parent="footer" blok={blogPage.footer.content} />
       )}
     </>
   )

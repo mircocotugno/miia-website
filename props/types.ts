@@ -312,7 +312,7 @@ export type PageProps = BlokProps & {
 
 export type ArticleProps = BlokProps & {
   component: 'article'
-  ref: StoryProps & { content: ArticleProps }
+  alias: StoryProps & { content: ArticleProps }
   title: string | ''
   description: string | ''
   image: ImageData
@@ -325,7 +325,7 @@ export type ArticleProps = BlokProps & {
 
 export type LocationProps = BlokProps & {
   component: 'location'
-  ref: StoryProps & { content: LocationProps }
+  alias: StoryProps & { content: LocationProps }
   title: string
   address: string
   gps: string
@@ -334,7 +334,7 @@ export type LocationProps = BlokProps & {
 
 export type CourseProps = BlokProps & {
   component: 'course'
-  ref: StoryProps & { content: CourseProps }
+  alias: StoryProps & { content: CourseProps }
   id: string
   title: string
   location: LocationProps
@@ -358,13 +358,13 @@ export type PersonData = {
 export type PersonProps = BlokProps &
   PersonData & {
     component: 'person'
-    ref: StoryProps & { content: PersonProps }
+    alias: StoryProps & { content: PersonProps }
     hide: Array<string>
   }
 
 export type EventProps = BlokProps & {
   component: 'event'
-  ref: StoryProps & { content: EventProps }
+  alias: StoryProps & { content: EventProps }
   title: string
   description: string
   location: LocationProps
@@ -376,7 +376,7 @@ export type EventProps = BlokProps & {
 
 export type FormProps = BlokProps & {
   component: 'form'
-  ref: StoryProps & { content: FormProps }
+  alias: StoryProps & { content: FormProps }
   scope: FormScopes
   title: string
   label: string

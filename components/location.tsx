@@ -9,7 +9,7 @@ interface LocationComponent {
 }
 
 export default function Location({ blok }: LocationComponent) {
-  const location = blok.ref?.content || blok
+  const location = blok.alias?.content || blok
   if (!location.title || !location.address) return null
 
   const classes = tv({
