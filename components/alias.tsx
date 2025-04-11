@@ -19,7 +19,7 @@ const relations = [
   'location.alias',
   'alias.resource',
   'map.locations',
-  'picture.author',
+  'article.author',
 ]
 
 type AliasData = (StoryProps & { content: any }) | null
@@ -123,7 +123,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
     return (
       <div
         {...storyblokEditable(blok)}
-        className='flex flex-col gap-2 sm:gap-4 sm:flex-row col-span-12 items-center'
+        className='flex flex-col gap-2 sm:gap-4 sm:flex-row col-span-12 items-start sm:items-center'
       >
         <Link
           href={alias.content.page.cachedUrl}
@@ -148,13 +148,13 @@ export default function Alias({ blok, parent }: AliasComponent) {
           href={alias.content.page.cachedUrl}
           isDisabled={!alias.content.page.cachedUrl}
           color='foreground'
-          className='flex-1 space-y-3'
+          className='flex-1 space-y-3 block'
         >
-          {alias.content.title && (
-            <h3 className='font-serif leading-tight font-bold break-words text-3xl md:text-4xl xl:text-5xl'>
+          {/* {alias.content.title && (
+            <h3 className='font-sans text-xl md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug'>
               {alias.content.title}
             </h3>
-          )}
+          )} */}
           {alias.content.description &&
             compiler(alias.content.description, {
               wrapper: 'p',
