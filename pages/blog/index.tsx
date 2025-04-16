@@ -9,8 +9,8 @@ import {
 import { storyblokApi } from '@modules/storyblokApi'
 import Meta from '../../components/meta'
 import Nav from '@components/nav'
-import Link from 'next/link'
-import { Image, Chip, Button } from '@heroui/react'
+import { default as NextLink } from 'next/link'
+import { Image, Chip, Button, Link as HeroLink } from '@heroui/react'
 
 interface BlogStory {
   story: ISbStoryData & {
@@ -94,32 +94,32 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
     <>
       <Meta {...blog} />
       {blog.header.content && (
-        <Nav parent='header' blok={blog.header.content} />
+        <Nav parent="header" blok={blog.header.content} />
       )}
       {!!items && items.length > 0 && (
-        <section className='py-6 pb-10 lg:py-12 lg:pb-20 space-y-8 bg-foreground text-background'>
-          <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
+        <section className="py-6 pb-10 lg:py-12 lg:pb-20 space-y-8 bg-foreground text-background">
+          <div className="px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit">
             {/* <div>
               {!!tags?.length &&
                 tags.map(({ name }, index) => <Chip key={index}>{name}</Chip>)}
             </div> */}
-            <div className='flex flex-wrap gap-6 lg:gap-8'>
+            <div className="flex flex-wrap gap-6 lg:gap-8">
               {items.map((post, index) => (
                 <article
-                  className='flex-1 min-w-full sm:min-w-60 sm:max-w-72 space-y-2'
+                  className="flex-1 min-w-full sm:min-w-60 sm:max-w-72 space-y-2"
                   key={index}
                 >
-                  <Link href={post?.full_slug} className='relative'>
+                  <NextLink href={post?.full_slug} className="relative">
                     <Image
                       src={post.content.image?.filename}
                       alt={post.content.image?.alt}
-                      width='100%'
+                      isZoomed
                       classNames={{
                         wrapper: 'flex-1 min-w-20 max-w-60 overflow-hidden',
                       }}
-                      radius='sm'
+                      radius="sm"
                     />
-                    <div className='inline-flex gap-2 flex-wrap absolute w-full bottom-0 z-20 p-2'>
+                    <div className="inline-flex gap-2 flex-wrap absolute w-full bottom-0 z-20 p-2">
                       {post?.tag_list.map((tag, index) => (
                         <Chip
                           key={index}
@@ -127,29 +127,30 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
                             base: 'bg-neutral-200 text-background',
                             content: 'font-medium',
                           }}
-                          size='sm'
+                          size="sm"
                         >
                           {tag}
                         </Chip>
                       ))}
                     </div>
-                  </Link>
+                  </NextLink>
 
-                  <div className='flex-1 text-background space-y-2'>
-                    <Link href={post?.full_slug} key={index}>
-                      <h4 className='font-bold text-lg leading-5 line-clamp-5'>
-                        {post.content.title}
-                      </h4>
-                    </Link>
-                    <p className='text-sm md:line-clamp-3 line-clamp-5'>
+                  <NextLink
+                    href={post?.full_slug}
+                    className="flex-1 block text-background space-y-2 hover:opacity-80 hover:transition-all transition-all"
+                  >
+                    <h4 className="text-background font-bold text-lg leading-5 line-clamp-5">
+                      {post.content.title}
+                    </h4>
+                    <p className="text-sm md:line-clamp-3 line-clamp-5">
                       {post.content.description}
                     </p>
-                  </div>
+                  </NextLink>
                 </article>
               ))}
             </div>
             {hasMore && (
-              <div className='inline-flex'>
+              <div className="inline-flex">
                 <Button onPress={() => setLoadMore(true)}>
                   Carica altri articoli
                 </Button>
@@ -160,10 +161,10 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
       )}
       {blog.body &&
         blog.body.map((body, index) => (
-          <StoryblokComponent blok={body} parent='page' key={index} />
+          <StoryblokComponent blok={body} parent="page" key={index} />
         ))}
       {blog.footer.content && (
-        <Nav parent='footer' blok={blog.footer.content} />
+        <Nav parent="footer" blok={blog.footer.content} />
       )}
     </>
   )

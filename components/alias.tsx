@@ -190,12 +190,10 @@ export default function Alias({ blok, parent }: AliasComponent) {
           />
         </NextLink>
         <div className="flex-1 space-y-6">
-          <NextLink href={alias?.full_slug} className="block">
+          <NextLink href={alias?.full_slug} className="hover:opacity-80 hover:transition-all transition-all space-y-3">
             <h4 className="font-serif font-bold text-4xl">
               {alias.content.title}
             </h4>
-          </NextLink>
-          <NextLink href={alias?.full_slug} className="block">
             <p className="text-sm line-clamp-3 sm:line-clamp-none">
               {alias.content.description}
             </p>
