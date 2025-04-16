@@ -99,10 +99,10 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
       {!!items && items.length > 0 && (
         <section className='py-6 pb-10 lg:py-12 lg:pb-20 space-y-8 bg-foreground text-background'>
           <div className='px-6 mx-auto space-y-6 max-w-[1280px] min-h-inherit'>
-            <div>
+            {/* <div>
               {!!tags?.length &&
                 tags.map(({ name }, index) => <Chip key={index}>{name}</Chip>)}
-            </div>
+            </div> */}
             <div className='flex flex-wrap gap-6 lg:gap-8'>
               {items.map((post, index) => (
                 <article
