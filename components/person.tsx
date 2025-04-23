@@ -72,8 +72,6 @@ const Person = ({ blok }: PersonComponent) => {
     ),
   }
 
-  console.log(person)
-
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const {
