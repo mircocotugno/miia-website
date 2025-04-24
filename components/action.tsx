@@ -46,7 +46,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
           color={theme || blok.color || 'default'}
           size={size}
           href={link}
-          className='col-auto font-bold min-w-fit cursor-pointer'
+          className='col-auto font-bold min-w-fit cursor-pointer gap-2'
           {...storyblokEditable(blok)}
         >
           {Label}
@@ -57,7 +57,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
   return (
     <Container>
       <Link
-        className='col-auto font-medium min-w-fit cursor-pointer'
+        className='col-auto font-medium min-w-fit cursor-pointer gap-2'
         href={link}
         target={blok.link.target}
         color={theme || blok.color || 'foreground'}
