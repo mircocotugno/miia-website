@@ -27,29 +27,34 @@ const ListItem = ({ label, icon, value }: ListItemComponent) =>
   )
 
 interface PriceComponent {
+  intersec: boolean
   amount: number
   steps: number | null
 }
 
-const Price = ({ amount, steps }: PriceComponent) => (
-  <h2 className="font-serif font-bold leading-compact inline-block align-middle lg:mx-2">
-    {!!steps && (
-      <span className="text-2xl lg:text-3xl leading-compact">
-        A partire da{' '}
+const Price = ({ amount, steps, intersec }: PriceComponent) => (
+  <h2
+    className={`font-serif font-bold leading-none align-middle ${intersec ? 'hidden md:inline-block' : 'mx-2 inline-block'}`}
+  >
+    <p className={intersec ? 'inline' : ''}>
+      {!!steps && <span className="text-xl">A partire da </span>}
+      <span className="font-black text-3xl leading-none mx-1">
+        {amount}
+        <small className="text-xl">€</small>
       </span>
-    )}
-    <span className="font-black text-4xl md:text-3xl lg:text-5xl mx-1 leading-compact">
-      {amount}
-      <small className="text-2xl lg:text-3xl mx-1 leading-compact">€</small>
-    </span>
-    {!!steps && (
-      <span className="text-2xl lg:text-3xl hidden sm:inline-block leading-compact">
-        per{' '}
-        <span className="text-3xl lg:text-4xl leading-compact">{steps}</span>{' '}
-        mesi
-      </span>
-    )}
-    {/* <small className="italic hidden sm:inline-block"> - iva inclusa</small> */}
+    </p>
+    <p className={intersec ? 'inline' : ''}>
+      {!!steps && (
+        <span className="text-xl leading-none mr-1">
+          per <span className="text-xl lg:text-2xl leading-none">{steps}</span>{' '}
+          mesi
+        </span>
+      )}
+      <small className="italic">
+        {' '}
+        <sup>*</sup>iva inclusa
+      </small>
+    </p>
   </h2>
 )
 
@@ -102,7 +107,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
             })}
           >
             <div className={containerClasses({ active: !isIntersecting })}>
-              <Price amount={495} steps={10} />
+              <Price amount={495} steps={10} intersec={!isIntersecting} />
               {!!courses && (
                 <div className={!isIntersecting ? 'hidden' : ''}>
                   <Accordion selectionMode="multiple">
@@ -111,19 +116,15 @@ export default function Aside({ blok, locations }: AsideComponent) {
                         key={index}
                         HeadingComponent="h4"
                         title={course.title}
-                        subtitle={
-                          course.hours.includes('20:00/23:00')
-                            ? 'Frequenza serale'
-                            : 'Frequenza al sabato'
-                        }
+                        subtitle={'Frequenza ' + course.days.join(' e ')}
                         classNames={{ title: 'font-bold tex-xl' }}
                       >
                         <ul className="text-sm space-y-1">
-                          <ListItem
+                          {/* <ListItem
                             label="lezioni:"
                             icon="calendar"
                             value={course.days ? course.days.join(', ') : null}
-                          />
+                          /> */}
                           <ListItem
                             label="orari:"
                             icon="clock"
@@ -176,14 +177,14 @@ const sectionClasses = tv({
 })
 
 const asideClasses = tv({
-  base: 'sticky z-30 md:top-20 col-span-full md:col-span-4 sm:-mt-32 order-1 md:order-last max-h-fit',
+  base: 'sticky z-30 md:top-20 col-span-full md:col-span-4 sm:-mt-32 order-1 md:order-last max-h-fit self-start',
 })
 
 const bannerClasses = tv({
   base: '-bottom-full',
   variants: {
     active: {
-      true: 'fixed right-0 left-0 bottom-0 text-background bg-foreground transition-all',
+      true: 'fixed right-0 left-0 bottom-0 transition-all md:bg-foreground md:text-background',
       false:
         'flex flex-col align-start justify-start rounded-3xl bg-background text-foreground p-2 shadow-aside transition-all',
     },
@@ -191,11 +192,11 @@ const bannerClasses = tv({
 })
 
 const containerClasses = tv({
-  base: 'flex flex-col',
+  base: 'flex',
   variants: {
     active: {
-      true: 'px-6 py-3 md:py-6 w-full mx-auto max-w-[1280px] sm:flex-row sm:justify-between gap-4 [&_button]:min-w-48',
-      false: 'justify-between',
+      true: 'p-6 w-full mx-auto max-w-[1280px] justify-end gap-4 [&_button]:w-full [&_button]:sm:w-auto [&_button]:sm:min-w-64',
+      false: 'flex-col justify-between',
     },
   },
 })

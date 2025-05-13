@@ -137,15 +137,9 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
             <div className="flex flex-col">
               <h6 className="text-small font-medium">{option.name.title}</h6>
               <p className="text-tiny">
-                <span>
-                  {option.name.hours.includes('20:00/23:00')
-                    ? 'Frequenza serale'
-                    : 'Frequenza al sabato'}
-                </span>
+                <span>{'Frequenza ' + option.name.days.join(' e ')}</span>
                 <span> - </span>
-                <span>
-                  {option.name.hours.join(" ")}
-                </span>
+                <span>{option.name.hours.join(' e ')}</span>
               </p>
             </div>
           )}

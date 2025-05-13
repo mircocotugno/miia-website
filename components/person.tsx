@@ -172,7 +172,7 @@ const Person = ({ blok }: PersonComponent) => {
 const classes = tv({
   slots: {
     cardClasses:
-      'col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 flex flex-col items-center gap-3',
+      'col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 flex flex-col items-center gap-3 max-w-40 mx-auto md:max-w-full',
     headerClasses:
       'flex items-center justify-center w-full aspect-square relative cursor-pointer sm:max-w-32 min-w-32',
     iconClasses: 'text-foreground transition-all pointer-events-none',
