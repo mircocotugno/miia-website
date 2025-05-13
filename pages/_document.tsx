@@ -4,7 +4,7 @@ import { fontSans, fontSerif } from '@config/fonts'
 export default function Document() {
   debugger
   return (
-    <Html lang='en' className='scroll-pt-14 scroll-smooth'>
+    <Html lang='en' className='scroll-pt-14 scroll-smooth hide-scroolbar'>
       <Head>
         <link
           rel='stylesheet'

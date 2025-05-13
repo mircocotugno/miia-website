@@ -17,14 +17,15 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
   const router = useRouter()
   let link = blok.link.url || `/${blok.link.cached_url}`
   if (blok.link?.anchor) {
-    link = link.startsWith(router.asPath)
-      ? `#${blok.link.anchor}`
-      : `${link}#${blok.link.anchor}`
+    link =
+      link === router.asPath + '/'
+        ? `#${blok.link.anchor}`
+        : `${link}#${blok.link.anchor.replaceAll(' ', '-')}`
   }
 
   const Container = ({ children }: PropsWithChildren) =>
     parent === 'section' ? (
-      <div className='col-span-12'>{children}</div>
+      <div className="col-span-12">{children}</div>
     ) : (
       children
     )
@@ -46,7 +47,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
           color={theme || blok.color || 'default'}
           size={size}
           href={link}
-          className='col-auto font-bold min-w-fit cursor-pointer gap-2'
+          className="col-auto font-bold min-w-fit cursor-pointer gap-2"
           {...storyblokEditable(blok)}
         >
           {Label}
@@ -57,7 +58,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
   return (
     <Container>
       <Link
-        className='col-auto font-medium min-w-fit cursor-pointer gap-2'
+        className="col-auto font-medium min-w-fit cursor-pointer gap-2"
         href={link}
         target={blok.link.target}
         color={theme || blok.color || 'foreground'}

@@ -14,7 +14,6 @@ import {
   useDisclosure,
   Button,
   Spinner,
-  select,
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
@@ -26,11 +25,12 @@ import { brevoApi, checkContact } from '@modules/brevo'
 
 interface FormComponent {
   blok: FormProps
+  label?: string
   courses?: Array<OptionProps>
   openday?: DataProps
 }
 
-export default function Form({ blok, courses, openday }: FormComponent) {
+export default function Form({ blok, label, courses, openday }: FormComponent) {
   const form = blok.alias?.content || blok
   if (!form.fields.length || !form.message) return null
 
@@ -143,10 +143,9 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       <Button
         color="primary"
         className="font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
-        size="lg"
         onPress={onOpen}
       >
-        {form.label || 'Compila il modulo'}
+        {label || form.label || 'Compila il modulo'}
       </Button>
       <Drawer
         size="lg"

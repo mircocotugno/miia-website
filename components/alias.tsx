@@ -4,7 +4,7 @@ import { storyblokApi } from '@modules/storyblokApi'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
-import { Chip, Image, Link as HeroLink } from '@heroui/react'
+import { Image, Link as HeroLink, Button as HeroButton } from '@heroui/react'
 import { default as NextLink } from 'next/link'
 
 interface AliasComponent {
@@ -82,7 +82,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
       if (data?.ArticleItems) {
         item = data?.ArticleItems.items[0]
       } else if (data?.EventItems) {
-        const today = new Date().toISOString()
+        const today = new Date()
         type storyEvent = StoryProps & { content: EventProps }
 
         const events = data.EventItems.items
@@ -97,7 +97,9 @@ export default function Alias({ blok, parent }: AliasComponent) {
             return A < B ? -1 : A > B ? 1 : 0
           })
 
-        item = events.find((item: storyEvent) => item.content.date >= today)
+        item = events.find(
+          (item: storyEvent) => new Date(item.content.date) >= today
+        )
 
         item.content.date = new Date(item.content.date)
       }
@@ -124,14 +126,9 @@ export default function Alias({ blok, parent }: AliasComponent) {
     return (
       <div
         {...storyblokEditable(blok)}
-        className="flex flex-col gap-2 sm:gap-4 sm:flex-row col-span-10 items-start sm:items-center"
+        className="flex flex-col gap-2 sm:gap-4 sm:flex-row col-span-12 items-start sm:items-center"
       >
-        <HeroLink
-          href={alias.content.page.cachedUrl}
-          isDisabled={!alias.content.page.cachedUrl}
-          color="foreground"
-          className="flex-1 sm:max-w-24 gap-2 sm:gap-1 flex sm:flex-col sm:justify-center items-baseline sm:items-center sm:px-6 sm:py-2 text-center"
-        >
+        <div className="flex-1 sm:max-w-24 gap-2 sm:gap-1 flex sm:flex-col sm:justify-center items-baseline sm:items-center sm:px-6 sm:py-2 text-center">
           <span className="text-xl sm:text-3xl font-bold">
             {alias.content.date.toLocaleDateString('it-IT', { day: '2-digit' })}
           </span>
@@ -143,26 +140,37 @@ export default function Alias({ blok, parent }: AliasComponent) {
               year: 'numeric',
             })}
           </span>
-        </HeroLink>
+        </div>
 
-        <HeroLink
-          href={alias.content.page.cachedUrl}
-          isDisabled={!alias.content.page.cachedUrl}
-          color="foreground"
-          className="flex-1 space-y-3 block"
-        >
-          {/* {alias.content.title && (
-            <h3 className='font-sans text-xl md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug'>
-              {alias.content.title}
-            </h3>
-          )} */}
+        <div className="flex-1 space-y-3 block">
+          <HeroLink
+            href={alias.content.page.cachedUrl}
+            isDisabled={!alias.content.page.cachedUrl}
+            color="foreground"
+          >
+            {alias.content.title && (
+              <h3 className="font-sans text-lg md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug">
+                {alias.content.title}
+              </h3>
+            )}
+          </HeroLink>
           {alias.content.description &&
             compiler(alias.content.description, {
               wrapper: 'div',
               forceWrapper: true,
               overrides: Typography({}),
             })}
-        </HeroLink>
+          {alias.content.page.cachedUrl && !blok.form?.content && (
+            <HeroLink
+              href={alias.content.page.cachedUrl}
+              isDisabled={!alias.content.page.cachedUrl}
+              color="foreground"
+              className="font-semibold text-sm"
+            >
+              Vai alla pagina
+            </HeroLink>
+          )}
+        </div>
         {blok.form?.content && (
           <div className="flex-0">
             <StoryblokComponent
@@ -190,7 +198,10 @@ export default function Alias({ blok, parent }: AliasComponent) {
           />
         </NextLink>
         <div className="flex-1 space-y-6">
-          <NextLink href={alias?.full_slug} className="hover:opacity-80 hover:transition-all transition-all space-y-3">
+          <NextLink
+            href={alias?.full_slug}
+            className="hover:opacity-80 hover:transition-all transition-all space-y-3"
+          >
             <h4 className="font-serif font-bold text-4xl">
               {alias.content.title}
             </h4>
