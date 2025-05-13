@@ -45,7 +45,7 @@ export type ImageArray = ImageData & {
 }
 
 export type OptionProps = {
-  name: string
+  name: string | (Omit<CourseProps, 'location'> & { location: string })
   value: string
 }
 
