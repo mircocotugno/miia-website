@@ -540,27 +540,15 @@ const aside: ComponentSchema = {
     enrollment: {
       type: 'section',
       display_name: 'Iscrizione',
-      keys: ['headline', 'courses', 'form'],
+      keys: ['amount', 'steps', 'courses', 'enroll', 'contact'],
     },
-    headline: {
-      type: 'markdown',
-      display_name: 'Intestazione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'link',
-        'inlinecode',
-        'italic',
-        'bold',
-        'hrule',
-      ],
-      required: true,
+    amount: {
+      type: 'number',
+      display_name: 'Prezzo',
+    },
+    steps: {
+      type: 'number',
+      display_name: 'Rate',
     },
     courses: {
       type: 'options',
@@ -570,9 +558,17 @@ const aside: ComponentSchema = {
       filter_content_type: ['course'],
       required: true,
     },
-    form: {
+    enroll: {
       type: 'option',
-      display_name: 'Modulo',
+      display_name: 'Modulo iscrizione',
+      source: 'internal_stories',
+      restrict_content_types: true,
+      filter_content_type: ['form'],
+      required: true,
+    },
+    contact: {
+      type: 'option',
+      display_name: 'Modulo contatti',
       source: 'internal_stories',
       restrict_content_types: true,
       filter_content_type: ['form'],

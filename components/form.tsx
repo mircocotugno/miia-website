@@ -25,12 +25,21 @@ import { brevoApi, checkContact } from '@modules/brevo'
 
 interface FormComponent {
   blok: FormProps
-  label?: string
+  button?: {
+    label?: string
+    color?: 'default' | 'primary' | 'secondary'
+    size?: 'md' | 'lg' | 'sm'
+  }
   courses?: Array<OptionProps>
   openday?: DataProps
 }
 
-export default function Form({ blok, label, courses, openday }: FormComponent) {
+export default function Form({
+  blok,
+  button,
+  courses,
+  openday,
+}: FormComponent) {
   const form = blok.alias?.content || blok
   if (!form.fields.length || !form.message) return null
 
@@ -141,11 +150,12 @@ export default function Form({ blok, label, courses, openday }: FormComponent) {
   return (
     <>
       <Button
-        color="primary"
+        color={button?.color || 'primary'}
+        size={button?.size}
         className="font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
         onPress={onOpen}
       >
-        {label || form.label || 'Compila il modulo'}
+        {button?.label || form.label || 'Compila il modulo'}
       </Button>
       <Drawer
         size="lg"

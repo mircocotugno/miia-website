@@ -211,10 +211,15 @@ export type AliasProps = BlokProps & {
 export type AsideProps = BlokProps & {
   component: 'aside'
   headline: string
+  amount: number
+  steps: number
   courses: Array<{
     content: Omit<CourseProps, 'location'> & { location: string }
   }>
-  form: StoryProps & {
+  enroll: StoryProps & {
+    content: FormProps
+  }
+  contact: StoryProps & {
     content: FormProps
   }
   contents: Array<

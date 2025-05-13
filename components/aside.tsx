@@ -37,17 +37,16 @@ const Price = ({ amount, steps, intersec }: PriceComponent) => (
     className={`font-serif font-bold leading-none align-middle ${intersec ? 'hidden md:inline-block' : 'mx-2 inline-block'}`}
   >
     <p className={intersec ? 'inline' : ''}>
-      {!!steps && <span className="text-xl">A partire da </span>}
-      <span className="font-black text-3xl leading-none mx-1">
+      {!!steps && <span className="text-xl lg:text-3xl">A partire da </span>}
+      <span className="font-black text-3xl lg:text-5xl leading-none mx-1">
         {amount}
         <small className="text-xl">€</small>
       </span>
     </p>
     <p className={intersec ? 'inline' : ''}>
       {!!steps && (
-        <span className="text-xl leading-none mr-1">
-          per <span className="text-xl lg:text-2xl leading-none">{steps}</span>{' '}
-          mesi
+        <span className="text-xl mlg:text-3xl leading-none mr-1">
+          per {steps} mesi
         </span>
       )}
       <small className="italic">
@@ -107,7 +106,11 @@ export default function Aside({ blok, locations }: AsideComponent) {
             })}
           >
             <div className={containerClasses({ active: !isIntersecting })}>
-              <Price amount={495} steps={10} intersec={!isIntersecting} />
+              <Price
+                amount={blok.amount || 100}
+                steps={blok.steps}
+                intersec={!isIntersecting}
+              />
               {!!courses && (
                 <div className={!isIntersecting ? 'hidden' : ''}>
                   <Accordion selectionMode="multiple">
@@ -120,11 +123,6 @@ export default function Aside({ blok, locations }: AsideComponent) {
                         classNames={{ title: 'font-bold tex-xl' }}
                       >
                         <ul className="text-sm space-y-1">
-                          {/* <ListItem
-                            label="lezioni:"
-                            icon="calendar"
-                            value={course.days ? course.days.join(', ') : null}
-                          /> */}
                           <ListItem
                             label="orari:"
                             icon="clock"
@@ -153,9 +151,17 @@ export default function Aside({ blok, locations }: AsideComponent) {
                   </Accordion>
                 </div>
               )}
-              {blok.form && (
+              {blok.enroll && (
                 <StoryblokComponent
-                  blok={blok.form.content}
+                  blok={blok.enroll.content}
+                  button={{ size: 'lg' }}
+                  courses={options}
+                />
+              )}
+              {blok.contact && isIntersecting && (
+                <StoryblokComponent
+                  button={{ color: 'foreground', size: 'sm' }}
+                  blok={blok.contact.content}
                   courses={options}
                 />
               )}
@@ -192,11 +198,11 @@ const bannerClasses = tv({
 })
 
 const containerClasses = tv({
-  base: 'flex',
+  base: 'flex justify-between',
   variants: {
     active: {
-      true: 'p-6 w-full mx-auto max-w-[1280px] justify-end gap-4 [&_button]:w-full [&_button]:sm:w-auto [&_button]:sm:min-w-64',
-      false: 'flex-col justify-between',
+      true: 'px-6 py-2 md:py-6  w-full mx-auto max-w-[1280px] gap-4 [&_button]:w-full [&_button]:sm:w-auto [&_button]:sm:min-w-64',
+      false: 'flex-col gap-3',
     },
   },
 })
