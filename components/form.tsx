@@ -14,7 +14,6 @@ import {
   useDisclosure,
   Button,
   Spinner,
-  select,
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
@@ -26,12 +25,38 @@ import { brevoApi, checkContact } from '@modules/brevo'
 
 interface FormComponent {
   blok: FormProps
+  button?: {
+    label?: string
+    color?: 'default' | 'primary' | 'secondary'
+    size?: 'md' | 'lg' | 'sm'
+  }
   courses?: Array<OptionProps>
   openday?: DataProps
 }
 
-export default function Form({ blok, courses, openday }: FormComponent) {
-  const form = blok.alias?.content || blok
+export default function Form({
+  blok,
+  button,
+  courses,
+  openday,
+}: FormComponent) {
+  const alias = blok.alias?.content
+  const form = alias || blok
+
+  if (!!alias) {
+    form.title = blok.title || blok.alias?.content.title
+    form.label = blok.label || blok.alias?.content.label
+    form.message = blok.message || blok.alias?.content.message
+    blok.fields.forEach((field: FieldProps) => {
+      const index = form.fields.findIndex(({ id }) => id === field.id)
+      if (index !== -1) {
+        form.fields[index] = field
+      } else {
+        form.fields.push(field)
+      }
+    })
+  }
+
   if (!form.fields.length || !form.message) return null
 
   const initData: FormData = {}
@@ -141,12 +166,12 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   return (
     <>
       <Button
-        color="primary"
+        color={button?.color || 'primary'}
+        size={button?.size}
         className="font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
-        size="lg"
         onPress={onOpen}
       >
-        {form.label || 'Compila il modulo'}
+        {button?.label || form.label || 'Compila il modulo'}
       </Button>
       <Drawer
         size="lg"
@@ -229,8 +254,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   )
 }
 
-function getData(body: Array<FieldProps>, data: FormData) {
-  body.forEach(
+function getData(fields: Array<FieldProps>, data: FormData) {
+  fields.forEach(
     (field) =>
       (data[field.id] = {
         id: field.id,

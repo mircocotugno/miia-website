@@ -78,7 +78,7 @@ const tagClasses = tv({
     },
     isFullHeight: {
       false: 'min-h-sm',
-      true: 'min-h-cover sm:min-h-lg',
+      true: 'min-h-lg',
     },
   },
 })

@@ -1,12 +1,10 @@
 import '@styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { GoogleTagManager } from '@next/third-parties/google'
 import {
   IubendaProvider,
   IubendaCookieSolutionBannerConfigInterface,
-  useIubenda,
 } from '@mep-agency/next-iubenda'
 
 import { storyblokInit, apiPlugin } from '@storyblok/react'
@@ -84,14 +82,14 @@ const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <IubendaProvider bannerConfig={iubendaBannerConfig}>
+      {/* <IubendaProvider bannerConfig={iubendaBannerConfig}> */}
         <HeroUIProvider>
           <NextThemesProvider attribute='class' defaultTheme='light'>
             <Component {...pageProps} />
           </NextThemesProvider>
         </HeroUIProvider>
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
-      </IubendaProvider>
+      {/* </IubendaProvider> */}
     </>
   )
 }

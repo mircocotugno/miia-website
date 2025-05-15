@@ -33,8 +33,8 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     className={blok.id === 'email' ? 'relative z-30' : ''}
     startContent={
       blok.input === 'tel' && (
-        <div className='pointer-events-none flex items-center'>
-          <span className='text-small text-neutral-400'>+39</span>
+        <div className="pointer-events-none flex items-center">
+          <span className="text-small text-neutral-400">+39</span>
         </div>
       )
     }
@@ -72,7 +72,7 @@ const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
       {blok.label}
     </p>
     {!!data.error && (
-      <small className='text-xs text-danger'>{data.error}</small>
+      <small className="text-xs text-danger">{data.error}</small>
     )}
   </Checkbox>
 )
@@ -127,11 +127,22 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
     >
       {options.map((option) => (
         <SelectItem
-          className='data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium'
+          className="data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium"
           key={option.value}
           value={option.value}
         >
-          {option.name}
+          {typeof option.name === 'string' ? (
+            option.name
+          ) : (
+            <div className="flex flex-col">
+              <h6 className="text-small font-medium">{option.name.title}</h6>
+              <p className="text-tiny">
+                <span>{'Frequenza ' + option.name.days.join(' e ')}</span>
+                <span> - </span>
+                <span>{option.name.hours.join(' e ')}</span>
+              </p>
+            </div>
+          )}
         </SelectItem>
       ))}
     </Select>

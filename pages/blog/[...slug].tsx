@@ -74,7 +74,7 @@ export default function PageStory({ story, blog }: PageStory) {
               />
             )}
             <div className="col-span-12 sm:col-span-8">
-              {(!!author?.title || !!page?.first_published_at) && (
+              {(!!author || !!page?.first_published_at) && (
                 <div className="inline-flex gap-6 w-full">
                   {page.first_published_at && (
                     <h4 className="font-medium inline-flex items-center gap-2">
@@ -82,7 +82,7 @@ export default function PageStory({ story, blog }: PageStory) {
                       <span>{page.first_published_at}</span>
                     </h4>
                   )}
-                  {author.title && (
+                  {author?.title && (
                     <h4 className="font-medium inline-flex items-center gap-2">
                       <i className="iconoir-profile-circle" />
                       <span>{author.title}</span>

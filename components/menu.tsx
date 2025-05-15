@@ -48,12 +48,14 @@ export default function Menu({
           onClick={() => handleOpen()}
         >
           {blok.title}
-          <i className={`-order-1 md:order-none iconoir-nav-arrow-${isOpen ? 'down' : 'up'}`} />
+          <i
+            className={`-order-1 md:order-none iconoir-nav-arrow-${isOpen ? 'down' : 'up'}`}
+          />
         </button>
 
         <div className={submenuClasses({ isOpen })}>
           {blok.links.map((link, index) => (
-            <StoryblokComponent blok={link} size='sm' key={index} />
+            <StoryblokComponent blok={link} size="sm" key={index} />
           ))}
         </div>
       </>
@@ -61,13 +63,18 @@ export default function Menu({
   }
   if (parent === 'footer') {
     return (
-      <div className='flex-none' {...storyblokEditable(blok)}>
-        <p className='text-lg font-medium mb-2'>{blok.title}</p>
-        <hr className='opacity-10 mb-4' />
-        <ul className='space-y-2'>
+      <div className="flex-none" {...storyblokEditable(blok)}>
+        {blok.title && (
+          <>
+            <p className="text-lg font-medium mb-2">{blok.title}</p>
+            <hr className="opacity-10 mb-4" />
+          </>
+        )}
+
+        <ul className={`space-y-2 ${blok.title ? '' : 'mt-12'}`}>
           {blok.links.map((link, index) => (
             <li key={`list-${index}`}>
-              <StoryblokComponent blok={link} size='sm' />
+              <StoryblokComponent blok={link} size="sm" />
             </li>
           ))}
         </ul>
@@ -78,14 +85,14 @@ export default function Menu({
     return (
       <div
         {...storyblokEditable(blok)}
-        className='flex flex-wrap gap-x-2 gap-y-4'
+        className="flex flex-wrap gap-x-2 gap-y-4"
       >
         {blok.links.map((link, index) => (
           <StoryblokComponent
             blok={link}
             key={`tab-${index}`}
-            theme='default'
-            size='sm'
+            theme="default"
+            size="sm"
           />
         ))}
       </div>
@@ -94,7 +101,7 @@ export default function Menu({
   return (
     <Dropdown {...storyblokEditable(blok)}>
       <DropdownTrigger>
-        <Link color='foreground'>{blok.title}</Link>
+        <Link color="foreground">{blok.title}</Link>
       </DropdownTrigger>
       <DropdownMenu
         aria-label={blok.id}

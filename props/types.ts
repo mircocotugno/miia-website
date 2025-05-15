@@ -45,7 +45,7 @@ export type ImageArray = ImageData & {
 }
 
 export type OptionProps = {
-  name: string
+  name: string | (Omit<CourseProps, 'location'> & { location: string })
   value: string
 }
 
@@ -211,10 +211,15 @@ export type AliasProps = BlokProps & {
 export type AsideProps = BlokProps & {
   component: 'aside'
   headline: string
+  amount: number
+  steps: number
   courses: Array<{
     content: Omit<CourseProps, 'location'> & { location: string }
   }>
-  form: StoryProps & {
+  enroll: StoryProps & {
+    content: FormProps
+  }
+  contact: StoryProps & {
     content: FormProps
   }
   contents: Array<
@@ -380,7 +385,7 @@ export type FormProps = BlokProps & {
   scope: FormScopes
   title: string
   label: string
-  fields: Array<FieldProps> | []
+  fields: Array<FieldProps>
   message: string
 }
 

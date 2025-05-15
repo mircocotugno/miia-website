@@ -47,6 +47,7 @@ export default function Image({ blok, parent }: ImageComponent) {
         src={blok.image.filename}
         alt={blok.image.alt}
         onClick={onOpen}
+        width={'100%'}
         removeWrapper={!!blok.size}
         sizes={`(max-${axis}:512px)::512px,(max-${axis}:768px)::768px,(max-${axis}:1024px):1024px,(max-${axis}:1280px):1280px,1280px`}
         classNames={{
@@ -70,14 +71,14 @@ export default function Image({ blok, parent }: ImageComponent) {
         <Modal
           isOpen={isOpen}
           onClose={onClose}
-          className='max-w-none mx-auto w-auto overflow-hidden max-h-[80vh]'
+          className="max-w-none mx-auto w-auto overflow-hidden max-h-[80vh]"
           classNames={{
             wrapper: 'items-center',
             closeButton:
               'fixed top-2 md:top-4 right-2 md:right-4 text-2xl md:text-4xl text-white bg-transparent hover:bg-transparent active:bg-transparent',
           }}
         >
-          <ModalContent className='p-0'>
+          <ModalContent className="p-0">
             <NextImage
               src={blok.image.filename}
               alt={blok.image.alt}
@@ -94,18 +95,18 @@ export default function Image({ blok, parent }: ImageComponent) {
 }
 
 const wrapperClasses = tv({
-  base: 'flex-1 col-span-12 sm:order-none',
+  base: 'flex-1 col-span-12 sm:order-none h-full',
   variants: {
     wrapperChild: {
       false: 'self-stretch',
     },
     order: {
-      '1': "-order-1",
-      '2': "-order-2",
-      '3': "-order-3",
-      '4': "-order-4",
-      '5': "-order-5",
-      '6': "-order-6",
+      '1': '-order-1',
+      '2': '-order-2',
+      '3': '-order-3',
+      '4': '-order-4',
+      '5': '-order-5',
+      '6': '-order-6',
     },
     sm: {
       '1/4': 'sm:col-span-3',
@@ -143,7 +144,7 @@ const wrapperClasses = tv({
 })
 
 const imageClasses = tv({
-  base: 'h-auto',
+  base: 'h-auto max-h-lg',
   variants: {
     size: {
       sm: 'max-w-32',
@@ -151,16 +152,16 @@ const imageClasses = tv({
       lg: 'max-w-64',
     },
     normalized: {
-      true: 'md:h-full sm:aspect-auto md:inset-0 md:object-cover',
+      true: 'h-full sm:aspect-auto md:object-cover',
       false: 'inset-0 object-cover sm:h-full',
     },
     order: {
-      '1': "-order-1",
-      '2': "-order-2",
-      '3': "-order-3",
-      '4': "-order-4",
-      '5': "-order-5",
-      '6': "-order-6",
+      '1': '-order-1',
+      '2': '-order-2',
+      '3': '-order-3',
+      '4': '-order-4',
+      '5': '-order-5',
+      '6': '-order-6',
     },
     aspect: {
       '9/4': 'sm:aspect-9/4 md:aspect-9/4',
