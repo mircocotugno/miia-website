@@ -2,7 +2,6 @@ import { Html, Head, Main, NextScript } from 'next/document'
 import { fontSans, fontSerif } from '@config/fonts'
 
 export default function Document() {
-  debugger
   return (
     <Html lang='en' className='scroll-pt-14 scroll-smooth hide-scroolbar'>
       <Head>

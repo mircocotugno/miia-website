@@ -51,7 +51,7 @@ export default function Form({
       const index = form.fields.findIndex(({ id }) => id === field.id)
       if (index !== -1) {
         form.fields[index] = field
-      } else {
+      } else if (!!field.id) {
         form.fields.push(field)
       }
     })
