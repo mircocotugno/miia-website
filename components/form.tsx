@@ -40,7 +40,23 @@ export default function Form({
   courses,
   openday,
 }: FormComponent) {
-  const form = blok.alias?.content || blok
+  const alias = blok.alias?.content
+  const form = alias || blok
+
+  if (!!alias) {
+    form.title = blok.title || blok.alias?.content.title
+    form.label = blok.label || blok.alias?.content.label
+    form.message = blok.message || blok.alias?.content.message
+    blok.fields.forEach((field: FieldProps) => {
+      const index = form.fields.findIndex(({ id }) => id === field.id)
+      if (index !== -1) {
+        form.fields[index] = field
+      } else {
+        form.fields.push(field)
+      }
+    })
+  }
+
   if (!form.fields.length || !form.message) return null
 
   const initData: FormData = {}
@@ -238,8 +254,8 @@ export default function Form({
   )
 }
 
-function getData(body: Array<FieldProps>, data: FormData) {
-  body.forEach(
+function getData(fields: Array<FieldProps>, data: FormData) {
+  fields.forEach(
     (field) =>
       (data[field.id] = {
         id: field.id,

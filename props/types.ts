@@ -385,7 +385,7 @@ export type FormProps = BlokProps & {
   scope: FormScopes
   title: string
   label: string
-  fields: Array<FieldProps> | []
+  fields: Array<FieldProps>
   message: string
 }
 
