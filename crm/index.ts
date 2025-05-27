@@ -11,8 +11,8 @@ async function brevo(
   type: Elements = process.argv[3],
   name: string = process.argv[4]
 ) {
-  let element = null
-  let path = null
+  let element: object
+  let path: string
   switch (operation) {
     case 'get':
       path = 'contacts'
@@ -39,10 +39,26 @@ async function brevo(
       }
       break
     case 'delete':
-      return await brevoDelete({
-        path: 'contacts/attributes/normal',
-        identifier: name,
-      })
+      if (type === 'attributes') {
+        if (!name) {
+          path = 'contacts/attributes'
+          const res = await brevoGet({ path })
+          res.attributes.forEach(
+            (attribute: { name: string; category: string; type: string }) =>
+              brevoDelete({
+                path: path,
+                identifier: attribute.category,
+                name: attribute.name,
+              })
+          )
+        }
+        return
+      } else {
+        return await brevoDelete({
+          path: 'contacts/attributes/normal',
+          identifier: name,
+        })
+      }
   }
 }
 

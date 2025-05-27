@@ -22,16 +22,36 @@ type Attributes = {
 }
 
 export const attributes: Attributes = {
-  interesse_ambito: {
-    type: 'category',
+  // Azioni dell'utente
+  conferma_contatto: {
+    type: 'boolean',
+  },
+  download_materiale: {
+    type: 'date',
+  },
+  partecipazione_openday: {
+    type: 'date',
+  },
+  invio_iscrizione: {
+    type: 'date',
+  },
+  iscrizione_newsletter: {
+    type: 'boolean',
+  },
+
+  // Informazioni di interesse
+  interesse_corso: {
+    type: 'category',// TODO change data type
     enumeration: [
-      { value: 1, label: 'interni' },
-      { value: 2, label: 'moda' },
+      { value: 1, label: 'interni - primo livello' },
+      { value: 2, label: 'interni - secondo livello' },
+      { value: 3, label: 'moda - primo livello' },
+      { value: 4, label: 'moda - secondo livello' },
     ],
   },
   interesse_sede: {
     type: 'multiple-choice',
-    multiCategoryOptions: ['treviso', 'padova', 'bassano'],
+    multiCategoryOptions: ['treviso', 'bassano', 'padova'],
   },
   interesse_frequenza: {
     type: 'multiple-choice',
@@ -41,113 +61,122 @@ export const attributes: Attributes = {
     type: 'multiple-choice',
     multiCategoryOptions: ['marzo', 'ottobre'],
   },
-  interesse_scopo: {
-    type: 'category',
-    enumeration: [
-      { value: 1, label: 'lavoro' },
-      { value: 2, label: 'ruolo' },
-      { value: 3, label: 'piacere' },
-    ],
-  },
-  openday_data: {
+  // interesse_scopo: {
+  //   type: 'category',
+  //   enumeration: [
+  //     { value: 1, label: 'lavoro' },
+  //     { value: 2, label: 'ruolo' },
+  //     { value: 3, label: 'piacere' },
+  //   ],
+  // },
+  interesse_openday: {
     type: 'date',
   },
-  openday_conferma: {
-    type: 'boolean',
-  },
-  openday_partecipazione: {
-    type: 'boolean',
-  },
-  profilo_formazione: {
-    type: 'text',
-  },
-  profilo_lavoro: {
-    type: 'text',
-  },
-  profilo_presentazione: {
-    type: 'text',
-  },
-  pagamento_fattura: {
-    type: 'category',
-    enumeration: [
-      { value: 1, label: 'privato' },
-      { value: 2, label: 'azienda' },
-    ],
-  },
-  pagamento_dilazione: {
-    type: 'category',
-    enumeration: [
-      { value: 1, label: 'unica' },
-      { value: 2, label: '5 rate' },
-      { value: 3, label: '9 rate' },
-    ],
-  },
+  // interesse_collaborazione: {
+  //   type: 'category',
+  //   enumeration: [
+  //     { value: 1, label: 'studenti' },
+  //     { value: 2, label: 'commerciale' },
+  //     { value: 3, label: 'formazione' },
+  //   ],
+  // },
+
+  // Preferenze iscrizione
   iscrizione_corso: {
     type: 'text',
   },
-  iscrizione_contratto: {
-    type: 'boolean',
-  },
-  progetto_intervento: {
-    type: 'category',
-    enumeration: [
-      { value: 1, label: 'arredare' },
-      { value: 2, label: 'rinnovare' },
-      { value: 3, label: 'ristrutturare' },
-    ],
-  },
-  progetto_immobile: {
-    type: 'text',
-  },
-  progetto_budget: {
-    type: 'float',
-  },
-  progetto_dimensione: {
-    type: 'float',
-  },
-  persona_codice: {
-    type: 'text',
-  },
-  persona_nascita: {
-    type: 'date',
-  },
-  persona_luogo: {
-    type: 'text',
-  },
-  persona_sesso: {
-    type: 'category',
-    enumeration: [
-      { value: 1, label: 'maschio' },
-      { value: 2, label: 'femmina' },
-      { value: 3, label: 'altro' },
-    ],
-  },
-  residenza_indirizzo: {
-    type: 'text',
-  },
-  residenza_citta: {
-    type: 'text',
-  },
-  residenza_provincia: {
-    type: 'text',
-  },
-  azienda_nome: {
-    type: 'text',
-  },
-  azienda_partitaiva: {
-    type: 'float',
-  },
-  azienda_indirizzo: {
-    type: 'text',
-  },
-  azienda_citta: {
-    type: 'text',
-  },
-  azienda_provincia: {
-    type: 'text',
-  },
-  collaborazione_richiesta: {
-    type: 'multiple-choice',
-    multiCategoryOptions: ['studenti', 'commerciale', 'formazione'],
-  },
+  // iscrizione_fattura: {
+  //   type: 'category',
+  //   enumeration: [
+  //     { value: 1, label: 'privato' },
+  //     { value: 2, label: 'azienda' },
+  //   ],
+  // },
+  // iscrizione_dilazione: {
+  //   type: 'category',
+  //   enumeration: [
+  //     { value: 1, label: 'unica' },
+  //     { value: 2, label: 'minime' },
+  //     { value: 3, label: 'massime' },
+  //   ],
+  // },
+
+  ///////////////////////////////////////
+  // Informazioni di profilo
+  // profilo_formazione: {
+  //   type: 'text',
+  // },
+  // profilo_lavoro: {
+  //   type: 'text',
+  // },
+  // profilo_presentazione: {
+  //   type: 'text',
+  // },
+
+  ///////////////////////////////////////
+  // Dati persona
+  // persona_codice: {
+  //   type: 'text',
+  // },
+  // persona_nascita: {
+  //   type: 'date',
+  // },
+  // persona_luogo: {
+  //   type: 'text',
+  // },
+  // persona_sesso: {
+  //   type: 'category',
+  //   enumeration: [
+  //     { value: 1, label: 'maschio' },
+  //     { value: 2, label: 'femmina' },
+  //     { value: 3, label: 'altro' },
+  //   ],
+  // },
+  // persona_indirizzo: {
+  //   type: 'text',
+  // },
+  // persona_citta: {
+  //   type: 'text',
+  // },
+  // persona_provincia: {
+  //   type: 'text',
+  // },
+
+  ///////////////////////////////////////
+  // Dati aziendali
+  // azienda_nome: {
+  //   type: 'text',
+  // },
+  // azienda_iva: {
+  //   type: 'float',
+  // },
+  // azienda_indirizzo: {
+  //   type: 'text',
+  // },
+  // azienda_citta: {
+  //   type: 'text',
+  // },
+  // azienda_provincia: {
+  //   type: 'text',
+  // },
+
+  ///////////////////////////////////////
+  // Indicazioni progetto
+  // progetto_intervento: {
+  //   type: 'category',
+  //   enumeration: [
+  //     { value: 1, label: 'arredare' },
+  //     { value: 2, label: 'rinnovare' },
+  //     { value: 3, label: 'ristrutturare' },
+  //   ],
+  // },
+  // progetto_immobile: {
+  //   type: 'text',
+  // },
+  // progetto_budget: {
+  //   type: 'float',
+  // },
+  // progetto_dimensione: {
+  //   type: 'float',
+  // },
 }

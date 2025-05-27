@@ -151,20 +151,22 @@ export default function Aside({ blok, locations }: AsideComponent) {
                   </Accordion>
                 </div>
               )}
-              {blok.enroll && (
-                <StoryblokComponent
-                  blok={blok.enroll.content}
-                  button={{ size: 'lg' }}
-                  courses={options}
-                />
-              )}
-              {blok.contact && isIntersecting && (
-                <StoryblokComponent
-                  button={{ color: 'foreground', size: 'sm' }}
-                  blok={blok.contact.content}
-                  courses={options}
-                />
-              )}
+              {!!blok.forms &&
+                blok.forms.map((form, index) => {
+                  const button = {
+                    size: !index ? 'lg' : 'sm',
+                    color: !index ? 'primary' : 'foreground',
+                    hide: !index ? false : !isIntersecting,
+                  }
+                  return (
+                    <StoryblokComponent
+                      key={index}
+                      blok={form}
+                      button={button}
+                      courses={options}
+                    />
+                  )
+                })}
             </div>
           </div>
         </aside>

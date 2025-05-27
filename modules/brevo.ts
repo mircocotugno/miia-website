@@ -1,26 +1,25 @@
-import type { FormScopes, FormData, BrevoProps, FormArea } from '@props/types'
+import type { FormList, FormData, BrevoProps, FormArea } from '@props/types'
+import { attributes } from '@crm/attributes'
 
 const baseUrl = 'https://api.brevo.com/v3/'
 const apiKey = process.env.NEXT_PUBLIC_BREVO_TOKEN
 
 const listIds = {
-  corsi: 10,
-  aziende: 26,
-  progetti: 25,
-  docenza: 29,
-  interni: 27,
-  moda: 28,
-  generici: 37,
+  studenti: 40,
+  docenti: 41,
+  aziende: 42,
+  clienti: 43,
 }
 
 export async function checkContact(email: string) {
   // TODO: some attributes are type multi-select but return index of value...
   if (!email) return console.error('Email non trovata')
   const response = await apiGet(`contacts/${email}`)
+  // console.log(response)
   return response
 }
 
-export async function brevoApi(scope: FormScopes, data: FormData) {
+export async function brevoApi(list: FormList, data: FormData) {
   const validation = data?.validation?.value
   if (!!validation) return false
 
@@ -51,32 +50,23 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     )
     .forEach((key) => {
       let value = data[key].value
-      if (['persona_nascita', 'openday_data'].includes(key)) {
-        value = `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+      if (typeof attributes[key] !== 'undefined') {
+        const type = attributes[key].type
+        if (type === 'multiple-choice') {
+          value = typeof value === 'string' ? [value] : value
+        }
+        if (['persona_nascita', 'openday_data'].includes(key)) {
+          value = `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+        }
       }
       contact.attributes[key.toUpperCase()] = value
     })
 
   // Manage lists
-  const list = []
-  if (scope) {
-    list.push(listIds[scope])
-  } else if (data?.scopo) {
-    const dataScope: FormScopes = data.scopo.value[0]
-    list.push(listIds[dataScope])
-  } else {
-    list.push(listIds.generici)
-  }
-
-  if (list[0] === listIds.corsi) {
-    const area: FormArea = data?.area?.value
-    area && list.push(listIds[area])
-  }
-
-  contact.listIds = list
+contact.listIds = [!!list ? listIds[list] : 19]
 
   // Check if exist
-  let response: any = null
+  let response: any = {}
   response = await apiGet(`contacts/${email}`)
   const userId = response?.id
   // console.log(userId)
@@ -88,12 +78,12 @@ export async function brevoApi(scope: FormScopes, data: FormData) {
     contact.email = email
     response = await apiPost('contacts', contact)
   }
-  // console.log(contact)
-
+  // TODO check why apiPut response is undefined
   if (!!response?.message) {
-    const name = data?.nome?.value
-    response.message = `#####Ops, qualcosa è andato storto ${name || ''}!
-    \nÈ stato trovato il seguente errore: **${response.message}**
+    response = {}
+    response.code = !response ? false : !response?.code
+    response.message = `#####Ops, qualcosa è andato storto ${data?.nome?.value || ''}!
+    ${!!response.message ? `\nÈ stato trovato il seguente errore: **${response.message}**` : ''}
     \nSe l'errore dovesse persistere, ci contatti all'indirizzo email info@miia.it`
   }
 

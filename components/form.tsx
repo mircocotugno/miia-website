@@ -17,11 +17,12 @@ import {
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
-import { attributes, CategoryAttribute } from '../crm/attributes'
+// import { attributes, CategoryAttribute } from '../crm/attributes'
 import { useState } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { brevoApi, checkContact } from '@modules/brevo'
+import { tv } from 'tailwind-variants'
 
 interface FormComponent {
   blok: FormProps
@@ -29,9 +30,13 @@ interface FormComponent {
     label?: string
     color?: 'default' | 'primary' | 'secondary'
     size?: 'md' | 'lg' | 'sm'
+    hide?: boolean
   }
   courses?: Array<OptionProps>
-  openday?: DataProps
+  openday?: {
+    date: Date
+    course: string
+  }
 }
 
 export default function Form({
@@ -44,6 +49,7 @@ export default function Form({
   const form = alias || blok
 
   if (!!alias) {
+    form.list = blok.list || blok.alias?.content.list
     form.title = blok.title || blok.alias?.content.title
     form.label = blok.label || blok.alias?.content.label
     form.message = blok.message || blok.alias?.content.message
@@ -60,8 +66,9 @@ export default function Form({
   if (!form.fields.length || !form.message) return null
 
   const initData: FormData = {}
-  if (openday) {
-    initData.openday = openday
+  if (!!openday) {
+    initData.interesse_corso = openday.course
+    initData.interesse_openday = openday.date
   }
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -90,26 +97,10 @@ export default function Form({
       setChecked(true)
       const _data = { ...data }
       _data.email.value = response.email
+      _data.nome.value = response.attributes.NOME
+      _data.cognome.value = response.attributes.COGNOME
+      _data.sms.value = response.attributes.SMS.substring(2)
 
-      Object.entries(response.attributes).forEach(
-        ([key, value]: [string, any]) => {
-          key = key.toLowerCase()
-          const attribute = attributes[key]
-          if (key === 'sms') {
-            value = value.substring(2)
-          }
-          if (attribute && attribute.type === 'category') {
-            const category = (
-              attributes[key] as CategoryAttribute
-            ).enumeration.find((category) => category.value == value)
-            value = category?.label
-          }
-          if (Array.isArray(data[key].value)) {
-            value = [value]
-          }
-          _data[key].value = value
-        }
-      )
       setData(_data)
     } else {
       setChecked(false)
@@ -126,7 +117,8 @@ export default function Form({
       ({ error }: DataProps): boolean => !!error
     )
     if (!hasError) {
-      const response = await brevoApi(form.scope, _data)
+      debugger
+      const response = await brevoApi(form.list, _data)
       if (!response) return handleReset()
 
       const parseText = (text: string) => {
@@ -159,6 +151,7 @@ export default function Form({
     setMessage('')
     setSubmitted(false)
     setLoading(false)
+    setChecked(false)
 
     onOpenChange()
   }
@@ -168,7 +161,7 @@ export default function Form({
       <Button
         color={button?.color || 'primary'}
         size={button?.size}
-        className="font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3"
+        className={buttonClasses({ hidden: button?.hide })}
         onPress={onOpen}
       >
         {button?.label || form.label || 'Compila il modulo'}
@@ -184,7 +177,7 @@ export default function Form({
         <DrawerContent>
           <DrawerHeader className="flex flex-col gap-1">
             {form.title || 'Compila il modulo'}
-            {isChecked && (
+            {isChecked && !isSubmitted && (
               <p className="font-medium text-medium text-foreground-800">
                 <span>Ben tornato, </span>
                 <strong className="text-primary">
@@ -271,3 +264,12 @@ function getData(fields: Array<FieldProps>, data: FormData) {
   )
   return data
 }
+
+const buttonClasses = tv({
+  base: 'font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3',
+  variants: {
+    hidden: {
+      true: 'hidden',
+    },
+  },
+})

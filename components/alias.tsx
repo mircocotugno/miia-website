@@ -4,24 +4,13 @@ import { storyblokApi } from '@modules/storyblokApi'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
-import { Image, Link as HeroLink, Button as HeroButton } from '@heroui/react'
+import { Image, Link as HeroLink } from '@heroui/react'
 import { default as NextLink } from 'next/link'
 
 interface AliasComponent {
   blok: AliasProps
   parent?: string
 }
-
-const relations = [
-  'article.author',
-  'person.alias',
-  'course.alias',
-  'event.alias',
-  'location.alias',
-  'alias.resource',
-  'map.locations',
-  'article.author',
-]
 
 type AliasData = (StoryProps & { content: any }) | null
 
@@ -63,6 +52,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
               content {
                 title
                 description
+                openday
                 date
                 location {
                   content
@@ -113,16 +103,25 @@ export default function Alias({ blok, parent }: AliasComponent) {
   if (!alias) return null
 
   if (isEvent) {
-    const fieldOpenday = {
-      id: 'openday_data',
-      value: alias.content.date.toLocaleDateString('it-IT', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }),
-      required: true,
-      error: null,
+    const openday = {
+      date: {
+        id: 'interesse_openday',
+        value: alias.content.date.toLocaleDateString('it-IT', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+        required: true,
+        error: null,
+      },
+      course: {
+        id: 'interesse_corso',
+        value: alias.content.openday,
+        required: true,
+        error: null,
+      },
     }
+
     return (
       <div
         {...storyblokEditable(blok)}
@@ -160,7 +159,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
               forceWrapper: true,
               overrides: Typography({}),
             })}
-          {alias.content.page.cachedUrl && !blok.form?.content && (
+          {alias.content.page.cachedUrl && !blok.submit?.length && (
             <HeroLink
               href={alias.content.page.cachedUrl}
               isDisabled={!alias.content.page.cachedUrl}
@@ -170,15 +169,10 @@ export default function Alias({ blok, parent }: AliasComponent) {
               Vai alla pagina
             </HeroLink>
           )}
+          {!!blok.submit?.length && blok?.submit.map((form, index) => (
+            <StoryblokComponent blok={form} openday={openday} key={index} />
+          ))}
         </div>
-        {blok.form?.content && (
-          <div className="flex-0">
-            <StoryblokComponent
-              blok={blok.form.content}
-              openday={fieldOpenday}
-            />
-          </div>
-        )}
       </div>
     )
   }

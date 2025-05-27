@@ -515,12 +515,12 @@ const alias: ComponentSchema = {
       display_name: 'Filtra per nome',
       description: 'Il nome della risorsa contiene il filtro',
     },
-    form: {
-      type: 'option',
-      display_name: 'Modulo',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
+    submit: {
+      type: 'bloks',
+      display_name: 'Iscrizione',
+      restrict_components: true,
+      component_whitelist: ['form'],
+      maximum: 1,
     },
   },
 }
@@ -540,7 +540,7 @@ const aside: ComponentSchema = {
     enrollment: {
       type: 'section',
       display_name: 'Iscrizione',
-      keys: ['amount', 'steps', 'courses', 'enroll', 'contact'],
+      keys: ['amount', 'steps', 'courses', 'forms'],
     },
     amount: {
       type: 'number',
@@ -558,20 +558,12 @@ const aside: ComponentSchema = {
       filter_content_type: ['course'],
       required: true,
     },
-    enroll: {
-      type: 'option',
-      display_name: 'Modulo iscrizione',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
-      required: true,
-    },
-    contact: {
-      type: 'option',
-      display_name: 'Modulo contatti',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
+    forms: {
+      type: 'bloks',
+      display_name: 'Moduli',
+      restrict_components: true,
+      component_whitelist: ['form'],
+      maximum: 3,
       required: true,
     },
     contents: {
@@ -798,16 +790,16 @@ const form: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['scope', 'title', 'label', 'fields', 'message'],
+      keys: ['list', 'title', 'label', 'fields', 'message'],
     },
-    scope: {
+    list: {
       type: 'option',
-      display_name: 'Scopo',
+      display_name: 'Lista',
       options: [
-        { value: 'corsi', name: 'Corsi' },
-        { value: 'progetti', name: 'Progetti' },
+        { value: 'studenti', name: 'Studenti' },
+        { value: 'clienti', name: 'Clienti' },
         { value: 'aziende', name: 'Aziende' },
-        { value: 'docenza', name: 'Docenza' },
+        { value: 'docenti', name: 'Docenti' },
       ],
     },
     title: {
@@ -1209,7 +1201,7 @@ const event: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['title', 'description', 'location', 'date', 'page'],
+      keys: ['title', 'description', 'openday', 'location', 'date', 'page'],
     },
     title: {
       type: 'text',
@@ -1230,6 +1222,22 @@ const event: ComponentSchema = {
         'inlinecode',
       ],
       default_value: '',
+    },
+    openday: {
+      type: 'option',
+      display_name: 'Openday',
+      options: [
+        {
+          value: 'interni - primo livello',
+          name: 'Corso interni primo livello',
+        },
+        {
+          value: 'interni - secondo livello',
+          name: 'Corso interni secondo livello',
+        },
+        { value: 'moda - primo livello', name: 'Corso moda primo livello' },
+        { value: 'moda - secondo livello', name: 'Corso moda secondo livello' },
+      ],
     },
     location: {
       type: 'option',

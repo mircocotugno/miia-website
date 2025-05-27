@@ -45,7 +45,7 @@ export type ImageArray = ImageData & {
 }
 
 export type OptionProps = {
-  name: string | (Omit<CourseProps, 'location'> & { location: string })
+  name: string | Omit<CourseProps, 'location'> & { location: string }
   value: string
 }
 
@@ -74,7 +74,7 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-export type FormScopes = 'corsi' | 'aziende' | 'progetti' | 'docenza'
+export type FormList = 'studenti' | 'aziende' | 'clienti' | 'docenti'
 
 export type FormArea = 'interni' | 'moda'
 
@@ -205,7 +205,7 @@ export type AliasProps = BlokProps & {
   component: 'alias'
   resource: 'next-event' | 'last-article'
   filter: string
-  form: StoryProps & { content: FormProps }
+  submit: Array<FormProps>
 }
 
 export type AsideProps = BlokProps & {
@@ -216,12 +216,7 @@ export type AsideProps = BlokProps & {
   courses: Array<{
     content: Omit<CourseProps, 'location'> & { location: string }
   }>
-  enroll: StoryProps & {
-    content: FormProps
-  }
-  contact: StoryProps & {
-    content: FormProps
-  }
+  forms: Array<FormProps>
   contents: Array<
     ImageProps | ListProps | TextProps | ActionProps | WrapperProps
   >
@@ -277,6 +272,7 @@ export type SectionProps = BlokProps & {
     | ActionProps
     | CarouselProps
     | MapProps
+    | AliasProps
     | LocationProps
     | PersonProps
     | EventProps
@@ -372,6 +368,11 @@ export type EventProps = BlokProps & {
   alias: StoryProps & { content: EventProps }
   title: string
   description: string
+  openday:
+    | 'interni - primo livello'
+    | 'interni - secondo livello'
+    | 'moda - primo livello'
+    | 'moda - secondo livello'
   location: LocationProps
   date: string
   page: LinkProps
@@ -382,7 +383,7 @@ export type EventProps = BlokProps & {
 export type FormProps = BlokProps & {
   component: 'form'
   alias: StoryProps & { content: FormProps }
-  scope: FormScopes
+  list: FormList
   title: string
   label: string
   fields: Array<FieldProps>
@@ -390,7 +391,7 @@ export type FormProps = BlokProps & {
 }
 
 export type FormData = {
-  [key: string]: DataProps
+  [key: string]: any
 }
 
 export type DataProps = {
