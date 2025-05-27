@@ -73,16 +73,18 @@ export const brevoUpdate = async ({
 interface BrevoDeleteProps {
   path: string
   identifier: string
+  name?: string
   type?: 'email_id' | 'phone_id' | 'contact_is'
 }
 
 export const brevoDelete = async ({
   path,
   identifier,
+  name,
   type,
 }: BrevoDeleteProps) =>
   await fetch(
-    `${baseUrl}/${path}${identifier ? `/${identifier}` : ''}${type ? `?identifierType=${type}` : ''}`,
+    `${baseUrl}/${path}${identifier ? `/${identifier}` : ''}${name ? `/${name}` : ''}${type ? `?identifierType=${type}` : ''}`,
     {
       method: 'DELETE',
       headers: {

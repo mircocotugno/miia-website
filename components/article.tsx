@@ -10,7 +10,7 @@ interface ArticleComponent {
 }
 
 export default function Article({ blok, story }: ArticleComponent) {
-  const article = blok.ref?.content || blok
+  const article = blok.alias?.content || blok
   if (!article.title || !article.description || !article.image) return null
 
   const classes = tv({
@@ -22,7 +22,7 @@ export default function Article({ blok, story }: ArticleComponent) {
       {article.image && (
         <Link
           className='flex-none min-w-16 w-full md:w-1/3'
-          href={blok.ref?.full_slug || story.full_slug || ''}
+          href={blok.alias?.full_slug || story.full_slug || ''}
         >
           <Image
             classNames={{
@@ -36,7 +36,7 @@ export default function Article({ blok, story }: ArticleComponent) {
         </Link>
       )}
       <div className='flex-1 min-w-32 space-y-4'>
-        <Link href={blok.ref?.full_slug || story.full_slug || ''}>
+        <Link href={blok.alias?.full_slug || story.full_slug || ''}>
           <h4 className='font-bold leading-tight text-3xl'>{article.title}</h4>
         </Link>
         <p className='font-sans leading-snug max-sm:line-clamp-3'>

@@ -45,11 +45,20 @@ export type ImageArray = ImageData & {
 }
 
 export type OptionProps = {
-  name: string
+  name: string | Omit<CourseProps, 'location'> & { location: string }
   value: string
 }
 
 // Props
+
+export type Roles =
+  | 'interior'
+  | 'style'
+  | 'design'
+  | 'cad'
+  | '3d'
+  | 'building'
+  | 'lighting'
 
 export type Sizes = 'small' | 'medium' | 'large' | 'extra' | 'full'
 
@@ -65,7 +74,7 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-export type FormScopes = 'corsi' | 'aziende' | 'progetti' | 'docenza'
+export type FormList = 'studenti' | 'aziende' | 'clienti' | 'docenti'
 
 export type FormArea = 'interni' | 'moda'
 
@@ -87,7 +96,7 @@ type InputTypes =
 export type ComponentsProps =
   | ActionProps
   | TextProps
-  | PictureProps
+  | ImageProps
   | GalleryProps
   | FieldProps
   | ListProps
@@ -129,6 +138,7 @@ export type TextProps = BlokProps & {
 }
 
 export type ImageProps = BlokProps & {
+  component: 'image'
   image: ImageData
   fullScreen: boolean
   aspect: '1/1' | '3/4' | '4/3' | '9/4' | '4/9'
@@ -142,30 +152,24 @@ export type BackgroundProps = BlokProps & {
   component: 'background'
   image: ImageData
   video: string
-  author: PersonProps
-}
-
-export type GalleryProps = BlokProps & {
-  images: Array<ImageArray>
-  fullScreen: boolean
-  aspect: '1/1' | '3/4' | '4/3'
-}
-
-export type PictureProps = BlokProps & {
-  component: 'picture'
-  asset: Array<ImageData>
-  size: 'sm' | 'md' | 'lg' | 'xl'
-  ratio: 'square' | 'portrait' | 'landscape' | 'circle'
-  effect: 'blurred' | 'zoomed'
-  background: boolean
-  preview: boolean
+  position: Array<'right' | 'center' | 'left'>
   author: StoryProps & { content: PersonProps }
 }
 
+export type GalleryProps = BlokProps & {
+  component: 'gallery'
+  images: Array<ImageArray>
+  fullScreen: boolean
+  aspect: '1/1' | '3/4' | '4/3'
+  size: '1/2' | '1/4' | '1/8'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+}
+
 export type VideoProps = BlokProps & {
-  component: 'media'
+  component: 'video'
   source: string
-  size: 'sm' | 'md' | 'lg' | 'xl'
+  width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
+  order: number
 }
 
 export type FieldProps = BlokProps & {
@@ -201,20 +205,20 @@ export type AliasProps = BlokProps & {
   component: 'alias'
   resource: 'next-event' | 'last-article'
   filter: string
-  form: StoryProps & { content: FormProps }
+  submit: Array<FormProps>
 }
 
 export type AsideProps = BlokProps & {
   component: 'aside'
   headline: string
+  amount: number
+  steps: number
   courses: Array<{
     content: Omit<CourseProps, 'location'> & { location: string }
   }>
-  form: StoryProps & {
-    content: FormProps
-  }
+  forms: Array<FormProps>
   contents: Array<
-    PictureProps | ListProps | TextProps | ActionProps | WrapperProps
+    ImageProps | ListProps | TextProps | ActionProps | WrapperProps
   >
   id: string
   theme: 'dark'
@@ -228,6 +232,7 @@ export type WrapperProps = BlokProps & {
     | TextProps
     | ActionProps
     | GalleryProps
+    | BackgroundProps
     | ListProps
     | MenuProps
     | MapProps
@@ -236,8 +241,6 @@ export type WrapperProps = BlokProps & {
     | EventProps
   )[]
   row: boolean
-  boxed: boolean
-  size: '1/4' | '1/3' | '1/2' | '2/3' | '3/4'
   width: Array<'1/4' | '1/3' | '1/2' | '2/3' | '3/4' | '1/1'>
   justify: Justifications
   order: number
@@ -263,11 +266,13 @@ export type SectionProps = BlokProps & {
     | WrapperProps
     | BackgroundProps
     | ProcessProps
+    | GalleryProps
     | ListProps
     | TextProps
     | ActionProps
     | CarouselProps
     | MapProps
+    | AliasProps
     | LocationProps
     | PersonProps
     | EventProps
@@ -277,8 +282,7 @@ export type SectionProps = BlokProps & {
   >
   id: string
   dark: boolean
-  contain: boolean
-  align: 'start' | 'center' | 'end' | 'stretch'
+  align: Array<'start' | 'center' | 'end' | 'stretch'>
 }
 
 export type NavProps = BlokProps & {
@@ -309,7 +313,7 @@ export type PageProps = BlokProps & {
 
 export type ArticleProps = BlokProps & {
   component: 'article'
-  ref: StoryProps & { content: ArticleProps }
+  alias: StoryProps & { content: ArticleProps }
   title: string | ''
   description: string | ''
   image: ImageData
@@ -322,7 +326,7 @@ export type ArticleProps = BlokProps & {
 
 export type LocationProps = BlokProps & {
   component: 'location'
-  ref: StoryProps & { content: LocationProps }
+  alias: StoryProps & { content: LocationProps }
   title: string
   address: string
   gps: string
@@ -331,7 +335,7 @@ export type LocationProps = BlokProps & {
 
 export type CourseProps = BlokProps & {
   component: 'course'
-  ref: StoryProps & { content: CourseProps }
+  alias: StoryProps & { content: CourseProps }
   id: string
   title: string
   location: LocationProps
@@ -343,22 +347,32 @@ export type CourseProps = BlokProps & {
   page: LinkProps
 }
 
-export type PersonProps = BlokProps & {
-  component: 'person'
-  ref: StoryProps & { content: PersonProps }
+export type PersonData = {
   image: Array<ImageData> | []
+  video: string
   title: string
-  role: 'interior' | 'style' | 'design' | 'software'
+  role: Roles
   description: string
-  message: string
   links: Array<ActionProps> | []
 }
 
+export type PersonProps = BlokProps &
+  PersonData & {
+    component: 'person'
+    alias: StoryProps & { content: PersonProps }
+    hide: Array<string>
+  }
+
 export type EventProps = BlokProps & {
   component: 'event'
-  ref: StoryProps & { content: EventProps }
+  alias: StoryProps & { content: EventProps }
   title: string
   description: string
+  openday:
+    | 'interni - primo livello'
+    | 'interni - secondo livello'
+    | 'moda - primo livello'
+    | 'moda - secondo livello'
   location: LocationProps
   date: string
   page: LinkProps
@@ -368,16 +382,16 @@ export type EventProps = BlokProps & {
 
 export type FormProps = BlokProps & {
   component: 'form'
-  ref: StoryProps & { content: FormProps }
-  scope: FormScopes
+  alias: StoryProps & { content: FormProps }
+  list: FormList
   title: string
   label: string
-  fields: Array<FieldProps> | []
+  fields: Array<FieldProps>
   message: string
 }
 
 export type FormData = {
-  [key: string]: DataProps
+  [key: string]: any
 }
 
 export type DataProps = {

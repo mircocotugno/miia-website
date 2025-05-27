@@ -10,7 +10,7 @@ interface CourseComponent {
 }
 
 export default function Course({ blok, parent }: CourseComponent) {
-  const course = blok.ref?.content || blok
+  const course = blok.alias?.content || blok
   if (!course.title || !course.days || !course.hours) return null
 
   const Container = ({ children }: PropsWithChildren) =>

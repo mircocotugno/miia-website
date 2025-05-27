@@ -21,7 +21,8 @@
       "@public/*": ["./public/*"],
       "@config/*": ["./config/*"],
       "@props/*": ["./props/*"],
-      "@cms/*": ["./cms/*"]
+      "@cms/*": ["./cms/*"],
+      "@crm/*": ["./crm/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

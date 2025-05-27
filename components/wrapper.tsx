@@ -8,17 +8,26 @@ interface WrapperComponent {
 
 export default function Wrapper({ blok }: WrapperComponent) {
   const order: any = !!blok.order ? blok.order.toString() : 'none'
+
+  const background = blok.contents.find(
+    (content) => content.component === 'background'
+  )
+  const contents = blok.contents.filter(
+    (content) => content.component !== 'background'
+  )
+
   return (
     <div
       {...storyblokEditable(blok)}
       className={classes({
         order: order,
-        sm: blok.width?.[0],
-        md: blok.width?.[1],
-        lg: blok.width?.[2],
-        xl: blok.width?.[3],
+        smWidth: blok.width?.[0],
+        mdWidth: blok.width?.[1],
+        lgWidth: blok.width?.[2],
+        xlWidth: blok.width?.[3],
         row: blok.row,
         justify: `${blok.row ? 'justify' : 'items'}-${blok.justify}`,
+        hasBackground: !!background,
       })}
     >
       {blok.contents.map((content, index) => (
@@ -28,26 +37,36 @@ export default function Wrapper({ blok }: WrapperComponent) {
           parent={blok.component}
         />
       ))}
+      {!!background && (
+        <>
+          <div className={gradientClasses()} />
+          <StoryblokComponent blok={background} />
+        </>
+      )}
     </div>
   )
 }
 
+const gradientClasses = tv({
+  base: 'gradient absolute inset-0 bg-gradient-to-tr to-60% -z-10 from-dark mix-blend-multiply',
+})
+
 const classes = tv({
-  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12 sm:order-none',
+  base: 'col-span-12 flex flex-col flex-wrap gap-4 min-h-12 sm:order-none items-start',
   variants: {
     row: {
       true: 'flex-row sm:max-md:col-span-12',
     },
     hasBackground: {
-      true: 'bg-cover bg-center min-h-md px-4 py-6 rounded-lg overflow-hidden justify-end text-background [&>*]:drop-shadow',
+      true: 'relative aspect-4/3 shadow-inner z-0 rounded-xl p-3 md:p-6 overflow-hidden justify-end [&_article]:flex-none [&_article]:backdrop-blur-sm [&_article]:rounded-3xl [&_article]:gap-1 ',
     },
     justify: {
-      'items-right': 'items-end',
-      'items-center': 'items-center',
-      'items-left': 'items-start',
-      'justify-right': 'justify-start',
-      'justify-center': 'justify-center',
-      'justify-left': 'justify-end',
+      'items-right': 'sm:items-end',
+      'items-center': 'sm:items-center',
+      'items-left': 'sm:items-start',
+      'justify-right': 'sm:justify-start',
+      'justify-center': 'sm:justify-center',
+      'justify-left': 'sm:justify-end',
     },
     order: {
       none: 'order-none',
@@ -58,7 +77,7 @@ const classes = tv({
       '5': '-order-5',
       '6': '-order-6',
     },
-    sm: {
+    smWidth: {
       '1/4': 'sm:col-span-3',
       '1/3': 'sm:col-span-4',
       '1/2': 'sm:col-span-6',
@@ -66,7 +85,7 @@ const classes = tv({
       '3/4': 'sm:col-span-9',
       '1/1': 'sm:col-span-12',
     },
-    md: {
+    mdWidth: {
       '1/4': 'md:col-span-3',
       '1/3': 'md:col-span-4',
       '1/2': 'md:col-span-6',
@@ -74,7 +93,7 @@ const classes = tv({
       '3/4': 'md:col-span-9',
       '1/1': 'md:col-span-12',
     },
-    lg: {
+    lgWidth: {
       '1/4': 'lg:col-span-3',
       '1/3': 'lg:col-span-4',
       '1/2': 'lg:col-span-6',
@@ -82,7 +101,7 @@ const classes = tv({
       '3/4': 'lg:col-span-9',
       '1/1': 'lg:col-span-12',
     },
-    xl: {
+    xlWidth: {
       '1/4': 'xl:col-span-3',
       '1/3': 'xl:col-span-4',
       '1/2': 'xl:col-span-6',

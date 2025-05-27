@@ -27,13 +27,19 @@ export default function Section({
       id={blok.id && blok.id.replaceAll(' ', '-')}
       className={tagClasses({
         themeDark: blok.dark,
-        rounded: parent === 'carousel',
+        isSlide: parent === 'carousel',
         hasBackground: !!background,
         singleSection: singleSection,
       })}
       {...storyblokEditable(blok)}
     >
-      <div className={containerClasses({ align: blok.align })}>
+      <div
+        className={containerClasses({
+          hasBackground: !!background,
+          align: blok.align?.[0],
+          smAlign: blok.align?.[1],
+        })}
+      >
         {contents.map((content, index) => (
           <StoryblokComponent
             key={index}
@@ -63,13 +69,22 @@ const gradientClasses = tv({
 })
 
 const containerClasses = tv({
-  base: 'px-6 py-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-3 sm:gap-x-4 md:gap-x-5 lg:gap-x-6 gap-y-2 sm:gap-y-3 md:gap-y-4 lg:gap-y-5 items-baseline',
+  base: 'p-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-2 sm:gap-x-4 md:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-10 items-baseline',
   variants: {
+    hasBackground: {
+      true: 'max-md:pb-24',
+    },
     align: {
       start: 'items-start',
       center: 'items-center',
       end: 'items-end',
       stretch: 'items-stretch',
+    },
+    smAlign: {
+      start: 'sm:items-start',
+      center: 'sm:items-center',
+      end: 'sm:items-end',
+      stretch: 'sm:items-stretch',
     },
   },
 })
@@ -81,8 +96,8 @@ const tagClasses = tv({
       true: 'dark text-foreground bg-background',
       false: 'light',
     },
-    rounded: {
-      true: 'rounded-lg',
+    isSlide: {
+      true: 'px-8',
     },
     hasBackground: {
       true: 'relative z-0 py-0 min-h-cover [&_article]:backdrop-blur-sm [&_article]:rounded-3xl',

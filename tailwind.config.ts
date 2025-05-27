@@ -8,6 +8,12 @@ export default {
     './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+    },
     fontFamily: {
       sans: ['var(--font-sans)'],
       serif: ['var(--font-serif)'],
@@ -26,11 +32,14 @@ export default {
         md: '16rem',
         lg: '32rem',
         xl: '64rem',
+        '1/8': '12.5%',
       },
       maxWidth: {
         '1/2': '50%',
         '1/3': '33.3333%',
         '1/4': '25%',
+        '2/3': '66.6666%',
+        '3/4': '75%',
         sm: '8rem',
         md: '16rem',
         lg: '32rem',

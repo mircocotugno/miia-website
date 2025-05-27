@@ -17,6 +17,7 @@ interface FieldComponent {
 export default function Field(props: FieldComponent) {
   if (!props.blok.input) return null
   const Fields = fields[props.blok.input]
+  if (!props?.data) return null
   return <Fields {...props} />
 }
 
@@ -33,8 +34,8 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     className={blok.id === 'email' ? 'relative z-30' : ''}
     startContent={
       blok.input === 'tel' && (
-        <div className='pointer-events-none flex items-center'>
-          <span className='text-small text-neutral-400'>+39</span>
+        <div className="pointer-events-none flex items-center">
+          <span className="text-small text-neutral-400">+39</span>
         </div>
       )
     }
@@ -72,7 +73,7 @@ const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
       {blok.label}
     </p>
     {!!data.error && (
-      <small className='text-xs text-danger'>{data.error}</small>
+      <small className="text-xs text-danger">{data.error}</small>
     )}
   </Checkbox>
 )
@@ -82,7 +83,7 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
     id={blok.id}
     label={blok.label}
     isRequired={blok.required}
-    value={data.value}
+    value={data.value || null}
     showMonthAndYearPickers
     errorMessage={data.error}
     isInvalid={!!data.error}
@@ -93,9 +94,7 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
 const SelectField = ({ blok, data, onChange }: FieldComponent) => {
   type value = Array<string>
   type key = string | undefined
-
   const options = getOptions(blok.options)
-
   const getValue = (value: value, key: key) => {
     if (!key) return value
     const index = value.indexOf(key)
@@ -107,6 +106,23 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
     return value
   }
 
+  const CustomItem = ({ name }: any) => {
+    if (typeof name === 'string') {
+      return <span>{name}</span>
+    } else {
+      return (
+        <div className="flex flex-col">
+          <h6 className="text-small font-medium">{name.title}</h6>
+          <p className="text-tiny">
+            <span>{'Frequenza ' + name.days.join(' e ')}</span>
+            <span> - </span>
+            <span>{name.hours.join(' e ')}</span>
+          </p>
+        </div>
+      )
+    }
+  }
+
   return (
     <Select
       id={blok.id}
@@ -115,25 +131,40 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
       placeholder={blok.placeholder}
       isRequired={blok.required}
       errorMessage={data.error}
-      selectedKeys={data.value}
       isInvalid={!!data.error}
+      items={options}
+      classNames={{
+        trigger: blok.input === 'enroll' ? 'h-20' : null,
+        value: 'space-x-1',
+        label:
+          blok.input === 'enroll'
+            ? 'group-data-[filled=true]:-translate-y-[calc(50%_+_theme(fontSize.small)/2)]'
+            : null,
+      }}
       selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
-      onSelectionChange={({ currentKey }) =>
+      onSelectionChange={({ currentKey }) => {
         onChange({
           ...data,
           value: getValue(data.value, currentKey),
         })
+      }}
+      renderValue={(items) =>
+        items.map((item) => (
+          <CustomItem key={item.key} name={item.data?.name} />
+        ))
       }
     >
-      {options.map((option) => (
+      {(option) => (
         <SelectItem
-          className='data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium'
+          className="data-[selectable=true]:focus:bg-neutral-100 data-[selectable=true]:focus:text-neutral-900 data-[selectable=true]:focus:font-medium"
           key={option.value}
-          value={option.value}
+          textValue={
+            typeof option.name === 'string' ? option.name : option.name.title
+          }
         >
-          {option.name}
+          <CustomItem name={option.name} />
         </SelectItem>
-      ))}
+      )}
     </Select>
   )
 }

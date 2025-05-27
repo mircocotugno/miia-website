@@ -8,11 +8,11 @@ interface ProcessComponent {
 }
 
 const processClasses = tv({
-  base: 'relative flex flex-wrap items-baseline gap-2',
+  base: 'flex flex-col md:flex-row flex-wrap gap-2 items-start sm:items-center md:items-start',
 })
 
 const stepClasses = tv({
-  base: 'relative flex-none w-full sm:flex-1 sm:min-w-24 md:min-w-32 lg:min-w-48 group',
+  base: 'flex flex-col sm:flex-row md:flex-col gap-4 flex-1 items-start sm:items-center md:items-start',
 })
 
 const indexClasses = tv({
@@ -20,13 +20,13 @@ const indexClasses = tv({
 })
 
 const arrowClasses = tv({
-  base: 'self-center justify-self-center rotate-90 sm:rotate-0 iconoir-arrow-right text-2xl',
+  base: 'rotate-90 md:rotate-0 iconoir-arrow-right text-2xl lg:px-4 md:self-center',
 })
 
 export default function Process({ blok }: ProcessComponent) {
   return (
     <div className='col-span-12' {...storyblokEditable(blok)}>
-      <h4 className='font-bold text-2xl'>{blok.title}</h4>
+      {blok.title && <h4 className='font-bold text-2xl'>{blok.title}</h4>}
       <div className={processClasses()}>
         {blok.steps.map((step, index) => (
           <Fragment key={step._uid}>

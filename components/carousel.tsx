@@ -2,7 +2,7 @@ import type { CarouselProps } from '@props/types'
 import { StoryblokComponent, storyblokEditable } from '@storyblok/react'
 import { tv } from 'tailwind-variants'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay } from 'swiper/modules'
+import { Autoplay, Navigation } from 'swiper/modules'
 
 interface CarouselComponent {
   blok: CarouselProps
@@ -12,12 +12,10 @@ interface CarouselComponent {
 export default function Carousel({ blok, parent }: CarouselComponent) {
   if (!blok.slides.length) return null
 
-  const isCarousel = blok.slides[0].component !== 'section'
-
   const slides = blok.slides.map((slide, index) => (
     <SwiperSlide
       {...storyblokEditable(slide)}
-      className='overflow-visible min-h-inherit'
+      className="overflow-visible min-h-inherit"
       key={index}
     >
       <StoryblokComponent blok={slide} parent={blok.component} />
@@ -30,33 +28,36 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
 
   const autoplay = blok.delay > 0 ? { delay: 6500 - 1000 * blok.delay } : false
 
-  const view = blok.view > 0 ? Number(blok.view) : 1
-  const smView = blok.view > 0 ? view + 1 : 1
-  const mdView = blok.view > 0 ? (view > 1 ? view * 2 : view + 1) : 1
+  const view = Number(blok.view)
+  const smView = blok.view > 0 ? view : 1
+  const mdView = blok.view > 0 ? view + 1 : 1
+  const lgView = blok.view > 0 ? (view > 1 ? view * 2 : view + 1) : 1
   const xlView = blok.view > 0 ? (view > 1 ? view * 3 : view + 1) : 1
 
   return (
     <Tag
       id={blok.id && blok.id.replaceAll(' ', '-')}
-      className={classes({
+      className={tagClasses({
         order: order,
         isFullHeight: blok.slides[0].component === 'section',
       })}
     >
       <Swiper
         {...storyblokEditable(blok)}
-        modules={[Autoplay]}
         loop={true}
         autoplay={autoplay}
-        slidesPerView={view}
+        slidesPerView={1}
         spaceBetween={blok.view ? 24 : 0}
-        className={'min-h-inherit'}
-        wrapperClass={'min-h-inherit'}
+        className={swiperClasses({ pageChild: parent === 'page' })}
+        wrapperClass={swiperClasses()}
         breakpoints={{
-          480: { slidesPerView: smView },
-          1024: { slidesPerView: mdView },
+          384: { slidesPerView: smView },
+          768: { slidesPerView: mdView },
+          1024: { slidesPerView: lgView },
           1280: { slidesPerView: xlView },
         }}
+        modules={[Autoplay, Navigation]}
+        navigation={{ enabled: true }}
       >
         {slides}
       </Swiper>
@@ -64,7 +65,7 @@ export default function Carousel({ blok, parent }: CarouselComponent) {
   )
 }
 
-const classes = tv({
+const tagClasses = tv({
   base: 'order-last sm:order-none w-full col-span-12',
   variants: {
     order: {
@@ -77,7 +78,16 @@ const classes = tv({
     },
     isFullHeight: {
       false: 'min-h-sm',
-      true: 'min-h-cover sm:min-h-lg',
+      true: 'min-h-lg',
+    },
+  },
+})
+
+const swiperClasses = tv({
+  base: 'min-h-inherit',
+  variants: {
+    pageChild: {
+      false: 'rounded-xl',
     },
   },
 })

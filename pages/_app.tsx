@@ -1,12 +1,10 @@
 import '@styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { GoogleTagManager } from '@next/third-parties/google'
 import {
   IubendaProvider,
   IubendaCookieSolutionBannerConfigInterface,
-  useIubenda,
 } from '@mep-agency/next-iubenda'
 
 import { storyblokInit, apiPlugin } from '@storyblok/react'
@@ -19,8 +17,8 @@ import Page from '@components/page'
 import Section from '@components/section'
 import Nav from '@components/nav'
 import Text from '@components/text'
+import Image from '@components/image'
 import Action from '@components/action'
-import Picture from '@components/picture'
 import Field from '@components/field'
 import Form from '@components/form'
 import Map from '@components/map'
@@ -36,7 +34,6 @@ import Video from '@components/video'
 import Wrapper from '@components/wrapper'
 import Alias from '@components/alias'
 import Background from '@components/background'
-import Image from '@components/image'
 import Gallery from '@components/gallery'
 import Menu from '@components/menu'
 import Process from '@components/process'
@@ -53,7 +50,6 @@ const components = {
   aside: Aside,
   wrapper: Wrapper,
   carousel: Carousel,
-  picture: Picture,
   video: Video,
   image: Image,
   background: Background,
@@ -86,24 +82,15 @@ const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <IubendaProvider bannerConfig={iubendaBannerConfig}>
+      {/* <IubendaProvider bannerConfig={iubendaBannerConfig}> */}
         <HeroUIProvider>
           <NextThemesProvider attribute='class' defaultTheme='light'>
             <Component {...pageProps} />
           </NextThemesProvider>
         </HeroUIProvider>
-        <Tracking />
-      </IubendaProvider>
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
+      {/* </IubendaProvider> */}
     </>
-  )
-}
-
-const Tracking = () => {
-  const { userPreferences } = useIubenda()
-  return (
-    userPreferences.hasBeenLoaded && (
-      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
-    )
   )
 }
 

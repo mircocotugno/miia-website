@@ -49,10 +49,10 @@ export async function cancelRecords({ name, type }: CancelRecord) {
     .readFileSync(file, 'utf-8')
     .split('\n')
     .filter((e: string) => !!e)
-  const refs = ['id', 'uuid']
-  refs.forEach((ref: string) => {
+  const values = ['id', 'uuid']
+  values.forEach((value: string) => {
     const index: number = records.findIndex((e: string) =>
-      e.includes(`${key}_${ref}`)
+      e.includes(`${key}_${value}`)
     )
 
     if (index >= 0) {

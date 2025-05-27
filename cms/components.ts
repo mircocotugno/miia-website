@@ -228,6 +228,18 @@ const gallery: ComponentSchema = {
       filetypes: ['images'],
       required: true,
     },
+    size: {
+      type: 'option',
+      display_name: 'Grandezza',
+      options: [
+        { value: '1/2', name: 'Metà' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/8', name: 'Un ottavo' },
+      ],
+      default_value: ['1/2'],
+      description: 'Grandezza delle anteprime',
+      tooltip: true,
+    },
     aspect: {
       type: 'option',
       display_name: 'Aspetto',
@@ -236,6 +248,23 @@ const gallery: ComponentSchema = {
         { value: '3/4', name: 'Verticale' },
         { value: '4/3', name: 'Orizzontale' },
       ],
+    },
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
+      options: [
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
+      ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
     },
     fullScreen: {
       type: 'boolean',
@@ -265,6 +294,19 @@ const background: ComponentSchema = {
       description: 'Id del video su youtube',
       inline_label: true,
     },
+    position: {
+      type: 'options',
+      display_name: 'Posizione',
+      description:
+        "Posizionamento dell'immagine rispetto ai margini.\nla prima selezione per mobile, la seconda per desktop.",
+      tooltip: true,
+      options: [
+        { value: 'right', name: 'Destra' },
+        { value: 'center', name: 'Centro' },
+        { value: 'left', name: 'Sinistra' },
+      ],
+      max_options: 2,
+    },
     author: {
       type: 'option',
       display_name: 'Autore',
@@ -287,15 +329,28 @@ const video: ComponentSchema = {
       display_name: 'Collegamento',
       required: true,
     },
-    size: {
-      type: 'option',
-      display_name: 'Grandezza',
+    width: {
+      type: 'options',
+      display_name: 'Larghezza',
       options: [
-        { value: 'sm', name: 'Piccolo' },
-        { value: 'md', name: 'Medio' },
-        { value: 'lg', name: 'Grande' },
-        { value: 'xl', name: 'Enorme' },
+        { value: '1/4', name: 'Un quarto' },
+        { value: '1/3', name: 'Un terzo' },
+        { value: '1/2', name: 'Metà' },
+        { value: '2/3', name: 'Due terzi' },
+        { value: '3/4', name: 'Tre quarti' },
+        { value: '1/1', name: 'Intera' },
       ],
+      default_value: ['1/2'],
+      description:
+        'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
+      tooltip: true,
+      max_options: 4,
+    },
+    order: {
+      type: 'number',
+      display_name: 'Riordino mobile',
+      max_value: 6,
+      min_value: 0,
     },
   },
 }
@@ -460,12 +515,12 @@ const alias: ComponentSchema = {
       display_name: 'Filtra per nome',
       description: 'Il nome della risorsa contiene il filtro',
     },
-    form: {
-      type: 'option',
-      display_name: 'Modulo',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
+    submit: {
+      type: 'bloks',
+      display_name: 'Iscrizione',
+      restrict_components: true,
+      component_whitelist: ['form'],
+      maximum: 1,
     },
   },
 }
@@ -485,27 +540,15 @@ const aside: ComponentSchema = {
     enrollment: {
       type: 'section',
       display_name: 'Iscrizione',
-      keys: ['headline', 'courses', 'form'],
+      keys: ['amount', 'steps', 'courses', 'forms'],
     },
-    headline: {
-      type: 'markdown',
-      display_name: 'Intestazione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'link',
-        'inlinecode',
-        'italic',
-        'bold',
-        'hrule',
-      ],
-      required: true,
+    amount: {
+      type: 'number',
+      display_name: 'Prezzo',
+    },
+    steps: {
+      type: 'number',
+      display_name: 'Rate',
     },
     courses: {
       type: 'options',
@@ -515,12 +558,12 @@ const aside: ComponentSchema = {
       filter_content_type: ['course'],
       required: true,
     },
-    form: {
-      type: 'option',
-      display_name: 'Modulo',
-      source: 'internal_stories',
-      restrict_content_types: true,
-      filter_content_type: ['form'],
+    forms: {
+      type: 'bloks',
+      display_name: 'Moduli',
+      restrict_components: true,
+      component_whitelist: ['form'],
+      maximum: 3,
       required: true,
     },
     contents: {
@@ -558,6 +601,8 @@ const section: ComponentSchema = {
         'alias',
         'background',
         'image',
+        'gallery',
+        'video',
         'list',
         'process',
         'text',
@@ -574,7 +619,7 @@ const section: ComponentSchema = {
       required: true,
     },
     align: {
-      type: 'option',
+      type: 'options',
       display_name: 'Allinea',
       options: [
         { name: 'Sopra', value: 'start' },
@@ -582,17 +627,12 @@ const section: ComponentSchema = {
         { name: 'Sotto', value: 'end' },
         { name: 'Riempi', value: 'stretch' },
       ],
+      max_options: 2,
     },
     dark: {
       type: 'boolean',
       display_name: 'Tema scuro',
       default_value: false,
-      inline_label: true,
-    },
-    contain: {
-      type: 'boolean',
-      display_name: 'Applica margini',
-      default_value: true,
       inline_label: true,
     },
   },
@@ -614,6 +654,7 @@ const wrapper: ComponentSchema = {
         'image',
         'video',
         'gallery',
+        'background',
         'text',
         'action',
         'list',
@@ -632,14 +673,9 @@ const wrapper: ComponentSchema = {
       display_name: 'Orizontale',
       inline_label: true,
     },
-    boxed: {
-      type: 'boolean',
-      display_name: 'Incorniciato',
-      inline_label: true,
-    },
     width: {
       type: 'options',
-      display_name: 'New Larghezza',
+      display_name: 'Larghezza',
       options: [
         { value: '1/4', name: 'Un quarto' },
         { value: '1/3', name: 'Un terzo' },
@@ -653,18 +689,6 @@ const wrapper: ComponentSchema = {
         'Larghezza rispetto alla sezione. Usare più opzioni per schermi sempre più grandi.',
       tooltip: true,
       max_options: 4,
-    },
-    size: {
-      type: 'option',
-      display_name: 'Largezza',
-      options: [
-        { value: '1/4', name: 'Un quarto' },
-        { value: '1/3', name: 'Un terzo' },
-        { value: '1/2', name: 'Metà' },
-        { value: '2/3', name: 'Due terzi' },
-        { value: '3/4', name: 'Tre quarti' },
-      ],
-      default_value: '1/2',
     },
     justify: {
       type: 'option',
@@ -757,7 +781,7 @@ const form: ComponentSchema = {
   component_group_uuid: 'containers',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -766,16 +790,16 @@ const form: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['scope', 'title', 'label', 'fields', 'message'],
+      keys: ['list', 'title', 'label', 'fields', 'message'],
     },
-    scope: {
+    list: {
       type: 'option',
-      display_name: 'Scopo',
+      display_name: 'Lista',
       options: [
-        { value: 'corsi', name: 'Corsi' },
-        { value: 'progetti', name: 'Progetti' },
+        { value: 'studenti', name: 'Studenti' },
+        { value: 'clienti', name: 'Clienti' },
         { value: 'aziende', name: 'Aziende' },
-        { value: 'docenza', name: 'Docenza' },
+        { value: 'docenti', name: 'Docenti' },
       ],
     },
     title: {
@@ -910,7 +934,7 @@ const article: ComponentSchema = {
   component_group_uuid: 'layouts',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -947,7 +971,7 @@ const article: ComponentSchema = {
       type: 'bloks',
       display_name: 'Contenuti articolo',
       restrict_components: true,
-      component_whitelist: ['section', 'carousel'],
+      component_whitelist: ['section', 'carousel', 'aside'],
     },
   },
 }
@@ -960,7 +984,7 @@ const location: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -1000,7 +1024,7 @@ const course: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -1092,22 +1116,38 @@ const person: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
       filter_content_type: ['person'],
     },
+    hide: {
+      type: 'option',
+      display_name: 'Nascondi',
+      options: [
+        { value: 'video', name: 'Video' },
+        { value: 'description', name: 'Descrizione' },
+        { value: 'role', name: 'Ruolo' },
+        { value: 'links', name: 'Collegamenti' },
+      ],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['image', 'title', 'role', 'description', 'message', 'links'],
+      keys: ['image', 'video', 'title', 'role', 'description', 'links'],
     },
     image: {
       type: 'multiasset',
       display_name: 'Immagini',
       description: 'Dimensione consigliata 500x500',
       filetypes: ['images'],
+    },
+    video: {
+      type: 'text',
+      display_name: 'Video',
+      description: 'id del video di youtube',
+      tooltip: true,
     },
     title: {
       type: 'text',
@@ -1118,23 +1158,17 @@ const person: ComponentSchema = {
       display_name: 'Ruolo',
       options: [
         { value: 'interior', name: 'Studente interni' },
-        // { value: 'fashion', name: 'Studente moda' },
         { value: 'style', name: 'Docente stile' },
         { value: 'design', name: 'Docente progettazione' },
-        { value: 'software', name: 'Docente software' },
+        { value: 'cad', name: 'Docente software' },
+        { value: '3d', name: 'Docente modellazione' },
+        { value: 'building', name: 'Docente cantieristica' },
+        { value: 'lighting', name: 'Docente illuminotecnica' },
       ],
     },
     description: {
       type: 'markdown',
       display_name: 'Descrizione',
-      customize_toolbar: true,
-      rich_markdown: true,
-      toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
-      max_length: 240,
-    },
-    message: {
-      type: 'markdown',
-      display_name: 'Messaggio',
       customize_toolbar: true,
       rich_markdown: true,
       toolbar: ['bold', 'italic', 'paragraph', 'quote', 'inlinecode'],
@@ -1158,7 +1192,7 @@ const event: ComponentSchema = {
   component_group_uuid: 'resources',
   preview_tmpl: ``,
   schema: {
-    ref: {
+    alias: {
       type: 'option',
       display_name: 'Collega',
       source: 'internal_stories',
@@ -1167,7 +1201,7 @@ const event: ComponentSchema = {
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['title', 'description', 'location', 'date', 'page'],
+      keys: ['title', 'description', 'openday', 'location', 'date', 'page'],
     },
     title: {
       type: 'text',
@@ -1188,6 +1222,22 @@ const event: ComponentSchema = {
         'inlinecode',
       ],
       default_value: '',
+    },
+    openday: {
+      type: 'option',
+      display_name: 'Openday',
+      options: [
+        {
+          value: 'interni - primo livello',
+          name: 'Corso interni primo livello',
+        },
+        {
+          value: 'interni - secondo livello',
+          name: 'Corso interni secondo livello',
+        },
+        { value: 'moda - primo livello', name: 'Corso moda primo livello' },
+        { value: 'moda - secondo livello', name: 'Corso moda secondo livello' },
+      ],
     },
     location: {
       type: 'option',

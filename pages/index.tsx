@@ -17,14 +17,17 @@ type Home = {
 const relations = [
   'page.header',
   'page.footer',
-  'form.ref',
-  'article.ref',
+  'form.alias',
+  'aside.courses',
+  'aside.enroll',
+  'aside.contact',
+  'article.alias',
   'article.author',
-  'person.ref',
-  'course.ref',
-  'event.ref',
+  'person.alias',
+  'course.alias',
+  'event.alias',
   'event.form',
-  'location.ref',
+  'location.alias',
   'map.locations',
   'picture.author',
   'alias.form',
@@ -40,7 +43,7 @@ export default function Home({ story }: Home) {
 }
 
 export async function getStaticProps() {
-  const slug = 'splash'
+  const slug = 'home'
 
   const variables = { slug, relations: relations.join(',') }
   const query = `

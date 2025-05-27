@@ -13,7 +13,7 @@ interface EventComponent {
 }
 
 export default function Event({ blok, parent }: EventComponent) {
-  const event = blok.ref?.content || blok
+  const event = blok.alias?.content || blok
   if (!event.title || !event.date) return null
 
   const link = event.page?.cached_url || event.page?.url
