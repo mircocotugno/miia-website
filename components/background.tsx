@@ -23,7 +23,7 @@ const BackgroundImage = ({ blok }: BackgroundComponent) => {
   return (
     <Fragment>
       {blok.author && (
-        <p className="absolute z-30 bottom-4 right-4 text-sm">
+        <p className="absolute z-30 bottom-4 right-4 text-xs py-1 px-2 bg-background bg-opacity-75 rounded-full">
           @{blok.author.content.title}
         </p>
       )}
