@@ -43,7 +43,7 @@ export default function Home({ story }: Home) {
 }
 
 export async function getStaticProps() {
-  const slug = 'slug'
+  const slug = 'home'
 
   const variables = { slug, relations: relations.join(',') }
   const query = `
