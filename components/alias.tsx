@@ -144,7 +144,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
         <div className="flex-1 space-y-3 block">
           <HeroLink
             href={alias.content.page.cachedUrl}
-            isDisabled={!alias.content.page.cachedUrl}
+            isDisabled={!alias.content.page.cachedUrl || !!blok.submit?.length}
             color="foreground"
           >
             {alias.content.title && (
