@@ -8,6 +8,7 @@ import type { StoryProps, ArticleProps, NavProps } from '@props/types'
 import Meta from '@components/meta'
 import Nav from '@components/nav'
 import { Image as HeroImage } from '@heroui/react'
+import { default as NextLink } from 'next/link'
 
 const relations = [
   'page.header',
@@ -56,12 +57,19 @@ export default function PageStory({ story, blog }: PageStory) {
   return (
     <>
       <Meta {...article} />
+      {blogPage.header && (
+        <Nav parent="header" blok={blogPage.header.content} />
+      )}
       <main className="min-h-screen">
-        {blogPage.header && (
-          <Nav parent="header" blok={blogPage.header.content} />
-        )}
         <section className="py-6">
-          <div className="px-6 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-12 items-center">
+          <div className="px-6 max-w-[1280px] min-h-inherit mx-auto grid grid-cols-12 gap-x-4 gap-y-6 lg:gap-x-8 items-center">
+            <NextLink
+              href="/blog"
+              className="col-span-12 text-sm font-medium inline-flex gap-2 items-center"
+            >
+              <i className="iconoir-arrow-left" />
+              Torna alla lista
+            </NextLink>
             {!!article.image?.filename && (
               <HeroImage
                 src={article.image.filename}

@@ -45,7 +45,7 @@ export type ImageArray = ImageData & {
 }
 
 export type OptionProps = {
-  name: string | Omit<CourseProps, 'location'> & { location: string }
+  name: string | (Omit<CourseProps, 'location'> & { location: string })
   value: string
 }
 
@@ -122,6 +122,7 @@ export type ActionProps = BlokProps & {
   id: string
   label: string
   link: LinkProps
+  external: boolean
   button: boolean
   color: 'primary' | 'secondary'
 }
@@ -203,6 +204,8 @@ export type ListProps = BlokProps & {
 
 export type AliasProps = BlokProps & {
   component: 'alias'
+  title: string
+  image: ImageData
   resource: 'next-event' | 'last-article'
   filter: string
   submit: Array<FormProps>
