@@ -122,6 +122,8 @@ export default function Alias({ blok, parent }: AliasComponent) {
       },
     }
 
+    console.log(alias.content.page.cachedUrl)
+
     return (
       <div
         {...storyblokEditable(blok)}
@@ -142,17 +144,23 @@ export default function Alias({ blok, parent }: AliasComponent) {
         </div>
 
         <div className="flex-1 space-y-3 block">
-          <HeroLink
-            href={alias.content.page.cachedUrl}
-            isDisabled={!alias.content.page.cachedUrl || !!blok.submit?.length}
-            color="foreground"
-          >
-            {alias.content.title && (
+          {alias.content.title &&
+          (!alias.content.page.cachedUrl || !!blok.submit?.length) ? (
+            <h3 className="font-sans text-lg md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug">
+              {alias.content.title}
+            </h3>
+          ) : (
+            <NextLink
+              href={alias.content.page.cachedUrl}
+              color="foreground"
+              className="font-semibold text-sm py-2 hover:opacity-100 opacity-85 inline-flex"
+            >
               <h3 className="font-sans text-lg md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug">
                 {alias.content.title}
               </h3>
-            )}
-          </HeroLink>
+            </NextLink>
+          )}
+
           {alias.content.description &&
             compiler(alias.content.description, {
               wrapper: 'div',
@@ -160,18 +168,18 @@ export default function Alias({ blok, parent }: AliasComponent) {
               overrides: Typography({}),
             })}
           {alias.content.page.cachedUrl && !blok.submit?.length && (
-            <HeroLink
+            <NextLink
               href={alias.content.page.cachedUrl}
-              isDisabled={!alias.content.page.cachedUrl}
               color="foreground"
-              className="font-semibold text-sm"
+              className="font-semibold text-sm py-2 hover:opacity-100 opacity-85 inline-flex"
             >
               Vai alla pagina
-            </HeroLink>
+            </NextLink>
           )}
-          {!!blok.submit?.length && blok?.submit.map((form, index) => (
-            <StoryblokComponent blok={form} openday={openday} key={index} />
-          ))}
+          {!!blok.submit?.length &&
+            blok?.submit.map((form, index) => (
+              <StoryblokComponent blok={form} openday={openday} key={index} />
+            ))}
         </div>
       </div>
     )
