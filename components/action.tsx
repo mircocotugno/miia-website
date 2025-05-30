@@ -47,7 +47,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
           size={size}
           isExternal={blok.external}
           color={theme || blok.color || 'default'}
-          className="col-auto text-medium font-semibold min-w-fit cursor-pointer gap-2"
+          className="col-auto text-medium font-medium min-w-fit cursor-pointer gap-2"
           {...storyblokEditable(blok)}
         >
           {Label}
@@ -58,7 +58,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
   return (
     <Container>
       <Link
-        className="col-auto font-semibold min-w-fit cursor-pointer gap-2"
+        className="col-auto font-medium min-w-fit cursor-pointer gap-2"
         href={link}
         isExternal={blok.external}
         color={theme || blok.color || 'foreground'}

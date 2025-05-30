@@ -186,7 +186,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
           {alias.content.page.cachedUrl && !blok.submit?.length && (
             <NextLink
               href={alias.content.page.cachedUrl}
-              className="font-semibold text-sm py-2 hover:opacity-100 opacity-85 inline-flex border-2 border-foreground px-3 rounded-xl"
+              className="font-medium text-sm py-2 hover:opacity-100 opacity-85 inline-flex border-2 border-foreground px-3 rounded-xl"
             >
               Vai alla pagina
             </NextLink>
@@ -228,7 +228,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
           </NextLink>
           <NextLink
             href={alias?.full_slug}
-            className="font-semibold text-sm py-2 hover:opacity-100 opacity-85 inline-flex border-2 border-foreground px-3 rounded-xl"
+            className="font-medium text-sm py-2 hover:opacity-100 opacity-85 inline-flex border-2 border-foreground px-3 rounded-xl"
           >
             Leggi articolo
           </NextLink>

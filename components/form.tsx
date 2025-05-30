@@ -266,7 +266,7 @@ function getData(fields: Array<FieldProps>, data: FormData) {
 }
 
 const buttonClasses = tv({
-  base: 'font-semibold text-medium col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3',
+  base: 'font-medium text-medium col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3',
   variants: {
     hidden: {
       true: 'hidden',

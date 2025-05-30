@@ -1,3 +1,5 @@
+import { interesse_area } from '@props/attributes'
+
 export type BaseAttribute = {
   type: 'text' | 'date' | 'float' | 'boolean' | 'id' | 'user'
 }
@@ -41,12 +43,19 @@ export const attributes: Attributes = {
 
   // Informazioni di interesse
   interesse_corso: {
-    type: 'category',// TODO change data type
+    type: 'category',
     enumeration: [
       { value: 1, label: 'interni - primo livello' },
       { value: 2, label: 'interni - secondo livello' },
       { value: 3, label: 'moda - primo livello' },
       { value: 4, label: 'moda - secondo livello' },
+    ],
+  },
+  interesse_area: {
+    type: 'category',
+    enumeration: [
+      { value: 1, label: 'interni' },
+      { value: 2, label: 'moda' },
     ],
   },
   interesse_sede: {
@@ -72,14 +81,14 @@ export const attributes: Attributes = {
   interesse_openday: {
     type: 'date',
   },
-  // interesse_collaborazione: {
-  //   type: 'category',
-  //   enumeration: [
-  //     { value: 1, label: 'studenti' },
-  //     { value: 2, label: 'commerciale' },
-  //     { value: 3, label: 'formazione' },
-  //   ],
-  // },
+  interesse_collaborazione: {
+    type: 'category',
+    enumeration: [
+      { value: 1, label: 'personale' },
+      { value: 2, label: 'progetti' },
+      { value: 3, label: 'collaborazione' },
+    ],
+  },
 
   // Preferenze iscrizione
   iscrizione_corso: {
