@@ -230,7 +230,7 @@ const thumbClasses = tv({
 const slideClasses = tv({
   slots: {
     wrapperClasses: 'max-w-inherith max-h-inherith rounded-xl',
-    imageClasses: 'max-h-full max-w-full rounded-xl',
+    imageClasses: 'max-h-full max-w-full rounded-xl mx-auto',
   },
 })
 

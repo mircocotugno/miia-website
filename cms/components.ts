@@ -24,6 +24,11 @@ const action: ComponentSchema = {
       show_anchor: true,
       asset_link_type: true,
     },
+    external: {
+      type: 'boolean',
+      display_name: 'Apri nuova finestra',
+      inline_label: true,
+    },
     button: {
       type: 'boolean',
       display_name: 'Mostra come bottone',
@@ -501,6 +506,16 @@ const alias: ComponentSchema = {
   component_group_uuid: 'elements',
   preview_tmpl: ``,
   schema: {
+    title: {
+      type: 'text',
+      display_name: 'Titolo',
+    },
+    image: {
+      type: 'asset',
+      display_name: 'Immagine',
+      filetypes: ['images'],
+    },
+
     resource: {
       type: 'option',
       display_name: 'Tipo',

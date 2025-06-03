@@ -6,6 +6,7 @@ import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { Image, Link as HeroLink } from '@heroui/react'
 import { default as NextLink } from 'next/link'
+import { tv } from 'tailwind-variants'
 
 interface AliasComponent {
   blok: AliasProps
@@ -121,38 +122,61 @@ export default function Alias({ blok, parent }: AliasComponent) {
         error: null,
       },
     }
-
+    const dateClasses = tv({
+      base: 'flex flex-col h-full w-full p-4',
+      variants: {
+        hasImage: {
+          true: 'min-h-64 sm:min-h-0 bg-gradient-to-br from-background to-transparent to-75 bg-blend-multiply',
+        },
+      },
+    })
     return (
       <div
         {...storyblokEditable(blok)}
         className="flex flex-col gap-2 sm:gap-4 sm:flex-row col-span-12 items-start sm:items-center"
       >
-        <div className="flex-1 sm:max-w-24 gap-2 sm:gap-1 flex sm:flex-col sm:justify-center items-baseline sm:items-center sm:px-6 sm:py-2 text-center">
-          <span className="text-xl sm:text-3xl font-bold">
-            {alias.content.date.toLocaleDateString('it-IT', { day: '2-digit' })}
-          </span>
-          <span className="text-xl font-semibold">
-            {alias.content.date.toLocaleDateString('it-IT', { month: 'long' })}
-          </span>
-          <span className="text-lg font-semibold sm:text-xs sm:font-normal">
-            {alias.content.date.toLocaleDateString('it-IT', {
-              year: 'numeric',
-            })}
-          </span>
+        <div
+          className="flex-1 sm:max-w-64 bg-cover bg-center rounded-md overflow-hidden self-stretch flex"
+          style={{
+            backgroundImage: !!blok.image?.filename
+              ? `url(${blok.image.filename})`
+              : '',
+          }}
+        >
+          <div className={dateClasses({ hasImage: !!blok.image?.filename })}>
+            <p className="text-3xl font-semibold sm:block">
+              <span className="sm:w-full sm:block">
+                {alias.content.date.toLocaleDateString('it-IT', {
+                  day: '2-digit',
+                  month: 'long',
+                })}
+              </span>
+              <span className="sm:w-full ml-1 sm:block sm:text-lg sm:font-medium">
+                {alias.content.date.toLocaleDateString('it-IT', {
+                  year: 'numeric',
+                })}
+              </span>
+            </p>
+          </div>
         </div>
-
-        <div className="flex-1 space-y-3 block">
-          <HeroLink
-            href={alias.content.page.cachedUrl}
-            isDisabled={!alias.content.page.cachedUrl}
-            color="foreground"
-          >
-            {alias.content.title && (
+        <div className="flex-1 space-y-4 block py-4">
+          {alias.content.title &&
+          (!alias.content.page.cachedUrl || !!blok.submit?.length) ? (
+            <h3 className="font-sans text-lg md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug">
+              {alias.content.title}
+            </h3>
+          ) : (
+            <NextLink
+              href={alias.content.page.cachedUrl}
+              color="foreground"
+              className="font-semibold text-sm hover:opacity-100 opacity-85 inline-flex"
+            >
               <h3 className="font-sans text-lg md:text-2xl xl:text-3xl font-bold leading-snug md:leading-snug xl:leading-snug">
                 {alias.content.title}
               </h3>
-            )}
-          </HeroLink>
+            </NextLink>
+          )}
+
           {alias.content.description &&
             compiler(alias.content.description, {
               wrapper: 'div',
@@ -160,18 +184,17 @@ export default function Alias({ blok, parent }: AliasComponent) {
               overrides: Typography({}),
             })}
           {alias.content.page.cachedUrl && !blok.submit?.length && (
-            <HeroLink
+            <NextLink
               href={alias.content.page.cachedUrl}
-              isDisabled={!alias.content.page.cachedUrl}
-              color="foreground"
-              className="font-semibold text-sm"
+              className="font-medium text-sm py-2 hover:opacity-100 opacity-85 inline-flex border-2 border-foreground px-3 rounded-xl"
             >
               Vai alla pagina
-            </HeroLink>
+            </NextLink>
           )}
-          {!!blok.submit?.length && blok?.submit.map((form, index) => (
-            <StoryblokComponent blok={form} openday={openday} key={index} />
-          ))}
+          {!!blok.submit?.length &&
+            blok?.submit.map((form, index) => (
+              <StoryblokComponent blok={form} openday={openday} key={index} />
+            ))}
         </div>
       </div>
     )
@@ -203,9 +226,12 @@ export default function Alias({ blok, parent }: AliasComponent) {
               {alias.content.description}
             </p>
           </NextLink>
-          <HeroLink href={alias?.full_slug} color="foreground">
+          <NextLink
+            href={alias?.full_slug}
+            className="font-medium text-sm py-2 hover:opacity-100 opacity-85 inline-flex border-2 border-foreground px-3 rounded-xl"
+          >
             Leggi articolo
-          </HeroLink>
+          </NextLink>
         </div>
       </article>
     )

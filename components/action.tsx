@@ -42,12 +42,12 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
       <Container>
         <Button
           id={blok.id}
-          as={Link}
-          target={blok.link.target}
-          color={theme || blok.color || 'default'}
-          size={size}
           href={link}
-          className="col-auto font-bold min-w-fit cursor-pointer gap-2"
+          as={Link}
+          size={size}
+          isExternal={blok.external}
+          color={theme || blok.color || 'default'}
+          className="col-auto text-medium font-medium min-w-fit cursor-pointer gap-2"
           {...storyblokEditable(blok)}
         >
           {Label}
@@ -60,7 +60,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
       <Link
         className="col-auto font-medium min-w-fit cursor-pointer gap-2"
         href={link}
-        target={blok.link.target}
+        isExternal={blok.external}
         color={theme || blok.color || 'foreground'}
         size={size || 'md'}
       >

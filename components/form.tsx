@@ -160,7 +160,7 @@ export default function Form({
     <>
       <Button
         color={button?.color || 'primary'}
-        size={button?.size}
+        size={button?.size || 'md'}
         className={buttonClasses({ hidden: button?.hide })}
         onPress={onOpen}
       >
@@ -266,7 +266,7 @@ function getData(fields: Array<FieldProps>, data: FormData) {
 }
 
 const buttonClasses = tv({
-  base: 'font-bold text-md col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3',
+  base: 'font-medium text-medium col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3',
   variants: {
     hidden: {
       true: 'hidden',

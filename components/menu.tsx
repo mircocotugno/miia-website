@@ -22,6 +22,23 @@ export default function Menu({
   handleOpen,
   parent,
 }: MenuComponent) {
+  if (blok.inline) {
+    return (
+      <div
+        {...storyblokEditable(blok)}
+        className="flex flex-wrap gap-x-2 gap-y-4"
+      >
+        {blok.links.map((link, index) => (
+          <StoryblokComponent
+            blok={link}
+            key={`tab-${index}`}
+            theme="default"
+            size="sm"
+          />
+        ))}
+      </div>
+    )
+  }
   if (parent === 'header') {
     const buttonClasses = tv({
       base: 'inline-flex items-center gap-1 font-medium hover:opacity-80 active:opacity-disabled transition-opacity text-foreground text-right',
@@ -81,23 +98,7 @@ export default function Menu({
       </div>
     )
   }
-  if (blok.inline) {
-    return (
-      <div
-        {...storyblokEditable(blok)}
-        className="flex flex-wrap gap-x-2 gap-y-4"
-      >
-        {blok.links.map((link, index) => (
-          <StoryblokComponent
-            blok={link}
-            key={`tab-${index}`}
-            theme="default"
-            size="sm"
-          />
-        ))}
-      </div>
-    )
-  }
+
   return (
     <Dropdown {...storyblokEditable(blok)}>
       <DropdownTrigger>
