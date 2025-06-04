@@ -19,13 +19,11 @@ import {
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
 // import { attributes, CategoryAttribute } from '../crm/attributes'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
-import { brevoApi, checkContact } from '@modules/brevo'
 import { tv } from 'tailwind-variants'
 import { attributes } from '@crm/attributes'
-import { Concert_One } from 'next/font/google'
 import { lists, type ListNames } from '@crm/lists'
 
 interface FormComponent {
@@ -42,6 +40,9 @@ interface FormComponent {
     course: string
   }
 }
+
+const errorMessage = `#####Ops, qualcosa è andato storto {{nome}}!
+    \nSe l'errore dovesse persistere, ci contatti all'indirizzo email info@miia.it`
 
 export default function Form({
   blok,
@@ -85,6 +86,10 @@ export default function Form({
     (): FormData => getData(form.fields, initData)
   )
 
+  useEffect(() => {
+    setData(getData(form.fields, initData))
+  }, [openday])
+
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -96,16 +101,20 @@ export default function Form({
 
   const handleCheck = async (email: string) => {
     setLoading(true)
-    const response = await checkContact(email)
-    if (response?.id) {
-      setUserId(response.id)
+    const response = await fetch('/api/send-brevo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scope: 'find', contact: { email } }),
+    })
+    if (response.ok) {
+      const contact = await response.json()
+      setUserId(contact.id)
       const _data = { ...data }
-      _data.email.value = response.email
+      _data.email.value = contact.email
       _data.email.error = null
-      _data.nome.value = response.attributes.NOME
-      _data.cognome.value = response.attributes.COGNOME
-      _data.sms.value = response.attributes.SMS.substring(2)
-
+      _data.nome.value = contact.attributes.NOME
+      _data.cognome.value = contact.attributes.COGNOME
+      _data.sms.value = contact.attributes.SMS.substring(2)
       setData(_data)
     } else {
       setUserId(null)
@@ -123,37 +132,36 @@ export default function Form({
     )
     if (!hasError) {
       const contact = getContactData(_data, userId, form.list)
-
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contact),
+        body: JSON.stringify({
+          scope: userId ? 'update' : 'create',
+          contact: contact,
+        }),
       })
 
-      console.log(response)
-      debugger
+      // if (!response.ok) return handleReset()
+      const parseText = (text: string) => {
+        const keys = text.match(/{{(.*?)}}/g)
+        if (keys && !!keys.length) {
+          keys.forEach((string) => {
+            const key = string.replace('{{', '').replace('}}', '')
+            if (!data[key]?.value) return text
+            text = text.replace(string, data[key].value)
+          })
+        }
+        return text
+      }
 
-      // if (!response) return handleReset()
-
-      // const parseText = (text: string) => {
-      //   const keys = text.match(/{{(.*?)}}/g)
-      //   if (keys && !!keys.length) {
-      //     keys.forEach((string) => {
-      //       const key = string.replace('{{', '').replace('}}', '')
-      //       if (!data[key]?.value) return text
-      //       text = text.replace(string, data[key].value)
-      //     })
-      //   }
-      //   return text
-      // }
-
-      // if (response.status.) {
-      //   setError('')
-      //   setMessage(parseText(form.message))
-      // } else if (response.error) {
-      //   setError(parseText(response.error))
-      // }
-      // setSubmitted(response.success)
+      if (response.ok) {
+        debugger
+        setError('')
+        setMessage(parseText(form.message))
+      } else {
+        setError(parseText(errorMessage))
+      }
+      setSubmitted(response.ok)
     } else {
       setData(_data)
     }
@@ -261,22 +269,22 @@ export default function Form({
   )
 }
 
-function getData(fields: Array<FieldProps>, data: FormData) {
-  fields.forEach(
-    (field) =>
-      (data[field.id] = {
-        id: field.id,
-        value:
-          field.input === 'hidden'
-            ? field.placeholder
-            : ['select', 'multiple', 'enroll'].includes(field.input)
-              ? []
-              : '',
-        required: field.required,
-        error: null,
-      })
-  )
-  return data
+function getData(fields: Array<FieldProps>, initial: FormData = {}) {
+  const newData: FormData = { ...initial }
+  fields.forEach((field) => {
+    newData[field.id] = {
+      id: field.id,
+      value:
+        field.input === 'hidden'
+          ? field.placeholder
+          : ['select', 'multiple', 'enroll'].includes(field.input)
+            ? []
+            : '',
+      required: field.required,
+      error: null,
+    }
+  })
+  return newData
 }
 
 function getContactData(data: FormData, id: null | number, list: ListNames) {
@@ -295,7 +303,8 @@ function getContactData(data: FormData, id: null | number, list: ListNames) {
       value = typeof field.value === 'string' ? [field.value] : field.value
     } else if (type === 'date') {
       value = new Date(field.value).toISOString().split('T', 1)[0]
-      // value = `${field.value.getFullYear()}-${field.value.getMonth() + 1}-${field.value.getDate()}`
+    } else if (key === 'sms') {
+      value = `+39${field.value}`
     }
     return (contact.attributes[key.toUpperCase()] = value)
   })

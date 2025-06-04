@@ -1,18 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-// import type { FormList, FormData, BrevoProps, FormArea } from '@props/types'
 
-type BrevoRequestBody = {
-  // Sostituisci con la struttura effettiva richiesta dalla tua API Brevo
+type BrevoContact = {
   id?: number
-  list: string | null
-  email: string | null
-  attributes: {
+  list?: string | null
+  email?: string | null
+  attributes?: {
     [key: string]: any
   }
 }
 
-type BrevoResponse = {
-  // Adatta in base alla risposta che ti aspetti da Brevo
+type BrevoRequestBody = {
+  scope: 'find' | 'create' | 'update'
+  contact: BrevoContact
+}
+
+export type BrevoResponse = {
+  id?: number
+  email?: string | null
+  attributes?: {
+    [key: string]: any
+  }
   messageId?: string
   error?: string
 }
@@ -22,7 +29,7 @@ export default async function sendBrevo(
   res: NextApiResponse<BrevoResponse>
 ): Promise<void> {
   if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST'])
+    res.setHeader('Allow', ['POST', 'PUT', 'GET'])
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
@@ -33,29 +40,58 @@ export default async function sendBrevo(
       .json({ error: 'Missing Brevo API key in environment' })
   }
 
-  // TODO: need to check this!
-  //   const validation = data?.validation?.value
-  // if (!!validation) return false
+  const { scope, contact }: BrevoRequestBody = req.body
+  let endpoint = 'https://api.brevo.com/v3/contacts'
+  let options: RequestInit = {
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      'api-key': token,
+    },
+  }
+
+  switch (scope) {
+    case 'find':
+      endpoint = endpoint + '/' + contact.email
+      options.method = 'GET'
+      break
+    case 'create':
+      options.method = 'POST'
+      options.body = JSON.stringify(contact)
+      break
+    case 'update':
+      endpoint = endpoint + '/' + contact.id
+      options.method = 'PUT'
+      options.body = JSON.stringify(contact)
+      break
+  }
 
   try {
-    const brevoRes = await fetch(
-      `https://api.brevo.com/v3/contacts/${req.body?.id || ''}`,
-      {
-        method: req.body?.id ? 'PUT' : 'POST',
-        headers: {
-          'api-key': token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(req.body),
-      }
-    )
+    const brevoRes = await fetch(endpoint, options)
 
-    const data = await brevoRes.json()
+    let data: any = null
+
+    // Solo se non è 204 (No Content) provo a leggere il JSON
+    if (brevoRes.status !== 204) {
+      try {
+        data = await brevoRes.json()
+      } catch (e) {
+        console.warn('Nessun JSON nella risposta:', e)
+        data = null
+      }
+    }
 
     if (!brevoRes.ok) {
+      console.log('Status Brevo:', brevoRes.status)
+      console.log('Risposta Brevo:', JSON.stringify(data, null, 2))
       return res
         .status(brevoRes.status)
-        .json({ error: data.message || 'Brevo API Error' })
+        .json({ error: data || 'Brevo API Error' })
+    }
+
+    if (scope === 'find') {
+      const { email, attributes } = data
+      return res.status(200).json({ email, attributes })
     }
 
     return res.status(200).json(data)
