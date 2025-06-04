@@ -4,6 +4,7 @@ import type {
   OptionProps,
   DataProps,
   FormData,
+  BrevoProps,
 } from '@props/types'
 import {
   Drawer,
@@ -23,6 +24,9 @@ import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { brevoApi, checkContact } from '@modules/brevo'
 import { tv } from 'tailwind-variants'
+import { attributes } from '@crm/attributes'
+import { Concert_One } from 'next/font/google'
+import { lists, type ListNames } from '@crm/lists'
 
 interface FormComponent {
   blok: FormProps
@@ -74,7 +78,7 @@ export default function Form({
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [isLoading, setLoading] = useState(false)
-  const [isChecked, setChecked] = useState(false)
+  const [userId, setUserId] = useState(null)
   const [isSubmitted, setSubmitted] = useState(false)
 
   const [data, setData] = useState(
@@ -94,16 +98,17 @@ export default function Form({
     setLoading(true)
     const response = await checkContact(email)
     if (response?.id) {
-      setChecked(true)
+      setUserId(response.id)
       const _data = { ...data }
       _data.email.value = response.email
+      _data.email.error = null
       _data.nome.value = response.attributes.NOME
       _data.cognome.value = response.attributes.COGNOME
       _data.sms.value = response.attributes.SMS.substring(2)
 
       setData(_data)
     } else {
-      setChecked(false)
+      setUserId(null)
     }
     setLoading(false)
   }
@@ -117,29 +122,38 @@ export default function Form({
       ({ error }: DataProps): boolean => !!error
     )
     if (!hasError) {
+      const contact = getContactData(_data, userId, form.list)
+
+      const response = await fetch('/api/send-brevo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contact),
+      })
+
+      console.log(response)
       debugger
-      const response = await brevoApi(form.list, _data)
-      if (!response) return handleReset()
 
-      const parseText = (text: string) => {
-        const keys = text.match(/{{(.*?)}}/g)
-        if (keys && !!keys.length) {
-          keys.forEach((string) => {
-            const key = string.replace('{{', '').replace('}}', '')
-            if (!data[key]?.value) return text
-            text = text.replace(string, data[key].value)
-          })
-        }
-        return text
-      }
+      // if (!response) return handleReset()
 
-      if (response.success) {
-        setError('')
-        setMessage(parseText(form.message))
-      } else if (response.error) {
-        setError(parseText(response.error))
-      }
-      setSubmitted(response.success)
+      // const parseText = (text: string) => {
+      //   const keys = text.match(/{{(.*?)}}/g)
+      //   if (keys && !!keys.length) {
+      //     keys.forEach((string) => {
+      //       const key = string.replace('{{', '').replace('}}', '')
+      //       if (!data[key]?.value) return text
+      //       text = text.replace(string, data[key].value)
+      //     })
+      //   }
+      //   return text
+      // }
+
+      // if (response.status.) {
+      //   setError('')
+      //   setMessage(parseText(form.message))
+      // } else if (response.error) {
+      //   setError(parseText(response.error))
+      // }
+      // setSubmitted(response.success)
     } else {
       setData(_data)
     }
@@ -151,7 +165,7 @@ export default function Form({
     setMessage('')
     setSubmitted(false)
     setLoading(false)
-    setChecked(false)
+    setUserId(null)
 
     onOpenChange()
   }
@@ -177,7 +191,7 @@ export default function Form({
         <DrawerContent>
           <DrawerHeader className="flex flex-col gap-1">
             {form.title || 'Compila il modulo'}
-            {isChecked && !isSubmitted && (
+            {userId && !isSubmitted && (
               <p className="font-medium text-medium text-foreground-800">
                 <span>Ben tornato, </span>
                 <strong className="text-primary">
@@ -263,6 +277,40 @@ function getData(fields: Array<FieldProps>, data: FormData) {
       })
   )
   return data
+}
+
+function getContactData(data: FormData, id: null | number, list: ListNames) {
+  const contact: BrevoProps = {
+    attributes: {},
+  }
+
+  Object.entries(data).forEach(([key, field]) => {
+    if (key === 'email') {
+      return (contact.email = field.value)
+    }
+    let value = field.value
+    const type =
+      typeof attributes[key] !== 'undefined' ? attributes[key].type : null
+    if (type === 'multiple-choice') {
+      value = typeof field.value === 'string' ? [field.value] : field.value
+    } else if (type === 'date') {
+      value = new Date(field.value).toISOString().split('T', 1)[0]
+      // value = `${field.value.getFullYear()}-${field.value.getMonth() + 1}-${field.value.getDate()}`
+    }
+    return (contact.attributes[key.toUpperCase()] = value)
+  })
+
+  if (id) {
+    contact.id = id
+  }
+
+  if (list) {
+    contact.listIds = [lists[list] || 19]
+  }
+
+  contact.updateEnabled = true
+
+  return contact
 }
 
 const buttonClasses = tv({

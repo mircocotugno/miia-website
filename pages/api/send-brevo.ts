@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { FormList, FormData, BrevoProps, FormArea } from '@props/types'
-import { attributes } from '@crm/attributes'
-import { lists, ids } from '@crm/lists'
+// import type { FormList, FormData, BrevoProps, FormArea } from '@props/types'
 
 type BrevoRequestBody = {
   // Sostituisci con la struttura effettiva richiesta dalla tua API Brevo
@@ -28,7 +26,6 @@ export default async function sendBrevo(
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const baseUrl = 'https://api.brevo.com/v3/'
   const token = process.env.BREVO_TOKEN
   if (!token) {
     return res
@@ -40,19 +37,21 @@ export default async function sendBrevo(
   //   const validation = data?.validation?.value
   // if (!!validation) return false
 
-  const { userId, contact } = req.body as BrevoRequestBody
-
   try {
-    const brevoRes = await fetch('https://api.brevo.com/v3/your-endpoint', {
-      method: 'POST',
-      headers: {
-        'api-key': token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(),
-    })
+    const brevoRes = await fetch(
+      `https://api.brevo.com/v3/${req.body?.id || ''}`,
+      {
+        method: req.body?.id ? 'PUT' : 'POST',
+        headers: {
+          'api-key': token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(req.body),
+      }
+    )
 
     const data = await brevoRes.json()
+
     if (!brevoRes.ok) {
       return res
         .status(brevoRes.status)
