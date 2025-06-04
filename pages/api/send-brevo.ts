@@ -39,7 +39,7 @@ export default async function sendBrevo(
 
   try {
     const brevoRes = await fetch(
-      `https://api.brevo.com/v3/${req.body?.id || ''}`,
+      `https://api.brevo.com/v3/contacts/${req.body?.id || ''}`,
       {
         method: req.body?.id ? 'PUT' : 'POST',
         headers: {
