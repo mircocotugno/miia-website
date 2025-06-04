@@ -417,8 +417,5 @@ export type BrevoProps = {
 }
 
 export type BrevoAttributes = {
-  COGNOME: string
-  NOME: string
-  SMS: number
   [key: string]: string | number | Date
 }
