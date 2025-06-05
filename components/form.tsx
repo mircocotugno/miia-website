@@ -4,6 +4,7 @@ import type {
   OptionProps,
   DataProps,
   FormData,
+  BrevoProps,
 } from '@props/types'
 import {
   Drawer,
@@ -18,11 +19,12 @@ import {
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
 // import { attributes, CategoryAttribute } from '../crm/attributes'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
-import { brevoApi, checkContact } from '@modules/brevo'
 import { tv } from 'tailwind-variants'
+import { attributes } from '@crm/attributes'
+import { lists, type ListNames } from '@crm/lists'
 
 interface FormComponent {
   blok: FormProps
@@ -38,6 +40,9 @@ interface FormComponent {
     course: string
   }
 }
+
+const errorMessage = `#####Ops, qualcosa è andato storto {{nome}}!
+    \nSe l'errore dovesse persistere, ci contatti all'indirizzo email info@miia.it`
 
 export default function Form({
   blok,
@@ -74,12 +79,16 @@ export default function Form({
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [isLoading, setLoading] = useState(false)
-  const [isChecked, setChecked] = useState(false)
+  const [userId, setUserId] = useState(null)
   const [isSubmitted, setSubmitted] = useState(false)
 
   const [data, setData] = useState(
     (): FormData => getData(form.fields, initData)
   )
+
+  useEffect(() => {
+    setData(getData(form.fields, initData))
+  }, [openday])
 
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -92,18 +101,23 @@ export default function Form({
 
   const handleCheck = async (email: string) => {
     setLoading(true)
-    const response = await checkContact(email)
-    if (response?.id) {
-      setChecked(true)
+    const response = await fetch('/api/send-brevo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scope: 'find', contact: { email } }),
+    })
+    if (response.ok) {
+      const contact = await response.json()
+      setUserId(contact.id)
       const _data = { ...data }
-      _data.email.value = response.email
-      _data.nome.value = response.attributes.NOME
-      _data.cognome.value = response.attributes.COGNOME
-      _data.sms.value = response.attributes.SMS.substring(2)
-
+      _data.email.value = contact.email
+      _data.email.error = null
+      _data.nome.value = contact.attributes.NOME
+      _data.cognome.value = contact.attributes.COGNOME
+      _data.sms.value = contact.attributes.SMS.substring(2)
       setData(_data)
     } else {
-      setChecked(false)
+      setUserId(null)
     }
     setLoading(false)
   }
@@ -117,10 +131,17 @@ export default function Form({
       ({ error }: DataProps): boolean => !!error
     )
     if (!hasError) {
-      debugger
-      const response = await brevoApi(form.list, _data)
-      if (!response) return handleReset()
+      const contact = getContactData(_data, userId, form.list)
+      const response = await fetch('/api/send-brevo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scope: userId ? 'update' : 'create',
+          contact: contact,
+        }),
+      })
 
+      // if (!response.ok) return handleReset()
       const parseText = (text: string) => {
         const keys = text.match(/{{(.*?)}}/g)
         if (keys && !!keys.length) {
@@ -133,13 +154,14 @@ export default function Form({
         return text
       }
 
-      if (response.success) {
+      if (response.ok) {
+        debugger
         setError('')
         setMessage(parseText(form.message))
-      } else if (response.error) {
-        setError(parseText(response.error))
+      } else {
+        setError(parseText(errorMessage))
       }
-      setSubmitted(response.success)
+      setSubmitted(response.ok)
     } else {
       setData(_data)
     }
@@ -151,7 +173,7 @@ export default function Form({
     setMessage('')
     setSubmitted(false)
     setLoading(false)
-    setChecked(false)
+    setUserId(null)
 
     onOpenChange()
   }
@@ -177,7 +199,7 @@ export default function Form({
         <DrawerContent>
           <DrawerHeader className="flex flex-col gap-1">
             {form.title || 'Compila il modulo'}
-            {isChecked && !isSubmitted && (
+            {userId && !isSubmitted && (
               <p className="font-medium text-medium text-foreground-800">
                 <span>Ben tornato, </span>
                 <strong className="text-primary">
@@ -247,22 +269,57 @@ export default function Form({
   )
 }
 
-function getData(fields: Array<FieldProps>, data: FormData) {
-  fields.forEach(
-    (field) =>
-      (data[field.id] = {
-        id: field.id,
-        value:
-          field.input === 'hidden'
-            ? field.placeholder
-            : ['select', 'multiple', 'enroll'].includes(field.input)
-              ? []
-              : '',
-        required: field.required,
-        error: null,
-      })
-  )
-  return data
+function getData(fields: Array<FieldProps>, initial: FormData = {}) {
+  const newData: FormData = { ...initial }
+  fields.forEach((field) => {
+    newData[field.id] = {
+      id: field.id,
+      value:
+        field.input === 'hidden'
+          ? field.placeholder
+          : ['select', 'multiple', 'enroll'].includes(field.input)
+            ? []
+            : '',
+      required: field.required,
+      error: null,
+    }
+  })
+  return newData
+}
+
+function getContactData(data: FormData, id: null | number, list: ListNames) {
+  const contact: BrevoProps = {
+    attributes: {},
+  }
+
+  Object.entries(data).forEach(([key, field]) => {
+    if (key === 'email') {
+      return (contact.email = field.value)
+    }
+    let value = field.value
+    const type =
+      typeof attributes[key] !== 'undefined' ? attributes[key].type : null
+    if (type === 'multiple-choice') {
+      value = typeof field.value === 'string' ? [field.value] : field.value
+    } else if (type === 'date') {
+      value = new Date(field.value).toISOString().split('T', 1)[0]
+    } else if (key === 'sms') {
+      value = `+39${field.value}`
+    }
+    return (contact.attributes[key.toUpperCase()] = value)
+  })
+
+  if (id) {
+    contact.id = id
+  }
+
+  if (list) {
+    contact.listIds = [lists[list] || 19]
+  }
+
+  contact.updateEnabled = true
+
+  return contact
 }
 
 const buttonClasses = tv({
