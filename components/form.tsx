@@ -131,6 +131,7 @@ export default function Form({
       ({ error }: DataProps): boolean => !!error
     )
     if (!hasError) {
+      setLoading(true)
       const contact = getContactData(_data, userId, form.list)
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
@@ -155,11 +156,12 @@ export default function Form({
       }
 
       if (response.ok) {
-        debugger
         setError('')
         setMessage(parseText(form.message))
+        setLoading(false)
       } else {
         setError(parseText(errorMessage))
+        setLoading(false)
       }
       setSubmitted(response.ok)
     } else {
