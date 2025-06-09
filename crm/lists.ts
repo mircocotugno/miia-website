@@ -10,9 +10,9 @@ export type Lists = {
 }
 
 export const lists: Lists = {
-  default: 19,
-  studenti: 40,
-  docenti: 41,
-  aziende: 42,
-  clienti: 43,
+  default: 2,
+  studenti: 6,
+  docenti: 12,
+  aziende: 8,
+  clienti: 10,
 }
