@@ -107,11 +107,7 @@ export default function Alias({ blok, parent }: AliasComponent) {
     const openday = {
       date: {
         id: 'interesse_openday',
-        value: alias.content.date.toLocaleDateString('it-IT', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-        }),
+        value: new Date(alias.content.date).toISOString(),
         required: true,
         error: null,
       },

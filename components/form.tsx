@@ -149,7 +149,11 @@ export default function Form({
           keys.forEach((string) => {
             const key = string.replace('{{', '').replace('}}', '')
             if (!data[key]?.value) return text
-            text = text.replace(string, data[key].value)
+            let value = data[key].value
+            if (!Number.isNaN(new Date(value).valueOf())) {
+              value = new Date(value).toLocaleDateString('it-IT')
+            }
+            text = text.replace(string, value)
           })
         }
         return text
