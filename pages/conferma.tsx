@@ -37,11 +37,11 @@ export default function Feedback() {
                 <span>Grazie {params.nome || null},</span>
                 <br />
                 <span className="text-5xl">
-                  grazie per aver confermato la tua identità!
+                  per aver confermato la tua identità!
                 </span>
               </h1>
               <p className={description()}>
-                Abbiamo ricevuto la tua richiesta: a breve ti invieremo una mail
+                A breve ti invieremo una mail
                 con tutte le informazioni necessarie. Nel frattempo, puoi
                 visitare il nostro blog e scoprire gli ultimi eventi e
                 approfondimenti dal mondo dell’interior design.
@@ -61,7 +61,7 @@ export default function Feedback() {
                 </span>
               </h1>
               <p className={description()}>
-                Abbiamo ricevuto la sua richiesta: a breve le invieremo una mail
+                A breve le invieremo una mail
                 con tutte le informazioni necessarie. Nel frattempo, può
                 visitare il nostro blog e scoprire gli ultimi eventi e
                 approfondimenti dal mondo dell’interior design.
@@ -77,11 +77,11 @@ export default function Feedback() {
                 <span>Buongiorno {params.nome || null},</span>
                 <br />
                 <span className="text-5xl">
-                  grazie per aver confermato la tua partecipazione all’Open Day!
+                  per aver confermato la tua partecipazione all’Open Day!
                 </span>
               </h1>
               <p className={description()}>
-                Nelle prossime ore riceverai via mail il link per accedere
+                Nei prossimi giorni riceverai via email il link per accedere
                 all’incontro. Se vuoi iniziare a farti un’idea dei temi che
                 affronteremo, visita la pagina del corso.
               </p>
