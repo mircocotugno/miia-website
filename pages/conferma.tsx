@@ -2,7 +2,8 @@ import { Logo } from '@public/logo'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { tv } from 'tailwind-variants'
-import { Link, Button } from '@heroui/react'
+import { Link as HeroLink, Button } from '@heroui/react'
+import Link from 'next/link'
 
 export default function Feedback() {
   const router = useRouter()
@@ -26,15 +27,9 @@ export default function Feedback() {
   return (
     <main>
       <section className="relative flex flex-col justify-center p-6 sm:py-8 md:py-10 lg:py-12 max-w-[1280px] min-h-inherit mx-auto h-screen">
-        <div className="absolute top-8 left-8">
-          <Logo
-            classes="md:max-lg:hidden"
-            // primary={theme == 'dark' ? '#F3F3F2' : '#262C2A'}
-            // secondary={theme == 'dark' ? '#686D6C' : '#262C2A'}
-            primary="#262C2A"
-            secondary="#262C2A"
-          />
-        </div>
+        <Link href="/" className="absolute top-8 left-8">
+          <Logo classes="" primary="#262C2A" secondary="#262C2A" />
+        </Link>
         <div className={wrapper()}>
           {params.studente && (
             <Fragment>
@@ -51,7 +46,7 @@ export default function Feedback() {
                 visitare il nostro blog e scoprire gli ultimi eventi e
                 approfondimenti dal mondo dell’interior design.
               </p>
-              <Button href="/blog" color="primary" as={Link}>
+              <Button href="/blog" color="primary" as={HeroLink}>
                 Visita il blog
               </Button>
             </Fragment>
@@ -71,7 +66,7 @@ export default function Feedback() {
                 visitare il nostro blog e scoprire gli ultimi eventi e
                 approfondimenti dal mondo dell’interior design.
               </p>
-              <Button href="/blog" color="primary" as={Link}>
+              <Button href="/blog" color="primary" as={HeroLink}>
                 Visita il blog
               </Button>
             </Fragment>
@@ -91,7 +86,7 @@ export default function Feedback() {
                 affronteremo, visita la pagina del corso.
               </p>
               {collegamentoCorso && (
-                <Button href={collegamentoCorso} color="primary" as={Link}>
+                <Button href={collegamentoCorso} color="primary" as={HeroLink}>
                   Visita la pagina
                 </Button>
               )}
@@ -105,8 +100,8 @@ export default function Feedback() {
 
 const classes = tv({
   slots: {
-    title: 'font-serif font-black text-6xl mb-6',
-    subtitle: 'font-sans font-medium text-3xl mb-3',
+    title: 'font-serif font-black text-4xl md:text-6xl leading-none mb-6',
+    subtitle: 'font-sans font-medium text-2xl md:text-3xl leading-none mb-3',
     description: 'font-sans text-lg mb-12',
     wrapper: 'md:max-w-2/3',
   },
