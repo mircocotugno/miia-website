@@ -44,6 +44,7 @@ export default function Section({
           <StoryblokComponent
             key={index}
             blok={content}
+            theme={blok.dark ? 'dark' : 'light'}
             parent={blok.component}
           />
         ))}

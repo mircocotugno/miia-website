@@ -95,6 +95,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
                   blok={content}
                   parent={content.component}
                   key={index}
+                  theme={blok.theme || 'light'}
                 />
               ))}
           </div>
