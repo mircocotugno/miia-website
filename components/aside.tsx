@@ -113,7 +113,10 @@ export default function Aside({ blok, locations }: AsideComponent) {
               />
               {!!courses && (
                 <div className={!isIntersecting ? 'hidden' : ''}>
-                  <Accordion selectionMode="multiple">
+                  <Accordion
+                    selectionMode="multiple"
+                    defaultExpandedKeys={courses.length === 1 ? ['0'] : []}
+                  >
                     {courses.map((course, index) => (
                       <AccordionItem
                         key={index}
