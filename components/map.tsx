@@ -1,5 +1,5 @@
 import type { LocationProps, MapProps } from '@props/types'
-import { Map as MapGl, Marker } from 'react-map-gl'
+import { Map as MapGl, Marker, NavigationControl } from 'react-map-gl'
 
 interface MapComponent {
   blok: MapProps
@@ -24,7 +24,7 @@ export default function Map({ blok, contain }: MapComponent) {
   const intialView = {
     longitude: longitude,
     latitude: latitude,
-    zoom: 7.5,
+    zoom: locations.length === 1 ? 14 : 7,
     bearing: 0,
     pitch: 0,
   }
@@ -37,17 +37,21 @@ export default function Map({ blok, contain }: MapComponent) {
       <MapGl
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         style={{ width: 'inherit', height: 'inherit', minHeight: 'inherit' }}
-        mapStyle='mapbox://styles/mapbox/dark-v9'
+        mapStyle="mapbox://styles/mapbox/dark-v9"
         initialViewState={intialView}
+        maxZoom={17.5}
+        minZoom={5.75}
+        scrollZoom={false}
       >
         {locations.map((location, index) => (
           <Marker
             latitude={location.pos[0]}
             longitude={location.pos[1]}
-            anchor='bottom'
+            anchor="bottom"
             key={index}
           />
         ))}
+        <NavigationControl />
       </MapGl>
     </Tag>
   )
