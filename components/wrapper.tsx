@@ -4,9 +4,10 @@ import { tv } from 'tailwind-variants'
 
 interface WrapperComponent {
   blok: WrapperProps
+  theme?: 'dark' | 'light'
 }
 
-export default function Wrapper({ blok }: WrapperComponent) {
+export default function Wrapper({ blok, theme }: WrapperComponent) {
   const order: any = !!blok.order ? blok.order.toString() : 'none'
 
   const background = blok.contents.find(
@@ -35,6 +36,7 @@ export default function Wrapper({ blok }: WrapperComponent) {
           key={index}
           blok={content}
           parent={blok.component}
+          theme={theme}
         />
       ))}
       {!!background && (

@@ -4,9 +4,10 @@ import { Map as MapGl, Marker, NavigationControl } from 'react-map-gl'
 interface MapComponent {
   blok: MapProps
   contain?: boolean
+  theme?: 'dark' | 'light'
 }
 
-export default function Map({ blok, contain }: MapComponent) {
+export default function Map({ blok, contain, theme }: MapComponent) {
   const locations: Array<LocationProps & { pos: Array<number> }> = []
   blok.locations.forEach(({ content }) => {
     const pos = content?.gps && content.gps.split('/').map((s) => Number(s))
@@ -37,7 +38,7 @@ export default function Map({ blok, contain }: MapComponent) {
       <MapGl
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         style={{ width: 'inherit', height: 'inherit', minHeight: 'inherit' }}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
+        mapStyle={theme === "dark" ? "mapbox://styles/mapbox/dark-v9": "mapbox://styles/mapbox/light-v11"}
         initialViewState={intialView}
         maxZoom={17.5}
         minZoom={5.75}
