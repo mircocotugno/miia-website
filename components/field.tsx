@@ -62,6 +62,7 @@ const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
     color={!!data.error ? 'danger' : undefined}
     onValueChange={(value) => onChange({ ...data, value })}
     className={blok.id === 'validation' ? 'hidden' : ''}
+    isSelected={data.value}
   >
     <p
       className={`text-sm ${!!data.error ? 'text-danger' : ''} ${
