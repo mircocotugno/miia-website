@@ -278,14 +278,21 @@ export default function Form({
 function getData(fields: Array<FieldProps>, initial: FormData = {}) {
   const newData: FormData = { ...initial }
   fields.forEach((field) => {
+    let value
+    switch (field.input) {
+      case 'hidden':
+        value = field.placeholder
+        break
+      case 'checkbox':
+        value = !!field.placeholder
+        break
+      default:
+        value = ['select', 'multiple', 'enroll'].includes(field.input) ? [] : ''
+        break
+    }
     newData[field.id] = {
       id: field.id,
-      value:
-        field.input === 'hidden'
-          ? field.placeholder
-          : ['select', 'multiple', 'enroll'].includes(field.input)
-            ? []
-            : '',
+      value: value,
       required: field.required,
       error: null,
     }
