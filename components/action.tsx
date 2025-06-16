@@ -9,11 +9,10 @@ import { useRouter } from 'next/router'
 interface ActionComponent {
   blok: ActionProps
   parent?: string
-  theme?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
 }
 
-export default function Action({ blok, parent, theme, size }: ActionComponent) {
+export default function Action({ blok, parent, size }: ActionComponent) {
   const router = useRouter()
   let link = blok.link.url || `/${blok.link.cached_url}`
   if (blok.link?.anchor) {
@@ -46,7 +45,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
           as={Link}
           size={size}
           isExternal={blok.external}
-          color={blok.color || theme || 'default'}
+          color={blok.color || 'default'}
           className="col-auto text-medium font-medium min-w-fit cursor-pointer gap-2"
           {...storyblokEditable(blok)}
         >
@@ -61,7 +60,7 @@ export default function Action({ blok, parent, theme, size }: ActionComponent) {
         className="col-auto font-medium min-w-fit cursor-pointer gap-2"
         href={link}
         isExternal={blok.external}
-        color={blok.color || theme || 'foreground'}
+        color={blok.color || 'foreground'}
         size={size || 'md'}
       >
         {Label}
