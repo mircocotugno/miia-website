@@ -10,16 +10,26 @@ interface BackgroundComponent {
   blok: BackgroundProps
 }
 
-export default function Background({ blok }: BackgroundComponent) {
-  if (!blok.image?.filename && !blok.video) return null
-  const Backgrounds = backgrounds[blok.image?.filename ? 'image' : 'video']
-  return <Backgrounds blok={blok} />
+const storyblokLoader = ({ src, width, quality }: any) => {
+  return `${src}/m/${width}x0/filters:quality(${quality || 60})`
 }
 
-const BackgroundImage = ({ blok }: BackgroundComponent) => {
+export default function Background({ blok }: BackgroundComponent) {
+  if (!blok.image?.filename && !blok.video) return null
+
+  return blok.video ? (
+    <BackgroundWithVideo blok={blok} />
+  ) : (
+    <BackgroundImage blok={blok} />
+  )
+}
+
+const BackgroundWithVideo = ({ blok }: BackgroundComponent) => {
   const [width] = useDeviceSize()
   const image = getImageSizes(blok.image)
-  const cropped = `/m/${Math.round((image.size.height / 4) * 3)}x${image.size.height}`
+
+  const isMobile = width <= 768
+
   return (
     <Fragment>
       {blok.author && (
@@ -27,42 +37,72 @@ const BackgroundImage = ({ blok }: BackgroundComponent) => {
           @{blok.author.content.title}
         </p>
       )}
-      <div className="absolute -z-20 inset-0">
+
+      <div className="absolute inset-0 -z-20">
+        {isMobile ? (
+          <Image
+            loader={storyblokLoader}
+            src={image.filename}
+            alt={image.alt || 'immagine di sfondo'}
+            fill
+            sizes="100vw"
+            quality={60}
+            loading="lazy"
+            placeholder="empty"
+            className={backgroundClasses({
+              position: blok.position?.[0],
+              smPosition: blok.position?.[1],
+            })}
+          />
+        ) : (
+          <iframe
+            {...storyblokEditable(blok)}
+            className="absolute w-[177.77777778vh] h-full min-w-full min-h-[56.25vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            src={`https://www.youtube-nocookie.com/embed/${blok.video}?rel=0&modestbranding=1&autohide=1&controls=0&mute=1&autoplay=1&loop=1&playlist=${blok.video}`}
+            allow="autoplay"
+            referrerPolicy="strict-origin-when-cross-origin"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+    </Fragment>
+  )
+}
+
+const BackgroundImage = ({ blok }: BackgroundComponent) => {
+  const [width] = useDeviceSize()
+  const image = getImageSizes(blok.image)
+
+  return (
+    <Fragment>
+      {blok.author && (
+        <p className="absolute z-30 bottom-4 right-4 text-xs py-1 px-2 bg-background bg-opacity-75 rounded-full">
+          @{blok.author.content.title}
+        </p>
+      )}
+      <div className="absolute inset-0 -z-20">
         <Image
+          loader={storyblokLoader}
+          src={image.filename}
+          alt={image.alt || 'immagine di sfondo'}
+          fill
+          sizes="(max-width: 768px) 100vw, 80vw"
+          quality={60}
+          loading="lazy"
+          placeholder="empty"
           className={backgroundClasses({
             position: blok.position?.[0],
             smPosition: blok.position?.[1],
           })}
-          src={width > 768 ? image.filename : image.filename + cropped}
-          alt={image.alt}
-          sizes="(max-width:480px):320px,(max-width:512px):480px,(max-width:768px):512px,(max-width:1024px):768px,(max-width:1240px):1024px,1440px"
-          quality={60}
-          priority
-          fill
+          priority={width > 768}
         />
       </div>
     </Fragment>
   )
 }
 
-const BackgroundVideo = ({ blok }: BackgroundComponent) => (
-  <iframe
-    {...storyblokEditable(blok)}
-    className="absolute w-[177.77777778vh] h-full min-w-full min-h-[56.25vw] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-20"
-    src={`https://www.youtube-nocookie.com/embed/${blok.video}?rel=0&modestbranding=1&autohide=1&showinfo=0&mute=1&showinfo=0&controls=0&autoplay=1&loop=1&playlist=${blok.video}`}
-    allow="autoplay"
-    referrerPolicy="strict-origin-when-cross-origin"
-    aria-hidden="true"
-  />
-)
-
-const backgrounds = {
-  image: BackgroundImage,
-  video: BackgroundVideo,
-}
-
 const backgroundClasses = tv({
-  base: 'object-cover object-center ',
+  base: 'object-cover object-center',
   variants: {
     position: {
       right: 'object-right',

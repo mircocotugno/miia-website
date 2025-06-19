@@ -24,23 +24,18 @@ export interface ImageSize {
 }
 
 export function getImageSizes(image: any) {
-  const size: ImageSize = {
-    width: 1024,
-    height: 768,
-    ratio: 1.333,
-    axis: 'width',
-  }
-  let sizes = image.filename
-    .match(/\/(\d+)x(\d+)\//)
-    ?.filter((s: string, i: number) => !!i)
-    ?.map((s: string) => Number(s))
+  const match = image.filename.match(/\/(\d+)x(\d+)\//)
 
-  if (!!sizes) {
-    size.width = sizes[0]
-    size.height = sizes[1]
-    size.ratio = sizes[0] / sizes[1]
-    size.axis = size.ratio >= 1 ? 'width' : 'height'
-  }
+  const [width, height] = match?.slice(1).map(Number) || [1024, 768]
+  const ratio = width / height
 
-  return { ...image, size }
+  return {
+    ...image,
+    size: {
+      width,
+      height,
+      ratio,
+      axis: ratio >= 1 ? 'width' : 'height',
+    },
+  }
 }
