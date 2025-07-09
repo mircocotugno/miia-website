@@ -41,10 +41,10 @@ export default function Feedback() {
                 </span>
               </h1>
               <p className={description()}>
-                A breve ti invieremo una mail
-                con tutte le informazioni necessarie. Nel frattempo, puoi
-                visitare il nostro blog e scoprire gli ultimi eventi e
-                approfondimenti dal mondo dell’interior design.
+                A breve ti invieremo una mail con tutte le informazioni
+                necessarie. Nel frattempo, puoi visitare il nostro blog e
+                scoprire gli ultimi eventi e approfondimenti dal mondo
+                dell’interior design.
               </p>
               <Button href="/blog" color="primary" as={HeroLink}>
                 Visita il blog
@@ -61,14 +61,44 @@ export default function Feedback() {
                 </span>
               </h1>
               <p className={description()}>
-                A breve le invieremo una mail
-                con tutte le informazioni necessarie. Nel frattempo, può
-                visitare il nostro blog e scoprire gli ultimi eventi e
-                approfondimenti dal mondo dell’interior design.
+                A breve le invieremo una mail con tutte le informazioni
+                necessarie. Nel frattempo, può visitare il nostro blog e
+                scoprire gli ultimi eventi e approfondimenti dal mondo
+                dell’interior design.
               </p>
               <Button href="/blog" color="primary" as={HeroLink}>
                 Visita il blog
               </Button>
+            </Fragment>
+          )}
+          {params.docente && (
+            <Fragment>
+              <h1 className={title()}>
+                <span>Buongiorno {params.nome || null},</span>
+                <br />
+                <span className="text-5xl">
+                  la ringraziamo per aver confermato la sua identità.
+                </span>
+              </h1>
+              <p className={description()}>
+                Abbiamo preso in carico la sua candidatura, la ricontatteremo
+                non appena possibile!
+              </p>
+            </Fragment>
+          )}
+          {params.azienda && (
+            <Fragment>
+              <h1 className={title()}>
+                <span>Buongiorno {params.nome || null},</span>
+                <br />
+                <span className="text-5xl">
+                  la ringraziamo per aver confermato la sua identità.
+                </span>
+              </h1>
+              <p className={description()}>
+                Abbiamo preso in carico la sua richiesta, la ricontatteremo non
+                appena possibile!
+              </p>
             </Fragment>
           )}
           {params.openday && (
