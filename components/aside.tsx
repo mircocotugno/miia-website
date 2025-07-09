@@ -145,7 +145,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
                             value={course.ends}
                           />
                           <ListItem
-                            label="posti:"
+                            label="posti rimasti:"
                             icon="group"
                             value={course.seats}
                           />
