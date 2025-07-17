@@ -87,10 +87,10 @@ export default function Gallery({ blok }: GalleryComponent) {
               src={slide.filename}
               alt={slide.alt}
               width={
-                slide.size.ratio > 1 ? sizes[5] : sizes[2] * slide.size.ratio
+                slide.size.ratio > 1 ? sizes[4] : sizes[2] * slide.size.ratio
               }
               height={
-                slide.size.ratio <= 1 ? sizes[2] : sizes[5] / slide.size.ratio
+                slide.size.ratio <= 1 ? sizes[2] : sizes[4] / slide.size.ratio
               }
               sizes={getSizes(slide.size.axis)}
               className={imageClasses({ class: 'h-auto' })}
