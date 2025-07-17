@@ -2,10 +2,6 @@ import '@styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import type { AppProps } from 'next/app'
 import { GoogleTagManager } from '@next/third-parties/google'
-import {
-  IubendaProvider,
-  IubendaCookieSolutionBannerConfigInterface,
-} from '@mep-agency/next-iubenda'
 
 import { storyblokInit, apiPlugin } from '@storyblok/react'
 import { HeroUIProvider } from '@heroui/react'
@@ -72,24 +68,15 @@ storyblokInit({
   components,
 })
 
-// See https://www.iubenda.com/en/help/1205-how-to-configure-your-cookie-solution-advanced-guide
-const iubendaBannerConfig: IubendaCookieSolutionBannerConfigInterface = {
-  siteId: Number(process.env.NEXT_PUBLIC_SITE_ID),
-  cookiePolicyId: Number(process.env.NEXT_PUBLIC_POLICY_ID),
-  lang: 'it',
-}
-
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      {/* <IubendaProvider bannerConfig={iubendaBannerConfig}> */}
-        <HeroUIProvider>
-          <NextThemesProvider attribute='class' defaultTheme='light'>
-            <Component {...pageProps} />
-          </NextThemesProvider>
-        </HeroUIProvider>
-        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
-      {/* </IubendaProvider> */}
+      <HeroUIProvider>
+        <NextThemesProvider attribute="class" defaultTheme="light">
+          <Component {...pageProps} />
+        </NextThemesProvider>
+      </HeroUIProvider>
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM || ''} />
     </>
   )
 }
