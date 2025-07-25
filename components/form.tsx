@@ -162,6 +162,7 @@ export default function Form({
 
       if (response.ok) {
         setError('')
+        debugger
 
         if (form.list === 'studenti') {
           sendGTMEvent({
