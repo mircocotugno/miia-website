@@ -162,14 +162,13 @@ export default function Form({
 
       if (response.ok) {
         setError('')
-        debugger
 
         if (form.list === 'studenti') {
           sendGTMEvent({
-            event: _data?.interesse_corso
+            event: !!_data?.interesse_corso
               ? 'submit_contact_form'
               : 'submit_enroll_form',
-            coruse: _data.interesse_corso || _data.iscrizione_corso,
+            course: _data?.interesse_corso.value || _data?.iscrizione_corso.value,
           })
         }
 
