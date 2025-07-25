@@ -18,6 +18,7 @@ import {
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
+import { sendGTMEvent } from '@next/third-parties/google'
 // import { attributes, CategoryAttribute } from '../crm/attributes'
 import { useState, useEffect } from 'react'
 import { compiler } from 'markdown-to-jsx'
@@ -161,6 +162,16 @@ export default function Form({
 
       if (response.ok) {
         setError('')
+
+        if (form.list === 'studenti') {
+          sendGTMEvent({
+            event: !!_data?.interesse_corso
+              ? 'submit_contact_form'
+              : 'submit_enroll_form',
+            course: _data?.interesse_corso.value || _data?.iscrizione_corso.value,
+          })
+        }
+
         setMessage(parseText(form.message))
         setLoading(false)
       } else {
