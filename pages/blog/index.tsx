@@ -199,6 +199,7 @@ export async function getStaticProps() {
         sort_by: "position:asc",
         resolve_relations: $relations,
         per_page: $pagination
+        filter_query: {hidden: {not_in: true}}
       ) {
         items {
           full_slug
