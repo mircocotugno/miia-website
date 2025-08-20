@@ -48,7 +48,7 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
         page: current + 1,
       }
       const query = `
-        query ($relations: String, $pagination: Int, $page: Int, $hidden: String) {
+        query ($relations: String, $pagination: Int, $page: Int) {
           ArticleItems(
         sort_by: "position:asc",
         resolve_relations: $relations,
