@@ -50,27 +50,28 @@ export default function Blog({ story, articles, hasMore, tags }: BlogStory) {
       const query = `
         query ($relations: String, $pagination: Int, $page: Int) {
           ArticleItems(
-            sort_by: "position:asc",
-            resolve_relations: $relations,
-            page: $page
-            per_page: $pagination
+        sort_by: "position:asc",
+        resolve_relations: $relations,
+        page: $page,
+        per_page: $pagination,
+        filter_query: {hidden: {not_in: true}}
           ) {
-            items {
-              full_slug
-              tag_list
-              first_published_at
-              content {
-                author {
-                  content
-                }
-                title
-                image {
-                  alt
-                  filename
-                }
-                description
-              }
+        items {
+          full_slug
+          tag_list
+          first_published_at
+          content {
+            author {
+          content
             }
+            title
+            image {
+          alt
+          filename
+            }
+            description
+          }
+        }
           }
         }
       `
@@ -198,6 +199,7 @@ export async function getStaticProps() {
         sort_by: "position:asc",
         resolve_relations: $relations,
         per_page: $pagination
+        filter_query: {hidden: {not_in: true}}
       ) {
         items {
           full_slug
