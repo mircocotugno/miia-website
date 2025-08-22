@@ -26,7 +26,11 @@ export default function Alias({ blok, parent }: AliasComponent) {
       const variables = { isArticle, isEvent }
       const query = `
         query ($isArticle: Boolean!, $isEvent: Boolean!){      
-          ArticleItems( per_page: 1, sort_by:"published_at:desc", resolve_relations: "article.author")
+          ArticleItems( 
+            sort_by:"published_at:desc", 
+            resolve_relations: "article.author",
+            per_page: 1, 
+            filter_query: {hidden: {not_in: true}})
           @include(if: $isArticle) {
             items {
               name
