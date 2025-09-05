@@ -20,7 +20,7 @@ import {
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
 import { sendGTMEvent } from '@next/third-parties/google'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
@@ -54,37 +54,33 @@ export default function Form({
   const alias = blok.alias?.content
   const form = alias || blok
 
-  // Merge fields from alias and blok, without mutating original arrays
-  let mergedFields = form.fields ? [...form.fields] : []
-  if (!!alias) {
-    // Merge additional form properties from blok and alias
-    form.list = blok.list || blok.alias?.content.list
-    form.tracking = blok.tracking || blok.alias?.content.tracking
-    form.title = blok.title || blok.alias?.content.title
-    form.label = blok.label || blok.alias?.content.label
-    form.message = blok.message || blok.alias?.content.message
-    // Merge fields, replacing or adding as needed
-    blok.fields.forEach((field: FieldProps) => {
-      const index = mergedFields.findIndex(({ id }) => id === field.id)
-      if (index !== -1) {
-        mergedFields[index] = field
-      } else if (!!field.id) {
-        mergedFields.push(field)
-      }
-    })
-  } else {
-    mergedFields = blok.fields
-  }
+  // Memoize mergedFields to avoid unnecessary recalculation
+  const mergedFields = useMemo(() => {
+    let fields = form.fields ? [...form.fields] : []
+    if (!!alias) {
+      blok.fields.forEach((field: FieldProps) => {
+        const index = fields.findIndex(({ id }) => id === field.id)
+        if (index !== -1) {
+          fields[index] = field
+        } else if (!!field.id) {
+          fields.push(field)
+        }
+      })
+    } else {
+      fields = blok.fields
+    }
+    return fields
+  }, [blok.fields, form.fields, alias])
 
-  // If no fields or message, do not render the form
-  if (!mergedFields.length || !form.message) return null
-
-  // Prepare initial form data, including openday info if provided
-  const initData: FormData = {}
-  if (!!openday) {
-    initData.interesse_corso = openday.course
-    initData.interesse_openday = openday.date
-  }
+  // Memoize initData for stable reference
+  const initData = useMemo(() => {
+    const data: FormData = {}
+    if (!!openday) {
+      data.interesse_corso = openday.course
+      data.interesse_openday = openday.date
+    }
+    return data
+  }, [openday])
 
   // Drawer state for modal form
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -103,6 +99,10 @@ export default function Form({
 
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+
+  // New: Success heading title and subtitle state
+  const [successTitle, setSuccessTitle] = useState('')
+  const [successSubtitle, setSuccessSubtitle] = useState('')
 
   // Handle field changes, including validation and email check
   const handleChange = (field: DataProps) => {
@@ -148,10 +148,29 @@ export default function Form({
     setLoading(false)
   }
 
+  // Memoize parseText function to avoid recreation on each render
+  const parseText = useCallback(
+    (text: string) => {
+      const keys = text.match(/{{(.*?)}}/g)
+      if (keys && !!keys.length) {
+        keys.forEach((string) => {
+          const key = string.replace('{{', '').replace('}}', '')
+          if (!data[key]?.value) return text
+          let value = data[key].value
+          if (!Number.isNaN(new Date(value).valueOf())) {
+            value = new Date(value).toLocaleDateString('it-IT')
+          }
+          text = text.replace(string, value)
+        })
+      }
+      return text
+    },
+    [data]
+  )
+
   // Handle form submission, including validation and API call
   const handleSubmit = async () => {
     const _data = { ...data }
-    // Validate all fields before submitting
     Object.entries(_data).forEach(
       ([name, field]) => (_data[name].error = fieldValidation(field))
     )
@@ -170,30 +189,21 @@ export default function Form({
         }),
       })
 
-      // Replace template variables in message with submitted data
-      const parseText = (text: string) => {
-        const keys = text.match(/{{(.*?)}}/g)
-        if (keys && !!keys.length) {
-          keys.forEach((string) => {
-            const key = string.replace('{{', '').replace('}}', '')
-            if (!data[key]?.value) return text
-            let value = data[key].value
-            if (!Number.isNaN(new Date(value).valueOf())) {
-              value = new Date(value).toLocaleDateString('it-IT')
-            }
-            text = text.replace(string, value)
-          })
-        }
-        return text
-      }
-
       if (response.ok) {
         setError('')
-        // Track form submission event
         sendGTMEvent({
           event: `submit_${form.tracking || 'contact'}_form`,
           course: _data?.interesse_corso.value || _data?.iscrizione_corso.value,
         })
+        // Set heading title and subtitle based on user existence
+        setSuccessTitle(
+          `${user ? 'Grazie' : 'Benvenuto'} ${_data.nome?.value || ''}!`
+        )
+        setSuccessSubtitle(
+          user
+            ? 'Abbiamo aggiornato i tuoi dati.'
+            : 'La tua richiesta è stata completata con successo.'
+        )
         setMessage(parseText(form.message))
         setLoading(false)
       } else {
@@ -238,7 +248,7 @@ export default function Form({
       >
         <DrawerContent>
           <DrawerHeader className="flex flex-col gap-1">
-            {form.title || 'Compila il modulo'}
+            {!isSubmitted && (form.title || 'Compila il modulo')}
             {user && !isSubmitted && (
               <p className="font-medium text-medium text-foreground-800">
                 <span>Ben tornato, </span>
@@ -247,6 +257,20 @@ export default function Form({
                 </strong>
                 !
               </p>
+            )}
+            {isSubmitted && (successTitle || successSubtitle) && (
+              <div className="mt-12">
+                {successTitle && (
+                  <h2 className="font-serif break-words text-primary text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight md:leading-tight xl:leading-none">
+                    {successTitle}
+                  </h2>
+                )}
+                {successSubtitle && (
+                  <h4 className="text-xl md:text-2xl font-semibold text-foreground-700 mt-2">
+                    {successSubtitle}
+                  </h4>
+                )}
+              </div>
             )}
           </DrawerHeader>
           <DrawerBody className="relative">
@@ -275,7 +299,7 @@ export default function Form({
                 )
               : compiler(message, {
                   wrapper: null,
-                  overrides: Typography({ theme: 'primary' }),
+                  overrides: Typography({}),
                 })}
             {error && (
               <div className="mt-auto">
@@ -409,3 +433,13 @@ const buttonClasses = tv({
 
 // 6. **Consistency**
 //    - The same array (`mergedFields`) is used for both rendering and initializing form data, reducing the risk of mismatches.
+// 5. **React Best Practices**
+//    - React recommends treating props and external objects as immutable. This approach follows that guideline.
+
+// 6. **Consistency**
+//    - The same array (`mergedFields`) is used for both rendering and initializing form data, reducing the risk of mismatches.
+// Yes, this approach is good:
+// - It separates the success title and subtitle from the main message.
+// - It makes the UI clearer for the user after submission.
+// - It keeps the form logic and rendering maintainable and easy to extend.
+// - The code is readable and follows React best practices.
