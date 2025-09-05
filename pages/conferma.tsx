@@ -1,4 +1,5 @@
 import { Logo } from '@public/logo'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { tv } from 'tailwind-variants'
@@ -33,11 +34,14 @@ export default function Feedback() {
         <div className={wrapper()}>
           {params.studente && (
             <Fragment>
+              <Head>
+                <title>Conferma contatto</title>
+              </Head>
               <h1 className={title()}>
                 <span>Grazie {params.nome || null},</span>
                 <br />
                 <span className="text-5xl">
-                  per aver confermato la tua identità!
+                  per aver confermato il contatto!
                 </span>
               </h1>
               <p className={description()}>
@@ -53,11 +57,14 @@ export default function Feedback() {
           )}
           {params.cliente && (
             <Fragment>
+              <Head>
+                <title>Conferma contatto</title>
+              </Head>
               <h1 className={title()}>
                 <span>Buongiorno {params.nome || null},</span>
                 <br />
                 <span className="text-5xl">
-                  la ringraziamo per aver confermato la sua identità.
+                  la ringraziamo per aver confermato il contatto.
                 </span>
               </h1>
               <p className={description()}>
@@ -77,7 +84,7 @@ export default function Feedback() {
                 <span>Buongiorno {params.nome || null},</span>
                 <br />
                 <span className="text-5xl">
-                  la ringraziamo per aver confermato la sua identità.
+                  la ringraziamo per aver confermato il contatto.
                 </span>
               </h1>
               <p className={description()}>
@@ -88,11 +95,14 @@ export default function Feedback() {
           )}
           {params.azienda && (
             <Fragment>
+              <Head>
+                <title>Conferma contatto</title>
+              </Head>
               <h1 className={title()}>
                 <span>Buongiorno {params.nome || null},</span>
                 <br />
                 <span className="text-5xl">
-                  la ringraziamo per aver confermato la sua identità.
+                  la ringraziamo per aver confermato il contatto.
                 </span>
               </h1>
               <p className={description()}>
@@ -103,6 +113,9 @@ export default function Feedback() {
           )}
           {params.openday && (
             <Fragment>
+              <Head>
+                <title>Conferma partecipazione</title>
+              </Head>
               <h1 className={title()}>
                 <span>Buongiorno {params.nome || null},</span>
                 <br />
