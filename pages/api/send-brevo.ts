@@ -1,8 +1,9 @@
+import type { FormList } from '@props/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type BrevoContact = {
   id?: number
-  list?: string | null
+  list?: FormList
   email?: string | null
   attributes?: {
     [key: string]: any
@@ -90,8 +91,8 @@ export default async function sendBrevo(
     }
 
     if (scope === 'find') {
-      const { email, attributes } = data
-      return res.status(200).json({ email, attributes })
+      const { id, email, attributes } = data
+      return res.status(200).json({ id, email, attributes })
     }
 
     return res.status(200).json(data)

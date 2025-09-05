@@ -93,18 +93,10 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
 )
 
 const SelectField = ({ blok, data, onChange }: FieldComponent) => {
-  type value = Array<string>
-  type key = string | undefined
   const options = getOptions(blok.options)
-  const getValue = (value: value, key: key) => {
-    if (!key) return value
-    const index = value.indexOf(key)
-    if (blok.input === 'multiple') {
-      index === -1 ? value.push(key) : value.splice(index, 1)
-    } else {
-      value = [key]
-    }
-    return value
+
+  const handleChange = (value: any) => {
+    onChange({ ...data, value: Array.from(value) })
   }
 
   const CustomItem = ({ name }: any) => {
@@ -133,6 +125,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
       isRequired={blok.required}
       errorMessage={data.error}
       isInvalid={!!data.error}
+      selectedKeys={Array.isArray(data.value) ? data.value : [data.value]}
       items={options}
       classNames={{
         trigger: blok.input === 'enroll' ? 'h-20' : null,
@@ -143,12 +136,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
             : null,
       }}
       selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
-      onSelectionChange={({ currentKey }) => {
-        onChange({
-          ...data,
-          value: getValue(data.value, currentKey),
-        })
-      }}
+      onSelectionChange={handleChange}
       renderValue={(items) =>
         items.map((item) => (
           <CustomItem key={item.key} name={item.data?.name} />

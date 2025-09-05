@@ -794,7 +794,7 @@ const form: ComponentSchema = {
   is_root: true,
   is_nestable: true,
   component_group_uuid: 'containers',
-  preview_tmpl: ``,
+  preview_tmpl: `{{it.list}}`,
   schema: {
     alias: {
       type: 'option',
@@ -802,20 +802,41 @@ const form: ComponentSchema = {
       source: 'internal_stories',
       filter_content_type: ['form'],
     },
+    list: {
+      type: 'options',
+      display_name: 'Liste',
+      options: [
+        { value: 31, name: 'Moda' },
+        { value: 32, name: 'interni' },
+        { value: 25, name: 'Studenti' },
+        { value: 26, name: '1 livello' },
+        { value: 35, name: '2 livello' },
+        { value: 16, name: 'Openday' },
+        { value: 15, name: 'Informazioni' },
+        { value: 17, name: 'Iscrizione' },
+        { value: 28, name: 'Clienti' },
+        { value: 19, name: 'Progetti' },
+        { value: 30, name: 'Aziende' },
+        { value: 33, name: 'Assunzioni' },
+        { value: 24, name: 'Collaborazioni' },
+        { value: 29, name: 'Docenti' },
+        { value: 29, name: 'Colloquio' },
+      ],
+      description: 'Selezionare le liste in cui includere i nuovi contatti',
+      inline_label: true,
+    },
+    tracking: {
+      type: 'options',
+      display_name: 'Tracciamento',
+      options: [
+        { value: 'enroll', name: 'Iscrizione' },
+        { value: 'open_day', name: 'Openday' },
+      ],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['list', 'title', 'label', 'fields', 'message'],
-    },
-    list: {
-      type: 'option',
-      display_name: 'Lista',
-      options: [
-        { value: 'studenti', name: 'Studenti' },
-        { value: 'clienti', name: 'Clienti' },
-        { value: 'aziende', name: 'Aziende' },
-        { value: 'docenti', name: 'Docenti' },
-      ],
+      keys: ['title', 'label', 'fields', 'message'],
     },
     title: {
       type: 'text',

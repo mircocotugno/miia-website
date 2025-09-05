@@ -46,7 +46,7 @@ export type ImageArray = ImageData & {
 
 export type OptionProps = {
   name: string | (Omit<CourseProps, 'location'> & { location: string })
-  value: string
+  value: string | number
 }
 
 // Props
@@ -74,7 +74,7 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-export type FormList = 'studenti' | 'aziende' | 'clienti' | 'docenti'
+export type FormList = Array<number> //'studenti' | 'aziende' | 'clienti' | 'docenti'
 
 export type FormArea = 'interni' | 'moda'
 
@@ -391,6 +391,7 @@ export type FormProps = BlokProps & {
   label: string
   fields: Array<FieldProps>
   message: string
+  tracking: 'enroll' | 'lead' | 'open_day' | string
 }
 
 export type FormData = {

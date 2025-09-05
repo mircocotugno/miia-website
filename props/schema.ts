@@ -123,7 +123,7 @@ type FieldMarkdownSchema = TextToolbarSchema & {
 type OptionSchema = {
   _uid?: string
   name: string
-  value: string
+  value: string | number
 }
 
 type FieldRichTextSchema = TextToolbarSchema & {

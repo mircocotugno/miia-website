@@ -5,6 +5,7 @@ import type {
   DataProps,
   FormData,
   BrevoProps,
+  FormList,
 } from '@props/types'
 import {
   Drawer,
@@ -19,13 +20,11 @@ import {
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
 import { sendGTMEvent } from '@next/third-parties/google'
-// import { attributes, CategoryAttribute } from '../crm/attributes'
 import { useState, useEffect } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
 import { attributes } from '@crm/attributes'
-import { lists, type ListNames } from '@crm/lists'
 
 interface FormComponent {
   blok: FormProps
@@ -56,6 +55,7 @@ export default function Form({
 
   if (!!alias) {
     form.list = blok.list || blok.alias?.content.list
+    form.tracking = blok.tracking || blok.alias?.content.tracking
     form.title = blok.title || blok.alias?.content.title
     form.label = blok.label || blok.alias?.content.label
     form.message = blok.message || blok.alias?.content.message
@@ -80,7 +80,7 @@ export default function Form({
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [isLoading, setLoading] = useState(false)
-  const [userId, setUserId] = useState(null)
+  const [user, setUser] = useState<BrevoProps | null>(null)
   const [isSubmitted, setSubmitted] = useState(false)
 
   const [data, setData] = useState(
@@ -96,6 +96,7 @@ export default function Form({
 
   const handleChange = (field: DataProps) => {
     field.error = fieldValidation(field)
+    console.log(field)
     setData({ ...data, [field.id]: field })
     if (field.id === 'email' && !field.error) return handleCheck(field.value)
   }
@@ -107,18 +108,32 @@ export default function Form({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ scope: 'find', contact: { email } }),
     })
+
     if (response.ok) {
-      const contact = await response.json()
-      setUserId(contact.id)
+      const contact: BrevoProps = await response.json()
+      setUser(contact)
       const _data = { ...data }
-      _data.email.value = contact.email
-      _data.email.error = null
-      _data.nome.value = contact.attributes.NOME
-      _data.cognome.value = contact.attributes.COGNOME
-      _data.sms.value = contact.attributes.SMS.substring(2)
+
+      form.fields.forEach(({ id }) => {
+        const attribute = id.toUpperCase()
+        if (typeof contact.attributes[attribute] === undefined) return
+        if (attribute === 'EMAIL') {
+          _data.email.value = contact.email
+          _data.email.error = null
+          return
+        }
+        let value = contact.attributes[attribute]
+        if (attribute === 'SMS') {
+          value = value.toString().substring(2)
+        }
+        if (!contact.attributes[attribute]) return
+        _data[id].value = value
+      })
+
       setData(_data)
     } else {
-      setUserId(null)
+      setUser(null)
+      setData((): FormData => getData(form.fields, initData))
     }
     setLoading(false)
   }
@@ -133,12 +148,14 @@ export default function Form({
     )
     if (!hasError) {
       setLoading(true)
-      const contact = getContactData(_data, userId, form.list)
+      const contact = getContactData(_data, user, form.list)
+      console.log(contact)
+
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          scope: userId ? 'update' : 'create',
+          scope: user ? 'update' : 'create',
           contact: contact,
         }),
       })
@@ -163,14 +180,10 @@ export default function Form({
       if (response.ok) {
         setError('')
 
-        if (form.list === 'studenti') {
-          sendGTMEvent({
-            event: !!_data?.interesse_corso
-              ? 'submit_contact_form'
-              : 'submit_enroll_form',
-            course: _data?.interesse_corso.value || _data?.iscrizione_corso.value,
-          })
-        }
+        sendGTMEvent({
+          event: `submit_${form.tracking || 'contact'}_form`,
+          course: _data?.interesse_corso.value || _data?.iscrizione_corso.value,
+        })
 
         setMessage(parseText(form.message))
         setLoading(false)
@@ -190,7 +203,7 @@ export default function Form({
     setMessage('')
     setSubmitted(false)
     setLoading(false)
-    setUserId(null)
+    setUser(null)
 
     onOpenChange()
   }
@@ -216,7 +229,7 @@ export default function Form({
         <DrawerContent>
           <DrawerHeader className="flex flex-col gap-1">
             {form.title || 'Compila il modulo'}
-            {userId && !isSubmitted && (
+            {user && !isSubmitted && (
               <p className="font-medium text-medium text-foreground-800">
                 <span>Ben tornato, </span>
                 <strong className="text-primary">
@@ -311,7 +324,11 @@ function getData(fields: Array<FieldProps>, initial: FormData = {}) {
   return newData
 }
 
-function getContactData(data: FormData, id: null | number, list: ListNames) {
+function getContactData(
+  data: FormData,
+  user: null | BrevoProps,
+  list: FormList
+) {
   const contact: BrevoProps = {
     attributes: {},
   }
@@ -333,13 +350,11 @@ function getContactData(data: FormData, id: null | number, list: ListNames) {
     return (contact.attributes[key.toUpperCase()] = value)
   })
 
-  if (id) {
-    contact.id = id
+  if (user) {
+    contact.id = user.id
   }
 
-  if (list) {
-    contact.listIds = [lists[list] || 19]
-  }
+  contact.listIds = list.length ? list : [19]
 
   contact.updateEnabled = true
 
