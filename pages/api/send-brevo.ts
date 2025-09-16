@@ -1,17 +1,19 @@
+import { attributes } from '@crm/attributes'
 import type { FormList } from '@props/types'
+import { constants } from 'buffer'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type BrevoContact = {
   id?: number
   list?: FormList
   email?: string | null
-  attributes?: {
+  attributes: {
     [key: string]: any
   }
 }
 
 type BrevoRequestBody = {
-  scope: 'find' | 'create' | 'update'
+  scope: 'find' | 'create' | string
   contact: BrevoContact
 }
 
@@ -42,7 +44,7 @@ export default async function sendBrevo(
   }
 
   const { scope, contact }: BrevoRequestBody = req.body
-  let endpoint = 'https://api.brevo.com/v3/contacts'
+  let endpoint = 'https://api.brevo.com/v3'
   let options: RequestInit = {
     headers: {
       accept: 'application/json',
@@ -53,18 +55,49 @@ export default async function sendBrevo(
 
   switch (scope) {
     case 'find':
-      endpoint = endpoint + '/' + contact.email
+      endpoint = endpoint + '/contacts/' + contact.email
       options.method = 'GET'
       break
     case 'create':
+      endpoint = endpoint + '/contacts'
       options.method = 'POST'
       options.body = JSON.stringify(contact)
       break
-    case 'update':
-      endpoint = endpoint + '/' + contact.id
-      options.method = 'PUT'
-      options.body = JSON.stringify(contact)
-      break
+    default:
+      // endpoint = endpoint + '/' + contact.id
+      // options.method = 'PUT'
+      endpoint = endpoint + '/events'
+      options.method = 'POST'
+      const properties: { [key: string]: any } = {}
+      const attributes: Array<string> = [
+        'AREA',
+        'PROGRAMMA',
+        'OPENDAY',
+        'CORSO',
+      ]
+      attributes.forEach((name) => {
+        let value
+        const attribute = contact.attributes[name]
+        if (typeof attribute !== 'undefined') {
+          if (Array.isArray(attribute)) {
+            value = contact.attributes[name][0]
+          }
+          if (name === 'OPENDAY') {
+            value = new Date(attribute).toISOString()
+          }
+          properties[name.toLowerCase()] = value
+        }
+      })
+
+      console.log(properties)
+
+      options.body = JSON.stringify({
+        identifiers: { email_id: contact.email },
+        event_name: scope,
+        event_date: new Date(),
+        properties: properties,
+        contact_properties: contact,
+      })
   }
 
   try {

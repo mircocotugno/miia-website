@@ -25,6 +25,7 @@ import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
 import { attributes } from '@crm/attributes'
+import { v4 as submitId } from 'uuid'
 
 interface FormComponent {
   blok: FormProps
@@ -35,10 +36,7 @@ interface FormComponent {
     hide?: boolean
   }
   courses?: Array<OptionProps>
-  openday?: {
-    date: Date
-    course: string
-  }
+  openday?: Date
 }
 
 const errorMessage = `#####Ops, qualcosa è andato storto {{nome}}!
@@ -53,6 +51,14 @@ export default function Form({
   // Get alias content if present, otherwise use blok
   const alias = blok.alias?.content
   const form = alias || blok
+
+  // Merge blok.list and alias.list
+  const mergedList = useMemo(() => {
+    const blokList = blok.list || []
+    const aliasList = alias?.list || []
+    // Remove duplicates
+    return Array.from(new Set([...blokList, ...aliasList]))
+  }, [blok.list, alias?.list])
 
   // Memoize mergedFields to avoid unnecessary recalculation
   const mergedFields = useMemo(() => {
@@ -76,8 +82,7 @@ export default function Form({
   const initData = useMemo(() => {
     const data: FormData = {}
     if (!!openday) {
-      data.interesse_corso = openday.course
-      data.interesse_openday = openday.date
+      data.openday = openday
     }
     return data
   }, [openday])
@@ -125,48 +130,39 @@ export default function Form({
       setUser(contact)
       const _data = { ...data }
       // Prefill fields from Brevo contact attributes
-      form.fields.forEach(({ id }) => {
-        const attribute = id.toUpperCase()
-        if (typeof contact.attributes[attribute] === undefined) return
-        if (attribute === 'EMAIL') {
+      mergedFields.forEach(({ id, input }) => {
+        const ID = id.toUpperCase()
+        if (typeof contact.attributes[ID] === undefined) return
+        if (ID === 'EMAIL') {
           _data.email.value = contact.email
           _data.email.error = null
           return
         }
-        let value = contact.attributes[attribute]
-        if (attribute === 'SMS') {
-          value = value.toString().substring(2)
+        let attribute = contact.attributes[ID]
+        const value = _data[id].value
+        if (ID === 'SMS') {
+          _data[id].value = attribute.toString().substring(2)
         }
-        if (!contact.attributes[attribute]) return
-        _data[id].value = value
+        if (ID === 'NOME' || ID === 'COGNOME') {
+          _data[id].value = attribute
+        }
+        // if (input === 'select') {
+        //   attribute = Array.isArray(attribute) ? attribute[0] : attribute
+        // }
+        // if (input === 'multiple') {
+        //   const _attribute = Array.isArray(attribute) ? attribute : [attribute]
+        //   const _value = Array.isArray(value) ? value : [value]
+        //   attribute = [...new Set([..._attribute, ..._value])]
+        // }
+        // if (!contact.attributes[ID]) return
+        // _data[id].value = attribute
       })
       setData(_data)
     } else {
       setUser(null)
-      setData((): FormData => getData(form.fields, initData))
     }
     setLoading(false)
   }
-
-  // Memoize parseText function to avoid recreation on each render
-  const parseText = useCallback(
-    (text: string) => {
-      const keys = text.match(/{{(.*?)}}/g)
-      if (keys && !!keys.length) {
-        keys.forEach((string) => {
-          const key = string.replace('{{', '').replace('}}', '')
-          if (!data[key]?.value) return text
-          let value = data[key].value
-          if (!Number.isNaN(new Date(value).valueOf())) {
-            value = new Date(value).toLocaleDateString('it-IT')
-          }
-          text = text.replace(string, value)
-        })
-      }
-      return text
-    },
-    [data]
-  )
 
   // Handle form submission, including validation and API call
   const handleSubmit = async () => {
@@ -179,12 +175,14 @@ export default function Form({
     )
     if (!hasError) {
       setLoading(true)
-      const contact = getContactData(_data, user, form.list)
+      _data.azione = submitId()
+      const contact = getContactData(_data, user, mergedList)
+      debugger
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          scope: user ? 'update' : 'create',
+          scope: user ? form.tracking : 'create',
           contact: contact,
         }),
       })
@@ -193,7 +191,7 @@ export default function Form({
         setError('')
         sendGTMEvent({
           event: `submit_${form.tracking || 'contact'}_form`,
-          course: _data?.interesse_corso.value || _data?.iscrizione_corso.value,
+          course: _data?.area.value || _data?.corso.value,
         })
         // Set heading title and subtitle based on user existence
         setSuccessTitle(
@@ -218,7 +216,7 @@ export default function Form({
 
   // Reset form state and close drawer
   const handleReset = () => {
-    setData(getData(form.fields, initData))
+    setData(getData(mergedFields, initData))
     setError('')
     setMessage('')
     setSubmitted(false)
@@ -226,6 +224,26 @@ export default function Form({
     setUser(null)
     onOpenChange()
   }
+
+  // Memoize parseText function to avoid recreation on each render
+  const parseText = useCallback(
+    (text: string) => {
+      const keys = text.match(/{{(.*?)}}/g)
+      if (keys && !!keys.length) {
+        keys.forEach((string) => {
+          const key = string.replace('{{', '').replace('}}', '')
+          if (!data[key]?.value) return text
+          let value = data[key].value
+          if (!Number.isNaN(new Date(value).valueOf())) {
+            value = new Date(value).toLocaleDateString('it-IT')
+          }
+          text = text.replace(string, value)
+        })
+      }
+      return text
+    },
+    [data]
+  )
 
   // Render form UI
   return (
@@ -339,14 +357,18 @@ function getData(fields: Array<FieldProps>, initial: FormData = {}) {
   fields.forEach((field) => {
     let value
     switch (field.input) {
-      case 'hidden':
-        value = field.placeholder
-        break
       case 'checkbox':
         value = !!field.placeholder
         break
+      case 'enroll':
+      case 'select':
+      case 'multiple':
+        value = field.hidden
+          ? field.placeholder.split(',').map((v) => v.trim())
+          : []
+        break
       default:
-        value = ['select', 'multiple', 'enroll'].includes(field.input) ? [] : ''
+        value = field.hidden ? field.placeholder : ''
         break
     }
     newData[field.id] = {
@@ -387,11 +409,11 @@ function getContactData(
   })
 
   if (user) {
-    contact.id = user.id
+    // contact.id = user.id
+  } else {
+    contact.listIds = list.length ? list : []
+    contact.updateEnabled = true
   }
-
-  contact.listIds = list.length ? list : [19]
-  contact.updateEnabled = true
 
   return contact
 }
