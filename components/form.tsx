@@ -2,7 +2,7 @@ import type {
   BrevoProps,
   FieldData,
   FieldProps,
-  FormData_,
+  FormData,
   FormProps,
   OptionProps,
 } from '@props/types'
@@ -25,9 +25,9 @@ import type { BrevoContact, BrevoEvent } from '@pages/api/send-brevo'
 import { sendGTMEvent } from '@next/third-parties/google'
 
 const dateFormat = {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
+  year: 'numeric' as const,
+  month: '2-digit' as const,
+  day: '2-digit' as const,
 }
 
 interface FormComponent {
@@ -38,32 +38,105 @@ interface FormComponent {
 
 type FormStates = 'close' | 'open' | 'search' | 'send' | 'error' | 'done'
 
+// Helper: Validate all fields immutably
+function validateFields(data: FormData) {
+  const updated = { ...data }
+  Object.entries(updated).forEach(([name, field]) => {
+    updated[name] = { ...field, error: fieldValidation(field) }
+  })
+  return updated
+}
+
+// Helper: Build event object
+function buildEvent(data: FormData, tracking: string) {
+  const eventFilterData = [
+    'email',
+    'nome',
+    'cognome',
+    'sms',
+    'newsletter',
+    'validation',
+  ]
+  return {
+    identifiers: { email_id: data.email.value },
+    event_name: tracking,
+    event_properties: Object.fromEntries(
+      Object.entries(data)
+        .filter(([name]) => !eventFilterData.includes(name))
+        .map(([name, { value }]) => {
+          if (Array.isArray(value)) value = value.join(', ')
+          if (value instanceof Date)
+            value = new Date(value).toLocaleDateString('it-IT', dateFormat)
+          return [name, value]
+        })
+    ),
+  }
+}
+
+// Helper: Build contact object
+function buildContact(
+  data: FormData,
+  user: BrevoProps | null,
+  list: any
+) {
+  const contactFilterData = ['email']
+  return {
+    id: user?.id,
+    email: data.email.value,
+    listIds: list,
+    attributes: Object.fromEntries(
+      Object.entries(data)
+        .filter(([name]) => !contactFilterData.includes(name))
+        .map(([name, { value }]) => {
+          const NAME = name.toUpperCase()
+          if (!!user && typeof user.attributes[NAME] !== 'undefined') {
+            let attribube = user.attributes[NAME]
+            if (Array.isArray(attribube)) {
+              value = [...new Set([...attribube, ...value])]
+            }
+          }
+          if (name === 'sms') value = '+39' + value
+          return [NAME, value]
+        })
+    ),
+  }
+}
+
+function mergeForm(blok: FormProps, courses?: Array<OptionProps>): FormProps {
+  const alias = blok.alias?.content
+  if (!alias) return blok
+
+  // Merge lists and fields without mutation
+  const mergedList = Array.from(new Set([...blok.list, ...alias.list]))
+  let mergedFields = Array.from(new Set([...alias.fields, ...blok.fields]))
+
+  // Handle enroll field
+  const enrollIndex = mergedFields.findIndex((field: FieldProps) => field.input === 'enroll')
+  if (enrollIndex >= 0) {
+    if (courses?.length) {
+      mergedFields = mergedFields.map((field, idx) =>
+        idx === enrollIndex ? { ...field, options: courses } : field
+      )
+    } else {
+      mergedFields = mergedFields.filter((_, idx) => idx !== enrollIndex)
+    }
+  }
+
+  return {
+    ...blok,
+    ...alias,
+    list: mergedList,
+    fields: mergedFields,
+    title: alias.title || blok.title,
+    label: alias.label || blok.label,
+    message: [alias.message, blok.message].join('\n'),
+    tracking: alias.tracking || blok.tracking,
+  }
+}
+
 export default function Form({ blok, courses, openday }: FormComponent) {
   // Merge alias to root form
-  const form = useMemo(() => {
-    const alias = blok.alias?.content
-    if (!alias) return blok
-    const form = {
-      title: alias.title || blok.title,
-      list: [...new Set([...blok.list, ...alias.list])],
-      label: alias.label || blok.label,
-      message: [alias.message, blok.message].join('\n'),
-      fields: [...new Set([...alias.fields, ...blok.fields])],
-      tracking: alias.tracking || blok.tracking,
-    }
-
-    // Fill or remove enroll field
-    const enrollIndex = form.fields.findIndex(
-      (field: FieldProps) => field.input === 'enroll'
-    )
-    if (enrollIndex >= 0 && courses?.length) {
-      form.fields[enrollIndex].options = courses
-    } else {
-      enrollIndex >= 0 && form.fields.splice(enrollIndex, 1)
-    }
-
-    return form
-  }, [blok, blok.alias, openday])
+  const form = useMemo(() => mergeForm(blok, courses), [blok, blok.alias, courses])
 
   useEffect(() => {
     if (openday) {
@@ -74,13 +147,14 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   // Init Data
   const [data, setData] = useState(() => getData(form.fields))
   const [user, setUser] = useState<BrevoProps | null>(null)
-
   const [state, setState] = useState<FormStates>('close')
+  const [message, setMessage] = useState<{ title: string; body: string } | null>(null)
 
-  const [message, setMessage] = useState<{
-    title: string
-    body: string
-  } | null>(null)
+  // Only render visible fields
+  const visibleFields = useMemo(
+    () => form.fields.filter((f) => !f.hidden),
+    [form.fields]
+  )
 
   const handleChange = async (field: FieldData) => {
     field.error = fieldValidation(field)
@@ -89,70 +163,12 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   }
 
   const handleSubmit = async () => {
-    // Validate fields immutably
-    const newData = { ...data }
-    Object.entries(newData).forEach(([name, field]) => {
-      newData[name] = { ...field, error: fieldValidation(field) }
-    })
+    const newData = validateFields(data)
     const hasError = Object.values(newData).some((f) => !!f.error)
-
     if (!hasError) {
       setState('send')
-
-      const eventFilterData = [
-        'email',
-        'nome',
-        'cognome',
-        'sms',
-        'newsletter',
-        'validation',
-      ]
-      const event: BrevoEvent = {
-        identifiers: { email_id: newData.email.value },
-        event_name: form.tracking,
-        event_properties: Object.fromEntries(
-          [...Object.entries(newData)]
-            .filter(([name]) => !eventFilterData.includes(name))
-            .map(([name, { value }]) => {
-              if (Array.isArray(value)) {
-                value = value.join(', ')
-              }
-              if (value instanceof Date) {
-                value = new Date(value).toLocaleDateString('it-IT', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                })
-              }
-              return [name, value]
-            })
-        ),
-      }
-      const contactFilterData = ['email']
-      const contact: BrevoContact = {
-        id: user?.id,
-        email: newData.email.value,
-        listIds: form.list,
-        attributes: Object.fromEntries(
-          [...Object.entries(newData)]
-            .filter(([name]) => !contactFilterData.includes(name))
-            .map(([name, { value }]) => {
-              const NAME = name.toUpperCase()
-              if (!!user && typeof user.attributes[NAME] !== 'undefined') {
-                let attribube = user.attributes[NAME]
-                if (Array.isArray(attribube)) {
-                  value = [...new Set([...attribube, ...value])]
-                }
-              }
-              if (name === 'sms') {
-                value = '+39' + value
-              }
-
-              return [NAME, value]
-            })
-        ),
-      }
-
+      const event = buildEvent(newData, form.tracking)
+      const contact = buildContact(newData, user, form.list)
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,11 +180,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
           body: parceText(form.message, data),
         })
         setState('done')
-        sendGTMEvent({
-          event: `submit_${form.tracking}_form`,
-        })
+        sendGTMEvent({ event: `submit_${form.tracking}_form` })
       } else {
-        console.log(response)
         setState('error')
       }
     } else {
@@ -176,6 +189,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       setState('error')
     }
   }
+
   const handleReset = () => {
     setData(() => getData(form.fields))
     setUser(null)
@@ -187,7 +201,6 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   const searchUser = async (field: FieldData) => {
     if (field.id === 'email' && !field.error) {
       setState('search')
-      // console.log(field.value)
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -196,18 +209,35 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
       const responseUser = response.ok ? await response.json() : null
       setUser(responseUser)
-      data.email.value = responseUser?.email || field.value
-      data.email.error = field.error
-      data.nome.value = responseUser?.attributes['NOME'] || ''
-      data.cognome.value = responseUser?.attributes['COGNOME'] || ''
-      data.sms.value =
-        responseUser?.attributes['SMS'].toString().substring(2) || ''
-      setData({ ...data })
+
+      // Create a new data object immutably
+      const newData = { ...data }
+      newData.email = {
+        ...newData.email,
+        value: responseUser?.email || field.value,
+        error: field.error,
+      }
+      newData.nome = {
+        ...newData.nome,
+        value: responseUser?.attributes?.NOME || '',
+      }
+      newData.cognome = {
+        ...newData.cognome,
+        value: responseUser?.attributes?.COGNOME || '',
+      }
+      newData.sms = {
+        ...newData.sms,
+        value: responseUser?.attributes?.SMS
+          ? responseUser.attributes.SMS.toString().substring(2)
+          : '',
+      }
+
+      setData(newData)
       setState('open')
     }
   }
   const parceText = useCallback(
-    (text: string, data: FormData_) => {
+    (text: string, data: FormData) => {
       const keys = text.match(/{{(.*?)}}/g)
       if (keys && !!keys.length) {
         keys.forEach((string) => {
@@ -277,7 +307,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                 overrides: Typography({}),
               })}
             {state !== 'done' &&
-              form.fields.map((field, index) => (
+              visibleFields.map((field, index) => (
                 <StoryblokComponent
                   blok={field}
                   data={data[field.id]}
@@ -324,14 +354,15 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 }
 
 const getData = (fields: Array<FieldProps>) => {
-  const data: FormData_ = {}
-  fields.forEach(({ id, input, placeholder = '', required, hidden }) => {
+  const data: FormData = {}
+  fields.forEach(({ id, input, placeholder = '', required, hidden: isHidden }) => {
     let value
-    if (hidden) {
+    if (isHidden) {
       // Always use placeholder for hidden fields
-      value = input === 'select' || input === 'multiple' || input === 'enroll'
-        ? placeholder.split(',').map((v) => v.trim()).filter(Boolean)
-        : placeholder
+      value =
+        input === 'select' || input === 'multiple' || input === 'enroll'
+          ? placeholder.split(',').map((v) => v.trim()).filter(Boolean)
+          : placeholder
     } else {
       switch (input) {
         case 'checkbox':
