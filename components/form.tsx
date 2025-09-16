@@ -24,10 +24,16 @@ import { tv } from 'tailwind-variants'
 import type { BrevoContact, BrevoEvent } from '@pages/api/send-brevo'
 import { sendGTMEvent } from '@next/third-parties/google'
 
+const dateFormat = {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}
+
 interface FormComponent {
   blok: FormProps
   courses?: Array<OptionProps>
-  openday?: Date
+  openday?: FieldData
 }
 
 type FormStates = 'close' | 'open' | 'search' | 'send' | 'error' | 'done'
@@ -45,6 +51,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       fields: [...new Set([...alias.fields, ...blok.fields])],
       tracking: alias.tracking || blok.tracking,
     }
+
     // Fill or remove enroll field
     const enrollIndex = form.fields.findIndex(
       (field: FieldProps) => field.input === 'enroll'
@@ -56,7 +63,13 @@ export default function Form({ blok, courses, openday }: FormComponent) {
     }
 
     return form
-  }, [blok, blok.alias])
+  }, [blok, blok.alias, openday])
+
+  useEffect(() => {
+    if (openday) {
+      setData({ ...data, openday })
+    }
+  }, [openday])
 
   // Init Data
   const [data, setData] = useState(() => getData(form.fields))
@@ -76,14 +89,13 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   }
 
   const handleSubmit = async () => {
-    const dataEntries = Object.entries(data)
-    const hasError = [...dataEntries]
-      .map(([name, field]) => {
-        const error = fieldValidation(field)
-        data[name].error = error
-        return error
-      })
-      .some((error): boolean => !!error)
+    // Validate fields immutably
+    const newData = { ...data }
+    Object.entries(newData).forEach(([name, field]) => {
+      newData[name] = { ...field, error: fieldValidation(field) }
+    })
+    const hasError = Object.values(newData).some((f) => !!f.error)
+
     if (!hasError) {
       setState('send')
 
@@ -96,24 +108,33 @@ export default function Form({ blok, courses, openday }: FormComponent) {
         'validation',
       ]
       const event: BrevoEvent = {
-        identifiers: { email_id: data.email.value },
+        identifiers: { email_id: newData.email.value },
         event_name: form.tracking,
         event_properties: Object.fromEntries(
-          [...dataEntries]
+          [...Object.entries(newData)]
             .filter(([name]) => !eventFilterData.includes(name))
-            .map(([name, { value }]) => [
-              name,
-              Array.isArray(value) ? value.join(', ') : value,
-            ])
+            .map(([name, { value }]) => {
+              if (Array.isArray(value)) {
+                value = value.join(', ')
+              }
+              if (value instanceof Date) {
+                value = new Date(value).toLocaleDateString('it-IT', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })
+              }
+              return [name, value]
+            })
         ),
       }
       const contactFilterData = ['email']
       const contact: BrevoContact = {
         id: user?.id,
-        email: data.email.value,
+        email: newData.email.value,
         listIds: form.list,
         attributes: Object.fromEntries(
-          [...dataEntries]
+          [...Object.entries(newData)]
             .filter(([name]) => !contactFilterData.includes(name))
             .map(([name, { value }]) => {
               const NAME = name.toUpperCase()
@@ -131,6 +152,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
             })
         ),
       }
+
       const response = await fetch('/api/send-brevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -150,7 +172,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
         setState('error')
       }
     } else {
-      setData(data)
+      setData(newData)
       setState('error')
     }
   }
@@ -303,22 +325,28 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
 const getData = (fields: Array<FieldProps>) => {
   const data: FormData_ = {}
-  fields.forEach(({ id, input, placeholder, required, hidden }) => {
+  fields.forEach(({ id, input, placeholder = '', required, hidden }) => {
     let value
-    switch (input) {
-      case 'checkbox':
-        value = !!placeholder
-        break
-      case 'enroll':
-      case 'select':
-      case 'multiple':
-        value = hidden ? placeholder.split(',').map((v) => v.trim()) : []
-        break
-      default:
-        value = hidden ? placeholder : ''
-        break
+    if (hidden) {
+      // Always use placeholder for hidden fields
+      value = input === 'select' || input === 'multiple' || input === 'enroll'
+        ? placeholder.split(',').map((v) => v.trim()).filter(Boolean)
+        : placeholder
+    } else {
+      switch (input) {
+        case 'checkbox':
+          value = !!placeholder
+          break
+        case 'enroll':
+        case 'select':
+        case 'multiple':
+          value = []
+          break
+        default:
+          value = ''
+          break
+      }
     }
-
     data[id] = {
       id,
       value,

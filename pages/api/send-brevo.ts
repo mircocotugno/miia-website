@@ -69,12 +69,12 @@ export default async function sendBrevo(
       options.body = JSON.stringify(contact)
     }
 
-    // console.log(endpoint)
-    // console.log(options)
+    console.log(endpoint)
+    console.log(options)
 
     const contactRes = await fetch(endpoint, options)
 
-    // console.log(contactRes)
+    console.log(contactRes)
 
     if (contactRes.status !== 204) {
       try {
@@ -100,12 +100,12 @@ export default async function sendBrevo(
       let options = { ...optionsInit, method: 'POST' }
       options.body = JSON.stringify(event)
 
-      // console.log(endpoint)
-      // console.log(options)
+      console.log(endpoint)
+      console.log(options)
 
       const eventRes = await fetch(endpoint, options)
 
-      // console.log(eventRes)
+      console.log(eventRes)
 
       if (eventRes.status !== 204) {
         try {
