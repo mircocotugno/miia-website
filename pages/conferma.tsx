@@ -32,6 +32,27 @@ export default function Feedback() {
           <Logo classes="" primary="#262C2A" secondary="#262C2A" />
         </Link>
         <div className={wrapper()}>
+          {params.aggiornamento && (
+            <Fragment>
+              <Head>
+                <title>Conferma aggiornamento</title>
+              </Head>
+              <h1 className={title()}>
+                <span>Grazie {params.nome || null},</span>
+                <br />
+                <span className="text-5xl">
+                  per aver corretto i tuoi dati di contatto!
+                </span>
+              </h1>
+              <p className={description()}>
+                Per noi le persone hanno un grosso valore e facciamo del nostro
+                meglio per curarle a partire da queste piccole cose.
+              </p>
+              <Button href="/blog" color="primary" as={HeroLink}>
+                Visita il blog
+              </Button>
+            </Fragment>
+          )}
           {params.studente && (
             <Fragment>
               <Head>

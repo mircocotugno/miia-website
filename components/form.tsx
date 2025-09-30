@@ -17,11 +17,11 @@ import {
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
+import { getCapitalize } from '@modules/formats'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { compiler } from 'markdown-to-jsx'
 import { Typography } from './typography'
 import { tv } from 'tailwind-variants'
-import type { BrevoContact, BrevoEvent } from '@pages/api/send-brevo'
 import { sendGTMEvent } from '@next/third-parties/google'
 
 const dateFormat = {
@@ -57,28 +57,31 @@ function buildEvent(data: FormData, tracking: string) {
     'newsletter',
     'validation',
   ]
+  const properties: { [key: string]: Date | string } = {}
+  Object.entries(data)
+    .filter(([name]) => !eventFilterData.includes(name))
+    .map(([name, { value }]) => {
+      if (Array.isArray(value)) value = value.join(', ')
+      let dateValue = new Date(value)
+      if (dateValue instanceof Date && !isNaN(dateValue.valueOf())) {
+        value = dateValue
+        properties[name + '_data'] = dateValue.toLocaleDateString(
+          'IT-it',
+          dateFormat
+        )
+      }
+      return (properties[name] = value)
+    })
+
   return {
     identifiers: { email_id: data.email.value },
-    event_name: tracking,
-    event_properties: Object.fromEntries(
-      Object.entries(data)
-        .filter(([name]) => !eventFilterData.includes(name))
-        .map(([name, { value }]) => {
-          if (Array.isArray(value)) value = value.join(', ')
-          if (value instanceof Date)
-            value = new Date(value).toLocaleDateString('it-IT', dateFormat)
-          return [name, value]
-        })
-    ),
+    event_name: `test_${tracking}`,
+    event_properties: properties,
   }
 }
 
 // Helper: Build contact object
-function buildContact(
-  data: FormData,
-  user: BrevoProps | null,
-  list: any
-) {
+function buildContact(data: FormData, user: BrevoProps | null, list: any) {
   const contactFilterData = ['email']
   return {
     id: user?.id,
@@ -111,7 +114,9 @@ function mergeForm(blok: FormProps, courses?: Array<OptionProps>): FormProps {
   let mergedFields = Array.from(new Set([...alias.fields, ...blok.fields]))
 
   // Handle enroll field
-  const enrollIndex = mergedFields.findIndex((field: FieldProps) => field.input === 'enroll')
+  const enrollIndex = mergedFields.findIndex(
+    (field: FieldProps) => field.input === 'enroll'
+  )
   if (enrollIndex >= 0) {
     if (courses?.length) {
       mergedFields = mergedFields.map((field, idx) =>
@@ -136,7 +141,10 @@ function mergeForm(blok: FormProps, courses?: Array<OptionProps>): FormProps {
 
 export default function Form({ blok, courses, openday }: FormComponent) {
   // Merge alias to root form
-  const form = useMemo(() => mergeForm(blok, courses), [blok, blok.alias, courses])
+  const form = useMemo(
+    () => mergeForm(blok, courses),
+    [blok, blok.alias, courses]
+  )
 
   useEffect(() => {
     if (openday) {
@@ -148,7 +156,10 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   const [data, setData] = useState(() => getData(form.fields))
   const [user, setUser] = useState<BrevoProps | null>(null)
   const [state, setState] = useState<FormStates>('close')
-  const [message, setMessage] = useState<{ title: string; body: string } | null>(null)
+  const [message, setMessage] = useState<{
+    title: string
+    body: string
+  } | null>(null)
 
   // Only render visible fields
   const visibleFields = useMemo(
@@ -158,6 +169,9 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
   const handleChange = async (field: FieldData) => {
     field.error = fieldValidation(field)
+    if (field.id === 'nome' || field.id === 'cognome') {
+      field.value = getCapitalize(field.value)
+    }
     setData({ ...data, [field.id]: field })
     searchUser(field)
   }
@@ -186,13 +200,20 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       }
     } else {
       setData(newData)
-      setState('error')
     }
   }
 
-  const handleReset = () => {
-    setData(() => getData(form.fields))
+  const handleClear = () => {
     setUser(null)
+    const newData = getData(form.fields)
+    if (openday) {
+      newData.openday = openday
+    }
+    setData(newData)
+  }
+
+  const handleReset = () => {
+    handleClear()
     setMessage(null)
     setState('close')
   }
@@ -255,11 +276,13 @@ export default function Form({ blok, courses, openday }: FormComponent) {
     [data]
   )
 
-  const { button, close, spinner, label } = classes()
+  const { button, close, spinner, label, clear } = classes()
 
   // console.log(state !== 'done')
   // console.log(form)
-  console.log(user)
+  console.log(data)
+
+  const hiddenUserFields = ['nome', 'cognome', 'sms', 'email']
 
   return (
     <>
@@ -291,15 +314,19 @@ export default function Form({ blok, courses, openday }: FormComponent) {
               </div>
             )}
             {user && state === 'open' && (
-              <>
-                <h4 className="font-semibold text-xl">
-                  Bentornato {user.attributes.NOME?.toString()}!
+              <div className="mb-4">
+                <h4 className="font-semibold text-xl capitalize">
+                  Bentornato {user.attributes.NOME?.toString()}{' '}
+                  {user.attributes.COGNOME?.toString()}!
                 </h4>
                 <p>
                   Abbiamo recuperato i tuoi dati, se vuoi cambiarli consulta
                   l'email di benvenuto.
                 </p>
-              </>
+                <span className={clear()} onClick={() => handleClear()}>
+                  Non sono io
+                </span>
+              </div>
             )}
             {state === 'done' &&
               compiler(message?.title, {
@@ -307,14 +334,17 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                 overrides: Typography({}),
               })}
             {state !== 'done' &&
-              visibleFields.map((field, index) => (
-                <StoryblokComponent
-                  blok={field}
-                  data={data[field.id]}
-                  onChange={handleChange}
-                  key={index}
-                />
-              ))}
+              visibleFields.map((field, index) => {
+                if (user && hiddenUserFields.includes(field.id)) return null
+                return (
+                  <StoryblokComponent
+                    blok={field}
+                    data={data[field.id]}
+                    onChange={handleChange}
+                    key={index}
+                  />
+                )
+              })}
             {state === 'done' &&
               compiler(message?.body, {
                 wrapper: null,
@@ -355,36 +385,41 @@ export default function Form({ blok, courses, openday }: FormComponent) {
 
 const getData = (fields: Array<FieldProps>) => {
   const data: FormData = {}
-  fields.forEach(({ id, input, placeholder = '', required, hidden: isHidden }) => {
-    let value
-    if (isHidden) {
-      // Always use placeholder for hidden fields
-      value =
-        input === 'select' || input === 'multiple' || input === 'enroll'
-          ? placeholder.split(',').map((v) => v.trim()).filter(Boolean)
-          : placeholder
-    } else {
-      switch (input) {
-        case 'checkbox':
-          value = !!placeholder
-          break
-        case 'enroll':
-        case 'select':
-        case 'multiple':
-          value = []
-          break
-        default:
-          value = ''
-          break
+  fields.forEach(
+    ({ id, input, placeholder = '', required, hidden: isHidden }) => {
+      let value
+      if (isHidden) {
+        // Always use placeholder for hidden fields
+        value =
+          input === 'select' || input === 'multiple' || input === 'enroll'
+            ? placeholder
+                .split(',')
+                .map((v) => v.trim())
+                .filter(Boolean)
+            : placeholder
+      } else {
+        switch (input) {
+          case 'checkbox':
+            value = !!placeholder
+            break
+          case 'enroll':
+          case 'select':
+          case 'multiple':
+            value = []
+            break
+          default:
+            value = ''
+            break
+        }
+      }
+      data[id] = {
+        id,
+        value,
+        required,
+        error: null,
       }
     }
-    data[id] = {
-      id,
-      value,
-      required,
-      error: null,
-    }
-  })
+  )
   return data
 }
 
@@ -395,7 +430,7 @@ const titles = {
 }
 
 const errors = {
-  default: '#####Si è verificato un errore, riprova più tardi',
+  default: 'Si è verificato un errore, riprova più tardi',
 }
 
 const classes = tv({
@@ -406,5 +441,6 @@ const classes = tv({
     spinner:
       'absolute inset-0 flex items-center justify-center z-20 bg-opacity-30 bg-background backdrop-blur-sm',
     label: 'text-neutral-500',
+    clear: 'font-medium underline text-sm cursor-pointer text-primary',
   },
 })
