@@ -37,6 +37,7 @@ interface FormComponent {
   blok: FormProps
   courses?: Array<OptionProps>
   openday?: FieldData
+  variant?: 'solid' | 'ghost'
 }
 
 type FormStates = 'close' | 'open' | 'search' | 'send' | 'error' | 'done'
@@ -143,7 +144,12 @@ function mergeForm(blok: FormProps, courses?: Array<OptionProps>): FormProps {
   }
 }
 
-export default function Form({ blok, courses, openday }: FormComponent) {
+export default function Form({
+  blok,
+  courses,
+  openday,
+  variant,
+}: FormComponent) {
   // Merge alias to root form
   const form = useMemo(
     () => mergeForm(blok, courses),
@@ -299,6 +305,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       <Button
         size="md"
         color="primary"
+        variant={variant || 'solid'}
         className={button()}
         onPress={() => setState('open')}
       >
