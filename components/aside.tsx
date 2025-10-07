@@ -124,7 +124,7 @@ export default function Aside({ blok, locations }: AsideComponent) {
                         HeadingComponent="h4"
                         title={course.title}
                         subtitle={'Frequenza ' + course.days.join(' e ')}
-                        classNames={{ title: 'font-bold tex-xl' }}
+                        classNames={{ title: 'font-bold lg:text-lg' }}
                       >
                         <ul className="text-sm space-y-1">
                           <ListItem
@@ -157,16 +157,12 @@ export default function Aside({ blok, locations }: AsideComponent) {
               )}
               {!!blok.forms &&
                 blok.forms.map((form, index) => {
-                  const button = {
-                    size: !index ? 'lg' : 'sm',
-                    color: !index ? 'primary' : 'foreground',
-                    hide: !index ? false : !isIntersecting,
-                  }
+                  if (!!index && !isIntersecting) return null
                   return (
                     <StoryblokComponent
                       key={index}
                       blok={form}
-                      button={button}
+                      variant={!index ? 'solid' : 'ghost'}
                       courses={options}
                     />
                   )
@@ -189,7 +185,7 @@ const sectionClasses = tv({
 })
 
 const asideClasses = tv({
-  base: 'sticky z-30 md:top-20 col-span-full md:col-span-4 sm:-mt-32 order-1 md:order-last max-h-fit self-start',
+  base: 'sticky z-30 md:top-20 col-span-full sm:col-span-8 md:col-span-4 sm:-mt-32 order-1 md:order-last max-h-fit self-start',
 })
 
 const bannerClasses = tv({
@@ -208,7 +204,7 @@ const containerClasses = tv({
   variants: {
     active: {
       true: 'px-6 py-2 md:py-6  w-full mx-auto max-w-[1280px] gap-4 [&_button]:w-full [&_button]:sm:w-auto [&_button]:sm:min-w-64',
-      false: 'flex-col gap-3',
+      false: 'flex-col gap-3 pb-1',
     },
   },
 })

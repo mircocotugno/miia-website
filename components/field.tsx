@@ -12,6 +12,7 @@ interface FieldComponent {
   blok: FieldProps
   data: DataProps
   onChange: (e: any) => object
+  onBlur: (e: any) => object
 }
 
 export default function Field(props: FieldComponent) {
@@ -21,7 +22,7 @@ export default function Field(props: FieldComponent) {
   return <Fields {...props} />
 }
 
-const TextField = ({ blok, data, onChange }: FieldComponent) => (
+const TextField = ({ blok, data, onChange, onBlur }: FieldComponent) => (
   <Input
     id={blok.id}
     label={blok.label}
@@ -31,7 +32,10 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     errorMessage={data.error}
     isInvalid={!!data.error}
     value={data.value}
-    className={blok.id === 'email' ? 'relative z-30' : ''}
+    className={
+      blok.hidden ? 'hidden' : blok.id === 'email' ? 'relative z-30' : ''
+    }
+    hidden={blok.hidden}
     startContent={
       blok.input === 'tel' && (
         <div className="pointer-events-none flex items-center">
@@ -40,6 +44,7 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
       )
     }
     onValueChange={(value) => onChange({ ...data, value })}
+    onBlur={() => (blok.id === 'email' ? onBlur({ ...data }) : null)}
   />
 )
 
@@ -51,6 +56,8 @@ const AreaField = ({ blok, data, onChange }: FieldComponent) => (
     value={data.value}
     errorMessage={data.error}
     isInvalid={!!data.error}
+    hidden={blok.hidden}
+    className={blok.hidden ? 'hidden' : ''}
     onValueChange={(value) => onChange({ ...data, value })}
   />
 )
@@ -61,8 +68,9 @@ const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
     isRequired={blok.required}
     color={!!data.error ? 'danger' : undefined}
     onValueChange={(value) => onChange({ ...data, value })}
-    className={blok.id === 'validation' ? 'hidden' : ''}
+    className={blok.id === 'validation' || blok.hidden ? 'hidden' : ''}
     isSelected={data.value}
+    hidden={blok.hidden}
   >
     <p
       className={`text-sm ${!!data.error ? 'text-danger' : ''} ${
@@ -88,23 +96,17 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
     showMonthAndYearPickers
     errorMessage={data.error}
     isInvalid={!!data.error}
+    hidden={blok.hidden}
+    className={blok.hidden ? 'hidden' : ''}
     onChange={(value) => onChange({ ...data, value })}
   />
 )
 
 const SelectField = ({ blok, data, onChange }: FieldComponent) => {
-  type value = Array<string>
-  type key = string | undefined
   const options = getOptions(blok.options)
-  const getValue = (value: value, key: key) => {
-    if (!key) return value
-    const index = value.indexOf(key)
-    if (blok.input === 'multiple') {
-      index === -1 ? value.push(key) : value.splice(index, 1)
-    } else {
-      value = [key]
-    }
-    return value
+
+  const handleChange = (value: any) => {
+    onChange({ ...data, value: Array.from(value) })
   }
 
   const CustomItem = ({ name }: any) => {
@@ -133,7 +135,10 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
       isRequired={blok.required}
       errorMessage={data.error}
       isInvalid={!!data.error}
+      hidden={blok.hidden}
+      selectedKeys={Array.isArray(data.value) ? data.value : [data.value]}
       items={options}
+      className={blok.hidden ? 'hidden' : ''}
       classNames={{
         trigger: blok.input === 'enroll' ? 'h-20' : null,
         value: 'space-x-1',
@@ -143,12 +148,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
             : null,
       }}
       selectionMode={blok.input === 'multiple' ? 'multiple' : 'single'}
-      onSelectionChange={({ currentKey }) => {
-        onChange({
-          ...data,
-          value: getValue(data.value, currentKey),
-        })
-      }}
+      onSelectionChange={handleChange}
       renderValue={(items) =>
         items.map((item) => (
           <CustomItem key={item.key} name={item.data?.name} />

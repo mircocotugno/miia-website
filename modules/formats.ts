@@ -44,3 +44,11 @@ export function getImageSizes(image: any) {
 
   return { ...image, size }
 }
+
+export const getCapitalize = (string: String) =>
+  string
+    .split(' ')
+    .map((s: string) =>
+      s.length > 1 ? `${s[0].toUpperCase()}${s.substring(1).toLowerCase()}` : s
+    )
+    .join(' ')

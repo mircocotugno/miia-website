@@ -46,7 +46,7 @@ export type ImageArray = ImageData & {
 
 export type OptionProps = {
   name: string | (Omit<CourseProps, 'location'> & { location: string })
-  value: string
+  value: string | number
 }
 
 // Props
@@ -74,7 +74,7 @@ type CourseDays =
 
 type CourseHours = '9:00/12:00' | '13:00/16:00' | '20:00/23:00'
 
-export type FormList = 'studenti' | 'aziende' | 'clienti' | 'docenti'
+export type FormList = Array<number> //'studenti' | 'aziende' | 'clienti' | 'docenti'
 
 export type FormArea = 'interni' | 'moda'
 
@@ -181,6 +181,7 @@ export type FieldProps = BlokProps & {
   placeholder: string
   required: boolean
   options: string | Array<OptionProps>
+  hidden?: boolean
 }
 
 export type MenuProps = BlokProps & {
@@ -391,7 +392,12 @@ export type FormProps = BlokProps & {
   label: string
   fields: Array<FieldProps>
   message: string
+  tracking: 'enroll' | 'lead' | 'open_day' | string
+  terms?: string
 }
+
+export type FormData_ = Record<string, FieldData>
+export type FieldData = DataProps
 
 export type FormData = {
   [key: string]: any
@@ -399,7 +405,7 @@ export type FormData = {
 
 export type DataProps = {
   id: string
-  value: any
+  value: any //string | boolean | number | Date | Array<string>
   required: boolean
   error: string | null
 }
@@ -417,5 +423,5 @@ export type BrevoProps = {
 }
 
 export type BrevoAttributes = {
-  [key: string]: string | number | Date
+  [key: string]: string | number | Date | Array<any>
 }

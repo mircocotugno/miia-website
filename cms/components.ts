@@ -388,12 +388,18 @@ const field: ComponentSchema = {
         { value: 'multiple', name: 'Selezione multipla' },
         // { value: 'file', name: 'File' }, //TODO :find a module for file input
         { value: 'enroll', name: 'Iscrizione' },
-        { value: 'hidden', name: 'Nascosto' },
+        // { value: 'hidden', name: 'Nascosto' },
       ],
       description:
         'Il campo tipo: "Iscrizione" può essere usato solo nelle pagine corso',
       default_value: 'text',
       required: true,
+    },
+    hidden: {
+      type: 'boolean',
+      display_name: 'Nascosto',
+      default_value: false,
+      inline_label: true,
     },
     label: {
       type: 'text',
@@ -515,7 +521,6 @@ const alias: ComponentSchema = {
       display_name: 'Immagine',
       filetypes: ['images'],
     },
-
     resource: {
       type: 'option',
       display_name: 'Tipo',
@@ -794,7 +799,7 @@ const form: ComponentSchema = {
   is_root: true,
   is_nestable: true,
   component_group_uuid: 'containers',
-  preview_tmpl: ``,
+  preview_tmpl: `{{it.list}}`,
   schema: {
     alias: {
       type: 'option',
@@ -802,20 +807,41 @@ const form: ComponentSchema = {
       source: 'internal_stories',
       filter_content_type: ['form'],
     },
+    list: {
+      type: 'options',
+      display_name: 'Liste',
+      options: [
+        { value: 31, name: 'Moda' },
+        { value: 32, name: 'interni' },
+        { value: 25, name: 'Studenti' },
+        { value: 26, name: '1 livello' },
+        { value: 35, name: '2 livello' },
+        { value: 16, name: 'Openday' },
+        { value: 15, name: 'Informazioni' },
+        { value: 17, name: 'Iscrizione' },
+        { value: 28, name: 'Clienti' },
+        { value: 19, name: 'Progetti' },
+        { value: 30, name: 'Aziende' },
+        { value: 33, name: 'Assunzioni' },
+        { value: 24, name: 'Collaborazioni' },
+        { value: 29, name: 'Docenti' },
+        { value: 29, name: 'Colloquio' },
+      ],
+      description: 'Selezionare le liste in cui includere i nuovi contatti',
+      inline_label: true,
+    },
+    tracking: {
+      type: 'options',
+      display_name: 'Tracciamento',
+      options: [
+        { value: 'enroll', name: 'Iscrizione' },
+        { value: 'open_day', name: 'Openday' },
+      ],
+    },
     new: {
       type: 'section',
       display_name: 'Nuovo',
-      keys: ['list', 'title', 'label', 'fields', 'message'],
-    },
-    list: {
-      type: 'option',
-      display_name: 'Lista',
-      options: [
-        { value: 'studenti', name: 'Studenti' },
-        { value: 'clienti', name: 'Clienti' },
-        { value: 'aziende', name: 'Aziende' },
-        { value: 'docenti', name: 'Docenti' },
-      ],
+      keys: ['title', 'label', 'fields', 'message'],
     },
     title: {
       type: 'text',
@@ -855,6 +881,13 @@ region, district, city, address, message, policy.`,
         'image',
         'inlinecode',
       ],
+    },
+    terms: {
+      type: 'text',
+      display_name: 'Collegamento termini e condizioni',
+      description:
+        "Inserendo il collegamento l'ultima verrà aggiunto il campo ho letto i termini e le condizioni",
+      inline_label: true,
     },
   },
 }
