@@ -31,7 +31,10 @@ const TextField = ({ blok, data, onChange }: FieldComponent) => (
     errorMessage={data.error}
     isInvalid={!!data.error}
     value={data.value}
-    className={blok.id === 'email' ? 'relative z-30' : ''}
+    className={
+      blok.hidden ? 'hidden' : blok.id === 'email' ? 'relative z-30' : ''
+    }
+    hidden={blok.hidden}
     startContent={
       blok.input === 'tel' && (
         <div className="pointer-events-none flex items-center">
@@ -51,6 +54,8 @@ const AreaField = ({ blok, data, onChange }: FieldComponent) => (
     value={data.value}
     errorMessage={data.error}
     isInvalid={!!data.error}
+    hidden={blok.hidden}
+    className={blok.hidden ? 'hidden' : ''}
     onValueChange={(value) => onChange({ ...data, value })}
   />
 )
@@ -61,8 +66,9 @@ const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
     isRequired={blok.required}
     color={!!data.error ? 'danger' : undefined}
     onValueChange={(value) => onChange({ ...data, value })}
-    className={blok.id === 'validation' ? 'hidden' : ''}
+    className={blok.id === 'validation' || blok.hidden ? 'hidden' : ''}
     isSelected={data.value}
+    hidden={blok.hidden}
   >
     <p
       className={`text-sm ${!!data.error ? 'text-danger' : ''} ${
@@ -88,6 +94,8 @@ const DateField = ({ blok, data, onChange }: FieldComponent) => (
     showMonthAndYearPickers
     errorMessage={data.error}
     isInvalid={!!data.error}
+    hidden={blok.hidden}
+    className={blok.hidden ? 'hidden' : ''}
     onChange={(value) => onChange({ ...data, value })}
   />
 )
@@ -125,8 +133,10 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
       isRequired={blok.required}
       errorMessage={data.error}
       isInvalid={!!data.error}
+      hidden={blok.hidden}
       selectedKeys={Array.isArray(data.value) ? data.value : [data.value]}
       items={options}
+      className={blok.hidden ? 'hidden' : ''}
       classNames={{
         trigger: blok.input === 'enroll' ? 'h-20' : null,
         value: 'space-x-1',

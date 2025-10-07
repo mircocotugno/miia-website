@@ -181,6 +181,7 @@ export type FieldProps = BlokProps & {
   placeholder: string
   required: boolean
   options: string | Array<OptionProps>
+  hidden?: boolean
 }
 
 export type MenuProps = BlokProps & {
@@ -392,7 +393,11 @@ export type FormProps = BlokProps & {
   fields: Array<FieldProps>
   message: string
   tracking: 'enroll' | 'lead' | 'open_day' | string
+  terms?: string
 }
+
+export type FormData_ = Record<string, FieldData>
+export type FieldData = DataProps
 
 export type FormData = {
   [key: string]: any
@@ -400,7 +405,7 @@ export type FormData = {
 
 export type DataProps = {
   id: string
-  value: any
+  value: any //string | boolean | number | Date | Array<string>
   required: boolean
   error: string | null
 }
@@ -418,5 +423,5 @@ export type BrevoProps = {
 }
 
 export type BrevoAttributes = {
-  [key: string]: string | number | Date
+  [key: string]: string | number | Date | Array<any>
 }

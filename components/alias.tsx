@@ -109,18 +109,10 @@ export default function Alias({ blok, parent }: AliasComponent) {
 
   if (isEvent) {
     const openday = {
-      date: {
-        id: 'interesse_openday',
-        value: new Date(alias.content.date).toISOString(),
-        required: true,
-        error: null,
-      },
-      course: {
-        id: 'interesse_corso',
-        value: alias.content.openday,
-        required: true,
-        error: null,
-      },
+      id: 'openday',
+      value: new Date(alias.content.date).toISOString(),
+      required: true,
+      error: null,
     }
     const dateClasses = tv({
       base: 'flex flex-col h-full w-full p-4',

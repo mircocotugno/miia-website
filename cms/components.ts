@@ -388,12 +388,18 @@ const field: ComponentSchema = {
         { value: 'multiple', name: 'Selezione multipla' },
         // { value: 'file', name: 'File' }, //TODO :find a module for file input
         { value: 'enroll', name: 'Iscrizione' },
-        { value: 'hidden', name: 'Nascosto' },
+        // { value: 'hidden', name: 'Nascosto' },
       ],
       description:
         'Il campo tipo: "Iscrizione" può essere usato solo nelle pagine corso',
       default_value: 'text',
       required: true,
+    },
+    hidden: {
+      type: 'boolean',
+      display_name: 'Nascosto',
+      default_value: false,
+      inline_label: true,
     },
     label: {
       type: 'text',
@@ -515,7 +521,6 @@ const alias: ComponentSchema = {
       display_name: 'Immagine',
       filetypes: ['images'],
     },
-
     resource: {
       type: 'option',
       display_name: 'Tipo',
@@ -876,6 +881,13 @@ region, district, city, address, message, policy.`,
         'image',
         'inlinecode',
       ],
+    },
+    terms: {
+      type: 'text',
+      display_name: 'Collegamento termini e condizioni',
+      description:
+        "Inserendo il collegamento l'ultima verrà aggiunto il campo ho letto i termini e le condizioni",
+      inline_label: true,
     },
   },
 }
