@@ -362,7 +362,7 @@ export default function Form({
                   />
                 )
               })}
-            {form.terms && (
+            {state !== 'done' && form.terms && (
               <p className="mt-2">
                 <Checkbox
                   isRequired={true}
