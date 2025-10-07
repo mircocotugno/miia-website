@@ -179,14 +179,50 @@ export default function Form({
     [form.fields]
   )
 
-  const handleChange = async (field: FieldData) => {
+  const handleChange = (field: FieldData) => {
     field.error = fieldValidation(field)
     if (field.id === 'nome' || field.id === 'cognome') {
       field.value = getCapitalize(field.value)
     }
     setData({ ...data, [field.id]: field })
-    if (field.id === 'email' && !field.error) {
-      await searchUser(field)
+  }
+
+  const handleUser = async (field: FieldData) => {
+    if (!field.error) {
+      setState('search')
+      const response = await fetch('/api/send-brevo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contact: { email: field.value } }),
+      })
+
+      const responseUser = response.ok ? await response.json() : null
+      await setUser(responseUser)
+
+      // Create a new data object immutably
+      const newData = { ...data }
+      newData.email = {
+        ...newData.email,
+        value: responseUser?.email || field.value,
+        error: field.error,
+      }
+      newData.nome = {
+        ...newData.nome,
+        value: responseUser?.attributes?.NOME || '',
+      }
+      newData.cognome = {
+        ...newData.cognome,
+        value: responseUser?.attributes?.COGNOME || '',
+      }
+      newData.sms = {
+        ...newData.sms,
+        value: responseUser?.attributes?.SMS
+          ? responseUser.attributes.SMS.toString().substring(2)
+          : '',
+      }
+
+      await setData(newData)
+      setState('open')
     }
   }
 
@@ -241,42 +277,6 @@ export default function Form({
   }
 
   // Utilities
-  const searchUser = async (field: FieldData) => {
-    setState('search')
-    const response = await fetch('/api/send-brevo', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contact: { email: field.value } }),
-    })
-
-    const responseUser = response.ok ? await response.json() : null
-    await setUser(responseUser)
-
-    // Create a new data object immutably
-    const newData = { ...data }
-    newData.email = {
-      ...newData.email,
-      value: responseUser?.email || field.value,
-      error: field.error,
-    }
-    newData.nome = {
-      ...newData.nome,
-      value: responseUser?.attributes?.NOME || '',
-    }
-    newData.cognome = {
-      ...newData.cognome,
-      value: responseUser?.attributes?.COGNOME || '',
-    }
-    newData.sms = {
-      ...newData.sms,
-      value: responseUser?.attributes?.SMS
-        ? responseUser.attributes.SMS.toString().substring(2)
-        : '',
-    }
-
-    await setData(newData)
-    setState('open')
-  }
   const parseText = useCallback(
     (text: string, data: FormData) => {
       const keys = text.match(/{{(.*?)}}/g)
@@ -358,6 +358,7 @@ export default function Form({
                     blok={field}
                     data={data[field.id]}
                     onChange={handleChange}
+                    onBlur={handleUser}
                     key={index}
                   />
                 )
