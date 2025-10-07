@@ -51,25 +51,31 @@ export default async function sendBrevo(
 
   try {
     // Contact API call
-    let endpoint = `${apiUrl}/contacts/`
-    let options = { ...optionsInit }
+    let contactEndpoint = `${apiUrl}/contacts/`
+    let contactOptions = { ...optionsInit }
 
     if (!event) {
-      endpoint += contact.email
-      options.method = 'GET'
+      contactEndpoint += contact.email
+      contactOptions.method = 'GET'
     } else {
       if (contact.id) {
-        endpoint += contact.id
-        options.method = 'PUT'
+        contactEndpoint += contact.id
+        contactOptions.method = 'PUT'
       } else {
-        options.method = 'POST'
+        contactOptions.method = 'POST'
       }
-      options.body = JSON.stringify(contact)
+      contactOptions.body = JSON.stringify(contact)
     }
 
-    const contactRes = await fetch(endpoint, options)
+    console.log(contactEndpoint)
+    console.log(contactOptions)
+
+    const contactRes = await fetch(contactEndpoint, contactOptions)
     let contactData = null
-    if (contactRes.status !== 204 && contactRes.headers.get('content-type')?.includes('application/json')) {
+    if (
+      contactRes.status !== 204 &&
+      contactRes.headers.get('content-type')?.includes('application/json')
+    ) {
       try {
         contactData = await contactRes.json()
       } catch (error) {
@@ -78,7 +84,9 @@ export default async function sendBrevo(
       }
     }
     if (!contactRes.ok) {
-      return res.status(contactRes.status).json({ error: contactData || 'Brevo API Error' })
+      return res
+        .status(contactRes.status)
+        .json({ error: contactData || 'Brevo API Error' })
     } else if (contactRes.ok && !event) {
       const { id, email, attributes } = contactData || {}
       return res.status(200).json({ id, email, attributes })
@@ -87,10 +95,21 @@ export default async function sendBrevo(
     // Event API call
     if (event) {
       let eventEndpoint = `${apiUrl}/events`
-      let eventOptions = { ...optionsInit, method: 'POST', body: JSON.stringify(event) }
+      let eventOptions = {
+        ...optionsInit,
+        method: 'POST',
+        body: JSON.stringify(event),
+      }
+
+      console.log(eventEndpoint)
+      console.log(eventOptions)
+
       const eventRes = await fetch(eventEndpoint, eventOptions)
       let eventData = null
-      if (eventRes.status !== 204 && eventRes.headers.get('content-type')?.includes('application/json')) {
+      if (
+        eventRes.status !== 204 &&
+        eventRes.headers.get('content-type')?.includes('application/json')
+      ) {
         try {
           eventData = await eventRes.json()
         } catch (error) {
@@ -98,7 +117,9 @@ export default async function sendBrevo(
         }
       }
       if (!eventRes.ok) {
-        return res.status(eventRes.status).json({ error: eventData || 'Brevo API Error' })
+        return res
+          .status(eventRes.status)
+          .json({ error: eventData || 'Brevo API Error' })
       }
     }
     return res.status(200).json(contactData)

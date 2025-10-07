@@ -14,6 +14,9 @@ import {
   DrawerHeader,
   DrawerFooter,
   Spinner,
+  Checkbox,
+  Link,
+  Alert,
 } from '@heroui/react'
 import { StoryblokComponent } from '@storyblok/react'
 import { fieldValidation } from '@modules/validations'
@@ -134,8 +137,9 @@ function mergeForm(blok: FormProps, courses?: Array<OptionProps>): FormProps {
     fields: mergedFields,
     title: alias.title || blok.title,
     label: alias.label || blok.label,
-    message: [alias.message, blok.message].join('\n'),
+    message: [alias.message, blok.message].filter(Boolean).join('\n'),
     tracking: alias.tracking || blok.tracking,
+    terms: alias.terms || blok.terms,
   }
 }
 
@@ -155,6 +159,8 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   // Init Data
   const [data, setData] = useState(() => getData(form.fields))
   const [user, setUser] = useState<BrevoProps | null>(null)
+  const [agreement, setAgreement] = useState(!form.terms)
+  const [error, setError] = useState<string | null>(null)
   const [state, setState] = useState<FormStates>('close')
   const [message, setMessage] = useState<{
     title: string
@@ -173,13 +179,19 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       field.value = getCapitalize(field.value)
     }
     setData({ ...data, [field.id]: field })
-    searchUser(field)
+    if (field.id === 'email' && !field.error) {
+      await searchUser(field)
+    }
   }
 
   const handleSubmit = async () => {
     const newData = validateFields(data)
     const hasError = Object.values(newData).some((f) => !!f.error)
     if (!hasError) {
+      setState(!agreement ? 'error' : 'open')
+      setError(!agreement ? errors.agreement : null)
+      if (!agreement) return
+
       setState('send')
       const event = buildEvent(newData, form.tracking)
       const contact = buildContact(newData, user, form.list)
@@ -190,15 +202,17 @@ export default function Form({ blok, courses, openday }: FormComponent) {
       })
       if (response.ok) {
         setMessage({
-          title: parceText(titles[user ? 'user' : 'new'], data),
-          body: parceText(form.message, data),
+          title: parseText(titles[user ? 'user' : 'new'], data),
+          body: parseText(form.message, data),
         })
         setState('done')
-        sendGTMEvent({ event: `submit_${form.tracking}_form` })
+        return sendGTMEvent({ event: `submit_${form.tracking}_form` })
       } else {
         setState('error')
+        return setError(errors.default)
       }
     } else {
+      setState('error')
       setData(newData)
     }
   }
@@ -215,49 +229,49 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   const handleReset = () => {
     handleClear()
     setMessage(null)
+    setError(null)
+    setAgreement(!form.terms)
     setState('close')
   }
 
   // Utilities
   const searchUser = async (field: FieldData) => {
-    if (field.id === 'email' && !field.error) {
-      setState('search')
-      const response = await fetch('/api/send-brevo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contact: { email: field.value } }),
-      })
+    setState('search')
+    const response = await fetch('/api/send-brevo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contact: { email: field.value } }),
+    })
 
-      const responseUser = response.ok ? await response.json() : null
-      setUser(responseUser)
+    const responseUser = response.ok ? await response.json() : null
+    await setUser(responseUser)
 
-      // Create a new data object immutably
-      const newData = { ...data }
-      newData.email = {
-        ...newData.email,
-        value: responseUser?.email || field.value,
-        error: field.error,
-      }
-      newData.nome = {
-        ...newData.nome,
-        value: responseUser?.attributes?.NOME || '',
-      }
-      newData.cognome = {
-        ...newData.cognome,
-        value: responseUser?.attributes?.COGNOME || '',
-      }
-      newData.sms = {
-        ...newData.sms,
-        value: responseUser?.attributes?.SMS
-          ? responseUser.attributes.SMS.toString().substring(2)
-          : '',
-      }
-
-      setData(newData)
-      setState('open')
+    // Create a new data object immutably
+    const newData = { ...data }
+    newData.email = {
+      ...newData.email,
+      value: responseUser?.email || field.value,
+      error: field.error,
     }
+    newData.nome = {
+      ...newData.nome,
+      value: responseUser?.attributes?.NOME || '',
+    }
+    newData.cognome = {
+      ...newData.cognome,
+      value: responseUser?.attributes?.COGNOME || '',
+    }
+    newData.sms = {
+      ...newData.sms,
+      value: responseUser?.attributes?.SMS
+        ? responseUser.attributes.SMS.toString().substring(2)
+        : '',
+    }
+
+    await setData(newData)
+    setState('open')
   }
-  const parceText = useCallback(
+  const parseText = useCallback(
     (text: string, data: FormData) => {
       const keys = text.match(/{{(.*?)}}/g)
       if (keys && !!keys.length) {
@@ -277,10 +291,6 @@ export default function Form({ blok, courses, openday }: FormComponent) {
   )
 
   const { button, close, spinner, label, clear } = classes()
-
-  // console.log(state !== 'done')
-  // console.log(form)
-  console.log(data)
 
   const hiddenUserFields = ['nome', 'cognome', 'sms', 'email']
 
@@ -313,7 +323,7 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                 />
               </div>
             )}
-            {user && state === 'open' && (
+            {user && (
               <div className="mb-4">
                 <h4 className="font-semibold text-xl capitalize">
                   Bentornato {user.attributes.NOME?.toString()}{' '}
@@ -345,16 +355,39 @@ export default function Form({ blok, courses, openday }: FormComponent) {
                   />
                 )
               })}
+            {form.terms && (
+              <p className="mt-2">
+                <Checkbox
+                  isRequired={true}
+                  onValueChange={(value) => {
+                    setAgreement(value)
+                    setError(!value ? errors.agreement : null)
+                    setState(!value ? 'error' : 'open')
+                  }}
+                >
+                  <p className="text-sm">Dichiaro di aver letto</p>
+                </Checkbox>
+                <Link
+                  href={form.terms}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-1 underline underline-offset-1 text-sm"
+                >
+                  l' informativa Privacy
+                </Link>
+                .
+              </p>
+            )}
             {state === 'done' &&
               compiler(message?.body, {
                 wrapper: null,
                 overrides: Typography({}),
               })}
-            {state === 'error' &&
-              compiler(errors['default'], {
-                wrapper: null,
-                overrides: Typography({ error: true }),
-              })}
+            {state === 'error' && !!error && (
+              <div className="w-full flex items-center">
+                <Alert color="danger" hideIcon variant="faded" title={error} />
+              </div>
+            )}
           </DrawerBody>
           <DrawerFooter className="justify-start">
             {state !== 'done' && (
@@ -426,11 +459,12 @@ const getData = (fields: Array<FieldProps>) => {
 const titles = {
   new: '###Benvenuto {{nome}}!',
   user: '###Bentornato {{nome}}!\nAbbiamo recuperato i tuoi dati.',
-  done: '###Grazie {{nome}{!',
+  done: '###Grazie {{nome}}!',
 }
 
 const errors = {
   default: 'Si è verificato un errore, riprova più tardi',
+  agreement: 'Devi accettare l’informativa privacy per procedere',
 }
 
 const classes = tv({

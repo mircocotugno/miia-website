@@ -393,6 +393,7 @@ export type FormProps = BlokProps & {
   fields: Array<FieldProps>
   message: string
   tracking: 'enroll' | 'lead' | 'open_day' | string
+  terms?: string
 }
 
 export type FormData_ = Record<string, FieldData>

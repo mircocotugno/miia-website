@@ -391,7 +391,7 @@ const field: ComponentSchema = {
         // { value: 'hidden', name: 'Nascosto' },
       ],
       description:
-      'Il campo tipo: "Iscrizione" può essere usato solo nelle pagine corso',
+        'Il campo tipo: "Iscrizione" può essere usato solo nelle pagine corso',
       default_value: 'text',
       required: true,
     },
@@ -881,6 +881,13 @@ region, district, city, address, message, policy.`,
         'image',
         'inlinecode',
       ],
+    },
+    terms: {
+      type: 'text',
+      display_name: 'Collegamento termini e condizioni',
+      description:
+        "Inserendo il collegamento l'ultima verrà aggiunto il campo ho letto i termini e le condizioni",
+      inline_label: true,
     },
   },
 }
