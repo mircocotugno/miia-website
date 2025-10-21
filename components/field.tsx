@@ -6,7 +6,11 @@ import {
   Checkbox,
   DatePicker,
   Textarea,
+  Slider,
 } from '@heroui/react'
+import { blob } from 'stream/consumers'
+import { div } from 'framer-motion/client'
+import { useState } from 'react'
 
 interface FieldComponent {
   blok: FieldProps
@@ -61,6 +65,50 @@ const AreaField = ({ blok, data, onChange }: FieldComponent) => (
     onValueChange={(value) => onChange({ ...data, value })}
   />
 )
+
+const getSliderOptions = (fieldOptions: string | Array<OptionProps>) =>
+  fieldOptions && typeof fieldOptions === 'string'
+    ? Object.fromEntries(
+        fieldOptions.split('\n').map((option: string) => option.split(':'))
+      )
+    : null
+
+const NumberField = ({ blok, data, onChange }: FieldComponent) => {
+  const options = getSliderOptions(blok.options)
+  const [number, setNumber] = useState(
+    !Number.isNaN(blok.placeholder) ? Number(blok.placeholder) : 0
+  )
+
+  // debugger
+
+  return (
+    <Slider
+      classNames={{
+        trackWrapper: 'my-2',
+        labelWrapper: 'text-sm justify-start gap-3',
+      }}
+      color="foreground"
+      defaultValue={number}
+      label={blok.label}
+      maxValue={Number(options?.max) || 100}
+      minValue={Number(options?.min) || 0}
+      size="sm"
+      renderValue={() => (
+        <span className="font-medium">
+          {number} {options.unit}
+        </span>
+      )}
+      step={Number(options?.step) || 1}
+      onChange={(value) => (Array.isArray(value) ? value[0] : setNumber(value))}
+      onChangeEnd={(value) =>
+        onChange({
+          ...data,
+          value: Array.isArray(value) ? value[0] : setNumber(value),
+        })
+      }
+    />
+  )
+}
 
 const CheckboxField = ({ blok, data, onChange }: FieldComponent) => (
   <Checkbox
@@ -172,7 +220,7 @@ const SelectField = ({ blok, data, onChange }: FieldComponent) => {
 
 const fields = {
   text: TextField,
-  number: TextField,
+  number: NumberField,
   email: TextField,
   tel: TextField,
   date: DateField,
